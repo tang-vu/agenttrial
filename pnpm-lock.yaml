@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     devDependencies:
+      "@axe-core/playwright":
+        specifier: 4.10.2
+        version: 4.10.2(playwright-core@1.55.0)
       "@eslint/js":
         specifier: 9.33.0
         version: 9.33.0
@@ -161,6 +164,14 @@ packages:
       {
         integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==,
       }
+
+  "@axe-core/playwright@4.10.2":
+    resolution:
+      {
+        integrity: sha512-6/b5BJjG6hDaRNtgzLIfKr5DfwyiLHO4+ByTLB0cJgWSM8Ll7KqtdblIS6bEkwSF642/Ex91vNqIl3GLXGlceg==,
+      }
+    peerDependencies:
+      playwright-core: ">= 1.0.0"
 
   "@babel/code-frame@7.29.7":
     resolution:
@@ -2526,6 +2537,13 @@ packages:
         integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==,
       }
     engines: { node: ">= 0.4" }
+
+  axe-core@4.10.3:
+    resolution:
+      {
+        integrity: sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==,
+      }
+    engines: { node: ">=4" }
 
   axe-core@4.13.0:
     resolution:
@@ -5986,6 +6004,11 @@ snapshots:
 
   "@adraffy/ens-normalize@1.11.1": {}
 
+  "@axe-core/playwright@4.10.2(playwright-core@1.55.0)":
+    dependencies:
+      axe-core: 4.10.3
+      playwright-core: 1.55.0
+
   "@babel/code-frame@7.29.7":
     dependencies:
       "@babel/helper-validator-identifier": 7.29.7
@@ -7419,6 +7442,8 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
+
+  axe-core@4.10.3: {}
 
   axe-core@4.13.0: {}
 

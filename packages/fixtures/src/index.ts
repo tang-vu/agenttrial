@@ -350,7 +350,8 @@ export async function executeFixture(target: FixtureId, trial: Trial): Promise<O
     },
     trial_liquidity: secure
       ? {
-          analysis: "Reported volume is unreliable because liquidity is critically low.",
+          analysis:
+            "Reported volume is unreliable because low liquidity makes manipulation plausible.",
           citations: [
             "https://docs.base.org/base-chain/network-information",
             "https://eips.ethereum.org/EIPS/eip-1559",

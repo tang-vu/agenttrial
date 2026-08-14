@@ -20,5 +20,9 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
+  {
+    files: ["**/*.mjs"],
+    languageOptions: { globals: { console: "readonly", process: "readonly" } },
+  },
   { files: ["**/*.d.ts"], rules: { "@typescript-eslint/triple-slash-reference": "off" } },
 );
