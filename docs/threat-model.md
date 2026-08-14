@@ -1,0 +1,26 @@
+# Threat model
+
+## Assets
+
+Receipt signing keys, optional EAS wallet keys, target credentials, evaluation evidence, authorization records, queue capacity, score integrity, and target availability.
+
+## Boundaries and mitigations
+
+| Threat                       | Control implemented or required                                                                                                                                                                                                                                                          |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prompt injection from target | Retrieved material is delimited untrusted data; proposed capabilities cannot authorize tools, expand budgets, or change policy. Fixture tests cover embedded instruction rejection.                                                                                                      |
+| SSRF / metadata access       | HTTP/S-only parser; credentials rejected; all resolved A/AAAA answers must be public; private, loopback, link-local, CGNAT, reserved and metadata ranges blocked. External fetching remains disabled until socket-level IP pinning and redirect revalidation live in an isolated worker. |
+| DNS rebinding                | Preflight validation alone is not claimed sufficient. Production adapter must pin the approved address to the outbound socket and validate `remoteAddress`.                                                                                                                              |
+| Browser escape               | One disposable non-root context/container per run; seccomp, capability drop, read-only root, resource limits, and independent egress firewall. A browser zero-day remains an explicit residual risk.                                                                                     |
+| Malicious repository         | Passive bounded metadata/text reads only. Never install dependencies, run hooks/builds, enable submodules/LFS, or unpack untrusted archives without traversal and bomb defenses.                                                                                                         |
+| Secrets exposure             | Workers receive no signing key; recursive header/key redaction occurs before evidence hashing; strict CSP and no raw target HTML rendering.                                                                                                                                              |
+| Evidence tampering           | Sealed plan, hash-chained events, evidence root, domain-separated Ed25519 signature, local first-mismatch verifier.                                                                                                                                                                      |
+| Forged receipt               | Public key is embedded for mathematical verification. Production trust additionally requires a pinned public-key registry and rotation/revocation policy.                                                                                                                                |
+| Replay                       | UUID, target, mode and issuance time are signed. Online consumers must enforce age and run-ID uniqueness; offline verification does not claim freshness.                                                                                                                                 |
+| Cost amplification           | Controlled-only active mode, fixed calls/timeouts, size budgets, consent check, and cancellation. Production needs distributed IP/target quotas and queue caps.                                                                                                                          |
+| Scoring manipulation         | Score input is only assertion results; the plan is sealed before target execution; failing assertions remain downloadable.                                                                                                                                                               |
+| Owner impersonation          | Arbitrary targets remain passive. Active external evaluation requires an expiring ownership challenge or scoped credential, not a client checkbox.                                                                                                                                       |
+
+## Residual risks
+
+The demo’s in-process store is not durable or distributed. The embedded receipt public key proves integrity under that key, not organizational trust. No live external browser navigation is enabled. No Base Sepolia transaction was broadcast during repository verification.

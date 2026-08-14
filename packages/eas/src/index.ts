@@ -46,3 +46,19 @@ export function attestationStatus() {
       "Credentials are configured, but live broadcast requires the explicit attestation script.",
   };
 }
+
+export interface AttestationTransport {
+  attest(encodedData: string): Promise<{ uid: string; transactionHash: string }>;
+}
+export async function submitAttestation(
+  transport: AttestationTransport,
+  fields: AttestationFields,
+) {
+  const result = await transport.attest(encodeAttestation(fields));
+  if (
+    !/^0x[0-9a-fA-F]{64}$/.test(result.uid) ||
+    !/^0x[0-9a-fA-F]{64}$/.test(result.transactionHash)
+  )
+    throw new Error("Attestation transport returned an invalid UID or transaction hash");
+  return { ...result, explorerUrl: `${BASE_SEPOLIA.explorer}/tx/${result.transactionHash}` };
+}

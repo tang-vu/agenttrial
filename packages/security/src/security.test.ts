@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BudgetGuard, isPublicIp, redact, validateTargetUrl } from "./index";
+import { BudgetGuard, consumeRateLimit, isPublicIp, redact, validateTargetUrl } from "./index";
 describe("SSRF policy", () => {
   it.each([
     "127.0.0.1",
@@ -32,4 +32,10 @@ describe("budgets and redaction", () => {
     expect(
       redact({ headers: { authorization: "Bearer abc" }, token: "secret", safe: "ok" }),
     ).toEqual({ headers: { authorization: "[REDACTED]" }, token: "[REDACTED]", safe: "ok" }));
+  it("rate limits repeated anonymous work", () => {
+    const key = `test-${Math.random()}`;
+    expect(consumeRateLimit(key, 1, 1000, 1).allowed).toBe(true);
+    expect(consumeRateLimit(key, 1, 1000, 2).allowed).toBe(false);
+    expect(consumeRateLimit(key, 1, 1000, 1002).allowed).toBe(true);
+  });
 });

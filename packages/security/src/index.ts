@@ -110,3 +110,18 @@ export class BudgetGuard {
       throw new Error("Time budget exceeded");
   }
 }
+
+const rateState = globalThis as typeof globalThis & {
+  __agenttrialRateLimits?: Map<string, { count: number; resetAt: number }>;
+};
+const rateLimits = (rateState.__agenttrialRateLimits ??= new Map());
+export function consumeRateLimit(key: string, limit = 10, windowMs = 60_000, now = Date.now()) {
+  const current = rateLimits.get(key);
+  if (!current || current.resetAt <= now) {
+    rateLimits.set(key, { count: 1, resetAt: now + windowMs });
+    return { allowed: true, remaining: limit - 1, resetAt: now + windowMs };
+  }
+  if (current.count >= limit) return { allowed: false, remaining: 0, resetAt: current.resetAt };
+  current.count++;
+  return { allowed: true, remaining: limit - current.count, resetAt: current.resetAt };
+}

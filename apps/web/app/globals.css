@@ -47,7 +47,7 @@ button {
   padding: 10px;
   z-index: 99;
 }
-.skip:focus {
+.skip:focus-visible {
   top: 10px;
 }
 :focus-visible {

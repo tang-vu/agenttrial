@@ -11,7 +11,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: "pnpm --filter @agenttrial/web dev --port 4178",
+    command: "pnpm --filter @agenttrial/web start --port 4178",
     url: "http://127.0.0.1:4178/api/health",
     reuseExistingServer: true,
     timeout: 120_000,

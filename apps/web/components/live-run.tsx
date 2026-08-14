@@ -47,6 +47,10 @@ export function LiveRun({ runId }: { runId: string }) {
   }, [runId]);
   const activeIndex = useMemo(() => states.indexOf(state), [state]);
   const completed = state === "COMPLETED";
+  async function cancel() {
+    const response = await fetch(`/api/runs/${runId}`, { method: "DELETE" });
+    if (response.ok) setState("CANCELLED");
+  }
   if (error)
     return (
       <div className="empty-state">
@@ -69,6 +73,11 @@ export function LiveRun({ runId }: { runId: string }) {
           <p className="mono">RUN {runId}</p>
         </div>
         <div className="live-actions">
+          {!completed && !["FAILED", "CANCELLED"].includes(state) && (
+            <button className="button secondary" onClick={cancel}>
+              Cancel trial
+            </button>
+          )}
           {completed && (
             <Link className="button" href={`/reports/${runId}`}>
               Open full report →

@@ -24,5 +24,9 @@ export default tseslint.config(
     files: ["**/*.mjs"],
     languageOptions: { globals: { console: "readonly", process: "readonly" } },
   },
+  {
+    files: ["scripts/capture-screenshots.mjs"],
+    languageOptions: { globals: { document: "readonly", HTMLElement: "readonly" } },
+  },
   { files: ["**/*.d.ts"], rules: { "@typescript-eslint/triple-slash-reference": "off" } },
 );
