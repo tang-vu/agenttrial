@@ -1,0 +1,1 @@
+{ "extends": "../../tsconfig.base.json", "compilerOptions": { "composite": true }, "references": [{ "path": "../core" }, { "path": "../evidence" }, { "path": "../fixtures" }, { "path": "../security" }, { "path": "../eas" }], "include": ["src/**/*.ts"] }

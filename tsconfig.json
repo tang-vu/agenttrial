@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/evidence" },
+    { "path": "packages/security" },
+    { "path": "packages/eas" },
+    { "path": "packages/fixtures" },
+    { "path": "packages/runtime" },
+    { "path": "apps/web" }
+  ]
+}

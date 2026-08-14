@@ -1,0 +1,1 @@
+{ "name": "@agenttrial/runtime", "version": "0.1.0", "private": true, "type": "module", "exports": { ".": "./src/index.ts" }, "dependencies": { "@agenttrial/core": "workspace:*", "@agenttrial/eas": "workspace:*", "@agenttrial/evidence": "workspace:*", "@agenttrial/fixtures": "workspace:*", "@agenttrial/security": "workspace:*" } }
