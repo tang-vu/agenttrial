@@ -1,0 +1,27 @@
+{
+  "name": "@agenttrial/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@agenttrial/core": "workspace:*",
+    "@agenttrial/eas": "workspace:*",
+    "@agenttrial/evidence": "workspace:*",
+    "@agenttrial/fixtures": "workspace:*",
+    "@agenttrial/runtime": "workspace:*",
+    "@agenttrial/security": "workspace:*",
+    "next": "16.3.1",
+    "openai": "7.4.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.7"
+  }
+}
