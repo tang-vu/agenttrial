@@ -4,8 +4,8 @@ import {
   getRun,
   getSigningPublicKey,
   processNextRun,
-} from "@agenttrial/runtime";
-import { verifyBundle } from "@agenttrial/evidence";
+} from "../packages/runtime/src/index.ts";
+import { verifyBundle } from "../packages/evidence/src/index.ts";
 
 async function main() {
   if (!process.env.DATABASE_URL)
