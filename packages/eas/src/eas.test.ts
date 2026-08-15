@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   BASE_SEPOLIA,
   EAS_SCHEMA,
+  decodeAttestation,
   encodeAttestation,
   submitAttestation,
   verifyAttestationRecord,
+  verifyAttestationPayload,
 } from "./index";
 describe("EAS encoding", () => {
   it("uses official Base Sepolia predeploys", () => {
@@ -25,6 +27,18 @@ describe("EAS encoding", () => {
     expect(EAS_SCHEMA).toContain("evidenceRoot");
     expect(encodeAttestation(input)).toBe(encodeAttestation(input));
     expect(encodeAttestation(input)).toMatch(/^0x/);
+    expect(decodeAttestation(encodeAttestation(input))).toEqual(input);
+    const record = {
+      id: `0x${"33".repeat(32)}`,
+      schemaId: `0x${"44".repeat(32)}`,
+      attester: `0x${"55".repeat(20)}`,
+      time: 1,
+      expirationTime: 0,
+      revocationTime: 0,
+      data: encodeAttestation(input),
+    };
+    expect(verifyAttestationPayload(record, input).valid).toBe(true);
+    expect(verifyAttestationPayload(record, { ...input, scoreBasisPoints: 1 }).valid).toBe(false);
   });
   it("supports a mocked attestation transport without a wallet", async () => {
     const input = {

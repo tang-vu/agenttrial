@@ -21,20 +21,40 @@ export interface AttestationFields {
   reportURI: string;
   evaluatedAt: bigint;
 }
+const ATTESTATION_TYPES = [
+  "string",
+  "bytes32",
+  "string",
+  "uint32",
+  "uint32",
+  "bytes32",
+  "string",
+  "uint64",
+] as const;
 export function encodeAttestation(fields: AttestationFields): string {
-  return AbiCoder.defaultAbiCoder().encode(
-    ["string", "bytes32", "string", "uint32", "uint32", "bytes32", "string", "uint64"],
-    [
-      fields.targetIdentifier,
-      fields.trialRoot,
-      fields.methodologyVersion,
-      fields.scoreBasisPoints,
-      fields.coverageBasisPoints,
-      fields.evidenceRoot,
-      fields.reportURI,
-      fields.evaluatedAt,
-    ],
-  );
+  return AbiCoder.defaultAbiCoder().encode(ATTESTATION_TYPES, [
+    fields.targetIdentifier,
+    fields.trialRoot,
+    fields.methodologyVersion,
+    fields.scoreBasisPoints,
+    fields.coverageBasisPoints,
+    fields.evidenceRoot,
+    fields.reportURI,
+    fields.evaluatedAt,
+  ]);
+}
+export function decodeAttestation(data: string): AttestationFields {
+  const decoded = AbiCoder.defaultAbiCoder().decode(ATTESTATION_TYPES, data);
+  return {
+    targetIdentifier: decoded[0],
+    trialRoot: decoded[1],
+    methodologyVersion: decoded[2],
+    scoreBasisPoints: Number(decoded[3]),
+    coverageBasisPoints: Number(decoded[4]),
+    evidenceRoot: decoded[5],
+    reportURI: decoded[6],
+    evaluatedAt: decoded[7],
+  };
 }
 
 export function attestationStatus() {
@@ -89,4 +109,23 @@ export function verifyAttestationRecord(
     hasData: /^0x[0-9a-f]*$/i.test(record.data) && record.data.length > 2,
   };
   return { valid: Object.values(checks).every(Boolean), checks };
+}
+
+export function verifyAttestationPayload(record: EasRecord, expected: AttestationFields) {
+  try {
+    const decoded = decodeAttestation(record.data);
+    const checks = {
+      targetIdentifier: decoded.targetIdentifier === expected.targetIdentifier,
+      trialRoot: decoded.trialRoot.toLowerCase() === expected.trialRoot.toLowerCase(),
+      methodologyVersion: decoded.methodologyVersion === expected.methodologyVersion,
+      scoreBasisPoints: decoded.scoreBasisPoints === expected.scoreBasisPoints,
+      coverageBasisPoints: decoded.coverageBasisPoints === expected.coverageBasisPoints,
+      evidenceRoot: decoded.evidenceRoot.toLowerCase() === expected.evidenceRoot.toLowerCase(),
+      reportURI: decoded.reportURI === expected.reportURI,
+      evaluatedAt: decoded.evaluatedAt === expected.evaluatedAt,
+    };
+    return { valid: Object.values(checks).every(Boolean), checks, decoded };
+  } catch {
+    return { valid: false, checks: { decodable: false }, decoded: undefined };
+  }
 }

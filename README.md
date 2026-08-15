@@ -93,6 +93,7 @@ The schema uses Base Sepolia chain ID `84532`, EAS `0x4200…0021`, and Schema R
 ```bash
 pnpm eas:register --confirm-base-sepolia
 pnpm eas:attest agenttrial-RUN_ID.json --confirm-base-sepolia
+pnpm eas:verify agenttrial-RUN_ID.json 0xATTESTATION_UID
 ```
 
 These commands spend Base Sepolia test ETH. Mainnet broadcasting is intentionally unsupported by the scripts. Attestation failure never blocks the signed local report.
