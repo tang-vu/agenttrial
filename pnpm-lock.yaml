@@ -183,6 +183,9 @@ importers:
       "@agenttrial/fixtures":
         specifier: workspace:*
         version: link:../fixtures
+      "@agenttrial/planner":
+        specifier: workspace:*
+        version: link:../planner
       "@agenttrial/security":
         specifier: workspace:*
         version: link:../security

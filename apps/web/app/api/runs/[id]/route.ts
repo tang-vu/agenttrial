@@ -5,7 +5,14 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const run = await getRun(id);
   if (!run) return NextResponse.json({ error: "Run not found." }, { status: 404 });
   return NextResponse.json(
-    { runId: run.id, state: run.state, events: run.events, report: run.report, error: run.error },
+    {
+      runId: run.id,
+      state: run.state,
+      events: run.events,
+      report: run.report,
+      attestation: run.bundle?.attestation,
+      error: run.error,
+    },
     { headers: { "cache-control": "no-store" } },
   );
 }

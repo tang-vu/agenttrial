@@ -30,6 +30,7 @@ import {
   type FixtureId,
 } from "@agenttrial/fixtures";
 import { redact } from "@agenttrial/security";
+import { OpenAIPlannerProvider } from "@agenttrial/planner";
 import {
   cancelQueuedJob,
   claimRun,
@@ -40,7 +41,7 @@ import {
   runCancellationRequested,
   saveRun,
 } from "./persistence";
-export { closePersistence } from "./persistence";
+export { closePersistence, heartbeatWorker, persistenceReadiness } from "./persistence";
 
 export interface RuntimeRun {
   id: string;
@@ -417,12 +418,45 @@ async function executeExternalRun(run: RuntimeRun) {
     );
     await ensureActive(run);
     const discovery = await discoverPublicTarget(run.targetUrl!);
+    const openAIPlanner = new OpenAIPlannerProvider();
+    let claims = discovery.claims;
+    if (openAIPlanner.available()) {
+      try {
+        const planned = await openAIPlanner.discover(discovery.response.body);
+        const aiClaims = planned.claims.map((claim, index) => ({
+          id: `claim_ai_${index + 1}`,
+          capability: claim.capability,
+          advertisedInput: claim.advertisedInput,
+          advertisedOutput: claim.advertisedOutput,
+          dependencies: [],
+          requiredPermissions: [],
+          successCondition: claim.successCondition,
+          evidenceSource: discovery.response.url,
+          confidence: claim.confidence,
+          discoveryLocation: claim.discoveryLocation,
+        }));
+        claims = [...claims, ...aiClaims].slice(0, 20);
+        emit(run, machine.state, "planner.discovery", "Optional AI claim extraction completed", {
+          provider: openAIPlanner.name,
+          addedClaims: aiClaims.length,
+          untrustedContent: "isolated",
+        });
+      } catch (error) {
+        emit(
+          run,
+          machine.state,
+          "planner.provider_failed",
+          "Optional AI discovery failed; deterministic discovery remains available",
+          { error: error instanceof Error ? error.message : "provider failure" },
+        );
+      }
+    }
     machine.transition("CLAIMS_EXTRACTED");
     emit(
       run,
       machine.state,
       "claims.normalized",
-      `${discovery.claims.length} typed claims extracted from untrusted content`,
+      `${claims.length} typed claims extracted from untrusted content`,
       { descriptorKind: discovery.descriptorKind, untrustedContent: "isolated" },
     );
     machine.transition("PLANNING");
@@ -575,7 +609,7 @@ async function executeExternalRun(run: RuntimeRun) {
         { assertionId: result.id, dimension: result.dimension },
       );
     machine.transition("SCORING");
-    const score = calculateScore(assertions, discovery.claims, new Set());
+    const score = calculateScore(assertions, claims, new Set());
     emit(
       run,
       machine.state,
@@ -587,7 +621,7 @@ async function executeExternalRun(run: RuntimeRun) {
       runId: run.id,
       target: discovery.target,
       state: "COMPLETED",
-      claims: discovery.claims,
+      claims,
       plan,
       planHash,
       observations: [observation],

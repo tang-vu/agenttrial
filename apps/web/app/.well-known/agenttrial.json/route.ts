@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export function GET(request: Request) {
   const origin = new URL(request.url).origin;
   return NextResponse.json({
-    schema: "https://agenttrial.dev/schemas/agent-descriptor-v1.json",
+    schema: `${origin}/schemas/agent-descriptor-v1.json`,
     name: "AgentTrial",
     version: "0.1.0",
     description: "Autonomous adversarial evaluator producing deterministic evidence receipts.",

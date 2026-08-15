@@ -12,6 +12,7 @@
     "@agenttrial/eas": "workspace:*",
     "@agenttrial/evidence": "workspace:*",
     "@agenttrial/fixtures": "workspace:*",
+    "@agenttrial/planner": "workspace:*",
     "@agenttrial/security": "workspace:*",
     "postgres": "3.4.8"
   }

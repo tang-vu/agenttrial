@@ -14,7 +14,7 @@ test("judge can run, inspect, verify, and tamper", async ({ page }) => {
     timeout: 30_000,
   });
   await page.getByRole("link", { name: /Open full report/ }).click();
-  await expect(page.getByText("Claims held up under pressure.")).toBeVisible();
+  await expect(page.getByText("Tested claims held up under pressure.")).toBeVisible();
   await page.getByRole("link", { name: /Verify receipt/ }).click();
   await expect(page.getByText("Receipt is cryptographically valid")).toBeVisible();
   await page.getByRole("button", { name: /Modify one byte/ }).click();
@@ -28,7 +28,7 @@ test("vulnerable fixture exposes failures", async ({ page }) => {
     timeout: 30_000,
   });
   await page.getByRole("link", { name: /Open full report/ }).click();
-  await expect(page.getByText("Material claims failed under pressure.")).toBeVisible();
+  await expect(page.getByText("Material tested claims failed under pressure.")).toBeVisible();
   await expect(page.getByText("FAIL").first()).toBeVisible();
 });
 test("active consent is required and cancellation is typed", async ({ request }) => {
@@ -55,4 +55,27 @@ test("landing has no serious accessibility violations", async ({ page }) => {
   expect(
     results.violations.filter((v) => ["serious", "critical"].includes(v.impact ?? "")),
   ).toEqual([]);
+});
+test("creation and verifier screens have no serious accessibility violations", async ({ page }) => {
+  for (const path of ["/new", "/verify"]) {
+    await page.goto(path);
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(
+      results.violations.filter((violation) =>
+        ["serious", "critical"].includes(violation.impact ?? ""),
+      ),
+    ).toEqual([]);
+  }
+});
+test("machine endpoints report truthful optional-provider status", async ({ request }) => {
+  const ready = await request.get("/api/ready");
+  expect(ready.status()).toBe(200);
+  const body = await ready.json();
+  expect(body.ready).toBe(true);
+  expect(body.plannerProvider).toBe("deterministic");
+  expect(body.openAIProvider).toBe("not-configured");
+  const descriptor = await request.get("/.well-known/agenttrial.json");
+  const descriptorBody = await descriptor.json();
+  expect(descriptorBody.a2a.supported).toBe(false);
+  expect((await request.get(new URL(descriptorBody.schema).pathname)).status()).toBe(200);
 });

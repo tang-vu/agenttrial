@@ -43,6 +43,10 @@ async function initialize() {
       )`;
       await db`ALTER TABLE agenttrial_jobs ADD COLUMN IF NOT EXISTS locked_until timestamptz`;
       await db`CREATE INDEX IF NOT EXISTS agenttrial_jobs_queue_idx ON agenttrial_jobs(status, available_at)`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_workers (
+        worker_id text PRIMARY KEY,
+        last_seen timestamptz NOT NULL DEFAULT now()
+      )`;
     })();
   return initialized;
 }
@@ -104,4 +108,31 @@ export async function runCancellationRequested(id: string) {
   const rows =
     await sql()`SELECT state, snapshot->>'cancelled' AS cancelled FROM agenttrial_runs WHERE id = ${id}::uuid LIMIT 1`;
   return rows[0]?.state === "CANCELLED" || rows[0]?.cancelled === "true";
+}
+
+export async function heartbeatWorker(workerId: string) {
+  if (!persistenceConfigured()) return;
+  await initialize();
+  await sql()`INSERT INTO agenttrial_workers (worker_id, last_seen) VALUES (${workerId}, now())
+    ON CONFLICT (worker_id) DO UPDATE SET last_seen = now()`;
+}
+
+export async function persistenceReadiness() {
+  if (!persistenceConfigured())
+    return { configured: false, database: true, worker: true, message: "in-process demo mode" };
+  try {
+    await initialize();
+    await sql()`SELECT 1`;
+    const workers =
+      await sql()`SELECT count(*)::int AS count FROM agenttrial_workers WHERE last_seen > now() - interval '30 seconds'`;
+    const worker = Number(workers[0]?.count ?? 0) > 0;
+    return {
+      configured: true,
+      database: true,
+      worker,
+      message: worker ? "database and worker ready" : "no recent worker heartbeat",
+    };
+  } catch {
+    return { configured: true, database: false, worker: false, message: "database unavailable" };
+  }
 }

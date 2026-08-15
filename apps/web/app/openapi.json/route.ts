@@ -57,8 +57,19 @@ const spec = {
       },
       delete: {
         summary: "Cancel an active run",
-        parameters: [idParameter],
-        responses: { "200": { description: "Cancellation requested" } },
+        parameters: [
+          idParameter,
+          {
+            name: "x-agenttrial-cancel-token",
+            in: "header",
+            required: true,
+            schema: { type: "string", minLength: 64, maxLength: 64 },
+          },
+        ],
+        responses: {
+          "200": { description: "Cancellation requested" },
+          "409": { $ref: "#/components/responses/Error" },
+        },
       },
     },
     "/api/runs/{id}/events": {
@@ -95,6 +106,19 @@ const spec = {
       get: {
         summary: "Readiness and optional-provider status",
         responses: { "200": { description: "Ready" } },
+      },
+    },
+    "/api/signing-keys": {
+      get: {
+        summary: "Get independently distributed receipt verification keys",
+        responses: {
+          "200": {
+            description: "Active signing-key registry",
+            content: {
+              "application/json": { schema: { $ref: "#/components/schemas/SigningKeys" } },
+            },
+          },
+        },
       },
     },
   },
@@ -202,6 +226,26 @@ const spec = {
               "planHash",
               "keyId",
             ],
+            properties: {
+              receiptVersion: { const: "1.0.0" },
+              methodologyVersion: { type: "string" },
+              runId: { type: "string", format: "uuid" },
+              targetId: { type: "string" },
+              mode: { enum: ["active-controlled", "passive-external"] },
+              planHash: { type: "string", pattern: "^[0-9a-f]{64}$" },
+              seedCommitment: { type: "string", pattern: "^[0-9a-f]{64}$" },
+              evidenceRoot: { type: "string", pattern: "^[0-9a-f]{64}$" },
+              evidenceItemHashes: {
+                type: "array",
+                items: { type: "string", pattern: "^[0-9a-f]{64}$" },
+              },
+              reportHash: { type: "string", pattern: "^[0-9a-f]{64}$" },
+              eventChainHead: { type: "string", pattern: "^[0-9a-f]{64}$" },
+              scoreBasisPoints: { type: "integer", minimum: 0, maximum: 10000 },
+              coverageBasisPoints: { type: "integer", minimum: 0, maximum: 10000 },
+              issuedAt: { type: "string", format: "date-time" },
+              keyId: { type: "string" },
+            },
           },
           signature: { type: "string", pattern: "^[0-9a-f]{128}$" },
           publicKey: { type: "string", pattern: "^[0-9a-f]{64}$" },
@@ -218,6 +262,26 @@ const spec = {
           evidenceRoot: { type: "string", pattern: "^[0-9a-f]{64}$" },
           receipt: { $ref: "#/components/schemas/Receipt" },
           attestation: { type: "object" },
+        },
+      },
+      SigningKeys: {
+        type: "object",
+        required: ["version", "keys"],
+        properties: {
+          version: { type: "string" },
+          keys: {
+            type: "array",
+            items: {
+              type: "object",
+              required: ["keyId", "algorithm", "publicKey", "status"],
+              properties: {
+                keyId: { type: "string" },
+                algorithm: { const: "Ed25519" },
+                publicKey: { type: "string", pattern: "^[0-9a-f]{64}$" },
+                status: { enum: ["active", "previous", "revoked"] },
+              },
+            },
+          },
         },
       },
     },

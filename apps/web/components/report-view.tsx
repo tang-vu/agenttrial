@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { TrialReport } from "@agenttrial/core";
+import type { EvidenceBundle } from "@agenttrial/evidence";
 const labels: Record<string, string> = {
   capability: "Capability execution",
   evidence: "Evidence & provenance",
@@ -22,12 +23,14 @@ export function ReportView({ runId }: { runId: string }) {
   const [report, setReport] = useState<TrialReport>();
   const [error, setError] = useState("");
   const [tab, setTab] = useState("findings");
+  const [attestation, setAttestation] = useState<EvidenceBundle["attestation"]>();
   useEffect(() => {
     fetch(`/api/runs/${runId}`)
       .then(async (r) => {
         const d = await r.json();
         if (!r.ok || !d.report) throw new Error(d.error ?? "Report is not ready");
         setReport(d.report);
+        setAttestation(d.attestation);
       })
       .catch((e) => setError(e.message));
   }, [runId]);
@@ -125,6 +128,17 @@ export function ReportView({ runId }: { runId: string }) {
           </p>
           <code>{report.planHash.slice(0, 18)}…</code>
           <small>Plan sealed before execution</small>
+          {attestation?.status === "anchored" && attestation.explorerUrl ? (
+            <a href={attestation.explorerUrl} target="_blank" rel="noreferrer">
+              View Base Sepolia attestation ↗
+            </a>
+          ) : (
+            <small>
+              {attestation?.status === "failed"
+                ? `Attestation failed: ${attestation.message}`
+                : "Signed local receipt · onchain anchor optional"}
+            </small>
+          )}
         </div>
       </section>
       <section className="dimension-grid">
