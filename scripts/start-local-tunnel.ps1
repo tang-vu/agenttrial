@@ -37,7 +37,7 @@ if (!$SkipBuild) {
 
 $env:AGENTTRIAL_SIGNING_SEED = Get-Content -LiteralPath $seedPath -Raw
 $web = Start-Process -FilePath $pnpm -ArgumentList @(
-  "--filter", "@agenttrial/web", "start", "--port", "$Port"
+  "--filter", "@agenttrial/web", "start", "--hostname", "127.0.0.1", "--port", "$Port"
 ) -WorkingDirectory $repo -WindowStyle Hidden -RedirectStandardOutput (
   Join-Path $stateDirectory "web.out.log"
 ) -RedirectStandardError (Join-Path $stateDirectory "web.err.log") -PassThru
