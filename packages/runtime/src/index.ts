@@ -39,6 +39,7 @@ import {
   persistenceConfigured,
   saveRun,
 } from "./persistence";
+export { closePersistence } from "./persistence";
 
 export interface RuntimeRun {
   id: string;

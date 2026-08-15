@@ -7,6 +7,7 @@
 - Added PostgreSQL snapshots, a durable `SKIP LOCKED` queue, separate worker, cross-process SSE, and cancellation capabilities.
 - Replaced simulated retry/repeat flags with measured fixture attempts and independent repeated executions.
 - Hardened EAS preflight verification, attestation record checks, OpenAPI schemas, redaction, accessibility coverage, and refreshed product screenshots.
+- Added PostgreSQL CI smoke coverage and approval-gated GHCR/Base Sepolia delivery workflows.
 
 ## 0.1.0 — 2026-08-14
 

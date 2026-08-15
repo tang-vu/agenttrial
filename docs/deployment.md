@@ -22,3 +22,9 @@ For Vercel, use the repository root for web only and point `DATABASE_URL` at man
 ## Base Sepolia
 
 Fund a dedicated testnet-only wallet, set `EAS_RPC_URL`, `EAS_PRIVATE_KEY`, and run the guarded registration script. Store the returned schema UID as `EAS_SCHEMA_UID`. Review the bundle and report URI before the guarded attestation script. Never reuse a mainnet private key. Mainnet is intentionally blocked by the scripts.
+
+## GitHub delivery workflows
+
+- `quality-gate` provisions PostgreSQL and verifies the durable queue in addition to all unit, build, browser and security checks.
+- `publish-deployment-images` builds separate web and worker targets and pushes them to GHCR only after the operator types `PUBLISH` and approves the `production` environment.
+- `attest-base-sepolia` downloads a reviewed HTTPS bundle, verifies its trusted receipt locally, and broadcasts only after `ATTEST_BASE_SEPOLIA` plus approval of the protected `base-sepolia` environment.

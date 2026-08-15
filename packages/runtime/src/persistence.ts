@@ -7,6 +7,11 @@ let initialized: Promise<void> | undefined;
 export function persistenceConfigured() {
   return Boolean(process.env.DATABASE_URL);
 }
+export async function closePersistence() {
+  if (client) await client.end({ timeout: 5 });
+  client = undefined;
+  initialized = undefined;
+}
 
 function sql() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not configured");

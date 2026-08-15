@@ -26,6 +26,7 @@ pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm test:durable # requires DATABASE_URL and AGENTTRIAL_SIGNING_SEED
 pnpm build
 pnpm exec playwright install chromium
 pnpm test:e2e
@@ -106,6 +107,8 @@ docker compose up --build
 ```
 
 The containers run as non-root users with read-only filesystems, no Linux capabilities, and `no-new-privileges`. Passive HTTP discovery is enabled; browser navigation and arbitrary external active tests remain disabled.
+
+GitHub Actions runs the complete quality gate with PostgreSQL. Manually approved workflows can publish immutable web/worker images to GHCR or attest a reviewed bundle on Base Sepolia; both require an explicit confirmation input and protected environment approval.
 
 ## Documentation
 

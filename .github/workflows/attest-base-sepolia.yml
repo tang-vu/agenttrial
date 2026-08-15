@@ -1,0 +1,39 @@
+name: attest-base-sepolia
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle_url:
+        description: HTTPS URL of the reviewed canonical evidence bundle
+        required: true
+      confirm:
+        description: Type ATTEST_BASE_SEPOLIA to authorize the testnet transaction
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  attest:
+    if: inputs.confirm == 'ATTEST_BASE_SEPOLIA'
+    environment: base-sepolia
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 11.20.0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Download reviewed bundle
+        run: curl --fail --proto '=https' --max-filesize 2000000 --output bundle.json "$BUNDLE_URL"
+        env:
+          BUNDLE_URL: ${{ inputs.bundle_url }}
+      - name: Verify and attest
+        run: pnpm eas:attest bundle.json --confirm-base-sepolia
+        env:
+          EAS_RPC_URL: ${{ secrets.EAS_RPC_URL }}
+          EAS_PRIVATE_KEY: ${{ secrets.EAS_PRIVATE_KEY }}
+          EAS_SCHEMA_UID: ${{ secrets.EAS_SCHEMA_UID }}
+          AGENTTRIAL_TRUSTED_PUBLIC_KEY: ${{ secrets.AGENTTRIAL_TRUSTED_PUBLIC_KEY }}
+          REPORT_URI: ${{ inputs.bundle_url }}
