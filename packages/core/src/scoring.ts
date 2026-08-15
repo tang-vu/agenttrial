@@ -23,7 +23,9 @@ export function calculateScore(
     dimensions[dimension] =
       possible === 0 ? 0 : round((earned / possible) * DIMENSION_POINTS[dimension]);
   }
-  const coverage = claims.length === 0 ? 0 : round((testedClaimIds.size / claims.length) * 100);
+  const knownClaimIds = new Set(claims.map((claim) => claim.id));
+  const testedKnownClaims = [...testedClaimIds].filter((id) => knownClaimIds.has(id)).length;
+  const coverage = claims.length === 0 ? 0 : round((testedKnownClaims / claims.length) * 100);
   const untestedClaims = claims.filter((c) => !testedClaimIds.has(c.id)).map((c) => c.id);
   const overall = round(Object.values(dimensions).reduce((a, b) => a + b, 0));
   const criticalFindings = assertions

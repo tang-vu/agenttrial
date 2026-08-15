@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { createServer } from "node:http";
-import { cancelRun, createExternalRun, createFixtureRun, runs } from "./index";
+import {
+  cancelRun,
+  cancelRunAuthorized,
+  createExternalRun,
+  createFixtureRun,
+  runs,
+  takeCancellationCapability,
+} from "./index";
 async function complete(id: string) {
   for (let i = 0; i < 100; i++) {
     const run = runs.get(id)!;
@@ -33,6 +40,12 @@ describe("pipeline integration", () => {
     const result = await complete(run.id);
     expect(result.state).toBe("CANCELLED");
     expect(result.events.at(-1)?.type).toBe("run.cancelled");
+  });
+  it("requires the private cancellation capability", async () => {
+    const run = createFixtureRun("evidence-researcher");
+    const token = takeCancellationCapability(run.id)!;
+    expect(await cancelRunAuthorized(run.id, "wrong-token")).toBe(false);
+    expect(await cancelRunAuthorized(run.id, token)).toBe(true);
   });
   it("executes bounded passive discovery without marking advertised behavior as tested", async () => {
     process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS = "true";

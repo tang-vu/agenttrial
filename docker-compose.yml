@@ -1,11 +1,27 @@
 services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: agenttrial
+      POSTGRES_USER: agenttrial
+      POSTGRES_PASSWORD: agenttrial-local
+    volumes: [agenttrial-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agenttrial"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
   web:
     build: .
     ports: ["3000:3000"]
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_APP_URL: http://localhost:3000
-      AGENTTRIAL_SIGNING_SEED: ${AGENTTRIAL_SIGNING_SEED:-}
+      AGENTTRIAL_SIGNING_SEED: ${AGENTTRIAL_SIGNING_SEED:?Generate a stable 64-character hex seed}
+      DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
+    depends_on:
+      postgres:
+        condition: service_healthy
     read_only: true
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
@@ -21,3 +37,21 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
+  worker:
+    build:
+      context: .
+      target: worker
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
+      AGENTTRIAL_SIGNING_SEED: ${AGENTTRIAL_SIGNING_SEED:?Generate a stable 64-character hex seed}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+
+volumes:
+  agenttrial-data:

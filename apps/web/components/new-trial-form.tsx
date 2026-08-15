@@ -38,6 +38,7 @@ export function NewTrialForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
+      sessionStorage.setItem(`agenttrial:cancel:${data.runId}`, data.cancelToken);
       router.push(`/live/${data.runId}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start the trial");
@@ -55,6 +56,7 @@ export function NewTrialForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
+      sessionStorage.setItem(`agenttrial:cancel:${data.runId}`, data.cancelToken);
       router.push(`/live/${data.runId}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start passive discovery");

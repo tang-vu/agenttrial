@@ -48,7 +48,11 @@ export function LiveRun({ runId }: { runId: string }) {
   const activeIndex = useMemo(() => states.indexOf(state), [state]);
   const completed = state === "COMPLETED";
   async function cancel() {
-    const response = await fetch(`/api/runs/${runId}`, { method: "DELETE" });
+    const token = sessionStorage.getItem(`agenttrial:cancel:${runId}`) ?? "";
+    const response = await fetch(`/api/runs/${runId}`, {
+      method: "DELETE",
+      headers: { "x-agenttrial-cancel-token": token },
+    });
     if (response.ok) setState("CANCELLED");
   }
   if (error)

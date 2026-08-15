@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { runs } from "@agenttrial/runtime";
+import { getRun } from "@agenttrial/runtime";
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const run = runs.get(id);
+  const run = await getRun(id);
   if (!run) return NextResponse.json({ error: "Run not found." }, { status: 404 });
   if (!run.bundle)
     return NextResponse.json({ error: "Evidence bundle is not ready." }, { status: 409 });

@@ -65,4 +65,9 @@ describe("deterministic scoring", () => {
     expect(result.badge).toBe("not-verified");
     expect(result.untestedClaims).toEqual(["b", "c"]);
   });
+  it("ignores unknown claim IDs when calculating coverage", () => {
+    expect(calculateScore(assertions(true), [claim("a")], new Set(["a", "forged"])).coverage).toBe(
+      100,
+    );
+  });
 });

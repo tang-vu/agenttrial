@@ -88,6 +88,12 @@ importers:
         specifier: 19.1.7
         version: 19.1.7(@types/react@19.1.10)
 
+  apps/worker:
+    dependencies:
+      "@agenttrial/runtime":
+        specifier: workspace:*
+        version: link:../../packages/runtime
+
   packages/adapters:
     dependencies:
       "@agenttrial/core":
@@ -171,6 +177,9 @@ importers:
       "@agenttrial/security":
         specifier: workspace:*
         version: link:../security
+      postgres:
+        specifier: 3.4.8
+        version: 3.4.8
 
   packages/security: {}
 
@@ -4827,6 +4836,13 @@ packages:
       }
     engines: { node: ^10 || ^12 || >=14 }
 
+  postgres@3.4.8:
+    resolution:
+      {
+        integrity: sha512-d+JFcLM17njZaOLkv6SCev7uoLaBtfK86vMUXhW1Z4glPWh4jozno9APvW/XKFJ3CCxVoC7OL38BqRydtu5nGg==,
+      }
+    engines: { node: ">=12" }
+
   prelude-ls@1.2.1:
     resolution:
       {
@@ -8956,6 +8972,8 @@ snapshots:
       nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  postgres@3.4.8: {}
 
   prelude-ls@1.2.1: {}
 

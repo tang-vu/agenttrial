@@ -33,8 +33,8 @@ export default function Developers() {
           <a href="/openapi.json">
             OpenAPI 3.1 schema <span>↗</span>
           </a>
-          <a href="/.well-known/agent-card.json">
-            A2A Agent Card <span>↗</span>
+          <a href="/.well-known/agenttrial.json">
+            Machine descriptor <span>↗</span>
           </a>
           <a href="/llms.txt">
             llms.txt <span>↗</span>

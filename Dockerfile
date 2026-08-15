@@ -6,6 +6,8 @@ WORKDIR /app
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json apps/web/package.json
+COPY apps/worker/package.json apps/worker/package.json
+COPY packages/adapters/package.json packages/adapters/package.json
 COPY packages/core/package.json packages/core/package.json
 COPY packages/eas/package.json packages/eas/package.json
 COPY packages/evidence/package.json packages/evidence/package.json
@@ -18,6 +20,13 @@ RUN pnpm install --frozen-lockfile
 FROM deps AS builder
 COPY . .
 RUN pnpm build
+
+FROM deps AS worker
+ENV NODE_ENV=production
+COPY . .
+RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs worker
+USER worker
+CMD ["pnpm", "--filter", "@agenttrial/worker", "start"]
 
 FROM node:24-bookworm-slim AS runner
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0

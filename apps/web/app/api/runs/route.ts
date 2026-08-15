@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { createExternalRun, createFixtureRun } from "@agenttrial/runtime";
+import {
+  createExternalRun,
+  createFixtureRun,
+  takeCancellationCapability,
+} from "@agenttrial/runtime";
 import type { FixtureId } from "@agenttrial/fixtures";
 import { consumeRateLimit } from "@agenttrial/security";
 import { z } from "zod";
@@ -46,7 +50,7 @@ export async function POST(request: Request) {
         ? createFixtureRun(body.fixture as FixtureId)
         : createExternalRun(body.targetUrl);
     return NextResponse.json(
-      { runId: run.id, state: run.state },
+      { runId: run.id, state: run.state, cancelToken: takeCancellationCapability(run.id) },
       { status: 201, headers: { "cache-control": "no-store" } },
     );
   } catch {

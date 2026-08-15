@@ -17,6 +17,7 @@ import {
   createSigningKey,
   evidenceRoot,
   hashObject,
+  hashText,
   signReceipt,
   type EvidenceBundle,
 } from "@agenttrial/evidence";
@@ -29,6 +30,15 @@ import {
   type FixtureId,
 } from "@agenttrial/fixtures";
 import { redact } from "@agenttrial/security";
+import {
+  cancelQueuedJob,
+  claimRun,
+  enqueueRun,
+  finishRunJob,
+  loadRun,
+  persistenceConfigured,
+  saveRun,
+} from "./persistence";
 
 export interface RuntimeRun {
   id: string;
@@ -41,6 +51,7 @@ export interface RuntimeRun {
   fixture?: FixtureId;
   targetUrl?: string;
   mode: "active-controlled" | "passive-external";
+  cancelTokenHash: string;
 }
 export type EventListener = (event: RunEvent) => void;
 
@@ -51,10 +62,18 @@ const globalStore = globalThis as typeof globalThis & {
 };
 export const runs = (globalStore.__agenttrialRuns ??= new Map());
 const listeners = (globalStore.__agenttrialListeners ??= new Map());
+const cancellationCapabilities = new Map<string, string>();
+const signingSeedHex = process.env.AGENTTRIAL_SIGNING_SEED;
+if (signingSeedHex && !/^[0-9a-fA-F]{64}$/.test(signingSeedHex))
+  throw new Error(
+    "AGENTTRIAL_SIGNING_SEED must be exactly 32 bytes encoded as 64 hexadecimal characters",
+  );
+if (process.env.DATABASE_URL && !signingSeedHex)
+  throw new Error(
+    "A stable AGENTTRIAL_SIGNING_SEED is required when the durable multi-process runtime is enabled",
+  );
 const signingKey = (globalStore.__agenttrialKey ??= createSigningKey(
-  process.env.AGENTTRIAL_SIGNING_SEED
-    ? Uint8Array.from(Buffer.from(process.env.AGENTTRIAL_SIGNING_SEED, "hex"))
-    : undefined,
+  signingSeedHex ? Uint8Array.from(Buffer.from(signingSeedHex, "hex")) : undefined,
 ));
 export function getSigningPublicKey() {
   return Buffer.from(signingKey.publicKey).toString("hex");
@@ -66,6 +85,7 @@ export function subscribe(runId: string, listener: EventListener) {
   listeners.set(runId, set);
   return () => {
     set.delete(listener);
+    if (set.size === 0) listeners.delete(runId);
   };
 }
 function emit(
@@ -84,6 +104,7 @@ function emit(
     ...(detail ? { detail } : {}),
   });
   listeners.get(run.id)?.forEach((fn) => fn(event));
+  void saveRun(run).catch(() => undefined);
   return event;
 }
 const pause = (ms = 90) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -93,6 +114,7 @@ function ensureActive(run: RuntimeRun) {
 
 export function createFixtureRun(fixture: FixtureId): RuntimeRun {
   if (!fixtures[fixture]) throw new Error("Unknown fixture");
+  const cancelToken = randomBytes(32).toString("hex");
   const run: RuntimeRun = {
     id: randomUUID(),
     state: "CREATED",
@@ -100,17 +122,21 @@ export function createFixtureRun(fixture: FixtureId): RuntimeRun {
     cancelled: false,
     fixture,
     mode: "active-controlled",
+    cancelTokenHash: hashText(cancelToken),
   };
+  cancellationCapabilities.set(run.id, cancelToken);
   runs.set(run.id, run);
   emit(run, "CREATED", "run.created", "Trial workspace created", {
     target: fixtures[fixture].name,
     mode: "active",
     authorization: "controlled fixture",
   });
-  void executeRun(run);
+  if (persistenceConfigured()) void enqueueRun(run).catch((error) => failQueuedRun(run, error));
+  else void executeRun(run);
   return run;
 }
 export function createExternalRun(targetUrl: string): RuntimeRun {
+  const cancelToken = randomBytes(32).toString("hex");
   const run: RuntimeRun = {
     id: randomUUID(),
     state: "CREATED",
@@ -118,20 +144,76 @@ export function createExternalRun(targetUrl: string): RuntimeRun {
     cancelled: false,
     targetUrl,
     mode: "passive-external",
+    cancelTokenHash: hashText(cancelToken),
   };
+  cancellationCapabilities.set(run.id, cancelToken);
   runs.set(run.id, run);
   emit(run, "CREATED", "run.created", "Passive evaluation workspace created", {
     target: targetUrl,
     mode: "passive",
     authorization: "public metadata discovery only",
   });
-  void executeExternalRun(run);
+  if (persistenceConfigured()) void enqueueRun(run).catch((error) => failQueuedRun(run, error));
+  else void executeExternalRun(run);
   return run;
+}
+function failQueuedRun(run: RuntimeRun, error: unknown) {
+  run.error = error instanceof Error ? error.message : "Could not enqueue run";
+  emit(run, "FAILED", "run.failed", "Durable queue submission failed", { error: run.error });
+}
+export async function getRun(id: string) {
+  return runs.get(id) ?? (await loadRun(id));
+}
+export async function processNextRun(workerId = `worker-${process.pid}`) {
+  if (!persistenceConfigured()) return false;
+  const id = await claimRun(workerId);
+  if (!id) return false;
+  const run = await loadRun(id);
+  if (!run) {
+    await finishRunJob(id, "Run snapshot missing");
+    return true;
+  }
+  runs.set(id, run);
+  try {
+    if (run.mode === "passive-external") await executeExternalRun(run);
+    else await executeRun(run);
+    await saveRun(run);
+    await finishRunJob(id, run.state === "FAILED" ? run.error : undefined);
+  } catch (error) {
+    await finishRunJob(id, error instanceof Error ? error.message : "Worker failure");
+  }
+  return true;
 }
 export function cancelRun(id: string) {
   const run = runs.get(id);
   if (!run || ["COMPLETED", "FAILED", "CANCELLED"].includes(run.state)) return false;
   run.cancelled = true;
+  return true;
+}
+export function takeCancellationCapability(id: string) {
+  const token = cancellationCapabilities.get(id);
+  cancellationCapabilities.delete(id);
+  return token;
+}
+export async function cancelRunAuthorized(id: string, token: string) {
+  const run = await getRun(id);
+  if (
+    !run ||
+    hashText(token) !== run.cancelTokenHash ||
+    ["COMPLETED", "FAILED", "CANCELLED"].includes(run.state)
+  )
+    return false;
+  run.cancelled = true;
+  run.state = "CANCELLED";
+  emit(
+    run,
+    "CANCELLED",
+    "run.cancelled",
+    "Trial cancelled with the private cancellation capability",
+  );
+  runs.set(id, run);
+  await cancelQueuedJob(id);
+  await saveRun(run);
   return true;
 }
 
