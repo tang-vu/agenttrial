@@ -42,6 +42,6 @@ sequenceDiagram
 
 ## Persistence and deployment
 
-The current controlled demo uses a `globalThis` process-local run store. It supports fresh concurrent runs and SSE within one Node process, which is sufficient for the public judging path and Docker single-instance deployment. It is not horizontally durable. A production marketplace deployment must replace the `RuntimeRun` map/listener set with PostgreSQL plus a durable queue/pub-sub adapter while preserving the same typed runtime interface.
+The credential-free development fallback uses a `globalThis` run store. When `DATABASE_URL` is configured, snapshots are revisioned in PostgreSQL, jobs are atomically claimed with `FOR UPDATE SKIP LOCKED`, a separate worker executes them, and SSE polls the durable snapshot so web and worker need not share a process.
 
-The external browser adapter is intentionally disabled in the public UI. Safe activation requires a separate non-root worker with network egress denial for private/special ranges, per-request policy enforcement, disposable contexts, and no receipt-signing keys.
+Passive HTTP discovery is enabled through the policy-enforcing adapter. External browser execution remains disabled; safe activation requires a separate non-root browser worker with network egress denial for private/special ranges, disposable contexts, and no receipt-signing keys.

@@ -9,6 +9,7 @@
   "dependencies": {
     "@agenttrial/core": "workspace:*",
     "@noble/hashes": "2.0.1",
+    "canonicalize": "4.0.0",
     "tweetnacl": "1.0.3",
     "zod": "4.4.3"
   }

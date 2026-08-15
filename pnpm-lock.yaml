@@ -8,11 +8,20 @@ overrides:
   adm-zip: 0.6.0
   serialize-javascript: 7.1.0
   tmp: 0.2.7
-  undici@<6.27.0: 6.27.0
+  undici@<6.28.0: 6.28.0
+  uuid@<11.1.1: 11.1.1
+  cookie@<0.7.0: 0.7.2
   ws: 8.21.3
 
 importers:
   .:
+    dependencies:
+      "@ethereum-attestation-service/eas-sdk":
+        specifier: 2.9.0
+        version: 2.9.0(supports-color@8.1.1)(typescript@5.9.2)(zod@4.4.3)
+      ethers:
+        specifier: 6.16.0
+        version: 6.16.0
     devDependencies:
       "@axe-core/playwright":
         specifier: 4.10.2
@@ -35,6 +44,9 @@ importers:
       prettier:
         specifier: 3.6.2
         version: 3.6.2
+      tsx:
+        specifier: 4.23.12
+        version: 4.23.12
       typescript:
         specifier: 5.9.2
         version: 5.9.2
@@ -43,7 +55,7 @@ importers:
         version: 8.40.0(eslint@9.33.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.9.2)
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@24.3.0)(vite@7.3.6(@types/node@24.3.0))
+        version: 4.1.10(@types/node@24.3.0)(vite@7.3.6(@types/node@24.3.0)(tsx@4.23.12))
 
   apps/web:
     dependencies:
@@ -132,6 +144,9 @@ importers:
       "@noble/hashes":
         specifier: 2.0.1
         version: 2.0.1
+      canonicalize:
+        specifier: 4.0.0
+        version: 4.0.0
       tweetnacl:
         specifier: 1.0.3
         version: 1.0.3
@@ -184,6 +199,12 @@ importers:
   packages/security: {}
 
 packages:
+  "@adraffy/ens-normalize@1.10.1":
+    resolution:
+      {
+        integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==,
+      }
+
   "@adraffy/ens-normalize@1.11.1":
     resolution:
       {
@@ -649,6 +670,12 @@ packages:
     resolution:
       {
         integrity: sha512-z2MeCrkp4JrtOMBHQt5fcdbxryC+xxofoPzzv3wcx5GbfG27PpkXRKxlSlb1l2jIT1YfDc701rixbP6vHaEN3Q==,
+      }
+
+  "@ethereum-attestation-service/eas-sdk@2.9.0":
+    resolution:
+      {
+        integrity: sha512-jEtBlhfm0HFkl64jAa4rxOXjEQkblTHqSmLFhttPf9y+ALEOk4qgJzV9knnJ7Yh+jFs1jxbTrVeUGap03Fwy9g==,
       }
 
   "@ethereum-attestation-service/eas-sdk@2.9.1":
@@ -2760,6 +2787,14 @@ packages:
         integrity: sha512-xxWVywk6a6Arlk+hymeycyn/VgqEfLDxupvhH/xiY5SJ/18kmi9o6MiO320DCUzypORHLtvh0I4i04tUhCNHNQ==,
       }
 
+  canonicalize@4.0.0:
+    resolution:
+      {
+        integrity: sha512-FEdXzwWs+N3rZqEqpqleiY9M1A6IAf9oo1zHFABnLW9FcJ/jzsu+G/Ks3Hq3FglmPKe80GeGBw8ZXLEnwPB0vQ==,
+      }
+    engines: { node: ">=18" }
+    hasBin: true
+
   chai@6.2.2:
     resolution:
       {
@@ -2876,10 +2911,10 @@ packages:
         integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==,
       }
 
-  cookie@0.4.2:
+  cookie@0.7.2:
     resolution:
       {
-        integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==,
+        integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==,
       }
     engines: { node: ">= 0.6" }
 
@@ -3387,6 +3422,13 @@ packages:
       {
         integrity: sha512-W2Ktez4L01Vexijrm5EB6w7dg4n/TgpoYU4avuT5T3Vmnw/eCRtiBrJfQYS/DCSvDIOLn2k57GcHdeBcgVxAqw==,
       }
+
+  ethers@6.16.0:
+    resolution:
+      {
+        integrity: sha512-U1wulmetNymijEhpSEQ7Ct/P/Jw9/e7R1j5XIbPRydgV2DjLVMsULDlNksq3RQnFgKoLlZf88ijYtWEXcPa07A==,
+      }
+    engines: { node: ">=14.0.0" }
 
   ethers@6.17.0:
     resolution:
@@ -5516,6 +5558,14 @@ packages:
         integrity: sha512-Tyrf5mxF8Ofs1tNoxA13lFeZ2Zrbd6cKbuH3V+MQ5sb6DtBj5FjrXVsRWT8YvNAQTqNoz66dz1WsbigI22aEnw==,
       }
 
+  tsx@4.23.12:
+    resolution:
+      {
+        integrity: sha512-FDf4L4sYzKtzWYhU/Xm0AQFdTjdIxNo9ElTf2mxXM6k8YMHXzYUe4yODVaXP4V9uMFbVg8c0qyBccK2OOxb45Q==,
+      }
+    engines: { node: ">=18.0.0" }
+    hasBin: true
+
   tweetnacl-util@0.15.1:
     resolution:
       {
@@ -5631,10 +5681,10 @@ packages:
         integrity: sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag==,
       }
 
-  undici@6.27.0:
+  undici@6.28.0:
     resolution:
       {
-        integrity: sha512-YmfV3YnEDzXRC5lZ2jWtWWHKGUm1zIt8AhesR1tens+HTNv+YZlN/dp6G727LOvMJ8xjP9Be7Y2Sdr96LDm+pg==,
+        integrity: sha512-LIY910g9TI13YS95lrMFrs8Rm/u/irgHeTWoKCoteeJ04CUJ92eEfj0rVn+7VKMPBpUPiUoBKfhNyLI23EE/KA==,
       }
     engines: { node: ">=18.17" }
 
@@ -5679,20 +5729,11 @@ packages:
         integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==,
       }
 
-  uuid@8.3.2:
+  uuid@11.1.1:
     resolution:
       {
-        integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==,
+        integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==,
       }
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
-    hasBin: true
-
-  uuid@9.0.1:
-    resolution:
-      {
-        integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==,
-      }
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   viem@2.55.15:
@@ -5942,6 +5983,8 @@ packages:
       }
 
 snapshots:
+  "@adraffy/ens-normalize@1.10.1": {}
+
   "@adraffy/ens-normalize@1.11.1": {}
 
   "@axe-core/playwright@4.10.2(playwright-core@1.62.1)":
@@ -6207,6 +6250,26 @@ snapshots:
       - ts-node
       - typescript
       - utf-8-validate
+
+  "@ethereum-attestation-service/eas-sdk@2.9.0(supports-color@8.1.1)(typescript@5.9.2)(zod@4.4.3)":
+    dependencies:
+      "@ethereum-attestation-service/eas-contracts": 1.7.1(supports-color@8.1.1)(typescript@5.9.2)
+      "@openzeppelin/merkle-tree": 1.0.8(supports-color@8.1.1)
+      ethers: 6.17.0
+      js-base64: 3.9.2
+      lodash: 4.18.1
+      multiformats: 9.9.0
+      pako: 2.2.0
+      semver: 7.8.5
+      viem: 2.55.15(typescript@5.9.2)(zod@4.4.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - c-kzg
+      - supports-color
+      - ts-node
+      - typescript
+      - utf-8-validate
+      - zod
 
   "@ethereum-attestation-service/eas-sdk@2.9.1(supports-color@8.1.1)(typescript@5.9.2)(zod@4.4.3)":
     dependencies:
@@ -6540,7 +6603,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       pony-cause: 2.1.11
       semver: 7.8.5
-      uuid: 9.0.1
+      uuid: 11.1.1
     transitivePeerDependencies:
       - supports-color
 
@@ -6858,7 +6921,7 @@ snapshots:
       "@sentry/tracing": 5.30.0
       "@sentry/types": 5.30.0
       "@sentry/utils": 5.30.0
-      cookie: 0.4.2
+      cookie: 0.7.2
       https-proxy-agent: 5.0.1(supports-color@8.1.1)
       lru_map: 0.3.3
       tslib: 1.14.1
@@ -7207,13 +7270,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.1
 
-  "@vitest/mocker@4.1.10(vite@7.3.6(@types/node@24.3.0))":
+  "@vitest/mocker@4.1.10(vite@7.3.6(@types/node@24.3.0)(tsx@4.23.12))":
     dependencies:
       "@vitest/spy": 4.1.10
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.3.6(@types/node@24.3.0)
+      vite: 7.3.6(@types/node@24.3.0)(tsx@4.23.12)
 
   "@vitest/pretty-format@4.1.10":
     dependencies:
@@ -7490,6 +7553,8 @@ snapshots:
 
   caniuse-lite@1.0.30001809: {}
 
+  canonicalize@4.0.0: {}
+
   chai@6.2.2: {}
 
   chalk@2.4.2:
@@ -7555,7 +7620,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cookie@0.4.2: {}
+  cookie@0.7.2: {}
 
   core-util-is@1.0.3: {}
 
@@ -8085,6 +8150,19 @@ snapshots:
       ethjs-util: 0.1.6
       rlp: 2.2.7
 
+  ethers@6.16.0:
+    dependencies:
+      "@adraffy/ens-normalize": 1.10.1
+      "@noble/curves": 1.2.0
+      "@noble/hashes": 1.3.2
+      "@types/node": 22.7.5
+      aes-js: 4.0.0-beta.5
+      tslib: 2.7.0
+      ws: 8.21.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   ethers@6.17.0:
     dependencies:
       "@adraffy/ens-normalize": 1.11.1
@@ -8332,8 +8410,8 @@ snapshots:
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.11
       tsort: 0.0.1
-      undici: 6.27.0
-      uuid: 8.3.2
+      undici: 6.28.0
+      uuid: 11.1.1
       ws: 8.21.3
     optionalDependencies:
       typescript: 5.9.2
@@ -9450,6 +9528,12 @@ snapshots:
 
   tsort@0.0.1: {}
 
+  tsx@4.23.12:
+    dependencies:
+      esbuild: 0.28.2
+    optionalDependencies:
+      fsevents: 2.3.3
+
   tweetnacl-util@0.15.1: {}
 
   tweetnacl@1.0.3: {}
@@ -9532,7 +9616,7 @@ snapshots:
 
   undici-types@7.10.0: {}
 
-  undici@6.27.0: {}
+  undici@6.28.0: {}
 
   universalify@0.1.2: {}
 
@@ -9577,9 +9661,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  uuid@8.3.2: {}
-
-  uuid@9.0.1: {}
+  uuid@11.1.1: {}
 
   viem@2.55.15(typescript@5.9.2)(zod@4.4.3):
     dependencies:
@@ -9598,7 +9680,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite@7.3.6(@types/node@24.3.0):
+  vite@7.3.6(@types/node@24.3.0)(tsx@4.23.12):
     dependencies:
       esbuild: 0.28.2
       fdir: 6.5.0(picomatch@4.0.5)
@@ -9609,11 +9691,12 @@ snapshots:
     optionalDependencies:
       "@types/node": 24.3.0
       fsevents: 2.3.3
+      tsx: 4.23.12
 
-  vitest@4.1.10(@types/node@24.3.0)(vite@7.3.6(@types/node@24.3.0)):
+  vitest@4.1.10(@types/node@24.3.0)(vite@7.3.6(@types/node@24.3.0)(tsx@4.23.12)):
     dependencies:
       "@vitest/expect": 4.1.10
-      "@vitest/mocker": 4.1.10(vite@7.3.6(@types/node@24.3.0))
+      "@vitest/mocker": 4.1.10(vite@7.3.6(@types/node@24.3.0)(tsx@4.23.12))
       "@vitest/pretty-format": 4.1.10
       "@vitest/runner": 4.1.10
       "@vitest/snapshot": 4.1.10
@@ -9630,7 +9713,7 @@ snapshots:
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
-      vite: 7.3.6(@types/node@24.3.0)
+      vite: 7.3.6(@types/node@24.3.0)(tsx@4.23.12)
       why-is-node-running: 2.3.0
     optionalDependencies:
       "@types/node": 24.3.0

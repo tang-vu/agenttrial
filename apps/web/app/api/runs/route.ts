@@ -44,7 +44,13 @@ export async function POST(request: Request) {
     const raw = await request.text();
     if (raw.length > 4096)
       return NextResponse.json({ error: "Request body exceeds 4 KiB." }, { status: 413 });
-    const body = requestSchema.parse(JSON.parse(raw));
+    const parsed = JSON.parse(raw);
+    if (parsed?.fixture && parsed.activeConsent !== true)
+      return NextResponse.json(
+        { error: "Active testing requires explicit consent." },
+        { status: 403 },
+      );
+    const body = requestSchema.parse(parsed);
     const run =
       "fixture" in body
         ? createFixtureRun(body.fixture as FixtureId)

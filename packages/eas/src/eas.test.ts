@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { BASE_SEPOLIA, EAS_SCHEMA, encodeAttestation, submitAttestation } from "./index";
+import {
+  BASE_SEPOLIA,
+  EAS_SCHEMA,
+  encodeAttestation,
+  submitAttestation,
+  verifyAttestationRecord,
+} from "./index";
 describe("EAS encoding", () => {
   it("uses official Base Sepolia predeploys", () => {
     expect(BASE_SEPOLIA.chainId).toBe(84532);
@@ -43,6 +49,33 @@ describe("EAS encoding", () => {
     );
     expect(received).toMatch(/^0x/);
     expect(result.uid).toHaveLength(66);
-    expect(result.explorerUrl).toContain("sepolia.basescan.org/tx/");
+    expect(result.explorerUrl).toContain("base-sepolia.easscan.org/attestation/view/");
+  });
+  it("rejects revoked, expired, wrong-schema, and wrong-attestor records", () => {
+    const record = {
+      id: `0x${"33".repeat(32)}`,
+      schemaId: `0x${"44".repeat(32)}`,
+      attester: `0x${"55".repeat(20)}`,
+      time: 1,
+      expirationTime: 0,
+      revocationTime: 0,
+      data: "0x1234",
+    };
+    expect(
+      verifyAttestationRecord(record, {
+        uid: record.id,
+        schemaUid: record.schemaId,
+        attestor: record.attester,
+      }).valid,
+    ).toBe(true);
+    expect(
+      verifyAttestationRecord(
+        { ...record, revocationTime: 2 },
+        { uid: record.id, schemaUid: record.schemaId },
+      ).valid,
+    ).toBe(false);
+    expect(
+      verifyAttestationRecord(record, { uid: record.id, schemaUid: `0x${"99".repeat(32)}` }).valid,
+    ).toBe(false);
   });
 });

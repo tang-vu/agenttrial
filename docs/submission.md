@@ -24,4 +24,4 @@ Unlike current Base wallet/token risk entries, AgentTrial serves every agent in 
 
 ## Honest status
 
-Controlled evaluation and offline receipts are complete and tested. Arbitrary external browser execution is intentionally disabled until an isolated worker and durable multi-instance store are deployed. ERC-8004 is deferred because the standard remains draft.
+Controlled evaluation, signed receipts, passive public discovery, and the PostgreSQL worker queue are complete and tested. Arbitrary external active/browser execution remains disabled until ownership proof and browser-grade egress isolation are deployed. ERC-8004 is deferred because the standard remains draft.

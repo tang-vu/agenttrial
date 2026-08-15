@@ -11,6 +11,14 @@ export function ReceiptVerifier() {
   const [trustedKeys, setTrustedKeys] = useState<string[]>([]);
   function inspect(next: EvidenceBundle, isTampered = false) {
     try {
+      if (
+        !next ||
+        next.schemaVersion !== "1.0.0" ||
+        !next.report ||
+        !Array.isArray(next.events) ||
+        !next.receipt?.payload
+      )
+        throw new Error("Bundle does not match the supported AgentTrial 1.0 schema.");
       setBundle(next);
       setResult(verifyBundle(next, { trustedPublicKeys: trustedKeys }));
       setTampered(isTampered);
@@ -38,6 +46,10 @@ export function ReceiptVerifier() {
   }, [params, trustedKeys]);
   function upload(file?: File) {
     if (!file) return;
+    if (file.size > 2_000_000) {
+      setError("Bundle exceeds the 2 MB local verification limit.");
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       try {

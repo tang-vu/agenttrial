@@ -1,13 +1,23 @@
 import { EAS, SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
 import { Wallet, JsonRpcProvider, ZeroAddress } from "ethers";
 import { readFileSync } from "node:fs";
+import { verifyBundle } from "../packages/evidence/src/index.ts";
 const file = process.argv.find((x) => x.endsWith(".json"));
-if (!file) throw new Error("Usage: node scripts/eas-attest.mjs bundle.json --confirm-base-sepolia");
+if (!file) throw new Error("Usage: pnpm eas:attest bundle.json --confirm-base-sepolia");
 if (!process.argv.includes("--confirm-base-sepolia"))
   throw new Error("Refusing to broadcast without --confirm-base-sepolia.");
 if (!process.env.EAS_PRIVATE_KEY || !process.env.EAS_RPC_URL || !process.env.EAS_SCHEMA_UID)
   throw new Error("EAS_PRIVATE_KEY, EAS_RPC_URL, and EAS_SCHEMA_UID are required.");
+if (!process.env.AGENTTRIAL_TRUSTED_PUBLIC_KEY)
+  throw new Error("AGENTTRIAL_TRUSTED_PUBLIC_KEY is required to reject forged bundles.");
 const bundle = JSON.parse(readFileSync(file, "utf8"));
+const verification = verifyBundle(bundle, {
+  trustedPublicKeys: [process.env.AGENTTRIAL_TRUSTED_PUBLIC_KEY],
+});
+if (!verification.valid)
+  throw new Error(
+    `Bundle verification failed at ${verification.firstMismatch}. Refusing to attest.`,
+  );
 const provider = new JsonRpcProvider(process.env.EAS_RPC_URL);
 const network = await provider.getNetwork();
 if (network.chainId !== 84532n)
@@ -25,7 +35,7 @@ const data = encoder.encodeData([
     value: bundle.receipt.payload.coverageBasisPoints,
     type: "uint32",
   },
-  { name: "evidenceRoot", value: `0x${bundle.evidenceRoot}`, type: "bytes32" },
+  { name: "evidenceRoot", value: `0x${bundle.receipt.payload.evidenceRoot}`, type: "bytes32" },
   { name: "reportURI", value: process.env.REPORT_URI ?? "", type: "string" },
   {
     name: "evaluatedAt",

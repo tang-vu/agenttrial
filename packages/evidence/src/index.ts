@@ -1,28 +1,37 @@
 import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex, hexToBytes, utf8ToBytes } from "@noble/hashes/utils.js";
 import nacl from "tweetnacl";
-import type { EvidenceItem, RunEvent, TrialReport } from "@agenttrial/core";
+import canonicalizeJcs from "canonicalize";
+import {
+  calculateScore,
+  evaluateAssertions,
+  type EvidenceItem,
+  type RunEvent,
+  type TrialReport,
+} from "@agenttrial/core";
 
 export const RECEIPT_VERSION = "1.0.0";
 export const SIGNING_CONTEXT = "AgentTrialReceipt\0v1\0";
 
 export function canonicalize(value: unknown): string {
-  if (value === null) return "null";
-  if (typeof value === "string" || typeof value === "boolean") return JSON.stringify(value);
+  assertCanonicalInput(value, new Set());
+  const canonical = canonicalizeJcs(value);
+  if (canonical === undefined) throw new Error("Value cannot be represented as canonical JSON");
+  return canonical;
+}
+
+function assertCanonicalInput(value: unknown, seen: Set<object>) {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return;
   if (typeof value === "number") {
     if (!Number.isFinite(value)) throw new Error("Canonical JSON rejects non-finite numbers");
-    return JSON.stringify(Object.is(value, -0) ? 0 : value);
+    return;
   }
-  if (Array.isArray(value)) return `[${value.map(canonicalize).join(",")}]`;
-  if (typeof value === "object") {
-    const record = value as Record<string, unknown>;
-    return `{${Object.keys(record)
-      .sort()
-      .filter((k) => record[k] !== undefined)
-      .map((k) => `${JSON.stringify(k)}:${canonicalize(record[k])}`)
-      .join(",")}}`;
-  }
-  throw new Error(`Unsupported canonical value: ${typeof value}`);
+  if (typeof value !== "object") throw new Error(`Unsupported canonical value: ${typeof value}`);
+  if (seen.has(value)) throw new Error("Canonical JSON rejects cyclic values");
+  seen.add(value);
+  const values = Array.isArray(value) ? value : Object.values(value as Record<string, unknown>);
+  for (const child of values) assertCanonicalInput(child, seen);
+  seen.delete(value);
 }
 
 export function hashObject(value: unknown): string {
@@ -143,12 +152,20 @@ export function verifyBundle(
     checks.push({ name, valid, detail });
   let previous = "0".repeat(64);
   let eventMismatch: string | undefined;
-  for (const event of bundle.events) {
+  const eventIds = new Set<string>();
+  for (const [index, event] of bundle.events.entries()) {
     const { hash, ...base } = event;
-    if (event.previousHash !== previous || hashObject(base) !== hash) {
+    if (
+      event.index !== index ||
+      event.id !== `evt_${String(index + 1).padStart(3, "0")}` ||
+      eventIds.has(event.id) ||
+      event.previousHash !== previous ||
+      hashObject(base) !== hash
+    ) {
       eventMismatch = event.id;
       break;
     }
+    eventIds.add(event.id);
     previous = hash;
   }
   add(
@@ -203,8 +220,43 @@ export function verifyBundle(
       ? "Plan was sealed before execution"
       : "Trial plan mismatch",
   );
+  const recomputedAssertions = bundle.report.plan.trials.flatMap((trial) => {
+    const observation = bundle.report.observations.find(
+      (candidate) => candidate.trialId === trial.id,
+    );
+    return observation ? evaluateAssertions(trial.assertions, observation) : [];
+  });
+  const testedClaims = new Set(
+    bundle.report.plan.trials
+      .filter((trial) =>
+        bundle.report.observations.some(
+          (observation) => observation.trialId === trial.id && observation.status !== "not_tested",
+        ),
+      )
+      .flatMap((trial) => trial.claimIds),
+  );
+  const recomputedScore = calculateScore(recomputedAssertions, bundle.report.claims, testedClaims);
+  const deterministic =
+    hashObject(recomputedAssertions) === hashObject(bundle.report.assertions) &&
+    hashObject(recomputedScore) === hashObject(bundle.report.score);
+  add(
+    "deterministic-verdict",
+    deterministic,
+    deterministic
+      ? "Assertions and score recompute from sealed inputs"
+      : "Assertion outcomes or score do not recompute",
+  );
   const reportMatches =
+    bundle.schemaVersion === "1.0.0" &&
+    bundle.receipt.payload.receiptVersion === RECEIPT_VERSION &&
+    bundle.receipt.algorithm === "Ed25519" &&
     bundle.receipt.payload.runId === bundle.report.runId &&
+    bundle.receipt.payload.targetId === bundle.report.target.id &&
+    bundle.receipt.payload.methodologyVersion === bundle.report.score.methodologyVersion &&
+    bundle.receipt.payload.seedCommitment === bundle.report.plan.seedCommitment &&
+    bundle.receipt.payload.mode ===
+      (bundle.report.target.controlled ? "active-controlled" : "passive-external") &&
+    bundle.receipt.payload.keyId === `ed25519:${bundle.receipt.publicKey.slice(0, 16)}` &&
     bundle.receipt.payload.scoreBasisPoints === Math.round(bundle.report.score.overall * 100) &&
     bundle.receipt.payload.coverageBasisPoints === Math.round(bundle.report.score.coverage * 100);
   add(

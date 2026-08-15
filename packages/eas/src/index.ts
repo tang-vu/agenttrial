@@ -8,6 +8,7 @@ export const BASE_SEPOLIA = {
   easContract: "0x4200000000000000000000000000000000000021",
   schemaRegistry: "0x4200000000000000000000000000000000000020",
   explorer: "https://sepolia.basescan.org",
+  attestationExplorer: "https://base-sepolia.easscan.org/attestation/view",
 } as const;
 
 export interface AttestationFields {
@@ -60,5 +61,30 @@ export async function submitAttestation(
     !/^0x[0-9a-fA-F]{64}$/.test(result.transactionHash)
   )
     throw new Error("Attestation transport returned an invalid UID or transaction hash");
-  return { ...result, explorerUrl: `${BASE_SEPOLIA.explorer}/tx/${result.transactionHash}` };
+  return { ...result, explorerUrl: `${BASE_SEPOLIA.attestationExplorer}/${result.uid}` };
+}
+
+export interface EasRecord {
+  id: string;
+  schemaId: string;
+  attester: string;
+  time: number;
+  expirationTime: number;
+  revocationTime: number;
+  data: string;
+}
+export function verifyAttestationRecord(
+  record: EasRecord,
+  expected: { uid: string; schemaUid: string; attestor?: string },
+) {
+  const checks = {
+    uid: record.id.toLowerCase() === expected.uid.toLowerCase(),
+    schema: record.schemaId.toLowerCase() === expected.schemaUid.toLowerCase(),
+    attestor:
+      !expected.attestor || record.attester.toLowerCase() === expected.attestor.toLowerCase(),
+    unrevoked: record.revocationTime === 0,
+    unexpired: record.expirationTime === 0 || record.expirationTime > Math.floor(Date.now() / 1000),
+    hasData: /^0x[0-9a-f]*$/i.test(record.data) && record.data.length > 2,
+  };
+  return { valid: Object.values(checks).every(Boolean), checks };
 }

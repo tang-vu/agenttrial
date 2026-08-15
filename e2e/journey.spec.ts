@@ -39,11 +39,17 @@ test("active consent is required and cancellation is typed", async ({ request })
   const created = await request.post("/api/runs", {
     data: { fixture: "evidence-researcher", activeConsent: true },
   });
-  const { runId } = await created.json();
-  expect([200, 409]).toContain((await request.delete(`/api/runs/${runId}`)).status());
+  const { runId, cancelToken } = await created.json();
+  expect((await request.delete(`/api/runs/${runId}`)).status()).toBe(409);
+  expect([200, 409]).toContain(
+    (
+      await request.delete(`/api/runs/${runId}`, {
+        headers: { "x-agenttrial-cancel-token": cancelToken },
+      })
+    ).status(),
+  );
 });
-test("landing has no serious accessibility violations", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name === "mobile", "desktop axe smoke");
+test("landing has no serious accessibility violations", async ({ page }) => {
   await page.goto("/");
   const results = await new AxeBuilder({ page }).analyze();
   expect(

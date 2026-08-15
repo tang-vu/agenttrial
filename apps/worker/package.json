@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --experimental-strip-types src/index.ts"
+    "start": "pnpm exec tsx src/index.ts"
   },
   "dependencies": {
     "@agenttrial/runtime": "workspace:*"

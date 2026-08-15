@@ -32,6 +32,14 @@ describe("budgets and redaction", () => {
     expect(
       redact({ headers: { authorization: "Bearer abc" }, token: "secret", safe: "ok" }),
     ).toEqual({ headers: { authorization: "[REDACTED]" }, token: "[REDACTED]", safe: "ok" }));
+  it("redacts embedded bearer, JWT, cloud key, and query credentials", () => {
+    const input =
+      "Bearer abcdefghijklmnop eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.signature AKIA1234567890ABCDEF https://x.test?a=1&token=secret123";
+    const output = redact(input) as string;
+    expect(output).not.toContain("abcdefghijklmnop");
+    expect(output).not.toContain("AKIA1234567890ABCDEF");
+    expect(output).not.toContain("secret123");
+  });
   it("rate limits repeated anonymous work", () => {
     const key = `test-${Math.random()}`;
     expect(consumeRateLimit(key, 1, 1000, 1).allowed).toBe(true);

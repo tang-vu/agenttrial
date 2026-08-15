@@ -1,22 +1,21 @@
 # Deployment
 
-## Single-instance judge deployment
+## Durable deployment
 
 ```bash
-docker build -t agenttrial .
-docker run --read-only --tmpfs /tmp -p 3000:3000 \
-  -e AGENTTRIAL_SIGNING_SEED=<64-hex-secret> agenttrial
+export AGENTTRIAL_SIGNING_SEED=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+docker compose up --build
 ```
 
-Use one instance because run state and SSE subscriptions are process-local. Terminating or redeploying it loses active/completed in-memory reports; judges should download bundles.
+Compose starts PostgreSQL, the Next.js web service, and a separately scalable queue worker. Both web and worker must receive the same managed signing seed. PostgreSQL snapshots allow GET, bundle, and SSE endpoints to work across processes and restarts.
 
-For Vercel, use the repository root, Node 24, `pnpm install --frozen-lockfile`, and `pnpm build`. Serverless route isolation is not a supported durable configuration for the current runtime; prefer the Docker service for the live demo.
+For Vercel, use the repository root for web only and point `DATABASE_URL` at managed PostgreSQL; deploy the worker target to Railway/Render/Fly. Do not rely on a serverless request continuing background execution.
 
-## Production evolution
+## Production hardening still required
 
-1. PostgreSQL for runs, plans, events, evidence metadata, authorization and idempotency records.
-2. Durable queue plus Redis/Postgres pub-sub for SSE fan-out.
-3. Separate browser worker on Railway/Render/Fly with denied private-network egress, non-root Chromium, no receipt key, and strict quotas.
+1. Managed migrations/backups, retention, distributed per-target limits, and idempotency records.
+2. LISTEN/NOTIFY or Redis pub-sub can replace the current bounded PostgreSQL SSE polling at higher scale.
+3. A separate browser worker with denied private-network egress, non-root Chromium, no receipt key, and strict quotas before enabling browser tests.
 4. Web/receipt service with signing key in managed KMS/secret storage.
 5. Immutable object storage for canonical bundles and a pinned public-key registry.
 

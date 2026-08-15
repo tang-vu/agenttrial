@@ -91,7 +91,16 @@ export function redact(value: unknown): unknown {
       ]),
     );
   if (typeof value === "string")
-    return value.replace(/(?:sk|ghp|github_pat)_[A-Za-z0-9_-]{12,}/g, "[REDACTED]");
+    return value
+      .replace(/\b(?:Bearer|Basic)\s+[A-Za-z0-9._~+/=-]{8,}/gi, "[REDACTED]")
+      .replace(/(?:sk|ghp|github_pat)_[A-Za-z0-9_-]{12,}/g, "[REDACTED]")
+      .replace(/\bAKIA[0-9A-Z]{16}\b/g, "[REDACTED]")
+      .replace(/\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g, "[REDACTED]")
+      .replace(
+        /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g,
+        "[REDACTED]",
+      )
+      .replace(/([?&](?:token|key|secret|password|signature)=)[^&#\s]+/gi, "$1[REDACTED]");
   return value;
 }
 

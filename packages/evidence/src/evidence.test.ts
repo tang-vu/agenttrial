@@ -10,7 +10,7 @@ import {
   verifySignature,
   type EvidenceBundle,
 } from "./index";
-import type { TrialReport } from "@agenttrial/core";
+import { METHODOLOGY_VERSION, type TrialReport } from "@agenttrial/core";
 function bundle(): EvidenceBundle {
   const events: EvidenceBundle["events"] = [];
   appendEvent(events, {
@@ -54,7 +54,7 @@ function bundle(): EvidenceBundle {
       confidence: "low",
       criticalFindings: [],
       untestedClaims: [],
-      methodologyVersion: "1",
+      methodologyVersion: METHODOLOGY_VERSION,
       badge: "not-verified",
     },
     startedAt: "2026-01-01T00:00:00.000Z",
@@ -63,8 +63,8 @@ function bundle(): EvidenceBundle {
   const root = evidenceRoot(evidence);
   const key = createSigningKey(new Uint8Array(32).fill(7));
   const payload = {
-    receiptVersion: "1",
-    methodologyVersion: "1",
+    receiptVersion: "1.0.0",
+    methodologyVersion: METHODOLOGY_VERSION,
     runId: "run",
     targetId: "target",
     mode: "active-controlled",
@@ -77,7 +77,7 @@ function bundle(): EvidenceBundle {
     scoreBasisPoints: 0,
     coverageBasisPoints: 0,
     issuedAt: "2026-01-01T00:00:01.000Z",
-    keyId: "test",
+    keyId: `ed25519:${Buffer.from(key.publicKey).toString("hex").slice(0, 16)}`,
   };
   return {
     schemaVersion: "1.0.0",

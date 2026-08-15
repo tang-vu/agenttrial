@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   transpilePackages: [
     "@agenttrial/core",
+    "@agenttrial/adapters",
     "@agenttrial/evidence",
     "@agenttrial/fixtures",
     "@agenttrial/runtime",

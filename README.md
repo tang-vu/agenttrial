@@ -42,16 +42,18 @@ pnpm secret-scan
 - Canonical JSON hashing, sealed plan, hash-chained events, evidence Merkle root, Ed25519 receipt, and browser-only verifier with first-mismatch reporting.
 - Real SSE timeline, full report, bundle download, tamper demo, methodology/security/developer screens, polished errors, and responsive accessibility.
 - Current OpenAI Responses API provider with structured Zod output plus a deterministic no-key provider.
-- SSRF URL/DNS primitives, secret redaction, hard budgets, active-consent enforcement, CSP, and passive-only external-target policy.
+- Passive website/OpenAPI/OpenAI-compatible/A2A/GitHub discovery with DNS/IP pinning, redirect revalidation, byte/time budgets, redaction, and explicit low coverage.
 - Base Sepolia EAS schema encoding, guarded registration/attestation scripts, and local receipt fallback.
-- OpenAPI 3.1, A2A 1.0 Agent Card, `llms.txt`, health, and readiness endpoints.
+- PostgreSQL snapshots, a `SKIP LOCKED` durable job queue, separate worker, cross-process SSE polling, and private cancellation capabilities.
+- OpenAPI 3.1 schemas, a truthful machine descriptor, `llms.txt`, health, and readiness endpoints. A2A is not advertised until its full task lifecycle exists.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
     J[Judge / builder] --> W[Next.js web + API]
-    W --> R[Trial runtime]
+    W --> P[(PostgreSQL + durable queue)]
+    P --> R[Isolated trial worker]
     R --> D[Discovery + deterministic planner]
     R --> F[Controlled fixture adapter]
     F --> A[Code assertions]
@@ -61,22 +63,25 @@ flowchart LR
     E -. optional .-> B[Base Sepolia EAS]
 ```
 
-Workspace packages separate typed domain logic (`core`), fixtures, evidence, network safety, planner providers, runtime orchestration, and EAS encoding. The demo store is process-local by design; production multi-instance durability is the principal pre-launch limitation. See [architecture](docs/architecture.md) and [limitations](docs/limitations.md).
+Workspace packages separate typed domain logic (`core`), adapters, fixtures, evidence, network safety, planner providers, runtime orchestration, and EAS encoding. Without `DATABASE_URL`, local development intentionally falls back to one process; Docker Compose enables the durable PostgreSQL/worker path.
 
 ## Environment
 
 Copy `.env.example` to `.env.local`. All values are optional for the controlled demo.
 
-| Variable                  | Purpose                                                                                    |
-| ------------------------- | ------------------------------------------------------------------------------------------ |
-| `OPENAI_API_KEY`          | Enables the optional real planner; server-only.                                            |
-| `OPENAI_MODEL`            | Required with the key; deliberately no hard-coded model default.                           |
-| `AGENTTRIAL_SIGNING_SEED` | 64 hex characters for a stable Ed25519 development/service identity. Use a secret manager. |
-| `NEXT_PUBLIC_APP_URL`     | Canonical deployment origin.                                                               |
-| `EAS_RPC_URL`             | Base Sepolia RPC URL.                                                                      |
-| `EAS_PRIVATE_KEY`         | Testnet attestor wallet; server/script only.                                               |
-| `EAS_SCHEMA_UID`          | Registered AgentTrial schema UID.                                                          |
-| `REPORT_URI`              | Optional public evidence/report URI for the attestation.                                   |
+| Variable                        | Purpose                                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| `OPENAI_API_KEY`                | Enables the optional real planner; server-only.                                            |
+| `OPENAI_MODEL`                  | Required with the key; deliberately no hard-coded model default.                           |
+| `AGENTTRIAL_SIGNING_SEED`       | 64 hex characters for a stable Ed25519 development/service identity. Use a secret manager. |
+| `NEXT_PUBLIC_APP_URL`           | Canonical deployment origin.                                                               |
+| `EAS_RPC_URL`                   | Base Sepolia RPC URL.                                                                      |
+| `EAS_PRIVATE_KEY`               | Testnet attestor wallet; server/script only.                                               |
+| `EAS_SCHEMA_UID`                | Registered AgentTrial schema UID.                                                          |
+| `REPORT_URI`                    | Optional public evidence/report URI for the attestation.                                   |
+| `AGENTTRIAL_TRUSTED_PUBLIC_KEY` | Pinned Ed25519 public key required by the guarded attestation script.                      |
+| `DATABASE_URL`                  | Enables durable snapshots and queued worker execution.                                     |
+| `AGENTTRIAL_TRUST_PROXY`        | Trust `x-real-ip` only behind a configured sanitizing proxy.                               |
 
 Never prefix private values with `NEXT_PUBLIC_`. An ephemeral signing key is generated at process start when no seed is configured; that is convenient locally but not a stable production identity.
 
@@ -86,20 +91,21 @@ The schema uses Base Sepolia chain ID `84532`, EAS `0x4200…0021`, and Schema R
 
 ```bash
 node scripts/eas-register.mjs --confirm-base-sepolia
-node scripts/eas-attest.mjs agenttrial-RUN_ID.json --confirm-base-sepolia
+pnpm eas:attest agenttrial-RUN_ID.json --confirm-base-sepolia
 ```
 
 These commands spend Base Sepolia test ETH. Mainnet broadcasting is intentionally unsupported by the scripts. Attestation failure never blocks the signed local report.
 
 ## Deploy
 
-For a single-instance review deployment, use the provided Docker image or set the Vercel project root to this repository. The UI/API and SSE runtime must share a process until a durable run-store adapter is added.
+For the durable local stack, generate a shared signing seed and start PostgreSQL, web, and worker:
 
 ```bash
+$env:AGENTTRIAL_SIGNING_SEED = node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 docker compose up --build
 ```
 
-The container runs as a non-root user with a read-only filesystem, no Linux capabilities, and `no-new-privileges`. External website/browser evaluation is disabled until a separately isolated, egress-restricted worker is deployed.
+The containers run as non-root users with read-only filesystems, no Linux capabilities, and `no-new-privileges`. Passive HTTP discovery is enabled; browser navigation and arbitrary external active tests remain disabled.
 
 ## Documentation
 
