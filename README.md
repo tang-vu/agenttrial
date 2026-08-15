@@ -20,6 +20,16 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000), choose **Run a live trial**, then select either controlled fixture. No OpenAI key, wallet, GitHub token, database, or account is required.
 
+To publish the local production build through an isolated Cloudflare Quick Tunnel on Windows:
+
+```powershell
+.\scripts\start-local-tunnel.ps1
+# Stop only the AgentTrial processes later:
+.\scripts\stop-local-tunnel.ps1
+```
+
+The signing seed and process metadata are stored outside the repository under `%LOCALAPPDATA%\AgentTrial`. Quick Tunnel URLs change after restart and have no uptime guarantee; use a named tunnel for a stable submission URL.
+
 ```bash
 # Full quality gate
 pnpm format:check
