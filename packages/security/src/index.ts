@@ -15,6 +15,7 @@ const blockedHostnames = new Set([
 ]);
 
 export function isPublicIp(address: string): boolean {
+  address = address.replace(/^\[|\]$/g, "");
   if (address.startsWith("::ffff:")) return isPublicIp(address.slice(7));
   const version = isIP(address);
   if (version === 4) {
@@ -61,7 +62,12 @@ export async function validateTargetUrl(raw: string): Promise<{ url: URL; addres
     throw new UnsafeTargetError("Only HTTP and HTTPS targets are allowed.");
   if (url.username || url.password)
     throw new UnsafeTargetError("Credentials in target URLs are not allowed.");
-  const hostname = url.hostname.replace(/\.$/, "").toLowerCase();
+  const privateTestTarget = privateTestTargetsAllowed();
+  const effectivePort = url.port || (url.protocol === "https:" ? "443" : "80");
+  const hostname = url.hostname
+    .replace(/^\[|\]$/g, "")
+    .replace(/\.$/, "")
+    .toLowerCase();
   if (
     blockedHostnames.has(hostname) ||
     hostname.endsWith(".localhost") ||
@@ -73,11 +79,18 @@ export async function validateTargetUrl(raw: string): Promise<{ url: URL; addres
     : await lookup(hostname, { all: true, verbatim: true });
   if (
     direct.length === 0 ||
-    (process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS !== "true" &&
-      direct.some((item) => !isPublicIp(item.address)))
+    (!privateTestTarget && direct.some((item) => !isPublicIp(item.address)))
   )
     throw new UnsafeTargetError("Target resolves to a private, reserved, or non-routable address.");
+  if (!privateTestTarget && !["80", "443"].includes(effectivePort))
+    throw new UnsafeTargetError("Public targets are restricted to HTTP ports 80 and 443.");
   return { url, addresses: direct.map((x) => x.address) };
+}
+
+export function privateTestTargetsAllowed() {
+  return (
+    process.env.NODE_ENV === "test" && process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS === "true"
+  );
 }
 
 export function redact(value: unknown): unknown {

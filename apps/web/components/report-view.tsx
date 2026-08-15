@@ -50,6 +50,17 @@ export function ReportView({ runId }: { runId: string }) {
     );
   const passed = report.assertions.filter((a) => a.passed).length;
   const failed = report.assertions.length - passed;
+  const untestedClaims = new Set(report.score.untestedClaims);
+  const verdictHeadline =
+    report.score.badge === "not-verified"
+      ? "Capability claims remain unverified."
+      : report.score.overall >= 75
+        ? "Tested claims held up under pressure."
+        : "Material tested claims failed under pressure.";
+  function revealEvidence(id: string) {
+    setTab("evidence");
+    window.setTimeout(() => document.getElementById(`evidence-${id}`)?.scrollIntoView(), 0);
+  }
   return (
     <>
       <div className="report-header">
@@ -57,7 +68,9 @@ export function ReportView({ runId }: { runId: string }) {
           <span className="kicker">EVIDENCE REPORT / {report.score.methodologyVersion}</span>
           <h1>{report.target.name}</h1>
           <p>
-            Controlled benchmark fixture · evaluated {new Date(report.completedAt).toLocaleString()}
+            {report.target.controlled ? "Controlled benchmark fixture" : "Passive public surface"}
+            {" · evaluated "}
+            {new Date(report.completedAt).toLocaleString()}
           </p>
         </div>
         <div className="report-actions">
@@ -83,11 +96,7 @@ export function ReportView({ runId }: { runId: string }) {
           <span className={`badge ${report.score.overall >= 75 ? "good" : "bad"}`}>
             {report.score.badge.replace("-", " ")}
           </span>
-          <h2>
-            {report.score.overall >= 75
-              ? "Claims held up under pressure."
-              : "Material claims failed under pressure."}
-          </h2>
+          <h2>{verdictHeadline}</h2>
           <p>
             {failed === 0
               ? "Every deterministic assertion passed."
@@ -161,7 +170,13 @@ export function ReportView({ runId }: { runId: string }) {
               </div>
               <span>{labels[a.dimension]}</span>
               <span className={a.passed ? "pass" : "fail"}>{a.passed ? "PASS" : "FAIL"}</span>
-              <code>{a.evidenceIds[0]}</code>
+              <span className="evidence-links">
+                {a.evidenceIds.map((id) => (
+                  <button type="button" key={id} onClick={() => revealEvidence(id)}>
+                    {id}
+                  </button>
+                ))}
+              </span>
             </article>
           ))}
         </section>
@@ -170,7 +185,9 @@ export function ReportView({ runId }: { runId: string }) {
         <section className="claim-cards">
           {report.claims.map((c) => (
             <article key={c.id}>
-              <span className="pass">TESTED</span>
+              <span className={untestedClaims.has(c.id) ? "untested" : "pass"}>
+                {untestedClaims.has(c.id) ? "NOT TESTED" : "TESTED"}
+              </span>
               <h3>{c.capability}</h3>
               <p>{c.successCondition}</p>
               <dl>
@@ -194,7 +211,7 @@ export function ReportView({ runId }: { runId: string }) {
       {tab === "evidence" && (
         <section className="evidence-list">
           {report.evidence.map((e) => (
-            <details key={e.id}>
+            <details key={e.id} id={`evidence-${e.id}`}>
               <summary>
                 <span>
                   <strong>{e.id}</strong>

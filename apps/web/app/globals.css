@@ -868,8 +868,23 @@ button {
 .findings code {
   font-size: 10px;
 }
+.evidence-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.evidence-links button {
+  border: 0;
+  padding: 0;
+  color: var(--steel);
+  background: transparent;
+  font: 10px var(--mono);
+  text-decoration: underline;
+  cursor: pointer;
+}
 .pass,
-.fail {
+.fail,
+.untested {
   font-family: var(--mono);
   font-size: 9px;
   font-weight: 700;
@@ -879,6 +894,9 @@ button {
 }
 .fail {
   color: var(--red);
+}
+.untested {
+  color: var(--steel);
 }
 .claim-cards {
   display: grid;
@@ -1243,7 +1261,7 @@ footer p {
     grid-template-columns: 2fr 1fr 60px;
   }
   .table-head span:last-child,
-  .findings article > code {
+  .findings article > .evidence-links {
     display: none;
   }
 }

@@ -9,7 +9,7 @@
     "build": "pnpm --filter @agenttrial/web build",
     "start": "pnpm --filter @agenttrial/web start",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit -p apps/web/tsconfig.json --pretty false && tsc --noEmit -p packages/planner/tsconfig.json --pretty false",
+    "typecheck": "pnpm -r exec tsc --noEmit --pretty false",
     "test": "vitest run",
     "test:durable": "tsx scripts/durable-smoke.mts",
     "test:watch": "vitest",

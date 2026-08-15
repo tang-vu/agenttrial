@@ -37,6 +37,7 @@ import {
   finishRunJob,
   loadRun,
   persistenceConfigured,
+  runCancellationRequested,
   saveRun,
 } from "./persistence";
 export { closePersistence } from "./persistence";
@@ -109,8 +110,8 @@ function emit(
   return event;
 }
 const pause = (ms = 90) => new Promise((resolve) => setTimeout(resolve, ms));
-function ensureActive(run: RuntimeRun) {
-  if (run.cancelled) throw new Error("CANCELLED");
+async function ensureActive(run: RuntimeRun) {
+  if (run.cancelled || (await runCancellationRequested(run.id))) throw new Error("CANCELLED");
 }
 
 export function createFixtureRun(fixture: FixtureId): RuntimeRun {
@@ -163,7 +164,7 @@ function failQueuedRun(run: RuntimeRun, error: unknown) {
   emit(run, "FAILED", "run.failed", "Durable queue submission failed", { error: run.error });
 }
 export async function getRun(id: string) {
-  return runs.get(id) ?? (await loadRun(id));
+  return persistenceConfigured() ? await loadRun(id) : runs.get(id);
 }
 export async function processNextRun(workerId = `worker-${process.pid}`) {
   if (!persistenceConfigured()) return false;
@@ -223,7 +224,7 @@ async function executeRun(run: RuntimeRun) {
   const startedAt = new Date().toISOString();
   try {
     await pause();
-    ensureActive(run);
+    await ensureActive(run);
     machine.transition("DISCOVERING");
     emit(
       run,
@@ -233,7 +234,7 @@ async function executeRun(run: RuntimeRun) {
     );
     const claims = discoverFixtureClaims(run.fixture!);
     await pause();
-    ensureActive(run);
+    await ensureActive(run);
     machine.transition("CLAIMS_EXTRACTED");
     emit(run, machine.state, "claims.normalized", `${claims.length} typed claims extracted`, {
       claims: claims.map((c) => c.capability),
@@ -247,7 +248,7 @@ async function executeRun(run: RuntimeRun) {
     const seed = randomBytes(16).toString("hex");
     const plan = generateFixturePlan(hashObject({ seed, runId: run.id }));
     await pause();
-    ensureActive(run);
+    await ensureActive(run);
     machine.transition("PLAN_SEALED");
     const planHash = hashObject(plan);
     emit(
@@ -267,7 +268,7 @@ async function executeRun(run: RuntimeRun) {
     const observations: Observation[] = [];
     const evidence: EvidenceItem[] = [];
     for (const trial of plan.trials) {
-      ensureActive(run);
+      await ensureActive(run);
       emit(run, machine.state, "tool.call", `${trial.category}: ${String(trial.input.scenario)}`, {
         trialId: trial.id,
         maxCalls: trial.maxCalls,
@@ -302,7 +303,7 @@ async function executeRun(run: RuntimeRun) {
         calls: observation.calls,
       });
     }
-    ensureActive(run);
+    await ensureActive(run);
     machine.transition("VERIFYING");
     emit(run, machine.state, "verification.started", "Running versioned deterministic assertions");
     const assertions = plan.trials.flatMap((trial) =>
@@ -414,7 +415,7 @@ async function executeExternalRun(run: RuntimeRun) {
       "discovery.started",
       "Fetching bounded public metadata through a DNS-pinned connection",
     );
-    ensureActive(run);
+    await ensureActive(run);
     const discovery = await discoverPublicTarget(run.targetUrl!);
     machine.transition("CLAIMS_EXTRACTED");
     emit(
@@ -437,7 +438,7 @@ async function executeExternalRun(run: RuntimeRun) {
       trials: [
         {
           id: "trial_public_surface",
-          claimIds: ["claim_public_surface"],
+          claimIds: [],
           category: "Passive availability and provenance",
           input: { url: discovery.response.url, method: "GET", contentLimitBytes: 1_000_000 },
           expectedBehavior:
@@ -448,8 +449,8 @@ async function executeExternalRun(run: RuntimeRun) {
               type: "equals",
               field: "reachable",
               expected: true,
-              dimension: "capability",
-              weight: 30,
+              dimension: "evidence",
+              weight: 1,
               description: "Public agent surface returned a successful HTTP response",
             },
             {
@@ -458,7 +459,7 @@ async function executeExternalRun(run: RuntimeRun) {
               field: "provenanceCaptured",
               expected: true,
               dimension: "evidence",
-              weight: 20,
+              weight: 1,
               description: "Discovery evidence retains its public source URL",
             },
             {
@@ -466,18 +467,18 @@ async function executeExternalRun(run: RuntimeRun) {
               type: "equals",
               field: "secureTransport",
               expected: true,
-              dimension: "safety",
-              weight: 20,
+              dimension: "evidence",
+              weight: 1,
               description: "Public surface uses HTTPS transport",
             },
             {
               id: "assert_calls",
               type: "lte",
               field: "$calls",
-              expected: 1,
-              dimension: "reliability",
-              weight: 15,
-              description: "Passive verification stayed within its request budget",
+              expected: 2,
+              dimension: "efficiency",
+              weight: 1,
+              description: "Discovery and passive verification stayed within their request budget",
             },
             {
               id: "assert_latency",
@@ -485,12 +486,12 @@ async function executeExternalRun(run: RuntimeRun) {
               field: "$latency",
               expected: 6000,
               dimension: "efficiency",
-              weight: 10,
+              weight: 1,
               description: "Public response completed within the latency budget",
             },
           ],
           timeoutMs: 6_000,
-          maxCalls: 1,
+          maxCalls: 2,
           severity: "medium",
           seed: seedCommitment.slice(0, 16),
           mode: "passive",
@@ -513,9 +514,9 @@ async function executeExternalRun(run: RuntimeRun) {
       machine.state,
       "tool.call",
       "Performing one DNS-pinned GET with redirect, byte, and timeout budgets",
-      { maxCalls: 1, timeoutMs: 6_000 },
+      { evaluationCalls: 2, thisStepCalls: 1, timeoutMs: 6_000 },
     );
-    ensureActive(run);
+    await ensureActive(run);
     const response = await safePublicFetch(discovery.response.url, {
       timeoutMs: 6_000,
       maxBytes: 1_000_000,
@@ -527,7 +528,7 @@ async function executeExternalRun(run: RuntimeRun) {
       startedAt,
       completedAt,
       latencyMs: response.latencyMs,
-      calls: 1,
+      calls: 2,
       status: response.status >= 200 && response.status < 400 ? "completed" : "capability_failed",
       output: {
         reachable: response.status >= 200 && response.status < 400,
@@ -574,12 +575,12 @@ async function executeExternalRun(run: RuntimeRun) {
         { assertionId: result.id, dimension: result.dimension },
       );
     machine.transition("SCORING");
-    const score = calculateScore(assertions, discovery.claims, new Set(["claim_public_surface"]));
+    const score = calculateScore(assertions, discovery.claims, new Set());
     emit(
       run,
       machine.state,
       "score.calculated",
-      `Deterministic passive score: ${score.overall}/100`,
+      `Deterministic passive surface score: ${score.overall}/100; capabilities remain untested`,
       { coverage: score.coverage, untestedClaims: score.untestedClaims.length },
     );
     const report: TrialReport = {

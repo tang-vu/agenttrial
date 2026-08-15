@@ -8,6 +8,7 @@ import {
   BudgetGuard,
   UnsafeTargetError,
   isPublicIp,
+  privateTestTargetsAllowed,
   redact,
   validateTargetUrl,
 } from "@agenttrial/security";
@@ -42,13 +43,16 @@ export async function safePublicFetch(
     maxDurationMs: timeoutMs * (maxRedirects + 1),
   });
   const redirects: string[] = [];
+  const deadline = performance.now() + timeoutMs;
   let current = raw;
   for (let redirect = 0; redirect <= maxRedirects; redirect++) {
+    const remainingMs = Math.floor(deadline - performance.now());
+    if (remainingMs <= 0) throw new Error("Target request exceeded the total deadline.");
     const validated = await validateTargetUrl(current);
     const response = await pinnedRequest(
       validated.url,
       validated.addresses,
-      timeoutMs,
+      remainingMs,
       maxBytes - budget.bytes,
     );
     budget.consume(response.bytes);
@@ -91,7 +95,7 @@ function pinnedRequest(
     request.once("socket", (socket) => {
       const verify = () => {
         const remote = socket.remoteAddress?.replace(/^::ffff:/, "") ?? "";
-        const testPrivateAllowed = process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS === "true";
+        const testPrivateAllowed = privateTestTargetsAllowed();
         if (
           (!testPrivateAllowed && !isPublicIp(remote)) ||
           !approvedAddresses.map((x) => x.replace(/^::ffff:/, "")).includes(remote)
@@ -103,6 +107,11 @@ function pinnedRequest(
       socket.once(url.protocol === "https:" ? "secureConnect" : "connect", verify);
     });
     request.once("timeout", () => request.destroy(new Error("Target request timed out.")));
+    const deadlineTimer = setTimeout(
+      () => request.destroy(new Error("Target request exceeded the total deadline.")),
+      timeoutMs,
+    );
+    request.once("close", () => clearTimeout(deadlineTimer));
     request.once("error", reject);
     request.once("response", (response) => {
       const chunks: Buffer[] = [];

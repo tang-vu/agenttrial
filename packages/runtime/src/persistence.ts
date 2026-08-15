@@ -41,6 +41,7 @@ async function initialize() {
         finished_at timestamptz,
         last_error text
       )`;
+      await db`ALTER TABLE agenttrial_jobs ADD COLUMN IF NOT EXISTS locked_until timestamptz`;
       await db`CREATE INDEX IF NOT EXISTS agenttrial_jobs_queue_idx ON agenttrial_jobs(status, available_at)`;
     })();
   return initialized;
@@ -54,7 +55,8 @@ export async function saveRun(run: RuntimeRun) {
   await db`INSERT INTO agenttrial_runs ${db({ id: run.id, state: run.state, revision, snapshot: db.json(run as never) })}
     ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, revision = EXCLUDED.revision,
       snapshot = EXCLUDED.snapshot, updated_at = now()
-    WHERE agenttrial_runs.revision <= EXCLUDED.revision`;
+    WHERE agenttrial_runs.revision <= EXCLUDED.revision
+      AND (agenttrial_runs.state <> 'CANCELLED' OR EXCLUDED.state = 'CANCELLED')`;
 }
 
 export async function loadRun(id: string): Promise<RuntimeRun | undefined> {
@@ -71,23 +73,35 @@ export async function enqueueRun(run: RuntimeRun) {
   await db`INSERT INTO agenttrial_jobs ${db({ id: run.id, payload: db.json({ id: run.id }) })} ON CONFLICT (id) DO NOTHING`;
 }
 
-export async function claimRun(workerId: string): Promise<string | undefined> {
+export async function claimRun(workerId: string, leaseMs = 30_000): Promise<string | undefined> {
   await initialize();
   const rows = await sql()`WITH next_job AS (
-      SELECT id FROM agenttrial_jobs WHERE status = 'queued' AND available_at <= now()
+      SELECT id FROM agenttrial_jobs
+      WHERE ((status = 'queued' AND available_at <= now())
+        OR (status = 'running' AND locked_until < now()))
+        AND attempts < 3
       ORDER BY available_at FOR UPDATE SKIP LOCKED LIMIT 1
     ) UPDATE agenttrial_jobs SET status = 'running', worker_id = ${workerId},
-      attempts = attempts + 1, started_at = now()
+      attempts = attempts + 1, started_at = now(),
+      locked_until = now() + (${leaseMs} * interval '1 millisecond')
     WHERE id = (SELECT id FROM next_job) RETURNING id`;
   return rows[0]?.id as string | undefined;
 }
 
 export async function finishRunJob(id: string, error?: string) {
   const status = error ? "failed" : "completed";
-  await sql()`UPDATE agenttrial_jobs SET status = ${status}, finished_at = now(), last_error = ${error ?? null} WHERE id = ${id}::uuid`;
+  await sql()`UPDATE agenttrial_jobs SET status = ${status}, finished_at = now(), locked_until = null, last_error = ${error ?? null} WHERE id = ${id}::uuid`;
 }
 export async function cancelQueuedJob(id: string) {
   if (!persistenceConfigured()) return;
   await initialize();
-  await sql()`UPDATE agenttrial_jobs SET status = 'cancelled', finished_at = now() WHERE id = ${id}::uuid AND status = 'queued'`;
+  await sql()`UPDATE agenttrial_jobs SET status = 'cancelled', finished_at = now(), locked_until = null WHERE id = ${id}::uuid AND status IN ('queued', 'running')`;
+}
+
+export async function runCancellationRequested(id: string) {
+  if (!persistenceConfigured()) return false;
+  await initialize();
+  const rows =
+    await sql()`SELECT state, snapshot->>'cancelled' AS cancelled FROM agenttrial_runs WHERE id = ${id}::uuid LIMIT 1`;
+  return rows[0]?.state === "CANCELLED" || rows[0]?.cancelled === "true";
 }

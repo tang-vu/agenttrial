@@ -21,6 +21,15 @@ describe("SSRF policy", () => {
     await expect(validateTargetUrl("https://user:pass@example.com")).rejects.toThrow(/Credentials/);
     await expect(validateTargetUrl("http://localhost:3000")).rejects.toThrow(/Local/);
   });
+  it("rejects public port scanning and never enables private targets in production", async () => {
+    await expect(validateTargetUrl("https://example.com:22")).rejects.toThrow(/ports 80 and 443/i);
+    const priorNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = "production";
+    process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS = "true";
+    await expect(validateTargetUrl("http://127.0.0.1")).rejects.toThrow(/private|reserved/i);
+    process.env.NODE_ENV = priorNodeEnv;
+    delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS;
+  });
 });
 describe("budgets and redaction", () => {
   it("stops over-budget calls", () => {

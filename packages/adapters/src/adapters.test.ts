@@ -22,4 +22,21 @@ describe("safe public adapter", () => {
     );
     await new Promise<void>((resolve) => server.close(() => resolve()));
   });
+  it("enforces an absolute deadline against slow-drip responses", async () => {
+    process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS = "true";
+    const server = createServer((_request, response) => {
+      response.writeHead(200, { "content-type": "text/plain" });
+      const timer = setInterval(() => response.write("x"), 40);
+      response.once("close", () => clearInterval(timer));
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    const port = typeof address === "object" && address ? address.port : 0;
+    const started = Date.now();
+    await expect(safePublicFetch(`http://127.0.0.1:${port}`, { timeoutMs: 220 })).rejects.toThrow(
+      /deadline/i,
+    );
+    expect(Date.now() - started).toBeLessThan(1_000);
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  });
 });
