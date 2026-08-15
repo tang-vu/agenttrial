@@ -190,15 +190,15 @@ async function executeRun(run: RuntimeRun) {
         maxCalls: trial.maxCalls,
         timeoutMs: trial.timeoutMs,
       });
-      if (trial.id === "trial_timeout")
+      const observation = await executeFixture(run.fixture!, trial);
+      if (observation.retryCount > 0)
         emit(
           run,
           machine.state,
           "tool.retry",
-          "Transient source timeout observed; applying bounded retry",
-          { trialId: trial.id, attempt: 2, limit: 2 },
+          "Transient source timeout observed; bounded retry executed",
+          { trialId: trial.id, attempts: observation.calls, retries: observation.retryCount },
         );
-      const observation = await executeFixture(run.fixture!, trial);
       observations.push(observation);
       evidence.push({
         id: observation.evidenceIds[0]!,
