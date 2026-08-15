@@ -24,7 +24,8 @@ if (Test-Path $statePath) {
 if (!(Test-Path $emptyConfig)) { New-Item -ItemType File -Path $emptyConfig | Out-Null }
 if (!(Test-Path $seedPath)) {
   $bytes = [byte[]]::new(32)
-  [Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+  $generator = [Security.Cryptography.RandomNumberGenerator]::Create()
+  try { $generator.GetBytes($bytes) } finally { $generator.Dispose() }
   [Convert]::ToHexString($bytes).ToLowerInvariant() | Set-Content -LiteralPath $seedPath -NoNewline
 }
 
