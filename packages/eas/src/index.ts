@@ -1,4 +1,4 @@
-import { SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
+import { AbiCoder } from "ethers";
 
 export const EAS_SCHEMA_VERSION = "1";
 export const EAS_SCHEMA =
@@ -22,17 +22,19 @@ export interface AttestationFields {
   evaluatedAt: bigint;
 }
 export function encodeAttestation(fields: AttestationFields): string {
-  const encoder = new SchemaEncoder(EAS_SCHEMA);
-  return encoder.encodeData([
-    { name: "targetIdentifier", value: fields.targetIdentifier, type: "string" },
-    { name: "trialRoot", value: fields.trialRoot, type: "bytes32" },
-    { name: "methodologyVersion", value: fields.methodologyVersion, type: "string" },
-    { name: "scoreBasisPoints", value: fields.scoreBasisPoints, type: "uint32" },
-    { name: "coverageBasisPoints", value: fields.coverageBasisPoints, type: "uint32" },
-    { name: "evidenceRoot", value: fields.evidenceRoot, type: "bytes32" },
-    { name: "reportURI", value: fields.reportURI, type: "string" },
-    { name: "evaluatedAt", value: fields.evaluatedAt, type: "uint64" },
-  ]);
+  return AbiCoder.defaultAbiCoder().encode(
+    ["string", "bytes32", "string", "uint32", "uint32", "bytes32", "string", "uint64"],
+    [
+      fields.targetIdentifier,
+      fields.trialRoot,
+      fields.methodologyVersion,
+      fields.scoreBasisPoints,
+      fields.coverageBasisPoints,
+      fields.evidenceRoot,
+      fields.reportURI,
+      fields.evaluatedAt,
+    ],
+  );
 }
 
 export function attestationStatus() {
