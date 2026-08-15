@@ -26,7 +26,8 @@ if (!(Test-Path $seedPath)) {
   $bytes = [byte[]]::new(32)
   $generator = [Security.Cryptography.RandomNumberGenerator]::Create()
   try { $generator.GetBytes($bytes) } finally { $generator.Dispose() }
-  [Convert]::ToHexString($bytes).ToLowerInvariant() | Set-Content -LiteralPath $seedPath -NoNewline
+  [BitConverter]::ToString($bytes).Replace("-", "").ToLowerInvariant() |
+    Set-Content -LiteralPath $seedPath -NoNewline
 }
 
 $listener = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
