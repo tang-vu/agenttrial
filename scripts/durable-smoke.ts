@@ -1,4 +1,10 @@
-import { closePersistence, createFixtureRun, getRun, getSigningPublicKey, processNextRun } from "@agenttrial/runtime";
+import {
+  closePersistence,
+  createFixtureRun,
+  getRun,
+  getSigningPublicKey,
+  processNextRun,
+} from "@agenttrial/runtime";
 import { verifyBundle } from "@agenttrial/evidence";
 
 if (!process.env.DATABASE_URL)
