@@ -1,7 +1,5 @@
-import { SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
-import { Wallet, JsonRpcProvider, ZeroAddress } from "ethers";
-const schema =
-  "string targetIdentifier,bytes32 trialRoot,string methodologyVersion,uint32 scoreBasisPoints,uint32 coverageBasisPoints,bytes32 evidenceRoot,string reportURI,uint64 evaluatedAt";
+import { Contract, Interface, Wallet, JsonRpcProvider, ZeroAddress } from "ethers";
+import { BASE_SEPOLIA, EAS_SCHEMA as schema } from "../packages/eas/src/index.ts";
 if (!process.argv.includes("--confirm-base-sepolia"))
   throw new Error(
     "Refusing to broadcast. Re-run with --confirm-base-sepolia after reviewing network and cost.",
@@ -12,16 +10,31 @@ const provider = new JsonRpcProvider(process.env.EAS_RPC_URL);
 const network = await provider.getNetwork();
 if (network.chainId !== 84532n)
   throw new Error(`Expected Base Sepolia (84532), received ${network.chainId}.`);
-const registry = new SchemaRegistry("0x4200000000000000000000000000000000000020");
-registry.connect(new Wallet(process.env.EAS_PRIVATE_KEY, provider));
-const transaction = await registry.register({
-  schema,
-  resolverAddress: ZeroAddress,
-  revocable: false,
-});
+const abi = [
+  "function register(string schema,address resolver,bool revocable) returns (bytes32)",
+  "event Registered(bytes32 indexed uid,address indexed registerer)",
+];
+const registry = new Contract(
+  BASE_SEPOLIA.schemaRegistry,
+  abi,
+  new Wallet(process.env.EAS_PRIVATE_KEY, provider),
+);
+const transaction = await registry.register(schema, ZeroAddress, false);
+const receipt = await transaction.wait();
+const iface = new Interface(abi);
+const parsed = receipt.logs
+  .map((log) => {
+    try {
+      return iface.parseLog(log);
+    } catch {
+      return null;
+    }
+  })
+  .find((log) => log?.name === "Registered");
+if (!parsed) throw new Error("Schema transaction mined without a Registered event.");
 console.log(
   JSON.stringify(
-    { transactionHash: transaction.data.hash, schemaUID: await transaction.wait(), schema },
+    { transactionHash: transaction.hash, schemaUID: parsed.args.uid, schema },
     null,
     2,
   ),

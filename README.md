@@ -91,7 +91,7 @@ Never prefix private values with `NEXT_PUBLIC_`. An ephemeral signing key is gen
 The schema uses Base Sepolia chain ID `84532`, EAS `0x4200…0021`, and Schema Registry `0x4200…0020`. Scripts refuse to broadcast unless the exact `--confirm-base-sepolia` flag is supplied.
 
 ```bash
-node scripts/eas-register.mjs --confirm-base-sepolia
+pnpm eas:register --confirm-base-sepolia
 pnpm eas:attest agenttrial-RUN_ID.json --confirm-base-sepolia
 ```
 

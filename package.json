@@ -18,6 +18,7 @@
     "format:check": "prettier --check .",
     "audit": "pnpm audit --audit-level high",
     "secret-scan": "node scripts/secret-scan.mjs",
+    "eas:register": "tsx scripts/eas-register.mjs",
     "eas:attest": "tsx scripts/eas-attest.mjs"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
     "vitest": "4.1.10"
   },
   "dependencies": {
-    "@ethereum-attestation-service/eas-sdk": "2.9.0",
     "ethers": "6.16.0"
   }
 }
