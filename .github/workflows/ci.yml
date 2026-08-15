@@ -30,7 +30,6 @@ jobs:
           --health-timeout 3s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://agenttrial:agenttrial-ci@127.0.0.1:5432/agenttrial
       AGENTTRIAL_SIGNING_SEED: "1111111111111111111111111111111111111111111111111111111111111111"
     steps:
       - uses: actions/checkout@v4
@@ -46,11 +45,11 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm test:durable
+        env:
+          DATABASE_URL: postgres://agenttrial:agenttrial-ci@127.0.0.1:5432/agenttrial
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
-        env:
-          DATABASE_URL: ""
       - run: pnpm audit --audit-level high
       - run: pnpm secret-scan
       - uses: actions/upload-artifact@v4
