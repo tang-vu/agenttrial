@@ -10,8 +10,7 @@ import { verifyBundle } from "@agenttrial/evidence";
 async function main() {
   if (!process.env.DATABASE_URL)
     throw new Error("DATABASE_URL is required for the durable smoke test");
-  if (!process.env.AGENTTRIAL_SIGNING_SEED)
-    throw new Error("AGENTTRIAL_SIGNING_SEED is required");
+  if (!process.env.AGENTTRIAL_SIGNING_SEED) throw new Error("AGENTTRIAL_SIGNING_SEED is required");
 
   const created = createFixtureRun("evidence-researcher");
   let claimed = false;
