@@ -114,8 +114,7 @@ function pinnedRequest(
         if (bytes > maxBytes) {
           exceeded = true;
           response.destroy(new Error("Target response exceeded the byte budget."));
-        }
-        else chunks.push(chunk);
+        } else chunks.push(chunk);
       });
       response.once("error", reject);
       response.once("end", () => {
@@ -239,18 +238,17 @@ export async function discoverPublicTarget(raw: string): Promise<ExternalDiscove
     name = extractTitle(response.body) ?? url.hostname;
     claims = extractTextClaims(stripHtml(response.body), response.url, "public page");
   }
-  if (claims.length === 0)
-    claims = [
-      claim(
-        "claim_public_surface",
-        "Expose a publicly discoverable agent surface",
-        "Returns bounded public documentation",
-        response.url,
-        "HTTP response",
-        0.55,
-      ),
-    ];
-  claims = claims.slice(0, 20);
+  claims = [
+    claim(
+      "claim_public_surface",
+      "Expose a publicly discoverable agent surface",
+      "Returns bounded public documentation",
+      response.url,
+      "HTTP response",
+      1,
+    ),
+    ...claims,
+  ].slice(0, 20);
   const target: TargetDescriptor = {
     id: `url:${url.origin}${url.pathname}`,
     name,

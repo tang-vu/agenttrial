@@ -153,6 +153,9 @@ importers:
 
   packages/runtime:
     dependencies:
+      "@agenttrial/adapters":
+        specifier: workspace:*
+        version: link:../adapters
       "@agenttrial/core":
         specifier: workspace:*
         version: link:../core

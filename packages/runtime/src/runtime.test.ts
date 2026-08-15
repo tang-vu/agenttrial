@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { cancelRun, createFixtureRun, runs } from "./index";
+import { createServer } from "node:http";
+import { cancelRun, createExternalRun, createFixtureRun, runs } from "./index";
 async function complete(id: string) {
   for (let i = 0; i < 100; i++) {
     const run = runs.get(id)!;
@@ -32,5 +33,28 @@ describe("pipeline integration", () => {
     const result = await complete(run.id);
     expect(result.state).toBe("CANCELLED");
     expect(result.events.at(-1)?.type).toBe("run.cancelled");
+  });
+  it("executes bounded passive discovery without marking advertised behavior as tested", async () => {
+    process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS = "true";
+    const server = createServer((_request, response) => {
+      response.setHeader("content-type", "text/html");
+      response.end(
+        "<title>Test Agent</title><p>This agent can summarize public records with citations.</p>",
+      );
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    try {
+      const address = server.address();
+      const port = typeof address === "object" && address ? address.port : 0;
+      const result = await complete(createExternalRun(`http://127.0.0.1:${port}`).id);
+      expect(result.state).toBe("COMPLETED");
+      expect(result.report?.target.controlled).toBe(false);
+      expect(result.report?.score.coverage).toBeLessThan(100);
+      expect(result.report?.score.untestedClaims.length).toBeGreaterThan(0);
+      expect(result.events.some((event) => event.type === "tool.call")).toBe(true);
+    } finally {
+      delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS;
+      await new Promise<void>((resolve) => server.close(() => resolve()));
+    }
   });
 });

@@ -25,6 +25,8 @@ export function NewTrialForm() {
   const [selected, setSelected] = useState(options[0]!.id);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [externalUrl, setExternalUrl] = useState("");
+  const [externalLoading, setExternalLoading] = useState(false);
   async function start() {
     setLoading(true);
     setError("");
@@ -40,6 +42,23 @@ export function NewTrialForm() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start the trial");
       setLoading(false);
+    }
+  }
+  async function startExternal() {
+    setExternalLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/runs", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ targetUrl: externalUrl, mode: "passive" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      router.push(`/live/${data.runId}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not start passive discovery");
+      setExternalLoading(false);
     }
   }
   return (
@@ -106,17 +125,27 @@ export function NewTrialForm() {
         </div>
         <label>
           Public URL, repository, API, or Agent Card
-          <input placeholder="https://example.com/.well-known/agent-card.json" disabled />
+          <input
+            type="url"
+            value={externalUrl}
+            onChange={(event) => setExternalUrl(event.target.value)}
+            placeholder="https://example.com/.well-known/agent-card.json"
+            required
+          />
         </label>
         <div className="notice">
-          <strong>External worker not configured</strong>
+          <strong>Passive by default</strong>
           <p>
-            This deployment only executes controlled fixtures. Public-target submission stays
-            disabled until an isolated egress-restricted worker is attached—never a fake scan.
+            Two bounded, DNS-pinned public GETs. No login, forms, exploit payloads, or inferred
+            capability passes.
           </p>
         </div>
-        <button className="button secondary full" disabled>
-          Configure worker to continue
+        <button
+          className="button secondary full"
+          onClick={startExternal}
+          disabled={externalLoading || !externalUrl}
+        >
+          {externalLoading ? "Starting passive evaluation…" : "Evaluate public surface →"}
         </button>
       </section>
     </div>

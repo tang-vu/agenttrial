@@ -1,4 +1,5 @@
 import { randomBytes, randomUUID } from "node:crypto";
+import { discoverPublicTarget, safePublicFetch } from "@agenttrial/adapters";
 import {
   TrialStateMachine,
   calculateScore,
@@ -9,6 +10,7 @@ import {
   type PipelineState,
   type RunEvent,
   type TrialReport,
+  type TrialPlan,
 } from "@agenttrial/core";
 import {
   appendEvent,
@@ -36,7 +38,9 @@ export interface RuntimeRun {
   bundle?: EvidenceBundle;
   error?: string;
   cancelled: boolean;
-  fixture: FixtureId;
+  fixture?: FixtureId;
+  targetUrl?: string;
+  mode: "active-controlled" | "passive-external";
 }
 export type EventListener = (event: RunEvent) => void;
 
@@ -95,6 +99,7 @@ export function createFixtureRun(fixture: FixtureId): RuntimeRun {
     events: [],
     cancelled: false,
     fixture,
+    mode: "active-controlled",
   };
   runs.set(run.id, run);
   emit(run, "CREATED", "run.created", "Trial workspace created", {
@@ -103,6 +108,24 @@ export function createFixtureRun(fixture: FixtureId): RuntimeRun {
     authorization: "controlled fixture",
   });
   void executeRun(run);
+  return run;
+}
+export function createExternalRun(targetUrl: string): RuntimeRun {
+  const run: RuntimeRun = {
+    id: randomUUID(),
+    state: "CREATED",
+    events: [],
+    cancelled: false,
+    targetUrl,
+    mode: "passive-external",
+  };
+  runs.set(run.id, run);
+  emit(run, "CREATED", "run.created", "Passive evaluation workspace created", {
+    target: targetUrl,
+    mode: "passive",
+    authorization: "public metadata discovery only",
+  });
+  void executeExternalRun(run);
   return run;
 }
 export function cancelRun(id: string) {
@@ -125,7 +148,7 @@ async function executeRun(run: RuntimeRun) {
       "discovery.started",
       "Inspecting Agent Card and advertised constraints",
     );
-    const claims = discoverFixtureClaims(run.fixture);
+    const claims = discoverFixtureClaims(run.fixture!);
     await pause();
     ensureActive(run);
     machine.transition("CLAIMS_EXTRACTED");
@@ -175,7 +198,7 @@ async function executeRun(run: RuntimeRun) {
           "Transient source timeout observed; applying bounded retry",
           { trialId: trial.id, attempt: 2, limit: 2 },
         );
-      const observation = await executeFixture(run.fixture, trial);
+      const observation = await executeFixture(run.fixture!, trial);
       observations.push(observation);
       evidence.push({
         id: observation.evidenceIds[0]!,
@@ -220,7 +243,7 @@ async function executeRun(run: RuntimeRun) {
     });
     const report: TrialReport = {
       runId: run.id,
-      target: fixtures[run.fixture],
+      target: fixtures[run.fixture!],
       state: "COMPLETED",
       claims,
       plan,
@@ -293,6 +316,272 @@ async function executeRun(run: RuntimeRun) {
       emit(run, "FAILED", "run.failed", "Trial stopped because the evaluator failed", {
         error: run.error,
       });
+    }
+  }
+}
+
+async function executeExternalRun(run: RuntimeRun) {
+  const machine = new TrialStateMachine();
+  const startedAt = new Date().toISOString();
+  try {
+    machine.transition("DISCOVERING");
+    emit(
+      run,
+      machine.state,
+      "discovery.started",
+      "Fetching bounded public metadata through a DNS-pinned connection",
+    );
+    ensureActive(run);
+    const discovery = await discoverPublicTarget(run.targetUrl!);
+    machine.transition("CLAIMS_EXTRACTED");
+    emit(
+      run,
+      machine.state,
+      "claims.normalized",
+      `${discovery.claims.length} typed claims extracted from untrusted content`,
+      { descriptorKind: discovery.descriptorKind, untrustedContent: "isolated" },
+    );
+    machine.transition("PLANNING");
+    emit(run, machine.state, "planner.started", "Constructing passive, non-invasive checks", {
+      provider: "deterministic passive planner",
+      methodology: METHODOLOGY_VERSION,
+    });
+    const seed = randomBytes(16).toString("hex");
+    const seedCommitment = hashObject({ seed, runId: run.id });
+    const plan: TrialPlan = {
+      version: METHODOLOGY_VERSION,
+      seedCommitment,
+      trials: [
+        {
+          id: "trial_public_surface",
+          claimIds: ["claim_public_surface"],
+          category: "Passive availability and provenance",
+          input: { url: discovery.response.url, method: "GET", contentLimitBytes: 1_000_000 },
+          expectedBehavior:
+            "The public surface responds within strict transport and resource budgets without active interaction.",
+          assertions: [
+            {
+              id: "assert_http_success",
+              type: "equals",
+              field: "reachable",
+              expected: true,
+              dimension: "capability",
+              weight: 30,
+              description: "Public agent surface returned a successful HTTP response",
+            },
+            {
+              id: "assert_provenance",
+              type: "equals",
+              field: "provenanceCaptured",
+              expected: true,
+              dimension: "evidence",
+              weight: 20,
+              description: "Discovery evidence retains its public source URL",
+            },
+            {
+              id: "assert_https",
+              type: "equals",
+              field: "secureTransport",
+              expected: true,
+              dimension: "safety",
+              weight: 20,
+              description: "Public surface uses HTTPS transport",
+            },
+            {
+              id: "assert_calls",
+              type: "lte",
+              field: "$calls",
+              expected: 1,
+              dimension: "reliability",
+              weight: 15,
+              description: "Passive verification stayed within its request budget",
+            },
+            {
+              id: "assert_latency",
+              type: "lte",
+              field: "$latency",
+              expected: 6000,
+              dimension: "efficiency",
+              weight: 10,
+              description: "Public response completed within the latency budget",
+            },
+          ],
+          timeoutMs: 6_000,
+          maxCalls: 1,
+          severity: "medium",
+          seed: seedCommitment.slice(0, 16),
+          mode: "passive",
+          authorizationRequired: false,
+        },
+      ],
+    };
+    machine.transition("PLAN_SEALED");
+    const planHash = hashObject(plan);
+    emit(
+      run,
+      machine.state,
+      "plan.sealed",
+      "Passive trial plan and seed commitment sealed before verification fetch",
+      { planHash, trials: 1 },
+    );
+    machine.transition("EXECUTING");
+    emit(
+      run,
+      machine.state,
+      "tool.call",
+      "Performing one DNS-pinned GET with redirect, byte, and timeout budgets",
+      { maxCalls: 1, timeoutMs: 6_000 },
+    );
+    ensureActive(run);
+    const response = await safePublicFetch(discovery.response.url, {
+      timeoutMs: 6_000,
+      maxBytes: 1_000_000,
+      maxRedirects: 3,
+    });
+    const completedAt = new Date().toISOString();
+    const observation: Observation = {
+      trialId: "trial_public_surface",
+      startedAt,
+      completedAt,
+      latencyMs: response.latencyMs,
+      calls: 1,
+      status: response.status >= 200 && response.status < 400 ? "completed" : "capability_failed",
+      output: {
+        reachable: response.status >= 200 && response.status < 400,
+        provenanceCaptured: true,
+        secureTransport: response.url.startsWith("https:"),
+        status: response.status,
+        descriptorKind: discovery.descriptorKind,
+      },
+      evidenceIds: ["ev_discovery", "ev_passive_verification"],
+      retryCount: 0,
+    };
+    const evidence: EvidenceItem[] = [
+      discovery.evidence,
+      {
+        id: "ev_passive_verification",
+        kind: "passive-http-verification",
+        trialId: "trial_public_surface",
+        capturedAt: completedAt,
+        data: redact({
+          url: response.url,
+          status: response.status,
+          headers: response.headers,
+          bytes: response.bytes,
+          latencyMs: response.latencyMs,
+          redirects: response.redirects,
+          remoteAddress: response.remoteAddress,
+        }) as Record<string, unknown>,
+        redactions: [],
+      },
+    ];
+    emit(run, machine.state, "evidence.captured", "Bounded passive response evidence captured", {
+      status: response.status,
+      bytes: response.bytes,
+      latencyMs: response.latencyMs,
+    });
+    machine.transition("VERIFYING");
+    const assertions = evaluateAssertions(plan.trials[0]!.assertions, observation);
+    for (const result of assertions)
+      emit(
+        run,
+        machine.state,
+        result.passed ? "assertion.passed" : "assertion.failed",
+        result.description,
+        { assertionId: result.id, dimension: result.dimension },
+      );
+    machine.transition("SCORING");
+    const score = calculateScore(assertions, discovery.claims, new Set(["claim_public_surface"]));
+    emit(
+      run,
+      machine.state,
+      "score.calculated",
+      `Deterministic passive score: ${score.overall}/100`,
+      { coverage: score.coverage, untestedClaims: score.untestedClaims.length },
+    );
+    const report: TrialReport = {
+      runId: run.id,
+      target: discovery.target,
+      state: "COMPLETED",
+      claims: discovery.claims,
+      plan,
+      planHash,
+      observations: [observation],
+      assertions,
+      evidence,
+      score,
+      startedAt,
+      completedAt,
+    };
+    machine.transition("RECEIPT_SIGNED");
+    emit(
+      run,
+      machine.state,
+      "receipt.signed",
+      "Preparing a receipt over the completed passive record",
+      { algorithm: "Ed25519" },
+    );
+    machine.transition("ATTESTING");
+    const attestation = attestationStatus();
+    emit(run, machine.state, "attestation.status", attestation.message, {
+      status: attestation.status,
+      network: "Base Sepolia",
+    });
+    machine.transition("COMPLETED");
+    emit(
+      run,
+      machine.state,
+      "run.completed",
+      "Passive evaluation complete; advertised behavior remains explicitly untested",
+      { score: score.overall, coverage: score.coverage },
+    );
+    const root = evidenceRoot(evidence);
+    const publicKey = getSigningPublicKey();
+    const receipt = signReceipt(
+      {
+        receiptVersion: "1.0.0",
+        methodologyVersion: METHODOLOGY_VERSION,
+        runId: run.id,
+        targetId: report.target.id,
+        mode: "passive-external",
+        planHash,
+        seedCommitment,
+        evidenceRoot: root,
+        evidenceItemHashes: evidence.map(hashObject),
+        reportHash: hashObject(report),
+        eventChainHead: run.events.at(-1)!.hash,
+        scoreBasisPoints: Math.round(score.overall * 100),
+        coverageBasisPoints: Math.round(score.coverage * 100),
+        issuedAt: new Date().toISOString(),
+        keyId: `ed25519:${publicKey.slice(0, 16)}`,
+      },
+      signingKey.secretKey,
+      signingKey.publicKey,
+    );
+    run.report = report;
+    run.bundle = {
+      schemaVersion: "1.0.0",
+      report,
+      events: run.events,
+      evidenceRoot: root,
+      receipt,
+      attestation,
+    };
+    run.state = "COMPLETED";
+  } catch (error) {
+    if ((error as Error).message === "CANCELLED") {
+      run.state = "CANCELLED";
+      emit(run, "CANCELLED", "run.cancelled", "Passive trial cancelled");
+    } else {
+      run.state = "FAILED";
+      run.error = error instanceof Error ? error.message : "Unknown external evaluation failure";
+      emit(
+        run,
+        "FAILED",
+        "run.failed",
+        "Public target request failed; no capability verdict was inferred",
+        { error: run.error, failureClass: "request_failed" },
+      );
     }
   }
 }
