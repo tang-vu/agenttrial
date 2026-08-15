@@ -71,6 +71,8 @@ function bundle(): EvidenceBundle {
     planHash,
     seedCommitment: "seed",
     evidenceRoot: root,
+    evidenceItemHashes: evidence.map(hashObject),
+    reportHash: hashObject(report),
     eventChainHead: events[0]!.hash,
     scoreBasisPoints: 0,
     coverageBasisPoints: 0,
@@ -91,12 +93,27 @@ describe("canonical evidence", () => {
   it("verifies chain and signature", () => {
     const b = bundle();
     expect(verifySignature(b.receipt)).toBe(true);
-    expect(verifyBundle(b).valid).toBe(true);
+    expect(verifyBundle(b, { trustedPublicKeys: [b.receipt.publicKey] }).valid).toBe(true);
   });
   it("detects one-byte tampering at the first mismatched object", () => {
     const b = bundle();
     b.report.evidence[0]!.data.answer = 43;
-    expect(verifyBundle(b).firstMismatch).toBe("evidence-root");
+    expect(verifyBundle(b, { trustedPublicKeys: [b.receipt.publicKey] }).firstMismatch).toBe(
+      "evidence-items",
+    );
+  });
+  it("rejects an otherwise valid receipt from an untrusted injected key", () => {
+    const b = bundle();
+    expect(verifyBundle(b).firstMismatch).toBe("trusted-signer");
+    const attacker = createSigningKey(new Uint8Array(32).fill(9));
+    b.receipt = signReceipt(b.receipt.payload, attacker.secretKey, attacker.publicKey);
+    expect(verifyBundle(b, { trustedPublicKeys: ["00".repeat(32)] }).valid).toBe(false);
+  });
+  it("does not collide when the final evidence leaf is duplicated", () => {
+    const b = bundle();
+    expect(evidenceRoot(b.report.evidence)).not.toBe(
+      evidenceRoot([...b.report.evidence, b.report.evidence[0]!]),
+    );
   });
   it("detects forged events and signatures", () => {
     const b = bundle();

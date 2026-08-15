@@ -52,6 +52,9 @@ const signingKey = (globalStore.__agenttrialKey ??= createSigningKey(
     ? Uint8Array.from(Buffer.from(process.env.AGENTTRIAL_SIGNING_SEED, "hex"))
     : undefined,
 ));
+export function getSigningPublicKey() {
+  return Buffer.from(signingKey.publicKey).toString("hex");
+}
 
 export function subscribe(runId: string, listener: EventListener) {
   const set = listeners.get(runId) ?? new Set();
@@ -230,33 +233,10 @@ async function executeRun(run: RuntimeRun) {
       completedAt: new Date().toISOString(),
     };
     machine.transition("RECEIPT_SIGNED");
-    const signedEvent = emit(
-      run,
-      machine.state,
-      "receipt.signed",
-      "Evidence root committed with an Ed25519 receipt",
-      { algorithm: "Ed25519" },
-    );
+    emit(run, machine.state, "receipt.signed", "Evidence root committed with an Ed25519 receipt", {
+      algorithm: "Ed25519",
+    });
     const root = evidenceRoot(evidence);
-    const receipt = signReceipt(
-      {
-        receiptVersion: "1.0.0",
-        methodologyVersion: METHODOLOGY_VERSION,
-        runId: run.id,
-        targetId: report.target.id,
-        mode: "active-controlled",
-        planHash,
-        seedCommitment: plan.seedCommitment,
-        evidenceRoot: root,
-        eventChainHead: signedEvent.hash,
-        scoreBasisPoints: Math.round(score.overall * 100),
-        coverageBasisPoints: Math.round(score.coverage * 100),
-        issuedAt: new Date().toISOString(),
-        keyId: `ed25519:${Buffer.from(signingKey.publicKey).toString("hex").slice(0, 16)}`,
-      },
-      signingKey.secretKey,
-      signingKey.publicKey,
-    );
     machine.transition("ATTESTING");
     const attestation = attestationStatus();
     emit(run, machine.state, "attestation.status", attestation.message, {
@@ -270,6 +250,28 @@ async function executeRun(run: RuntimeRun) {
       "run.completed",
       "Trial complete; report and evidence bundle are ready",
       { score: score.overall, coverage: score.coverage },
+    );
+    const publicKey = getSigningPublicKey();
+    const receipt = signReceipt(
+      {
+        receiptVersion: "1.0.0",
+        methodologyVersion: METHODOLOGY_VERSION,
+        runId: run.id,
+        targetId: report.target.id,
+        mode: "active-controlled",
+        planHash,
+        seedCommitment: plan.seedCommitment,
+        evidenceRoot: root,
+        evidenceItemHashes: evidence.map(hashObject),
+        reportHash: hashObject(report),
+        eventChainHead: run.events.at(-1)!.hash,
+        scoreBasisPoints: Math.round(score.overall * 100),
+        coverageBasisPoints: Math.round(score.coverage * 100),
+        issuedAt: new Date().toISOString(),
+        keyId: `ed25519:${publicKey.slice(0, 16)}`,
+      },
+      signingKey.secretKey,
+      signingKey.publicKey,
     );
     run.report = report;
     run.bundle = {

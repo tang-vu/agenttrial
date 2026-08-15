@@ -8,6 +8,7 @@
     { "path": "packages/fixtures" },
     { "path": "packages/runtime" },
     { "path": "packages/planner" },
+    { "path": "packages/adapters" },
     { "path": "apps/web" }
   ]
 }

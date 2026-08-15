@@ -1,0 +1,14 @@
+{
+  "name": "@agenttrial/adapters",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@agenttrial/core": "workspace:*",
+    "@agenttrial/security": "workspace:*",
+    "zod": "4.4.3"
+  }
+}

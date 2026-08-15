@@ -88,6 +88,18 @@ importers:
         specifier: 19.1.7
         version: 19.1.7(@types/react@19.1.10)
 
+  packages/adapters:
+    dependencies:
+      "@agenttrial/core":
+        specifier: workspace:*
+        version: link:../core
+      "@agenttrial/security":
+        specifier: workspace:*
+        version: link:../security
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+
   packages/core:
     dependencies:
       zod:

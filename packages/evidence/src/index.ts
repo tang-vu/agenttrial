@@ -57,6 +57,8 @@ export interface ReceiptPayload {
   planHash: string;
   seedCommitment: string;
   evidenceRoot: string;
+  evidenceItemHashes: string[];
+  reportHash: string;
   eventChainHead: string;
   scoreBasisPoints: number;
   coverageBasisPoints: number;
@@ -85,15 +87,15 @@ export interface EvidenceBundle {
 }
 
 export function evidenceRoot(items: EvidenceItem[]): string {
-  if (items.length === 0) return hashObject([]);
-  let layer = items.map((item) => hashObject(item));
+  if (items.length === 0) return hashText("AgentTrialEvidence\0empty");
+  let layer = items.map((item) => hashText(`AgentTrialEvidence\0leaf\0${hashObject(item)}`));
   while (layer.length > 1) {
     const next: string[] = [];
     for (let i = 0; i < layer.length; i += 2)
-      next.push(hashText(`${layer[i]}${layer[i + 1] ?? layer[i]}`));
+      next.push(hashText(`AgentTrialEvidence\0node\0${layer[i]}\0${layer[i + 1] ?? ""}`));
     layer = next;
   }
-  return layer[0]!;
+  return hashText(`AgentTrialEvidence\0root\0${items.length}\0${layer[0]}`);
 }
 
 export function createSigningKey(seed?: Uint8Array) {
@@ -129,7 +131,13 @@ export interface VerificationResult {
   checks: { name: string; valid: boolean; detail: string }[];
   firstMismatch?: string;
 }
-export function verifyBundle(bundle: EvidenceBundle): VerificationResult {
+export interface VerificationOptions {
+  trustedPublicKeys?: readonly string[];
+}
+export function verifyBundle(
+  bundle: EvidenceBundle,
+  options: VerificationOptions = {},
+): VerificationResult {
   const checks: VerificationResult["checks"] = [];
   const add = (name: string, valid: boolean, detail: string) =>
     checks.push({ name, valid, detail });
@@ -145,16 +153,46 @@ export function verifyBundle(bundle: EvidenceBundle): VerificationResult {
   }
   add(
     "event-chain",
-    !eventMismatch,
-    eventMismatch ? `First mismatch at ${eventMismatch}` : `${bundle.events.length} events linked`,
+    !eventMismatch && previous === bundle.receipt.payload.eventChainHead,
+    eventMismatch
+      ? `First mismatch at ${eventMismatch}`
+      : previous === bundle.receipt.payload.eventChainHead
+        ? `${bundle.events.length} events linked and signed`
+        : "Event chain head is not the signed checkpoint",
+  );
+  const itemHashes = bundle.report.evidence.map(hashObject);
+  const expectedItemHashes = bundle.receipt.payload.evidenceItemHashes;
+  const evidenceMismatchIndex = itemHashes.findIndex(
+    (hash, index) => hash !== expectedItemHashes?.[index],
+  );
+  const evidenceItemsMatch =
+    evidenceMismatchIndex === -1 && itemHashes.length === expectedItemHashes?.length;
+  add(
+    "evidence-items",
+    evidenceItemsMatch,
+    evidenceItemsMatch
+      ? `${itemHashes.length} evidence objects individually committed`
+      : evidenceMismatchIndex >= 0
+        ? `First mismatch at ${bundle.report.evidence[evidenceMismatchIndex]?.id ?? `index ${evidenceMismatchIndex}`}`
+        : "Evidence object count mismatch",
   );
   const computedEvidenceRoot = evidenceRoot(bundle.report.evidence);
   add(
     "evidence-root",
-    computedEvidenceRoot === bundle.evidenceRoot,
-    computedEvidenceRoot === bundle.evidenceRoot
-      ? "Evidence root matches"
+    computedEvidenceRoot === bundle.evidenceRoot &&
+      computedEvidenceRoot === bundle.receipt.payload.evidenceRoot,
+    computedEvidenceRoot === bundle.evidenceRoot &&
+      computedEvidenceRoot === bundle.receipt.payload.evidenceRoot
+      ? "Evidence root matches signed receipt"
       : "Evidence object mismatch",
+  );
+  const computedReportHash = hashObject(bundle.report);
+  add(
+    "report",
+    computedReportHash === bundle.receipt.payload.reportHash,
+    computedReportHash === bundle.receipt.payload.reportHash
+      ? "Entire report matches signed receipt"
+      : "Report content mismatch",
   );
   const computedPlanHash = hashObject(bundle.report.plan);
   add(
@@ -174,10 +212,22 @@ export function verifyBundle(bundle: EvidenceBundle): VerificationResult {
     reportMatches,
     reportMatches ? "Receipt matches report" : "Report score, coverage, or run ID mismatch",
   );
+  const signatureValid = verifySignature(bundle.receipt);
   add(
     "signature",
-    verifySignature(bundle.receipt),
-    verifySignature(bundle.receipt) ? "Ed25519 signature valid" : "Signature invalid",
+    signatureValid,
+    signatureValid ? "Ed25519 self-signature valid" : "Signature invalid",
+  );
+  const trusted =
+    options.trustedPublicKeys?.some(
+      (key) => key.toLowerCase() === bundle.receipt.publicKey.toLowerCase(),
+    ) ?? false;
+  add(
+    "trusted-signer",
+    trusted,
+    trusted
+      ? "Signer matches an independently supplied AgentTrial trust key"
+      : "Signer is not in the independently supplied trust set",
   );
   const first = checks.find((c) => !c.valid);
   return { valid: !first, checks, ...(first ? { firstMismatch: first.name } : {}) };

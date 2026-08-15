@@ -8,10 +8,11 @@ export function ReceiptVerifier() {
   const [result, setResult] = useState<VerificationResult>();
   const [error, setError] = useState("");
   const [tampered, setTampered] = useState(false);
+  const [trustedKeys, setTrustedKeys] = useState<string[]>([]);
   function inspect(next: EvidenceBundle, isTampered = false) {
     try {
       setBundle(next);
-      setResult(verifyBundle(next));
+      setResult(verifyBundle(next, { trustedPublicKeys: trustedKeys }));
       setTampered(isTampered);
       setError("");
     } catch (e) {
@@ -19,8 +20,14 @@ export function ReceiptVerifier() {
     }
   }
   useEffect(() => {
+    fetch("/api/signing-keys", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data) => setTrustedKeys(data.keys.map((key: { publicKey: string }) => key.publicKey)))
+      .catch(() => setTrustedKeys([]));
+  }, []);
+  useEffect(() => {
     const run = params.get("run");
-    if (run)
+    if (run && trustedKeys.length > 0)
       fetch(`/api/runs/${run}/bundle`)
         .then((r) => {
           if (!r.ok) throw new Error("Bundle unavailable");
@@ -28,7 +35,7 @@ export function ReceiptVerifier() {
         })
         .then((b) => inspect(b))
         .catch((e) => setError(e.message));
-  }, [params]);
+  }, [params, trustedKeys]);
   function upload(file?: File) {
     if (!file) return;
     const reader = new FileReader();

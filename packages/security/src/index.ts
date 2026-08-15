@@ -71,7 +71,11 @@ export async function validateTargetUrl(raw: string): Promise<{ url: URL; addres
   const direct = isIP(hostname)
     ? [{ address: hostname }]
     : await lookup(hostname, { all: true, verbatim: true });
-  if (direct.length === 0 || direct.some((item) => !isPublicIp(item.address)))
+  if (
+    direct.length === 0 ||
+    (process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS !== "true" &&
+      direct.some((item) => !isPublicIp(item.address)))
+  )
     throw new UnsafeTargetError("Target resolves to a private, reserved, or non-routable address.");
   return { url, addresses: direct.map((x) => x.address) };
 }
