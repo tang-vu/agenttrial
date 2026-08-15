@@ -31,7 +31,7 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://agenttrial:agenttrial-ci@127.0.0.1:5432/agenttrial
-      AGENTTRIAL_SIGNING_SEED: 1111111111111111111111111111111111111111111111111111111111111111
+      AGENTTRIAL_SIGNING_SEED: "1111111111111111111111111111111111111111111111111111111111111111"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

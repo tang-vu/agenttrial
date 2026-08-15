@@ -12,7 +12,11 @@ if (!process.env.DATABASE_URL)
 if (!process.env.AGENTTRIAL_SIGNING_SEED) throw new Error("AGENTTRIAL_SIGNING_SEED is required");
 
 const created = createFixtureRun("evidence-researcher");
-const claimed = await processNextRun("ci-smoke-worker");
+let claimed = false;
+for (let attempt = 0; attempt < 30 && !claimed; attempt += 1) {
+  claimed = await processNextRun("ci-smoke-worker");
+  if (!claimed) await new Promise((resolve) => setTimeout(resolve, 100));
+}
 if (!claimed) throw new Error("Worker did not claim the queued run");
 const completed = await getRun(created.id);
 if (!completed?.bundle || completed.state !== "COMPLETED")
