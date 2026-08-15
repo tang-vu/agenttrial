@@ -14,7 +14,13 @@ const requestSchema = z.union([
       activeConsent: z.literal(true),
     })
     .strict(),
-  z.object({ targetUrl: z.string().url().max(2048), mode: z.literal("passive") }).strict(),
+  z
+    .object({
+      targetUrl: z.string().url().max(2048),
+      mode: z.literal("passive"),
+      capabilityDescription: z.string().trim().min(1).max(2000).optional(),
+    })
+    .strict(),
 ]);
 export async function POST(request: Request) {
   try {
@@ -70,7 +76,7 @@ export async function POST(request: Request) {
     const run =
       "fixture" in body
         ? createFixtureRun(body.fixture as FixtureId)
-        : createExternalRun(body.targetUrl);
+        : createExternalRun(body.targetUrl, body.capabilityDescription);
     return NextResponse.json(
       { runId: run.id, state: run.state, cancelToken: takeCancellationCapability(run.id) },
       { status: 201, headers: { "cache-control": "no-store" } },

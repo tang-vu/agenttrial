@@ -53,6 +53,7 @@ export interface RuntimeRun {
   cancelled: boolean;
   fixture?: FixtureId;
   targetUrl?: string;
+  capabilityDescription?: string;
   mode: "active-controlled" | "passive-external";
   cancelTokenHash: string;
 }
@@ -138,7 +139,7 @@ export function createFixtureRun(fixture: FixtureId): RuntimeRun {
   else void executeRun(run);
   return run;
 }
-export function createExternalRun(targetUrl: string): RuntimeRun {
+export function createExternalRun(targetUrl: string, capabilityDescription?: string): RuntimeRun {
   const cancelToken = randomBytes(32).toString("hex");
   const run: RuntimeRun = {
     id: randomUUID(),
@@ -146,6 +147,7 @@ export function createExternalRun(targetUrl: string): RuntimeRun {
     events: [],
     cancelled: false,
     targetUrl,
+    ...(capabilityDescription ? { capabilityDescription } : {}),
     mode: "passive-external",
     cancelTokenHash: hashText(cancelToken),
   };
@@ -394,7 +396,12 @@ async function executeRun(run: RuntimeRun) {
   } catch (error) {
     if ((error as Error).message === "CANCELLED") {
       run.state = "CANCELLED";
-      emit(run, "CANCELLED", "run.cancelled", "Trial cancelled; partial evidence retained");
+      emit(
+        run,
+        "CANCELLED",
+        "run.cancelled",
+        "Trial cancelled; incomplete observations were discarded and no receipt was issued",
+      );
     } else {
       run.state = "FAILED";
       run.error = error instanceof Error ? error.message : "Unknown failure";
@@ -420,6 +427,22 @@ async function executeExternalRun(run: RuntimeRun) {
     const discovery = await discoverPublicTarget(run.targetUrl!);
     const openAIPlanner = new OpenAIPlannerProvider();
     let claims = discovery.claims;
+    if (run.capabilityDescription)
+      claims = [
+        ...claims,
+        {
+          id: "claim_user_1",
+          capability: run.capabilityDescription.slice(0, 240),
+          advertisedInput: "User-described input",
+          advertisedOutput: "User-described capability outcome",
+          dependencies: [],
+          requiredPermissions: [],
+          successCondition: run.capabilityDescription.slice(0, 500),
+          evidenceSource: "user-provided capability description",
+          confidence: 0.4,
+          discoveryLocation: "trial submission",
+        },
+      ].slice(0, 20);
     if (openAIPlanner.available()) {
       try {
         const planned = await openAIPlanner.discover(discovery.response.body);

@@ -154,6 +154,12 @@ const spec = {
         properties: {
           targetUrl: { type: "string", format: "uri", maxLength: 2048 },
           mode: { const: "passive" },
+          capabilityDescription: {
+            type: "string",
+            maxLength: 2000,
+            description:
+              "Optional user-asserted capability; always labeled untested in passive mode.",
+          },
         },
       },
       RunCreated: {

@@ -26,6 +26,7 @@ export function NewTrialForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [externalUrl, setExternalUrl] = useState("");
+  const [capabilityDescription, setCapabilityDescription] = useState("");
   const [externalLoading, setExternalLoading] = useState(false);
   async function start() {
     setLoading(true);
@@ -52,7 +53,11 @@ export function NewTrialForm() {
       const res = await fetch("/api/runs", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ targetUrl: externalUrl, mode: "passive" }),
+        body: JSON.stringify({
+          targetUrl: externalUrl,
+          mode: "passive",
+          ...(capabilityDescription ? { capabilityDescription } : {}),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -107,6 +112,15 @@ export function NewTrialForm() {
               These fixtures belong to AgentTrial and are safe for active adversarial tests.
             </small>
           </span>
+        </label>
+        <label>
+          Optional capability description
+          <textarea
+            value={capabilityDescription}
+            onChange={(event) => setCapabilityDescription(event.target.value.slice(0, 2000))}
+            placeholder="Describe what the agent claims to do. This is recorded as user-asserted, not verified evidence."
+            rows={4}
+          />
         </label>
         {error && (
           <p className="error-box" role="alert">

@@ -452,12 +452,14 @@ button {
   font-size: 12px;
   font-weight: 650;
 }
-.external-card input {
+.external-card input,
+.external-card textarea {
   width: 100%;
   border: 1px solid var(--line);
   background: #ece8df;
   padding: 15px;
   margin-bottom: 20px;
+  resize: vertical;
 }
 .notice {
   background: #ebe5da;
