@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { afterEach, describe, expect, it } from "vitest";
-import { safePublicFetch } from "./index";
+import { normalizeDiscoveryUrl, safePublicFetch } from "./index";
 
 describe("safe public adapter", () => {
   afterEach(() => delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS);
@@ -38,5 +38,15 @@ describe("safe public adapter", () => {
     );
     expect(Date.now() - started).toBeLessThan(1_000);
     await new Promise<void>((resolve) => server.close(() => resolve()));
+  });
+});
+describe("descriptor routing", () => {
+  it("uses the bounded GitHub README API for repository roots", () => {
+    expect(normalizeDiscoveryUrl("https://github.com/openai/openai-node")).toBe(
+      "https://api.github.com/repos/openai/openai-node/readme",
+    );
+    expect(normalizeDiscoveryUrl("https://example.com/agent-card.json")).toBe(
+      "https://example.com/agent-card.json",
+    );
   });
 });

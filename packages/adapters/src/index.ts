@@ -164,7 +164,10 @@ const A2ACardSchema = z.object({
   ),
   supportedInterfaces: z
     .array(z.object({ url: z.string(), protocolBinding: z.string(), protocolVersion: z.string() }))
-    .optional(),
+    .min(1),
+  capabilities: z.record(z.string(), z.unknown()),
+  defaultInputModes: z.array(z.string()).min(1),
+  defaultOutputModes: z.array(z.string()).min(1),
 });
 const OpenApiSchema = z.object({
   openapi: z.string(),
@@ -181,7 +184,7 @@ export interface ExternalDiscovery {
 }
 
 export async function discoverPublicTarget(raw: string): Promise<ExternalDiscovery> {
-  const response = await safePublicFetch(raw);
+  const response = await safePublicFetch(normalizeDiscoveryUrl(raw));
   const url = new URL(response.url);
   const parsed = tryJson(response.body);
   const a2a = A2ACardSchema.safeParse(parsed);
@@ -224,12 +227,19 @@ export async function discoverPublicTarget(raw: string): Promise<ExternalDiscove
         }
   } else if (
     url.hostname.toLowerCase() === "github.com" ||
+    url.hostname.toLowerCase() === "api.github.com" ||
     url.hostname.toLowerCase().endsWith(".githubusercontent.com")
   ) {
     descriptorKind = "github";
-    name =
-      extractTitle(response.body) ?? url.pathname.split("/").filter(Boolean).at(-1) ?? url.hostname;
-    claims = extractTextClaims(response.body, response.url, "README");
+    const apiBody = tryJson(response.body) as { content?: unknown; encoding?: unknown } | undefined;
+    const readme =
+      url.hostname.toLowerCase() === "api.github.com" &&
+      apiBody?.encoding === "base64" &&
+      typeof apiBody.content === "string"
+        ? Buffer.from(apiBody.content.replace(/\s/g, ""), "base64").toString("utf8")
+        : response.body;
+    name = extractTitle(readme) ?? url.pathname.split("/").filter(Boolean).at(-2) ?? url.hostname;
+    claims = extractTextClaims(readme, response.url, "README");
   } else if (/\/v1\/models\/?$/.test(url.pathname) && parsed && typeof parsed === "object") {
     descriptorKind = "openai";
     name = `${url.hostname} OpenAI-compatible endpoint`;
@@ -295,6 +305,14 @@ export async function discoverPublicTarget(raw: string): Promise<ExternalDiscove
       redactions: [],
     },
   };
+}
+
+export function normalizeDiscoveryUrl(raw: string) {
+  const url = new URL(raw);
+  if (url.hostname.toLowerCase() !== "github.com") return raw;
+  const parts = url.pathname.split("/").filter(Boolean);
+  if (parts.length !== 2) return raw;
+  return `https://api.github.com/repos/${encodeURIComponent(parts[0]!)}/${encodeURIComponent(parts[1]!)}/readme`;
 }
 
 function claim(

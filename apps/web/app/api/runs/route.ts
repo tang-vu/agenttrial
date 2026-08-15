@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       process.env.AGENTTRIAL_TRUST_PROXY === "true"
         ? (request.headers.get("x-real-ip") ?? "anonymous")
         : "anonymous";
-    const rate = consumeRateLimit(`create:${client}`, 10, 60_000);
+    const rate = consumeRateLimit(`create:${client}`, client === "anonymous" ? 60 : 10, 60_000);
     if (!rate.allowed)
       return NextResponse.json(
         { error: "Trial creation rate limit exceeded." },
@@ -51,6 +51,22 @@ export async function POST(request: Request) {
         { status: 403 },
       );
     const body = requestSchema.parse(parsed);
+    if ("targetUrl" in body) {
+      const targetOrigin = new URL(body.targetUrl).origin.toLowerCase();
+      const targetRate = consumeRateLimit(`target:${targetOrigin}`, 5, 60_000);
+      if (!targetRate.allowed)
+        return NextResponse.json(
+          { error: "This target has reached its passive evaluation limit." },
+          {
+            status: 429,
+            headers: {
+              "retry-after": String(
+                Math.max(1, Math.ceil((targetRate.resetAt - Date.now()) / 1000)),
+              ),
+            },
+          },
+        );
+    }
     const run =
       "fixture" in body
         ? createFixtureRun(body.fixture as FixtureId)
