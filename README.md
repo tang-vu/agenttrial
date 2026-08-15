@@ -20,15 +20,19 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000), choose **Run a live trial**, then select either controlled fixture. No OpenAI key, wallet, GitHub token, database, or account is required.
 
-To publish the local production build through an isolated Cloudflare Quick Tunnel on Windows:
+To publish the local production build at the configured Cloudflare Named Tunnel hostname on Windows:
 
 ```powershell
 .\scripts\start-local-tunnel.ps1
+# Install restart-on-failure plus reboot/logon recovery:
+.\scripts\install-local-autostart.ps1 -SkipBuild
 # Stop only the AgentTrial processes later:
 .\scripts\stop-local-tunnel.ps1
+# Also remove the scheduled task:
+.\scripts\stop-local-tunnel.ps1 -DisableAutostart
 ```
 
-The signing seed and process metadata are stored outside the repository under `%LOCALAPPDATA%\AgentTrial`. Quick Tunnel URLs change after restart and have no uptime guarantee; use a named tunnel for a stable submission URL.
+The default hostname is `https://agenttrial.tangvu.dev`. The signing seed, generated tunnel config, logs, and process metadata stay outside the repository under `%LOCALAPPDATA%\AgentTrial`. A supervisor restarts either Next.js or `cloudflared` after a process failure. The installer registers an at-startup task when run as Administrator; otherwise it safely falls back to starting when the current Windows user logs in after reboot. The PC must remain powered, awake, and connected to the internet.
 
 ```bash
 # Full quality gate

@@ -1,17 +1,37 @@
+param([switch]$DisableAutostart)
+
 $ErrorActionPreference = "Stop"
+$taskName = "AgentTrial Local Service"
 $stateDirectory = Join-Path $env:LOCALAPPDATA "AgentTrial\tunnel"
 $statePath = Join-Path $stateDirectory "processes.json"
-if (!(Test-Path $statePath)) { throw "No AgentTrial tunnel state was found." }
+
+if ($DisableAutostart) {
+  Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
+} else {
+  Stop-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+}
+
+if (!(Test-Path $statePath)) {
+  Write-Output "No running AgentTrial local service was found."
+  exit 0
+}
 $state = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
 
-$tunnel = Get-CimInstance Win32_Process -Filter "ProcessId=$($state.tunnelPid)" -ErrorAction SilentlyContinue
-if ($tunnel -and $tunnel.CommandLine -like "*127.0.0.1:$($state.port)*") {
-  Stop-Process -Id $state.tunnelPid -Force
+function Stop-VerifiedProcess([int]$ProcessId, [string]$Pattern) {
+  if (!$ProcessId) { return }
+  $process = Get-CimInstance Win32_Process -Filter "ProcessId=$ProcessId" -ErrorAction SilentlyContinue
+  if ($process -and $process.CommandLine -like "*$Pattern*") {
+    Stop-Process -Id $ProcessId -Force -ErrorAction SilentlyContinue
+  }
 }
+
+Stop-VerifiedProcess $state.supervisorPid "run-local-service.ps1"
+Stop-VerifiedProcess $state.tunnelPid "cloudflared-agenttrial.yml"
+Stop-VerifiedProcess $state.webLauncherPid "@agenttrial/web"
+
 $listener = Get-NetTCPConnection -LocalPort $state.port -State Listen -ErrorAction SilentlyContinue
 if ($listener -and $listener.OwningProcess -eq $state.webPid) {
-  Stop-Process -Id $state.webPid -Force
+  Stop-Process -Id $state.webPid -Force -ErrorAction SilentlyContinue
 }
-Remove-Item -LiteralPath $statePath
-Write-Output "AgentTrial tunnel stopped."
-
+Remove-Item -LiteralPath $statePath -Force -ErrorAction SilentlyContinue
+Write-Output "AgentTrial local service stopped. Autostart disabled: $DisableAutostart"

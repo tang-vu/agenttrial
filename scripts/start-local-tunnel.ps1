@@ -1,5 +1,7 @@
 param(
   [int]$Port = 4179,
+  [string]$Hostname = "agenttrial.tangvu.dev",
+  [string]$TunnelId = "88c75f02-f4d3-4086-a485-462ee04ab843",
   [switch]$SkipBuild
 )
 
@@ -8,20 +10,30 @@ $repo = Split-Path -Parent $PSScriptRoot
 $stateDirectory = Join-Path $env:LOCALAPPDATA "AgentTrial\tunnel"
 $seedPath = Join-Path $stateDirectory "signing-seed.txt"
 $statePath = Join-Path $stateDirectory "processes.json"
-$emptyConfig = Join-Path $stateDirectory "cloudflared-empty.yml"
+$configPath = Join-Path $stateDirectory "cloudflared-agenttrial.yml"
+$credentialsPath = Join-Path $env:USERPROFILE ".cloudflared\$TunnelId.json"
 $cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
 $pnpm = (Get-Command pnpm.cmd -ErrorAction Stop).Source
 
 if (!(Test-Path $cloudflared)) { throw "cloudflared is not installed at $cloudflared" }
+if (!(Test-Path $credentialsPath)) { throw "Tunnel credentials are missing at $credentialsPath" }
 New-Item -ItemType Directory -Path $stateDirectory -Force | Out-Null
+
 if (Test-Path $statePath) {
   $existing = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
-  if (Get-Process -Id $existing.tunnelPid -ErrorAction SilentlyContinue) {
-    throw "AgentTrial is already published at $($existing.url). Run stop-local-tunnel.ps1 first."
+  $supervisor = Get-Process -Id $existing.supervisorPid -ErrorAction SilentlyContinue
+  if ($supervisor) {
+    try {
+      Invoke-RestMethod "https://$Hostname/api/health" -TimeoutSec 10 | Out-Null
+      Write-Output "https://$Hostname"
+      exit 0
+    } catch {
+      throw "AgentTrial supervisor PID $($existing.supervisorPid) is already running but the public health check failed."
+    }
   }
-  Remove-Item -LiteralPath $statePath
+  Remove-Item -LiteralPath $statePath -Force
 }
-if (!(Test-Path $emptyConfig)) { New-Item -ItemType File -Path $emptyConfig | Out-Null }
+
 if (!(Test-Path $seedPath)) {
   $bytes = [byte[]]::new(32)
   $generator = [Security.Cryptography.RandomNumberGenerator]::Create()
@@ -30,63 +42,48 @@ if (!(Test-Path $seedPath)) {
     Set-Content -LiteralPath $seedPath -NoNewline
 }
 
-$listener = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
-if ($listener) { throw "Port $Port is already in use by PID $($listener.OwningProcess)." }
+@"
+tunnel: $TunnelId
+credentials-file: $credentialsPath
+
+ingress:
+  - hostname: $Hostname
+    service: http://127.0.0.1:$Port
+    originRequest:
+      connectTimeout: 10s
+      keepAliveConnections: 16
+      keepAliveTimeout: 1m30s
+  - service: http_status:404
+"@ | Set-Content -LiteralPath $configPath
+
 if (!$SkipBuild) {
   & $pnpm build
   if ($LASTEXITCODE -ne 0) { throw "Production build failed." }
 }
 
-$env:AGENTTRIAL_SIGNING_SEED = Get-Content -LiteralPath $seedPath -Raw
-$web = Start-Process -FilePath $pnpm -ArgumentList @(
-  "--filter", "@agenttrial/web", "start", "--hostname", "127.0.0.1", "--port", "$Port"
-) -WorkingDirectory $repo -WindowStyle Hidden -RedirectStandardOutput (
-  Join-Path $stateDirectory "web.out.log"
-) -RedirectStandardError (Join-Path $stateDirectory "web.err.log") -PassThru
-Remove-Item Env:AGENTTRIAL_SIGNING_SEED
+$supervisorLog = Join-Path $stateDirectory "supervisor.out.log"
+$supervisorErrorLog = Join-Path $stateDirectory "supervisor.err.log"
+$supervisor = Start-Process -FilePath powershell.exe -ArgumentList @(
+  "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+  ('"' + (Join-Path $PSScriptRoot "run-local-service.ps1") + '"'),
+  "-Port", "$Port", "-Hostname", $Hostname, "-ConfigPath", ('"' + $configPath + '"'),
+  "-StateDirectory", ('"' + $stateDirectory + '"'), "-PnpmPath", ('"' + $pnpm + '"'),
+  "-CloudflaredPath", ('"' + $cloudflared + '"')
+) -WorkingDirectory $repo -WindowStyle Hidden -RedirectStandardOutput $supervisorLog `
+  -RedirectStandardError $supervisorErrorLog -PassThru
 
 $ready = $false
 for ($attempt = 0; $attempt -lt 60; $attempt += 1) {
-  Start-Sleep -Milliseconds 500
+  Start-Sleep -Seconds 1
+  if ($supervisor.HasExited) {
+    throw "AgentTrial supervisor exited. See $supervisorErrorLog"
+  }
   try {
-    Invoke-RestMethod "http://127.0.0.1:$Port/api/health" | Out-Null
+    Invoke-RestMethod "https://$Hostname/api/health" -TimeoutSec 10 | Out-Null
     $ready = $true
     break
   } catch {}
 }
-if (!$ready) { throw "AgentTrial did not become healthy on port $Port." }
+if (!$ready) { throw "https://$Hostname did not become healthy within 60 seconds." }
 
-$session = Get-Date -Format "yyyyMMdd-HHmmss"
-$tunnelLog = Join-Path $stateDirectory "cloudflared-$session.log"
-$tunnel = Start-Process -FilePath $cloudflared -ArgumentList @(
-  "--config", $emptyConfig, "tunnel", "--url", "http://127.0.0.1:$Port",
-  "--no-autoupdate", "--logfile", $tunnelLog
-) -WorkingDirectory $stateDirectory -WindowStyle Hidden -RedirectStandardOutput (
-  Join-Path $stateDirectory "tunnel-$session.out.log"
-) -RedirectStandardError (Join-Path $stateDirectory "tunnel-$session.err.log") -PassThru
-
-$publicUrl = $null
-for ($attempt = 0; $attempt -lt 30; $attempt += 1) {
-  Start-Sleep -Seconds 1
-  if (Test-Path $tunnelLog) {
-    $match = Select-String -Path $tunnelLog -Pattern "https://[-a-z0-9]+\.trycloudflare\.com" -AllMatches
-    $publicUrl = $match.Matches.Value | Select-Object -Last 1
-    if ($publicUrl) { break }
-  }
-}
-if (!$publicUrl) { throw "Cloudflare Quick Tunnel did not publish a URL." }
-
-$publicReady = $false
-for ($attempt = 0; $attempt -lt 30; $attempt += 1) {
-  try {
-    Invoke-RestMethod "$publicUrl/api/health" | Out-Null
-    $publicReady = $true
-    break
-  } catch { Start-Sleep -Seconds 2 }
-}
-if (!$publicReady) { throw "Cloudflare published $publicUrl but it did not become reachable." }
-
-$webPid = (Get-NetTCPConnection -LocalPort $Port -State Listen).OwningProcess
-@{ webPid = $webPid; tunnelPid = $tunnel.Id; port = $Port; url = $publicUrl } |
-  ConvertTo-Json | Set-Content -LiteralPath $statePath
-Write-Output $publicUrl
+Write-Output "https://$Hostname"
