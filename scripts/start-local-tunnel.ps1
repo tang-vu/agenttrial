@@ -76,6 +76,16 @@ for ($attempt = 0; $attempt -lt 30; $attempt += 1) {
 }
 if (!$publicUrl) { throw "Cloudflare Quick Tunnel did not publish a URL." }
 
+$publicReady = $false
+for ($attempt = 0; $attempt -lt 30; $attempt += 1) {
+  try {
+    Invoke-RestMethod "$publicUrl/api/health" | Out-Null
+    $publicReady = $true
+    break
+  } catch { Start-Sleep -Seconds 2 }
+}
+if (!$publicReady) { throw "Cloudflare published $publicUrl but it did not become reachable." }
+
 $webPid = (Get-NetTCPConnection -LocalPort $Port -State Listen).OwningProcess
 @{ webPid = $webPid; tunnelPid = $tunnel.Id; port = $Port; url = $publicUrl } |
   ConvertTo-Json | Set-Content -LiteralPath $statePath
