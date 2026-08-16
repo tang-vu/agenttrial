@@ -23,7 +23,12 @@ export async function GET() {
       openAIProvider,
       paidPlannerPolicy: "disabled-for-anonymous-runs",
       persistence,
-      attestation: easConfigured ? "configured" : "local-receipt-fallback",
+      attestation:
+        process.env.EAS_ATTESTATION_ENABLED !== "true"
+          ? "disabled-local-receipt-fallback"
+          : easConfigured
+            ? "configured"
+            : "incomplete-configuration",
     },
     { status: ready ? 200 : 503, headers: { "cache-control": "no-store" } },
   );

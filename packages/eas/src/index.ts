@@ -58,15 +58,19 @@ export function decodeAttestation(data: string): AttestationFields {
 }
 
 export function attestationStatus() {
-  if (!process.env.EAS_SCHEMA_UID || !process.env.EAS_PRIVATE_KEY)
+  if (process.env.EAS_ATTESTATION_ENABLED !== "true")
+    return {
+      status: "disabled" as const,
+      message: "Base Sepolia anchoring is disabled; the signed local receipt is complete.",
+    };
+  if (!process.env.EAS_SCHEMA_UID || !process.env.EAS_PRIVATE_KEY || !process.env.EAS_RPC_URL)
     return {
       status: "not_configured" as const,
-      message: "Base Sepolia anchoring is optional; the signed local receipt is complete.",
+      message: "Base Sepolia anchoring was enabled but its testnet configuration is incomplete.",
     };
   return {
-    status: "failed" as const,
-    message:
-      "Credentials are configured, but live broadcast requires the explicit attestation script.",
+    status: "queued" as const,
+    message: "Receipt is ready for the operator-approved Base Sepolia attestation workflow.",
   };
 }
 

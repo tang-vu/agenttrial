@@ -23,7 +23,7 @@ For Vercel, use the repository root for web only and point `DATABASE_URL` at man
 
 ## Base Sepolia
 
-Fund a dedicated testnet-only wallet, set `EAS_RPC_URL`, `EAS_PRIVATE_KEY`, and run the guarded registration script. Store the returned schema UID as `EAS_SCHEMA_UID`. Review the bundle and report URI before the guarded attestation script. Never reuse a mainnet private key. Mainnet is intentionally blocked by the scripts.
+Fund a dedicated testnet-only wallet, set `EAS_RPC_URL`, `EAS_PRIVATE_KEY`, `EAS_SCHEMA_UID`, `AGENTTRIAL_TRUSTED_PUBLIC_KEY`, and `EAS_ATTESTATION_ENABLED=true`. Review the completed receipt and report URI, then run `pnpm eas:attest RUN_UUID --confirm-base-sepolia`. The workflow is idempotent, persists transaction/UID state, and verifies the mined chain, schema, attestor, revocation/expiry, and every decoded receipt field before marking the attachment anchored. Never reuse a mainnet private key. Mainnet is intentionally blocked.
 
 ## GitHub delivery workflows
 

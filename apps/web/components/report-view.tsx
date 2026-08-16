@@ -55,6 +55,9 @@ export function ReportView({ runId }: { runId: string }) {
   const failed = report.assertions.length - passed;
   const untestedClaims = new Set(report.score.untestedClaims);
   const capabilityScoreAvailable = report.score.coverage > 0;
+  const authorizedExternal = report.plan.trials.some(
+    (trial) => trial.mode === "active" && trial.authorizationRequired,
+  );
   const verdictHeadline =
     report.score.badge === "not-verified"
       ? "Capability claims remain unverified."
@@ -72,7 +75,11 @@ export function ReportView({ runId }: { runId: string }) {
           <span className="kicker">EVIDENCE REPORT / {report.score.methodologyVersion}</span>
           <h1>{report.target.name}</h1>
           <p>
-            {report.target.controlled ? "Controlled benchmark fixture" : "Passive public surface"}
+            {report.target.controlled
+              ? "Controlled benchmark fixture"
+              : authorizedExternal
+                ? "Authorized A2A evaluation"
+                : "Passive public surface"}
             {" · evaluated "}
             {new Date(report.completedAt).toLocaleString()}
           </p>
@@ -145,7 +152,11 @@ export function ReportView({ runId }: { runId: string }) {
             <small>
               {attestation?.status === "failed"
                 ? `Attestation failed: ${attestation.message}`
-                : "Signed local receipt · onchain anchor optional"}
+                : attestation?.status === "queued" ||
+                    attestation?.status === "pending" ||
+                    attestation?.status === "submitted"
+                  ? attestation.message
+                  : "Signed local receipt · onchain anchor optional"}
             </small>
           )}
         </div>

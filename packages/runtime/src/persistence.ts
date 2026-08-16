@@ -180,6 +180,23 @@ async function initialize() {
         status text NOT NULL,
         registered_at timestamptz NOT NULL DEFAULT now()
       )`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_attestations (
+        run_id uuid PRIMARY KEY REFERENCES agenttrial_runs(id) ON DELETE CASCADE,
+        chain_id integer NOT NULL,
+        eas_contract text NOT NULL,
+        schema_uid text NOT NULL,
+        status text NOT NULL,
+        payload_hash text NOT NULL,
+        report_uri text NOT NULL,
+        uid text UNIQUE,
+        transaction_hash text,
+        attestor text,
+        block_number bigint,
+        attempts integer NOT NULL DEFAULT 1,
+        last_error text,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
+      )`;
     })();
   return initialized;
 }
@@ -216,7 +233,11 @@ export async function loadRun(id: string): Promise<RuntimeRun | undefined> {
   if (!persistenceConfigured()) return loadLocalSnapshot(id);
   await initialize();
   const rows = await sql()`SELECT snapshot FROM agenttrial_runs WHERE id = ${id}::uuid LIMIT 1`;
-  return (rows[0]?.snapshot as RuntimeRun | undefined) ?? loadLocalSnapshot(id);
+  const run = (rows[0]?.snapshot as RuntimeRun | undefined) ?? (await loadLocalSnapshot(id));
+  if (!run?.bundle) return run;
+  const attachment = await loadAttestation(id);
+  if (attachment) run.bundle.attestation = attachment;
+  return run;
 }
 
 export async function enqueueRun(run: RuntimeRun) {
@@ -428,4 +449,108 @@ export async function loadSigningPublicKeys() {
     status: "active" | "previous" | "revoked";
     registeredAt: Date;
   }>;
+}
+
+export interface PersistedAttestation {
+  status: "pending" | "submitted" | "anchored" | "failed";
+  chainId: number;
+  easContract: string;
+  schemaUid: string;
+  payloadHash: string;
+  reportURI: string;
+  uid?: string;
+  transactionHash?: string;
+  explorerUrl?: string;
+  message: string;
+}
+
+function mapAttestation(row: Record<string, unknown>): PersistedAttestation {
+  const uid = row.uid as string | undefined;
+  const status = row.status as PersistedAttestation["status"];
+  return {
+    status,
+    chainId: Number(row.chain_id),
+    easContract: String(row.eas_contract),
+    schemaUid: String(row.schema_uid),
+    payloadHash: String(row.payload_hash),
+    reportURI: String(row.report_uri),
+    ...(uid
+      ? { uid, explorerUrl: `https://base-sepolia.easscan.org/attestation/view/${uid}` }
+      : {}),
+    ...(row.transaction_hash ? { transactionHash: String(row.transaction_hash) } : {}),
+    message:
+      status === "anchored"
+        ? "Receipt anchor confirmed on Base Sepolia."
+        : status === "failed"
+          ? String(row.last_error ?? "Attestation failed; local receipt remains valid.")
+          : status === "submitted"
+            ? "Attestation transaction submitted and awaiting confirmation."
+            : "Attestation queued for Base Sepolia.",
+  };
+}
+
+export async function loadAttestation(runId: string) {
+  if (!persistenceConfigured()) return undefined;
+  await initialize();
+  const rows = await sql()`SELECT * FROM agenttrial_attestations WHERE run_id = ${runId}::uuid`;
+  return rows[0] ? mapAttestation(rows[0] as Record<string, unknown>) : undefined;
+}
+
+export async function beginAttestation(input: {
+  runId: string;
+  chainId: number;
+  easContract: string;
+  schemaUid: string;
+  payloadHash: string;
+  reportURI: string;
+}) {
+  await initialize();
+  const db = sql();
+  const rows = await db`INSERT INTO agenttrial_attestations ${db({
+    run_id: input.runId,
+    chain_id: input.chainId,
+    eas_contract: input.easContract,
+    schema_uid: input.schemaUid,
+    status: "pending",
+    payload_hash: input.payloadHash,
+    report_uri: input.reportURI,
+  })} ON CONFLICT (run_id) DO UPDATE SET
+    attempts = agenttrial_attestations.attempts + 1,
+    updated_at = now(),
+    status = CASE WHEN agenttrial_attestations.status IN ('anchored','submitted')
+      THEN agenttrial_attestations.status ELSE 'pending' END
+    WHERE agenttrial_attestations.payload_hash = EXCLUDED.payload_hash RETURNING *`;
+  if (!rows[0])
+    throw new Error("Attestation retry payload does not match the existing run binding.");
+  return mapAttestation(rows[0] as Record<string, unknown>);
+}
+
+export async function recordAttestationSubmitted(runId: string, transactionHash: string) {
+  const rows = await sql()`UPDATE agenttrial_attestations SET status = 'submitted',
+    transaction_hash = ${transactionHash}, updated_at = now() WHERE run_id = ${runId}::uuid
+    AND status <> 'anchored' RETURNING *`;
+  return rows[0] ? mapAttestation(rows[0] as Record<string, unknown>) : undefined;
+}
+
+export async function confirmAttestation(input: {
+  runId: string;
+  uid: string;
+  transactionHash: string;
+  attestor: string;
+  blockNumber: bigint;
+}) {
+  const rows =
+    await sql()`UPDATE agenttrial_attestations SET status = 'anchored', uid = ${input.uid},
+    transaction_hash = ${input.transactionHash}, attestor = ${input.attestor},
+    block_number = ${input.blockNumber.toString()}, last_error = null, updated_at = now()
+    WHERE run_id = ${input.runId}::uuid AND status IN ('pending','submitted') RETURNING *`;
+  if (!rows[0]) throw new Error("Attestation could not be confirmed from its current state.");
+  return mapAttestation(rows[0] as Record<string, unknown>);
+}
+
+export async function failAttestation(runId: string, error: string) {
+  const rows = await sql()`UPDATE agenttrial_attestations SET status = 'failed',
+    last_error = ${error.slice(0, 1000)}, updated_at = now() WHERE run_id = ${runId}::uuid
+    AND status <> 'anchored' RETURNING *`;
+  return rows[0] ? mapAttestation(rows[0] as Record<string, unknown>) : undefined;
 }

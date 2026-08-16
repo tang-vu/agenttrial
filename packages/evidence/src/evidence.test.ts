@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   appendEvent,
+  attestationBindingHash,
   canonicalize,
   createSigningKey,
   evidenceRoot,
@@ -122,5 +123,28 @@ describe("canonical evidence", () => {
     const fresh = bundle();
     fresh.receipt.signature = `00${fresh.receipt.signature.slice(2)}`;
     expect(verifySignature(fresh.receipt)).toBe(false);
+  });
+  it("binds persisted Base Sepolia attachment metadata to the signed receipt", () => {
+    const b = bundle();
+    const descriptor = {
+      chainId: 84532,
+      easContract: "0x4200000000000000000000000000000000000021",
+      schemaUid: `0x${"11".repeat(32)}`,
+      reportURI: "https://agenttrial.tangvu.dev/reports/run",
+    };
+    b.attestation = {
+      status: "anchored",
+      ...descriptor,
+      payloadHash: attestationBindingHash(b.receipt.payload, descriptor),
+      uid: `0x${"22".repeat(32)}`,
+      transactionHash: `0x${"33".repeat(32)}`,
+      explorerUrl: `https://base-sepolia.easscan.org/attestation/view/0x${"22".repeat(32)}`,
+      message: "confirmed",
+    };
+    expect(verifyBundle(b, { trustedPublicKeys: [b.receipt.publicKey] }).valid).toBe(true);
+    b.attestation.reportURI = "https://attacker.invalid/report";
+    expect(verifyBundle(b, { trustedPublicKeys: [b.receipt.publicKey] }).firstMismatch).toBe(
+      "attestation-attachment",
+    );
   });
 });

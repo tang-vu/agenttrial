@@ -87,12 +87,48 @@ export interface EvidenceBundle {
   evidenceRoot: string;
   receipt: SignedReceipt;
   attestation?: {
-    status: "anchored" | "failed" | "not_configured";
+    status:
+      | "disabled"
+      | "not_configured"
+      | "queued"
+      | "pending"
+      | "submitted"
+      | "anchored"
+      | "failed";
+    chainId?: number;
+    easContract?: string;
+    schemaUid?: string;
+    payloadHash?: string;
+    reportURI?: string;
     uid?: string;
     transactionHash?: string;
     explorerUrl?: string;
     message: string;
   };
+}
+
+export function attestationBindingHash(
+  payload: ReceiptPayload,
+  attachment: {
+    chainId: number;
+    easContract: string;
+    schemaUid: string;
+    reportURI: string;
+  },
+) {
+  return hashObject({
+    chainId: attachment.chainId,
+    easContract: attachment.easContract.toLowerCase(),
+    schemaUid: attachment.schemaUid.toLowerCase(),
+    targetIdentifier: payload.targetId,
+    trialRoot: payload.planHash,
+    methodologyVersion: payload.methodologyVersion,
+    scoreBasisPoints: payload.scoreBasisPoints,
+    coverageBasisPoints: payload.coverageBasisPoints,
+    evidenceRoot: payload.evidenceRoot,
+    reportURI: attachment.reportURI,
+    evaluatedAt: Math.floor(Date.parse(payload.issuedAt) / 1000),
+  });
 }
 
 export function evidenceRoot(items: EvidenceItem[]): string {
@@ -287,6 +323,29 @@ export function verifyBundle(
       ? "Signer matches the supplied AgentTrial trust-key set"
       : "Signer is not in the supplied trust-key set",
   );
+  if (bundle.attestation?.status === "anchored") {
+    const attachment = bundle.attestation;
+    const structurallyValid =
+      attachment.chainId === 84532 &&
+      /^0x[0-9a-f]{40}$/i.test(attachment.easContract ?? "") &&
+      /^0x[0-9a-f]{64}$/i.test(attachment.schemaUid ?? "") &&
+      /^0x[0-9a-f]{64}$/i.test(attachment.uid ?? "") &&
+      /^0x[0-9a-f]{64}$/i.test(attachment.transactionHash ?? "") &&
+      attachment.payloadHash ===
+        attestationBindingHash(bundle.receipt.payload, {
+          chainId: attachment.chainId,
+          easContract: attachment.easContract!,
+          schemaUid: attachment.schemaUid!,
+          reportURI: attachment.reportURI ?? "",
+        });
+    add(
+      "attestation-attachment",
+      structurallyValid,
+      structurallyValid
+        ? "Base Sepolia attachment is bound to the signed receipt; onchain status is a separate check"
+        : "Attestation attachment does not bind to this receipt",
+    );
+  }
   const first = checks.find((c) => !c.valid);
   return { valid: !first, checks, ...(first ? { firstMismatch: first.name } : {}) };
 }

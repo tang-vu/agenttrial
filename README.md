@@ -61,7 +61,7 @@ pnpm secret-scan
 - Current OpenAI Responses API provider with structured Zod output plus a deterministic no-key provider.
 - Passive website/OpenAPI/OpenAI-compatible/A2A/GitHub discovery with DNS/IP pinning, redirect revalidation, byte/time budgets, redaction, and explicit low coverage.
 - One-time HTTPS domain-control challenges and a real, bounded A2A HTTP+JSON 1.0 active adapter with two-call repeatability evidence and private session capabilities.
-- Base Sepolia EAS schema encoding, guarded registration/attestation scripts, and local receipt fallback.
+- Base Sepolia EAS schema encoding, guarded idempotent attestation, persisted report attachments, onchain field verification, and local receipt fallback.
 - PostgreSQL snapshots, fenced durable queues, a target-facing worker with no signing seed, a no-egress validating signer, cross-process SSE polling, and private cancellation capabilities.
 - OpenAPI 3.1 schemas, a truthful machine descriptor, `llms.txt`, health, and readiness endpoints. A2A is not advertised until its full task lifecycle exists.
 
@@ -111,11 +111,12 @@ The schema uses Base Sepolia chain ID `84532`, EAS `0x4200…0021`, and Schema R
 
 ```bash
 pnpm eas:register --confirm-base-sepolia
-pnpm eas:attest agenttrial-RUN_ID.json --confirm-base-sepolia
+pnpm eas:attest RUN_UUID --confirm-base-sepolia # durable PostgreSQL run; persists UID/tx
+# or: pnpm eas:attest agenttrial-RUN_ID.json --confirm-base-sepolia
 pnpm eas:verify agenttrial-RUN_ID.json 0xATTESTATION_UID
 ```
 
-These commands spend Base Sepolia test ETH. Mainnet broadcasting is intentionally unsupported by the scripts. Attestation failure never blocks the signed local report.
+These commands spend Base Sepolia test ETH. Mainnet broadcasting is intentionally unsupported. For a durable run, the workflow stores pending/submitted/anchored/failed state, verifies the mined schema, attestor and decoded receipt fields, and joins the explorer link into subsequent report/bundle reads. Failure never blocks or mutates the signed local receipt.
 
 ## Deploy
 

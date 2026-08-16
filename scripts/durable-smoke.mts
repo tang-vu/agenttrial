@@ -6,10 +6,13 @@ import {
   processNextRun,
   processNextSigningJob,
 } from "../packages/runtime/src/index.ts";
-import { verifyBundle } from "../packages/evidence/src/index.ts";
+import { attestationBindingHash, verifyBundle } from "../packages/evidence/src/index.ts";
 import {
+  beginAttestation,
   claimRun,
+  confirmAttestation,
   finishRunJob,
+  recordAttestationSubmitted,
   renewRunLease,
   saveRun,
 } from "../packages/runtime/src/persistence.ts";
@@ -80,6 +83,40 @@ async function main() {
   });
   if (!verification.valid)
     throw new Error(`Persisted bundle failed verification at ${verification.firstMismatch}`);
+  const attachmentDescriptor = {
+    chainId: 84532,
+    easContract: "0x4200000000000000000000000000000000000021",
+    schemaUid: `0x${"11".repeat(32)}`,
+    reportURI: `https://agenttrial.tangvu.dev/reports/${created.id}`,
+  };
+  const payloadHash = attestationBindingHash(
+    completed.bundle.receipt.payload,
+    attachmentDescriptor,
+  );
+  await beginAttestation({ runId: created.id, ...attachmentDescriptor, payloadHash });
+  await recordAttestationSubmitted(created.id, `0x${"22".repeat(32)}`);
+  await confirmAttestation({
+    runId: created.id,
+    uid: `0x${"33".repeat(32)}`,
+    transactionHash: `0x${"22".repeat(32)}`,
+    attestor: `0x${"44".repeat(20)}`,
+    blockNumber: 123n,
+  });
+  const attached = await getRun(created.id);
+  if (attached?.bundle?.attestation?.status !== "anchored")
+    throw new Error("Confirmed EAS attachment was not joined into the durable bundle");
+  if (!verifyBundle(attached.bundle, { trustedPublicKeys: [getSigningPublicKey()] }).valid)
+    throw new Error("Persisted EAS attachment did not bind to the signed receipt");
+  await beginAttestation({
+    runId: created.id,
+    ...attachmentDescriptor,
+    payloadHash: "00".repeat(32),
+  }).then(
+    () => {
+      throw new Error("Mismatched EAS retry payload was accepted");
+    },
+    () => undefined,
+  );
 
   const malicious = createFixtureRun("evidence-researcher");
   process.env.AGENTTRIAL_EXECUTION_ONLY = "true";
