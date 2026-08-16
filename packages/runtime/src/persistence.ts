@@ -16,6 +16,8 @@ export interface JobLease {
   workerId: string;
   token: string;
   leaseMs: number;
+  attempt: number;
+  initialRun?: RuntimeRun;
 }
 
 export class LeaseLostError extends Error {
@@ -272,7 +274,7 @@ export async function enqueueRun(run: RuntimeRun) {
     if (Number(counts[0]?.count ?? 0) >= maxQueued)
       throw new Error("Evaluator queue is at capacity; retry later.");
     await tx`INSERT INTO agenttrial_runs ${db({ id: run.id, state: run.state, revision: run.events.length, snapshot: db.json(run as never) })} ON CONFLICT (id) DO NOTHING`;
-    await tx`INSERT INTO agenttrial_jobs ${db({ id: run.id, payload: db.json({ id: run.id }) })} ON CONFLICT (id) DO NOTHING`;
+    await tx`INSERT INTO agenttrial_jobs ${db({ id: run.id, payload: db.json({ initialRun: run } as never) })} ON CONFLICT (id) DO NOTHING`;
   });
 }
 
@@ -302,9 +304,19 @@ export async function claimRun(workerId: string, leaseMs = 30_000): Promise<JobL
     ) UPDATE agenttrial_jobs SET status = 'running', worker_id = ${workerId},
       lease_token = ${token}, attempts = attempts + 1, started_at = COALESCE(started_at, now()),
       locked_until = now() + (${leaseMs} * interval '1 millisecond')
-    WHERE id = (SELECT id FROM next_job) RETURNING id`;
+    WHERE id = (SELECT id FROM next_job) RETURNING id, attempts, payload`;
   const id = rows[0]?.id as string | undefined;
-  return id ? { id, workerId, token, leaseMs } : undefined;
+  const payload = rows[0]?.payload as { initialRun?: RuntimeRun } | undefined;
+  return id
+    ? {
+        id,
+        workerId,
+        token,
+        leaseMs,
+        attempt: Number(rows[0]?.attempts ?? 1),
+        ...(payload?.initialRun ? { initialRun: payload.initialRun } : {}),
+      }
+    : undefined;
 }
 
 export async function renewRunLease(lease: JobLease) {
@@ -467,9 +479,9 @@ export async function claimSigningJob(
     ) UPDATE agenttrial_signing_jobs SET status = 'running', worker_id = ${workerId},
       lease_token = ${token}, attempts = attempts + 1,
       locked_until = now() + (${leaseMs} * interval '1 millisecond')
-    WHERE id = (SELECT id FROM next_job) RETURNING id`;
+    WHERE id = (SELECT id FROM next_job) RETURNING id, attempts`;
   const id = rows[0]?.id as string | undefined;
-  return id ? { id, workerId, token, leaseMs } : undefined;
+  return id ? { id, workerId, token, leaseMs, attempt: Number(rows[0]?.attempts ?? 1) } : undefined;
 }
 
 export async function saveSignedRun(run: RuntimeRun, lease: JobLease) {

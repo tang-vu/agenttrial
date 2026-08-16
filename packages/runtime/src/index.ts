@@ -98,7 +98,12 @@ const listeners = (globalStore.__agenttrialListeners ??= new Map());
 const cancellationCapabilities = new Map<string, string>();
 const activeLeases = new Map<
   string,
-  { lease: JobLease; lost: boolean; controller: AbortController }
+  {
+    lease: JobLease;
+    lost: boolean;
+    controller: AbortController;
+    checkpoint: Promise<void>;
+  }
 >();
 const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
 const signingSeedHex = process.env.AGENTTRIAL_SIGNING_SEED;
@@ -167,9 +172,20 @@ function emit(
   });
   listeners.get(run.id)?.forEach((fn) => fn(event));
   const leaseState = activeLeases.get(run.id);
-  void saveRun(run, leaseState?.lease).catch((error) => {
-    if (error instanceof LeaseLostError && leaseState) leaseState.lost = true;
-  });
+  if (leaseState) {
+    const snapshot = structuredClone(run);
+    leaseState.checkpoint = leaseState.checkpoint
+      .then(async () => {
+        if (leaseState.lost) return;
+        await saveRun(snapshot, leaseState.lease);
+      })
+      .catch((error) => {
+        leaseState.lost = true;
+        leaseState.controller.abort(error instanceof LeaseLostError ? error : new LeaseLostError());
+      });
+  } else {
+    void saveRun(structuredClone(run)).catch(() => undefined);
+  }
   return event;
 }
 const pause = (ms = 90) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -179,6 +195,7 @@ async function ensureActive(run: RuntimeRun) {
 }
 async function persistExecutionRun(run: RuntimeRun) {
   const leaseState = activeLeases.get(run.id);
+  if (leaseState) await leaseState.checkpoint;
   if (leaseState?.lost) throw new LeaseLostError();
   await saveRun(run, leaseState?.lease);
 }
@@ -287,20 +304,32 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
   if (!persistenceConfigured()) return false;
   const lease = await claimRun(workerId);
   if (!lease) return false;
-  const run = await loadRun(lease.id);
+  let run = await loadRun(lease.id);
   if (!run) {
     await finishRunJob(lease, "Run snapshot missing");
     return true;
   }
+  if (lease.attempt > 1 && lease.initialRun) {
+    run = structuredClone(lease.initialRun);
+  }
   runs.set(lease.id, run);
-  const leaseState = { lease, lost: false, controller: new AbortController() };
+  const leaseState = {
+    lease,
+    lost: false,
+    controller: new AbortController(),
+    checkpoint: Promise.resolve(),
+  };
   activeLeases.set(lease.id, leaseState);
-  let renewing = false;
+  if (lease.attempt > 1)
+    emit(run, "CREATED", "worker.recovered", "Worker restarted the trial from its sealed input", {
+      attempt: lease.attempt,
+      discardedPartialAttempt: lease.attempt - 1,
+    });
+  let renewalPromise: Promise<void> | undefined;
   const renewal = setInterval(
     () => {
-      if (renewing || leaseState.lost) return;
-      renewing = true;
-      void renewRunLease(lease)
+      if (renewalPromise || leaseState.lost) return;
+      renewalPromise = renewRunLease(lease)
         .then((renewed) => {
           if (!renewed) {
             leaseState.lost = true;
@@ -312,7 +341,7 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
           leaseState.controller.abort(new LeaseLostError());
         })
         .finally(() => {
-          renewing = false;
+          renewalPromise = undefined;
         });
     },
     Math.max(250, Math.floor(lease.leaseMs / 3)),
@@ -321,6 +350,9 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
     if (run.mode === "passive-external") await executeExternalRun(run);
     else if (run.mode === "active-external") await executeAuthorizedExternalRun(run);
     else await executeRun(run);
+    clearInterval(renewal);
+    if (renewalPromise) await renewalPromise;
+    await leaseState.checkpoint;
     if (leaseState.lost) throw new LeaseLostError();
     await saveRun(run, lease);
     if (!(await finishRunJob(lease, run.state === "FAILED" ? run.error : undefined)))
