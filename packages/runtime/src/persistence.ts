@@ -4,6 +4,8 @@ import { mkdir, readFile, readdir, rename, stat, unlink, writeFile } from "node:
 import { join, resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import type { RuntimeRun } from "./index";
+import type { AuthorizationRecord } from "@agenttrial/core";
+import { appendEvent } from "@agenttrial/evidence";
 
 let client: ReturnType<typeof postgres> | undefined;
 let initialized: Promise<void> | undefined;
@@ -197,6 +199,22 @@ async function initialize() {
         created_at timestamptz NOT NULL DEFAULT now(),
         updated_at timestamptz NOT NULL DEFAULT now()
       )`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_authorizations (
+        id uuid PRIMARY KEY,
+        status text NOT NULL,
+        token_hash text NOT NULL,
+        expires_at timestamptz NOT NULL,
+        snapshot jsonb NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
+      )`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_rate_limits (
+        bucket_key text PRIMARY KEY,
+        count integer NOT NULL,
+        reset_at timestamptz NOT NULL
+      )`;
+      await db`CREATE INDEX IF NOT EXISTS agenttrial_authorizations_expiry_idx
+        ON agenttrial_authorizations(status, expires_at)`;
     })();
   return initialized;
 }
@@ -243,8 +261,19 @@ export async function loadRun(id: string): Promise<RuntimeRun | undefined> {
 export async function enqueueRun(run: RuntimeRun) {
   await initialize();
   const db = sql();
-  await db`INSERT INTO agenttrial_runs ${db({ id: run.id, state: run.state, revision: run.events.length, snapshot: db.json(run as never) })} ON CONFLICT (id) DO NOTHING`;
-  await db`INSERT INTO agenttrial_jobs ${db({ id: run.id, payload: db.json({ id: run.id }) })} ON CONFLICT (id) DO NOTHING`;
+  await db.begin(async (transaction) => {
+    const tx = transaction as unknown as ReturnType<typeof sql>;
+    const maxQueued = Math.min(
+      1_000,
+      Math.max(1, Number(process.env.AGENTTRIAL_MAX_QUEUED_RUNS ?? 100)),
+    );
+    const counts = await tx`SELECT count(*)::int AS count FROM agenttrial_jobs
+      WHERE status IN ('queued','running')`;
+    if (Number(counts[0]?.count ?? 0) >= maxQueued)
+      throw new Error("Evaluator queue is at capacity; retry later.");
+    await tx`INSERT INTO agenttrial_runs ${db({ id: run.id, state: run.state, revision: run.events.length, snapshot: db.json(run as never) })} ON CONFLICT (id) DO NOTHING`;
+    await tx`INSERT INTO agenttrial_jobs ${db({ id: run.id, payload: db.json({ id: run.id }) })} ON CONFLICT (id) DO NOTHING`;
+  });
 }
 
 async function failExhaustedJobs() {
@@ -301,6 +330,41 @@ export async function cancelQueuedJob(id: string) {
   await initialize();
   await sql()`UPDATE agenttrial_jobs SET status = 'cancelled', finished_at = now(), locked_until = null,
     lease_token = null WHERE id = ${id}::uuid AND status IN ('queued', 'running')`;
+}
+
+export async function cancelRunDurably(id: string, cancelTokenHash: string) {
+  if (!persistenceConfigured()) return undefined;
+  await initialize();
+  return sql().begin(async (transaction) => {
+    const tx = transaction as unknown as ReturnType<typeof sql>;
+    const rows = await tx`SELECT snapshot, state FROM agenttrial_runs
+      WHERE id = ${id}::uuid FOR UPDATE`;
+    const run = rows[0]?.snapshot as RuntimeRun | undefined;
+    if (
+      !run ||
+      run.cancelTokenHash !== cancelTokenHash ||
+      ["COMPLETED", "FAILED", "CANCELLED"].includes(String(rows[0]?.state))
+    )
+      return undefined;
+    run.cancelled = true;
+    run.state = "CANCELLED";
+    appendEvent(run.events, {
+      at: new Date().toISOString(),
+      state: "CANCELLED",
+      type: "run.cancelled",
+      message: "Trial cancelled with the private cancellation capability",
+    });
+    await tx`UPDATE agenttrial_jobs SET status = 'cancelled', finished_at = now(),
+      locked_until = null, lease_token = null WHERE id = ${id}::uuid
+      AND status IN ('queued','running')`;
+    await tx`UPDATE agenttrial_signing_jobs SET status = 'cancelled', finished_at = now(),
+      locked_until = null, lease_token = null WHERE id = ${id}::uuid
+      AND status IN ('queued','running')`;
+    const db = sql();
+    await tx`UPDATE agenttrial_runs SET state = 'CANCELLED', revision = ${run.events.length},
+      snapshot = ${db.json(run as never)}, updated_at = now() WHERE id = ${id}::uuid`;
+    return run;
+  });
 }
 
 export async function runCancellationRequested(id: string) {
@@ -553,4 +617,58 @@ export async function failAttestation(runId: string, error: string) {
     last_error = ${error.slice(0, 1000)}, updated_at = now() WHERE run_id = ${runId}::uuid
     AND status <> 'anchored' RETURNING *`;
   return rows[0] ? mapAttestation(rows[0] as Record<string, unknown>) : undefined;
+}
+
+export async function saveAuthorizationRecord(record: AuthorizationRecord) {
+  if (!persistenceConfigured()) return;
+  await initialize();
+  const db = sql();
+  await db`INSERT INTO agenttrial_authorizations ${db({
+    id: record.id,
+    status: record.status,
+    token_hash: record.verificationTokenHash,
+    expires_at: record.expiresAt,
+    snapshot: db.json(record as never),
+  })} ON CONFLICT (id) DO UPDATE SET status = EXCLUDED.status,
+    expires_at = EXCLUDED.expires_at, snapshot = EXCLUDED.snapshot, updated_at = now()`;
+}
+
+export async function loadAuthorizationRecord(id: string) {
+  if (!persistenceConfigured()) return undefined;
+  await initialize();
+  const rows = await sql()`SELECT snapshot FROM agenttrial_authorizations WHERE id = ${id}::uuid`;
+  return rows[0]?.snapshot as AuthorizationRecord | undefined;
+}
+
+export async function transitionAuthorizationRecord(
+  id: string,
+  expectedStatus: AuthorizationRecord["status"],
+  record: AuthorizationRecord,
+) {
+  if (!persistenceConfigured()) return true;
+  await initialize();
+  const db = sql();
+  const rows = await db`UPDATE agenttrial_authorizations SET status = ${record.status},
+    snapshot = ${db.json(record as never)}, updated_at = now()
+    WHERE id = ${id}::uuid AND status = ${expectedStatus} AND expires_at > now()
+    RETURNING id`;
+  return rows.length === 1;
+}
+
+export async function consumeDistributedRateLimit(key: string, limit: number, windowMs: number) {
+  if (!persistenceConfigured()) return undefined;
+  await initialize();
+  const boundedWindow = Math.min(24 * 60 * 60 * 1000, Math.max(1_000, windowMs));
+  const rows = await sql()`INSERT INTO agenttrial_rate_limits (bucket_key, count, reset_at)
+    VALUES (${key}, 1, now() + (${boundedWindow} * interval '1 millisecond'))
+    ON CONFLICT (bucket_key) DO UPDATE SET
+      count = CASE WHEN agenttrial_rate_limits.reset_at <= now() THEN 1
+        ELSE agenttrial_rate_limits.count + 1 END,
+      reset_at = CASE WHEN agenttrial_rate_limits.reset_at <= now()
+        THEN now() + (${boundedWindow} * interval '1 millisecond')
+        ELSE agenttrial_rate_limits.reset_at END
+    RETURNING count, reset_at`;
+  const count = Number(rows[0]?.count ?? limit + 1);
+  const resetAt = new Date(rows[0]?.reset_at as string | Date).getTime();
+  return { allowed: count <= limit, remaining: Math.max(0, limit - count), resetAt };
 }

@@ -1,11 +1,14 @@
 import {
   closePersistence,
+  cancelRunAuthorized,
   createFixtureRun,
   getRun,
   getSigningPublicKey,
   processNextRun,
   processNextSigningJob,
+  takeCancellationCapability,
 } from "../packages/runtime/src/index.ts";
+import { randomUUID } from "node:crypto";
 import { attestationBindingHash, verifyBundle } from "../packages/evidence/src/index.ts";
 import {
   beginAttestation,
@@ -15,6 +18,8 @@ import {
   recordAttestationSubmitted,
   renewRunLease,
   saveRun,
+  saveAuthorizationRecord,
+  transitionAuthorizationRecord,
 } from "../packages/runtime/src/persistence.ts";
 
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -23,6 +28,69 @@ async function main() {
   if (!process.env.DATABASE_URL)
     throw new Error("DATABASE_URL is required for the durable smoke test");
   if (!process.env.AGENTTRIAL_SIGNING_SEED) throw new Error("AGENTTRIAL_SIGNING_SEED is required");
+
+  const authorizationId = randomUUID();
+  const issuedAt = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + 60_000).toISOString();
+  const authorization = {
+    id: authorizationId,
+    status: "issued" as const,
+    origin: "https://agent.example",
+    cardUrl: "https://agent.example/.well-known/agent-card.json",
+    cardHash: "11".repeat(32),
+    interfaceUrl: "https://agent.example/a2a/",
+    protocolBinding: "HTTP+JSON" as const,
+    protocolVersion: "1.0" as const,
+    skillId: "research",
+    proofUrl: "https://agent.example/.well-known/agenttrial-proof.json",
+    scopeHash: "22".repeat(32),
+    documentHash: "33".repeat(32),
+    nonceHash: "44".repeat(32),
+    verificationTokenHash: "55".repeat(32),
+    actorId: "ci-session",
+    grant: {
+      mode: "active" as const,
+      actions: ["SendMessage"] as ["SendMessage"],
+      trialCategories: ["core-functionality" as const],
+      maxMessages: 2,
+      maxRequestBytes: 16_384,
+      maxResponseBytes: 1_000_000,
+      timeoutMs: 15_000,
+    },
+    testMessage: "test",
+    expectedSubstring: "ok",
+    issuedAt,
+    expiresAt,
+  };
+  await saveAuthorizationRecord(authorization);
+  const verifiedAuthorization = {
+    ...authorization,
+    status: "verified" as const,
+    verifiedAt: new Date().toISOString(),
+    verificationEvidence: {
+      proofHash: "66".repeat(32),
+      verifiedAt: new Date().toISOString(),
+      cardHash: authorization.cardHash,
+      proofUrl: authorization.proofUrl,
+    },
+  };
+  const verifyRaces = await Promise.all([
+    transitionAuthorizationRecord(authorizationId, "issued", verifiedAuthorization),
+    transitionAuthorizationRecord(authorizationId, "issued", verifiedAuthorization),
+  ]);
+  if (verifyRaces.filter(Boolean).length !== 1)
+    throw new Error("Authorization verification transition was not atomic");
+  const consumedAuthorization = {
+    ...verifiedAuthorization,
+    status: "consumed" as const,
+    consumedAt: new Date().toISOString(),
+  };
+  const consumeRaces = await Promise.all([
+    transitionAuthorizationRecord(authorizationId, "verified", consumedAuthorization),
+    transitionAuthorizationRecord(authorizationId, "verified", consumedAuthorization),
+  ]);
+  if (consumeRaces.filter(Boolean).length !== 1)
+    throw new Error("Authorization consumption transition was not one-time");
 
   const fenced = createFixtureRun("evidence-researcher");
   let firstLease: Awaited<ReturnType<typeof claimRun>>;
@@ -56,6 +124,23 @@ async function main() {
   if (await finishRunJob(staleLease)) throw new Error("Stale worker finished after fencing");
   if (!(await finishRunJob(replacement, "reclaim probe complete")))
     throw new Error("Replacement worker could not finish reclaimed job");
+
+  const cancellable = createFixtureRun("evidence-researcher");
+  const cancelToken = takeCancellationCapability(cancellable.id);
+  if (!cancelToken) throw new Error("Cancellation capability was not issued");
+  let cancellationLease: Awaited<ReturnType<typeof claimRun>>;
+  for (let attempt = 0; attempt < 30 && !cancellationLease; attempt += 1) {
+    cancellationLease = await claimRun("cancelled-worker", 5_000);
+    if (!cancellationLease) await pause(50);
+  }
+  if (!cancellationLease || cancellationLease.id !== cancellable.id)
+    throw new Error("Cancellation probe was not claimed");
+  if (!(await cancelRunAuthorized(cancellable.id, cancelToken)))
+    throw new Error("Authorized durable cancellation was rejected");
+  if (await finishRunJob(cancellationLease))
+    throw new Error("Cancelled worker retained its queue fence");
+  if ((await getRun(cancellable.id))?.state !== "CANCELLED")
+    throw new Error("Durable cancellation did not atomically update the run snapshot");
 
   const created = createFixtureRun("evidence-researcher");
   process.env.AGENTTRIAL_EXECUTION_ONLY = "true";

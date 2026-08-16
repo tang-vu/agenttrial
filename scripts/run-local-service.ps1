@@ -32,6 +32,7 @@ function Start-Web {
 
   $env:AGENTTRIAL_SIGNING_SEED = Get-Content -LiteralPath $seedPath -Raw
   $env:AGENTTRIAL_DATA_DIR = Join-Path $StateDirectory "data"
+  $env:AGENTTRIAL_CLOUDFLARE_TUNNEL = "true"
   $env:HOSTNAME = "127.0.0.1"
   $env:PORT = "$Port"
   try {
@@ -57,6 +58,7 @@ function Start-Web {
   } finally {
     Remove-Item Env:AGENTTRIAL_SIGNING_SEED -ErrorAction SilentlyContinue
     Remove-Item Env:AGENTTRIAL_DATA_DIR -ErrorAction SilentlyContinue
+    Remove-Item Env:AGENTTRIAL_CLOUDFLARE_TUNNEL -ErrorAction SilentlyContinue
     Remove-Item Env:HOSTNAME -ErrorAction SilentlyContinue
     Remove-Item Env:PORT -ErrorAction SilentlyContinue
   }

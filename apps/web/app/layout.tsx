@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { connection } from "next/server";
 
 export const metadata: Metadata = {
   title: { default: "AgentTrial — Evidence for agent claims", template: "%s — AgentTrial" },
@@ -13,7 +14,8 @@ const nav = [
   ["Developers", "/developers"],
   ["Verify", "/verify"],
 ] as const;
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  await connection();
   return (
     <html lang="en">
       <body>

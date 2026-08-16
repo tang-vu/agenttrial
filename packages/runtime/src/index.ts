@@ -39,6 +39,7 @@ import {
 import { normalizeTargetUrl, redact } from "@agenttrial/security";
 import {
   cancelQueuedJob,
+  cancelRunDurably,
   claimRun,
   LeaseLostError,
   enqueueRun,
@@ -64,6 +65,7 @@ export {
   verifyAuthorizationChallenge,
 } from "./authorizations";
 export { closePersistence, heartbeatWorker, persistenceReadiness } from "./persistence";
+export { consumeDistributedRateLimit } from "./persistence";
 
 export interface RuntimeRun {
   id: string;
@@ -344,6 +346,14 @@ export function takeCancellationCapability(id: string) {
   return token;
 }
 export async function cancelRunAuthorized(id: string, token: string) {
+  if (persistenceConfigured()) {
+    const cancelled = await cancelRunDurably(id, hashText(token));
+    if (!cancelled) return false;
+    runs.set(id, cancelled);
+    const event = cancelled.events.at(-1);
+    if (event) listeners.get(id)?.forEach((listener) => listener(event));
+    return true;
+  }
   const run = await getRun(id);
   if (
     !run ||

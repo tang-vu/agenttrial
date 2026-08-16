@@ -14,6 +14,12 @@ import {
 import { hashObject, hashText } from "@agenttrial/evidence";
 import { normalizeTargetUrl, privateTestTargetsAllowed } from "@agenttrial/security";
 import { z } from "zod";
+import {
+  loadAuthorizationRecord,
+  persistenceConfigured,
+  saveAuthorizationRecord,
+  transitionAuthorizationRecord,
+} from "./persistence";
 
 const inputSchema = z
   .object({
@@ -62,7 +68,18 @@ function authorizationPath(id: string) {
   const directory = authorizationDirectory();
   return directory ? join(directory, `${id}.json`) : undefined;
 }
-async function persist(record: AuthorizationRecord) {
+async function persist(
+  record: AuthorizationRecord,
+  expectedStatus?: AuthorizationRecord["status"],
+) {
+  if (persistenceConfigured()) {
+    if (expectedStatus) {
+      if (!(await transitionAuthorizationRecord(record.id, expectedStatus, record)))
+        throw new Error("Authorization state changed or expired before it could be updated.");
+    } else await saveAuthorizationRecord(record);
+    memory.set(record.id, record);
+    return;
+  }
   memory.set(record.id, record);
   const directory = authorizationDirectory();
   const path = authorizationPath(record.id);
@@ -74,6 +91,10 @@ async function persist(record: AuthorizationRecord) {
   await unlink(temporary).catch(() => undefined);
 }
 async function load(id: string) {
+  if (persistenceConfigured()) {
+    const persisted = await loadAuthorizationRecord(id);
+    return persisted ? AuthorizationRecordSchema.parse(persisted) : undefined;
+  }
   const cached = memory.get(id);
   if (cached) return cached;
   const path = authorizationPath(id);
@@ -190,7 +211,7 @@ export async function verifyAuthorizationChallenge(id: string, verificationToken
     throw new Error("Authorization challenge or private verification token is invalid.");
   if (record.status !== "issued") throw new Error("Authorization challenge is not pending.");
   if (Date.parse(record.expiresAt) <= Date.now()) {
-    await persist({ ...record, status: "expired" });
+    await persist({ ...record, status: "expired" }, "issued");
     throw new Error("Authorization challenge expired.");
   }
   const proofResponse = await safePublicFetch(record.proofUrl, {
@@ -222,7 +243,7 @@ export async function verifyAuthorizationChallenge(id: string, verificationToken
       proofUrl: record.proofUrl,
     },
   });
-  await persist(verified);
+  await persist(verified, "issued");
   return publicAuthorization(verified);
 }
 
@@ -233,7 +254,7 @@ export async function consumeAuthorization(id: string, verificationToken: string
   if (record.status !== "verified")
     throw new Error("Authorization is not verified or was consumed.");
   if (Date.parse(record.expiresAt) <= Date.now()) {
-    await persist({ ...record, status: "expired" });
+    await persist({ ...record, status: "expired" }, "verified");
     throw new Error("Authorization expired before the active run started.");
   }
   const consumed = AuthorizationRecordSchema.parse({
@@ -241,7 +262,7 @@ export async function consumeAuthorization(id: string, verificationToken: string
     status: "consumed",
     consumedAt: new Date().toISOString(),
   });
-  await persist(consumed);
+  await persist(consumed, "verified");
   return consumed;
 }
 

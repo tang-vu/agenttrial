@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { issueAuthorizationChallenge } from "@agenttrial/runtime";
+import { consumeDistributedRateLimit, issueAuthorizationChallenge } from "@agenttrial/runtime";
 import { consumeRateLimit } from "@agenttrial/security";
 
 export async function POST(request: Request) {
@@ -12,7 +12,9 @@ export async function POST(request: Request) {
     const raw = await request.text();
     if (Buffer.byteLength(raw) > 8 * 1024)
       return NextResponse.json({ error: "Request body exceeds 8 KiB." }, { status: 413 });
-    const rate = consumeRateLimit("authorization:anonymous", 10, 60_000);
+    const rate =
+      (await consumeDistributedRateLimit("authorization:anonymous", 10, 60_000)) ??
+      consumeRateLimit("authorization:anonymous", 10, 60_000);
     if (!rate.allowed)
       return NextResponse.json(
         { error: "Authorization challenge rate limit exceeded." },

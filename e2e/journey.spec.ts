@@ -141,3 +141,23 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
   expect(security.status()).toBe(200);
   expect(await security.text()).toContain("agenttrial.tangvu.dev/.well-known/security.txt");
 });
+
+test("production pages enforce a nonce CSP without inline script execution", async ({
+  page,
+  request,
+}) => {
+  const response = await request.get("/");
+  const policy = response.headers()["content-security-policy"] ?? "";
+  expect(policy).toContain("script-src 'self' 'nonce-");
+  expect(policy).toContain("'strict-dynamic'");
+  expect(policy.match(/script-src[^;]*/)?.[0]).not.toContain("'unsafe-inline'");
+  expect(response.headers()["strict-transport-security"]).toBeUndefined();
+
+  await page.goto("/");
+  await page
+    .getByRole("link", { name: /Run a live trial/ })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/new$/);
+  await expect(page.getByRole("button", { name: /Run live trial/ })).toBeEnabled();
+});

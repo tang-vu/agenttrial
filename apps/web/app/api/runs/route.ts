@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   consumeAuthorization,
+  consumeDistributedRateLimit,
   createAuthorizedA2ARun,
   createExternalRun,
   createFixtureRun,
@@ -42,10 +43,16 @@ export async function POST(request: Request) {
     if (declaredLength > 4096)
       return NextResponse.json({ error: "Request body exceeds 4 KiB." }, { status: 413 });
     const client =
-      process.env.AGENTTRIAL_TRUST_PROXY === "true"
-        ? (request.headers.get("x-real-ip") ?? "anonymous")
-        : "anonymous";
-    const rate = consumeRateLimit(`create:${client}`, client === "anonymous" ? 60 : 10, 60_000);
+      process.env.AGENTTRIAL_CLOUDFLARE_TUNNEL === "true"
+        ? (request.headers.get("cf-connecting-ip") ?? "anonymous")
+        : process.env.AGENTTRIAL_TRUST_PROXY === "true"
+          ? (request.headers.get("x-real-ip") ?? "anonymous")
+          : "anonymous";
+    const createKey = `create:${client}`;
+    const createLimit = client === "anonymous" ? 20 : 10;
+    const rate =
+      (await consumeDistributedRateLimit(createKey, createLimit, 60_000)) ??
+      consumeRateLimit(createKey, createLimit, 60_000);
     if (!rate.allowed)
       return NextResponse.json(
         { error: "Trial creation rate limit exceeded." },
@@ -68,7 +75,10 @@ export async function POST(request: Request) {
     const body = requestSchema.parse(parsed);
     if ("targetUrl" in body) {
       const targetOrigin = new URL(body.targetUrl).origin.toLowerCase();
-      const targetRate = consumeRateLimit(`target:${targetOrigin}`, 5, 60_000);
+      const targetKey = `target:${targetOrigin}`;
+      const targetRate =
+        (await consumeDistributedRateLimit(targetKey, 5, 60_000)) ??
+        consumeRateLimit(targetKey, 5, 60_000);
       if (!targetRate.allowed)
         return NextResponse.json(
           { error: "This target has reached its passive evaluation limit." },
