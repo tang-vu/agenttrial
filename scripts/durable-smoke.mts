@@ -83,8 +83,12 @@ async function main() {
 
   const malicious = createFixtureRun("evidence-researcher");
   process.env.AGENTTRIAL_EXECUTION_ONLY = "true";
-  if (!(await processNextRun("ci-malicious-worker")))
-    throw new Error("Malicious unsigned probe was not executed");
+  let maliciousExecuted = false;
+  for (let attempt = 0; attempt < 30 && !maliciousExecuted; attempt += 1) {
+    maliciousExecuted = await processNextRun("ci-malicious-worker");
+    if (!maliciousExecuted) await pause(100);
+  }
+  if (!maliciousExecuted) throw new Error("Malicious unsigned probe was not executed");
   const mutated = await getRun(malicious.id);
   if (!mutated?.pendingFinalization) throw new Error("Unsigned probe payload missing");
   mutated.pendingFinalization.report.score.overall = 1000;
