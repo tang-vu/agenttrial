@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { ASSERTION_REGISTRY_MANIFEST } from "@agenttrial/core";
+import { hashObject } from "@agenttrial/evidence";
 export const metadata: Metadata = { title: "Methodology" };
 const dims = [
   ["Capability execution", 30],
@@ -95,6 +97,11 @@ export default function Methodology() {
           A matching seed proves the tested plan was fixed before observations arrived; it does not
           turn a technical evaluation into a legal certification or safety guarantee.
         </aside>
+        <div className="method-commitment">
+          <span className="kicker">ASSERTION REGISTRY COMMITMENT</span>
+          <code>{hashObject(ASSERTION_REGISTRY_MANIFEST)}</code>
+          <a href="/api/methodology">Inspect the machine-readable manifest â†—</a>
+        </div>
       </section>
     </main>
   );

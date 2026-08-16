@@ -1255,6 +1255,24 @@ pre {
 .link-list a:hover {
   background: var(--ivory);
 }
+.method-commitment {
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+}
+.method-commitment code {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.method-commitment a {
+  width: fit-content;
+  border-bottom: 1px solid;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
 .benchmark-shell {
   padding: 70px clamp(20px, 6vw, 92px) 110px;
 }

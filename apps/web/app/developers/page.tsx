@@ -36,6 +36,9 @@ export default function Developers() {
           <a href="/.well-known/agenttrial.json">
             Machine descriptor <span>↗</span>
           </a>
+          <a href="/api/methodology">
+            Methodology manifest + registry hash <span>â†—</span>
+          </a>
           <a href="/llms.txt">
             llms.txt <span>↗</span>
           </a>

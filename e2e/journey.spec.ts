@@ -163,6 +163,11 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
     expect(openapi.components.schemas[schema], `${schema} schema`).toBeTruthy();
   expect(openapi.components.schemas.Run.required).toContain("id");
   expect(openapi.components.schemas.EvidenceBundle.properties.report.$ref).toContain("Report");
+  const methodology = await (await request.get("/api/methodology")).json();
+  expect(methodology.methodologyVersion).toBe("agenttrial-1.1.0");
+  expect(methodology.assertionRegistryHash).toMatch(/^[0-9a-f]{64}$/);
+  expect(methodology.scoreAuthority).toBe("deterministic-code-only");
+  expect(openapi.components.schemas.MethodologyManifest).toBeTruthy();
   const security = await request.get("/.well-known/security.txt");
   expect(security.status()).toBe(200);
   expect(await security.text()).toContain("agenttrial.tangvu.dev/.well-known/security.txt");

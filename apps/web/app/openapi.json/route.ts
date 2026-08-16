@@ -158,6 +158,19 @@ const spec = {
         },
       },
     },
+    "/api/methodology": {
+      get: {
+        summary: "Get the versioned deterministic scoring and commitment manifest",
+        responses: {
+          "200": {
+            description: "Methodology and assertion-registry manifest",
+            content: {
+              "application/json": { schema: { $ref: "#/components/schemas/MethodologyManifest" } },
+            },
+          },
+        },
+      },
+    },
   },
   components: {
     responses: {
@@ -175,6 +188,36 @@ const spec = {
       },
     },
     schemas: {
+      MethodologyManifest: {
+        type: "object",
+        additionalProperties: false,
+        required: [
+          "schemaVersion",
+          "methodologyVersion",
+          "evaluatorBuild",
+          "scoreAuthority",
+          "assertionRegistry",
+          "assertionRegistryHash",
+          "dimensions",
+          "coverage",
+          "commitments",
+          "schemas",
+          "disclaimer",
+        ],
+        properties: {
+          schemaVersion: { const: "agenttrial.methodology-manifest.v1" },
+          methodologyVersion: { type: "string" },
+          evaluatorBuild: { type: "string" },
+          scoreAuthority: { const: "deterministic-code-only" },
+          assertionRegistry: { type: "object" },
+          assertionRegistryHash: { type: "string", pattern: "^[0-9a-f]{64}$" },
+          dimensions: { type: "object", additionalProperties: { type: "number" } },
+          coverage: { type: "object" },
+          commitments: { type: "object" },
+          schemas: { type: "object" },
+          disclaimer: { type: "string" },
+        },
+      },
       FixtureRunRequest: {
         type: "object",
         additionalProperties: false,
