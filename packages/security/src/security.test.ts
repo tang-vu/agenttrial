@@ -12,8 +12,12 @@ describe("SSRF policy", () => {
     "fc00::1",
     "fe80::1",
     "::ffff:127.0.0.1",
+    "64:ff9b::7f00:1",
+    "64:ff9b:1::1",
+    "2002:7f00:1::",
+    "2001:db8::1",
   ])("blocks %s", (ip) => expect(isPublicIp(ip)).toBe(false));
-  it.each(["1.1.1.1", "8.8.8.8", "2606:4700:4700::1111"])("allows %s", (ip) =>
+  it.each(["1.1.1.1", "8.8.8.8", "203.1.1.1", "2606:4700:4700::1111"])("allows %s", (ip) =>
     expect(isPublicIp(ip)).toBe(true),
   );
   it("rejects unsafe schemes, credentials, and local names", async () => {

@@ -1,5 +1,5 @@
 import { lookup } from "node:dns/promises";
-import { isIP } from "node:net";
+import { BlockList, isIP } from "node:net";
 
 export class UnsafeTargetError extends Error {
   constructor(message: string) {
@@ -14,40 +14,45 @@ const blockedHostnames = new Set([
   "instance-data.ec2.internal",
 ]);
 
+const blockedIps = new BlockList();
+for (const [network, prefix] of [
+  ["0.0.0.0", 8],
+  ["10.0.0.0", 8],
+  ["100.64.0.0", 10],
+  ["127.0.0.0", 8],
+  ["169.254.0.0", 16],
+  ["172.16.0.0", 12],
+  ["192.0.0.0", 24],
+  ["192.0.2.0", 24],
+  ["192.168.0.0", 16],
+  ["198.18.0.0", 15],
+  ["198.51.100.0", 24],
+  ["203.0.113.0", 24],
+  ["224.0.0.0", 4],
+  ["240.0.0.0", 4],
+] as const)
+  blockedIps.addSubnet(network, prefix, "ipv4");
+for (const [network, prefix] of [
+  ["::", 128],
+  ["::1", 128],
+  ["64:ff9b::", 96],
+  ["64:ff9b:1::", 48],
+  ["100::", 64],
+  ["2001::", 23],
+  ["2001:db8::", 32],
+  ["2002::", 16],
+  ["fc00::", 7],
+  ["fe80::", 10],
+  ["ff00::", 8],
+] as const)
+  blockedIps.addSubnet(network, prefix, "ipv6");
+
 export function isPublicIp(address: string): boolean {
   address = address.replace(/^\[|\]$/g, "");
   if (address.startsWith("::ffff:")) return isPublicIp(address.slice(7));
   const version = isIP(address);
-  if (version === 4) {
-    const parts = address.split(".").map(Number);
-    const [a = 0, b = 0] = parts;
-    return !(
-      a === 0 ||
-      a === 10 ||
-      a === 127 ||
-      (a === 169 && b === 254) ||
-      (a === 172 && b >= 16 && b <= 31) ||
-      (a === 192 && b === 168) ||
-      (a === 100 && b >= 64 && b <= 127) ||
-      a >= 224 ||
-      (a === 192 && b === 0) ||
-      (a === 198 && (b === 18 || b === 19)) ||
-      (a === 198 && b === 51) ||
-      (a === 203 && b === 0)
-    );
-  }
-  if (version === 6) {
-    const n = address.toLowerCase();
-    return !(
-      n === "::" ||
-      n === "::1" ||
-      n.startsWith("fc") ||
-      n.startsWith("fd") ||
-      /^fe[89ab]/.test(n) ||
-      n.startsWith("ff") ||
-      n.startsWith("2001:db8:")
-    );
-  }
+  if (version === 4) return !blockedIps.check(address, "ipv4");
+  if (version === 6) return !blockedIps.check(address, "ipv6");
   return false;
 }
 
