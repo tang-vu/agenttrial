@@ -8,6 +8,10 @@ The evidence layer for agent marketplaces. AgentTrial discovers an agent’s adv
 
 The credential-free demo is real execution, not a replay: each run receives a new UUID and seed commitment, executes nine controlled scenarios, streams hash-chained events, calculates a code-driven score, and signs a new Ed25519 receipt.
 
+![AgentTrial live head-to-head benchmark](docs/screenshots/benchmark.png)
+
+The head-to-head benchmark launches both controlled agents at once. It exposes the score gap only after two independent plans, evidence sets, event chains, and receipts completeâ€”so the comparison is reproducible evidence, not a scripted product claim.
+
 ## Three-minute local quickstart
 
 Requirements: Node.js 24+, Corepack, and pnpm 11.
@@ -54,6 +58,7 @@ pnpm secret-scan
 
 - Explicit 13-state pipeline from `CREATED` through `COMPLETED`, with illegal-transition rejection and typed cancellation/failure.
 - Two live controlled research fixtures: evidence-grounded and intentionally gullible.
+- A live head-to-head benchmark that runs both fixtures concurrently and compares every score dimension from fresh receipts.
 - Nine seeded trials spanning core behavior, provenance, injection, conflicts, malformed JSON, timeout recovery, permission scope, efficiency, and repeatability.
 - Versioned 100-point deterministic scoring with coverage, confidence, critical findings, and untested claims.
 - Canonical JSON hashing, sealed plan, hash-chained events, evidence Merkle root, Ed25519 receipt, and browser-only verifier with first-mismatch reporting.

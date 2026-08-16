@@ -17,6 +17,16 @@ await page.screenshot({ path: "docs/screenshots/landing.png", fullPage: true });
 await page.goto(`${origin}/new`, { waitUntil: "networkidle" });
 await prepareScreenshot();
 await page.screenshot({ path: "docs/screenshots/new-trial.png", fullPage: true });
+await page.goto(`${origin}/benchmark`, { waitUntil: "networkidle" });
+await page.getByRole("button", { name: /Run both live/ }).click();
+await page.getByText("The evidence separated them.").waitFor({ timeout: 30_000 });
+await prepareScreenshot();
+await page.screenshot({ path: "docs/screenshots/benchmark.png", fullPage: true });
+await page.setViewportSize({ width: 390, height: 844 });
+await prepareScreenshot();
+await page.screenshot({ path: "docs/screenshots/benchmark-mobile.png", fullPage: true });
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(`${origin}/new`, { waitUntil: "networkidle" });
 await page.getByRole("button", { name: /Run live trial/ }).click();
 await page.getByRole("heading", { name: "Evidence sealed." }).waitFor({ timeout: 30_000 });
 await prepareScreenshot();
@@ -34,4 +44,6 @@ await page.goto(origin, { waitUntil: "networkidle" });
 await prepareScreenshot();
 await page.screenshot({ path: "docs/screenshots/mobile.png", fullPage: true });
 await browser.close();
-console.log("Captured landing, new trial, live, report, verifier, and mobile screenshots.");
+console.log(
+  "Captured landing, new trial, benchmark desktop/mobile, live, report, verifier, and mobile screenshots.",
+);

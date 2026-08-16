@@ -33,6 +33,14 @@ test("vulnerable fixture exposes failures", async ({ page }) => {
   await expect(page.getByText("Material tested claims failed under pressure.")).toBeVisible();
   await expect(page.getByText("FAIL").first()).toBeVisible();
 });
+test("head-to-head benchmark executes fresh evidence for both agents", async ({ page }) => {
+  await page.goto("/benchmark");
+  await expect(page.getByRole("heading", { name: /Same claims/ })).toBeVisible();
+  await page.getByRole("button", { name: /Run both live/ }).click();
+  await expect(page.getByText("The evidence separated them.")).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(/point evidence gap/)).toBeVisible();
+  await expect(page.getByRole("link", { name: /Inspect report/ })).toHaveCount(2);
+});
 test("active consent is required and cancellation is typed", async ({ request }) => {
   const denied = await request.post("/api/runs", {
     data: { fixture: "evidence-researcher", activeConsent: false },
@@ -117,8 +125,8 @@ test("landing has no serious accessibility violations", async ({ page }) => {
     results.violations.filter((v) => ["serious", "critical"].includes(v.impact ?? "")),
   ).toEqual([]);
 });
-test("creation and verifier screens have no serious accessibility violations", async ({ page }) => {
-  for (const path of ["/new", "/verify"]) {
+test("key product screens have no serious accessibility violations", async ({ page }) => {
+  for (const path of ["/new", "/benchmark", "/verify"]) {
     await page.goto(path);
     const results = await new AxeBuilder({ page }).analyze();
     expect(

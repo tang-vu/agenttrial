@@ -90,8 +90,8 @@ export default function Home() {
         <p>
           One resists manipulation. One takes the bait. Both trials execute live with new run IDs.
         </p>
-        <Link className="button ivory" href="/new">
-          Begin the trial <span>→</span>
+        <Link className="button ivory" href="/benchmark">
+          Run both agents live <span>→</span>
         </Link>
       </section>
     </main>
