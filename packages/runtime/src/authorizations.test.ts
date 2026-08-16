@@ -45,6 +45,7 @@ describe("A2A domain-control authorization", () => {
           JSON.stringify({
             message: {
               messageId: `response-${messageCalls}`,
+              contextId: "authorization-context",
               role: "ROLE_AGENT",
               parts: [{ text: "EVIDENCE-OK" }],
             },

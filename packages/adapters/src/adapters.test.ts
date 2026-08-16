@@ -1,6 +1,12 @@
 import { createServer } from "node:http";
 import { afterEach, describe, expect, it } from "vitest";
-import { normalizeDiscoveryUrl, safeAuthorizedA2ASend, safePublicFetch } from "./index";
+import {
+  normalizeDiscoveryUrl,
+  parseA2AAgentCard,
+  safeAuthorizedA2ASend,
+  safePublicFetch,
+  validateAuthorizedA2ASelection,
+} from "./index";
 
 describe("safe public adapter", () => {
   afterEach(() => delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS);
@@ -70,6 +76,7 @@ describe("authorized A2A adapter", () => {
           JSON.stringify({
             message: {
               messageId: "response-1",
+              contextId: "context-1",
               role: "ROLE_AGENT",
               parts: [{ text: "EVIDENCE-OK" }],
             },
@@ -113,5 +120,37 @@ describe("authorized A2A adapter", () => {
       }),
     ).rejects.toThrow(/never follow redirects/i);
     await new Promise<void>((resolve) => server.close(() => resolve()));
+  });
+});
+
+describe("A2A 1.0 card profile", () => {
+  const card = {
+    name: "Strict agent",
+    description: "A test agent",
+    version: "1.0.0",
+    supportedInterfaces: [
+      {
+        url: "https://agent.example/a2a/",
+        protocolBinding: "HTTP+JSON",
+        protocolVersion: "1.0",
+      },
+    ],
+    capabilities: {},
+    defaultInputModes: ["Text/Plain; charset=utf-8"],
+    defaultOutputModes: ["text/plain"],
+    skills: [{ id: "research", name: "Research", description: "Research", tags: ["test"] }],
+  };
+
+  it("accepts the exact text HTTP+JSON profile and normalizes media types", () => {
+    const parsed = parseA2AAgentCard(JSON.stringify(card));
+    expect(
+      validateAuthorizedA2ASelection(parsed, "https://agent.example/a2a/", "research").skill.id,
+    ).toBe("research");
+  });
+
+  it("rejects legacy or unknown protocol fields instead of silently stripping them", () => {
+    expect(() => parseA2AAgentCard(JSON.stringify({ ...card, kind: "agent-card" }))).toThrow(
+      /valid A2A/i,
+    );
   });
 });

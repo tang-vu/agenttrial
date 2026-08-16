@@ -160,42 +160,55 @@ function pinnedRequest(
   });
 }
 
+const A2ASecurityRequirementSchema = z
+  .object({
+    schemes: z.record(z.string(), z.object({ list: z.array(z.string()) }).strict()),
+  })
+  .strict();
+const A2AExtensionSchema = z
+  .object({
+    uri: z.string().url().optional(),
+    description: z.string().optional(),
+    required: z.boolean().optional(),
+    params: z.record(z.string(), z.unknown()).optional(),
+  })
+  .strict();
+
 export const A2ACardSchema = z
   .object({
-    name: z.string(),
-    description: z.string(),
-    version: z.string(),
+    name: z.string().min(1),
+    description: z.string().min(1),
+    provider: z
+      .object({ url: z.string().url(), organization: z.string().min(1) })
+      .strict()
+      .optional(),
+    version: z.string().min(1),
+    documentationUrl: z.string().url().optional(),
+    iconUrl: z.string().url().optional(),
     skills: z.array(
       z
         .object({
-          id: z.string(),
-          name: z.string(),
-          description: z.string(),
+          id: z.string().min(1),
+          name: z.string().min(1),
+          description: z.string().min(1),
           tags: z.array(z.string()),
+          examples: z.array(z.string()).optional(),
           inputModes: z.array(z.string()).optional(),
           outputModes: z.array(z.string()).optional(),
-          securityRequirements: z
-            .array(
-              z
-                .object({
-                  schemes: z.record(z.string(), z.object({ list: z.array(z.string()) }).strict()),
-                })
-                .strict(),
-            )
-            .optional(),
+          securityRequirements: z.array(A2ASecurityRequirementSchema).optional(),
         })
-        .passthrough(),
+        .strict(),
     ),
     supportedInterfaces: z
       .array(
         z
           .object({
             url: z.string().url(),
-            protocolBinding: z.string(),
-            protocolVersion: z.string(),
+            protocolBinding: z.string().min(1),
+            protocolVersion: z.string().min(1),
             tenant: z.string().min(1).optional(),
           })
-          .passthrough(),
+          .strict(),
       )
       .min(1),
     capabilities: z
@@ -203,33 +216,26 @@ export const A2ACardSchema = z
         streaming: z.boolean().optional(),
         pushNotifications: z.boolean().optional(),
         extendedAgentCard: z.boolean().optional(),
-        extensions: z
-          .array(
-            z
-              .object({
-                uri: z.string().optional(),
-                description: z.string().optional(),
-                required: z.boolean().optional(),
-                params: z.record(z.string(), z.unknown()).optional(),
-              })
-              .passthrough(),
-          )
-          .optional(),
+        extensions: z.array(A2AExtensionSchema).optional(),
       })
-      .passthrough(),
+      .strict(),
+    securitySchemes: z.record(z.string(), z.record(z.string(), z.unknown())).optional(),
     defaultInputModes: z.array(z.string()).min(1),
     defaultOutputModes: z.array(z.string()).min(1),
-    securityRequirements: z
+    securityRequirements: z.array(A2ASecurityRequirementSchema).optional(),
+    signatures: z
       .array(
         z
           .object({
-            schemes: z.record(z.string(), z.object({ list: z.array(z.string()) }).strict()),
+            protected: z.string().min(1),
+            signature: z.string().min(1),
+            header: z.record(z.string(), z.unknown()).optional(),
           })
           .strict(),
       )
       .optional(),
   })
-  .passthrough();
+  .strict();
 
 export type A2AAgentCard = z.infer<typeof A2ACardSchema>;
 
@@ -271,8 +277,13 @@ export function validateAuthorizedA2ASelection(
   if (!skill) throw new Error("The selected skill is not advertised by the Agent Card.");
   if (skill.securityRequirements?.length)
     throw new Error("Active v1 supports only A2A skills that advertise anonymous access.");
-  const inputModes = skill.inputModes ?? card.defaultInputModes;
-  const outputModes = skill.outputModes ?? card.defaultOutputModes;
+  const normalizeMode = (mode: string) => mode.split(";", 1)[0]!.trim().toLowerCase();
+  const inputModes = (skill.inputModes?.length ? skill.inputModes : card.defaultInputModes).map(
+    normalizeMode,
+  );
+  const outputModes = (skill.outputModes?.length ? skill.outputModes : card.defaultOutputModes).map(
+    normalizeMode,
+  );
   if (!inputModes.includes("text/plain") || !outputModes.includes("text/plain"))
     throw new Error("The selected skill must advertise text/plain input and output.");
   return { selectedInterface, skill };
@@ -281,7 +292,7 @@ export function validateAuthorizedA2ASelection(
 const A2AMessageSchema = z
   .object({
     messageId: z.string().min(1),
-    contextId: z.string().optional(),
+    contextId: z.string().min(1),
     taskId: z.string().optional(),
     role: z.literal("ROLE_AGENT"),
     parts: z.array(z.object({ text: z.string() }).strict()).min(1),
@@ -292,12 +303,37 @@ const A2AMessageSchema = z
   .strict();
 const A2ATaskSchema = z
   .object({
-    id: z.string(),
-    contextId: z.string().optional(),
-    status: z.object({ state: z.string() }).passthrough(),
+    id: z.string().min(1),
+    contextId: z.string().min(1).optional(),
+    status: z
+      .object({
+        state: z.enum([
+          "TASK_STATE_UNSPECIFIED",
+          "TASK_STATE_SUBMITTED",
+          "TASK_STATE_WORKING",
+          "TASK_STATE_COMPLETED",
+          "TASK_STATE_FAILED",
+          "TASK_STATE_CANCELED",
+          "TASK_STATE_INPUT_REQUIRED",
+          "TASK_STATE_REJECTED",
+          "TASK_STATE_AUTH_REQUIRED",
+        ]),
+        message: A2AMessageSchema.optional(),
+        timestamp: z.string().datetime().optional(),
+      })
+      .strict(),
     artifacts: z
       .array(
-        z.object({ parts: z.array(z.object({ text: z.string() }).strict()).min(1) }).passthrough(),
+        z
+          .object({
+            artifactId: z.string().min(1),
+            name: z.string().optional(),
+            description: z.string().optional(),
+            parts: z.array(z.object({ text: z.string() }).strict()).min(1),
+            metadata: z.record(z.string(), z.unknown()).optional(),
+            extensions: z.array(z.string().url()).optional(),
+          })
+          .strict(),
       )
       .optional(),
     history: z.array(A2AMessageSchema).max(0).optional(),
@@ -384,6 +420,11 @@ export async function safeAuthorizedA2ASend(
     )
   )
     throw new Error("Blocking A2A response returned a non-terminal task state.");
+  if (decoded.task?.artifacts) {
+    const artifactIds = decoded.task.artifacts.map((artifact) => artifact.artifactId);
+    if (new Set(artifactIds).size !== artifactIds.length)
+      throw new Error("A2A task returned duplicate artifact IDs.");
+  }
   const capabilityFailed = taskState === "TASK_STATE_FAILED" || taskState === "TASK_STATE_REJECTED";
   const text = decoded.message
     ? decoded.message.parts.map((part) => part.text).join("\n")
