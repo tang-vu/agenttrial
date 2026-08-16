@@ -8,6 +8,10 @@
   both the signed report and receipt payload.
 - Bumped the deterministic methodology to `agenttrial-1.1.0`; legacy 1.0 receipts remain locally
   verifiable with their explicitly narrower provenance contract.
+- Added a live head-to-head benchmark that executes both controlled agents concurrently and exposes
+  the dimension-level evidence gap only after two fresh signed receipts complete.
+- Published a machine-readable methodology manifest containing the assertion-registry commitment,
+  score authority, dimension weights, coverage thresholds, and evaluator build provenance.
 
 ## 0.4.0 — 2026-08-16
 

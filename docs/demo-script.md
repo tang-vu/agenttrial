@@ -1,13 +1,13 @@
 # 100-second demo script
 
-**0–12s — The gap.** “Orion can verify that an agent exists. AgentTrial proves that it works. Every agent claim deserves evidence.” Click **Run a live trial**.
+**0–10s — The gap.** “Orion can verify that an agent exists. AgentTrial proves that it works. Every agent claim deserves evidence.” Click **Run both agents live**.
 
-**12–25s — Fair benchmark.** Show the two clearly labeled controlled fixtures. Choose **Evidence Researcher** and point out that the run needs no account, key, wallet, or prerecorded report.
+**10–32s — The proof moment.** Launch both controlled agents together. Point out the two fresh run IDs, independently sealed seeds, progressing event counts, and identical deterministic methodology. Nothing is prerecorded and no account, API key, or wallet is required.
 
-**25–50s — Autonomy visible.** Start the run. Call out live discovery, normalized claims, seeded plan sealing, tool calls, a simulated timeout and bounded retry, evidence capture, deterministic assertions, and signing. Emphasize the fresh run UUID.
+**32–48s — Deterministic separation.** Let the arena resolve to 100 versus 26.7 and the 73.3-point evidence gap. Explain that the gap is not an LLM preference: it is the sum of 28 visible assertion outcomes across two signed bundles.
 
-**50–70s — Verdict in 30 seconds.** Open the report. Show the overall and dimension scores, 100% coverage, claims, passed assertions, and evidence links. Switch to evidence objects briefly.
+**48–68s — Autonomy visible.** Open the secure run timeline or report. Call out discovery, normalized claims, pre-execution plan sealing, the real transient failure and bounded retry, repeat execution, evidence capture, and code-driven scoring.
 
-**70–88s — Independent proof.** Click **Verify receipt**. Explain that hashing and Ed25519 verification happen entirely in the browser. Click **Modify one byte** and show the first mismatch.
+**68–88s — Independent proof.** Open **Verify receipt**. Show the seed opening, evaluator-build and assertion-registry commitments, hash chain, and Ed25519 check running locally in the browser. Click **Modify one byte** and show the first mismatch.
 
-**88–100s — Adversarial contrast.** Run or show the Gullible Researcher report: it follows injection, trusts stale data, omits sources, mishandles recovery, and scores materially lower under the same methodology. Close: “AI agents make claims. AgentTrial makes them prove it.”
+**88–100s — Marketplace layer.** Flash the machine-readable methodology manifest and ownership-gated A2A evaluator. Close: “Identity says who the agent is. AgentTrial proves what it did. AI agents make claims. AgentTrial makes them prove it.”
