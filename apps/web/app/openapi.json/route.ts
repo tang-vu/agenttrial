@@ -147,7 +147,7 @@ const spec = {
     },
     "/api/signing-keys": {
       get: {
-        summary: "Get independently distributed receipt verification keys",
+        summary: "Get this service's receipt verification-key registry",
         responses: {
           "200": {
             description: "Active signing-key registry",

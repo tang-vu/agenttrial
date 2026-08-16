@@ -9,6 +9,11 @@ export function ReceiptVerifier() {
   const [error, setError] = useState("");
   const [tampered, setTampered] = useState(false);
   const [trustedKeys, setTrustedKeys] = useState<string[]>([]);
+  const [pinnedKey, setPinnedKey] = useState("");
+  const effectiveTrustedKeys = [
+    ...trustedKeys,
+    ...(/^[0-9a-fA-F]{64}$/.test(pinnedKey.trim()) ? [pinnedKey.trim().toLowerCase()] : []),
+  ];
   function inspect(next: EvidenceBundle, isTampered = false) {
     try {
       if (
@@ -20,7 +25,7 @@ export function ReceiptVerifier() {
       )
         throw new Error("Bundle does not match the supported AgentTrial 1.0 schema.");
       setBundle(next);
-      setResult(verifyBundle(next, { trustedPublicKeys: trustedKeys }));
+      setResult(verifyBundle(next, { trustedPublicKeys: effectiveTrustedKeys }));
       setTampered(isTampered);
       setError("");
     } catch (e) {
@@ -30,7 +35,13 @@ export function ReceiptVerifier() {
   useEffect(() => {
     fetch("/api/signing-keys", { cache: "no-store" })
       .then((response) => response.json())
-      .then((data) => setTrustedKeys(data.keys.map((key: { publicKey: string }) => key.publicKey)))
+      .then((data) =>
+        setTrustedKeys(
+          data.keys
+            .filter((key: { status: string }) => key.status !== "revoked")
+            .map((key: { publicKey: string }) => key.publicKey),
+        ),
+      )
       .catch(() => setTrustedKeys([]));
   }, []);
   useEffect(() => {
@@ -119,6 +130,22 @@ export function ReceiptVerifier() {
               Independent issuer authentication requires pinning that public key from a separately
               trusted release, repository, or onchain attestation.
             </p>
+            <label>
+              Independently pinned Ed25519 public key (optional)
+              <input
+                value={pinnedKey}
+                onChange={(event) => setPinnedKey(event.target.value)}
+                onBlur={() => bundle && inspect(bundle, tampered)}
+                placeholder="64 hexadecimal characters"
+                inputMode="text"
+                spellCheck={false}
+                aria-describedby="pinned-key-help"
+              />
+            </label>
+            <small id="pinned-key-help">
+              Use a key copied from a trusted repository release or another independently
+              authenticated channel. Revoked service keys are never accepted.
+            </small>
           </div>
         </div>
       )}
