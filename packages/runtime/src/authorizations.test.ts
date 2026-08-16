@@ -85,7 +85,10 @@ describe("A2A domain-control authorization", () => {
     expect(completed?.state, completed?.error).toBe("COMPLETED");
     expect(completed?.report?.score.coverage).toBe(100);
     expect(completed?.report?.observations[0]?.status).toBe("completed");
-    expect(verifyBundle(completed!.bundle!).valid).toBe(true);
+    const verification = verifyBundle(completed!.bundle!, {
+      trustedPublicKeys: [completed!.bundle!.receipt.publicKey],
+    });
+    expect(verification.valid, JSON.stringify(verification.checks)).toBe(true);
     expect(messageCalls).toBe(2);
     await new Promise<void>((resolve) => server.close(() => resolve()));
   });
