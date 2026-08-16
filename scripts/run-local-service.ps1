@@ -3,7 +3,7 @@ param(
   [string]$Hostname = "agenttrial.tangvu.dev",
   [Parameter(Mandatory = $true)][string]$ConfigPath,
   [Parameter(Mandatory = $true)][string]$StateDirectory,
-  [Parameter(Mandatory = $true)][string]$PnpmPath,
+  [Parameter(Mandatory = $true)][string]$NodePath,
   [Parameter(Mandatory = $true)][string]$CloudflaredPath
 )
 
@@ -31,13 +31,21 @@ function Start-Web {
   if ($listener) { throw "Port $Port is already in use by PID $($listener.OwningProcess)." }
 
   $env:AGENTTRIAL_SIGNING_SEED = Get-Content -LiteralPath $seedPath -Raw
+  $env:AGENTTRIAL_DATA_DIR = Join-Path $StateDirectory "data"
+  $env:HOSTNAME = "127.0.0.1"
+  $env:PORT = "$Port"
   try {
-    $script:webLauncher = Start-Process -FilePath $PnpmPath -ArgumentList @(
-      "--filter", "@agenttrial/web", "start", "--hostname", "127.0.0.1", "--port", "$Port"
+    $standaloneServer = Join-Path $repo "apps\web\.next\standalone\apps\web\server.js"
+    if (!(Test-Path $standaloneServer)) { throw "Standalone production server is missing." }
+    $script:webLauncher = Start-Process -FilePath $NodePath -ArgumentList @(
+      ('"' + $standaloneServer + '"')
     ) -WorkingDirectory $repo -WindowStyle Hidden -RedirectStandardOutput $webLog `
       -RedirectStandardError $webErrorLog -PassThru
   } finally {
     Remove-Item Env:AGENTTRIAL_SIGNING_SEED -ErrorAction SilentlyContinue
+    Remove-Item Env:AGENTTRIAL_DATA_DIR -ErrorAction SilentlyContinue
+    Remove-Item Env:HOSTNAME -ErrorAction SilentlyContinue
+    Remove-Item Env:PORT -ErrorAction SilentlyContinue
   }
 
   for ($attempt = 0; $attempt -lt 60; $attempt += 1) {

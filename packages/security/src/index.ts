@@ -51,7 +51,7 @@ export function isPublicIp(address: string): boolean {
   return false;
 }
 
-export async function validateTargetUrl(raw: string): Promise<{ url: URL; addresses: string[] }> {
+export function normalizeTargetUrl(raw: string) {
   let url: URL;
   try {
     url = new URL(raw);
@@ -62,6 +62,17 @@ export async function validateTargetUrl(raw: string): Promise<{ url: URL; addres
     throw new UnsafeTargetError("Only HTTP and HTTPS targets are allowed.");
   if (url.username || url.password)
     throw new UnsafeTargetError("Credentials in target URLs are not allowed.");
+  if (url.search)
+    throw new UnsafeTargetError(
+      "Query parameters are not accepted because public evaluation URLs must not contain secrets.",
+    );
+  if (url.hash)
+    throw new UnsafeTargetError("URL fragments are not accepted for evaluation targets.");
+  return url;
+}
+
+export async function validateTargetUrl(raw: string): Promise<{ url: URL; addresses: string[] }> {
+  const url = normalizeTargetUrl(raw);
   const privateTestTarget = privateTestTargetsAllowed();
   const effectivePort = url.port || (url.protocol === "https:" ? "443" : "80");
   const hostname = url.hostname

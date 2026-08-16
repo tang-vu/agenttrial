@@ -112,6 +112,14 @@ export function ReceiptVerifier() {
           <button className="button secondary full" onClick={tamper} disabled={tampered}>
             {tampered ? "One byte changed — failure detected" : "Modify one byte and verify again"}
           </button>
+          <div className="trust-boundary">
+            <strong>Issuer trust boundary</strong>
+            <p>
+              Integrity is checked locally against the current key registry served by AgentTrial.
+              Independent issuer authentication requires pinning that public key from a separately
+              trusted release, repository, or onchain attestation.
+            </p>
+          </div>
         </div>
       )}
       <div className="privacy-note">
@@ -119,7 +127,8 @@ export function ReceiptVerifier() {
         <p>
           <strong>Private by design</strong>
           <small>
-            Parsing, hashing, event-chain checks, and Ed25519 verification happen locally.
+            The uploaded bundle never leaves this browser. The current signer registry is fetched
+            separately from this AgentTrial service.
           </small>
         </p>
       </div>

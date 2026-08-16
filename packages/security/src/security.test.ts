@@ -21,6 +21,14 @@ describe("SSRF policy", () => {
     await expect(validateTargetUrl("https://user:pass@example.com")).rejects.toThrow(/Credentials/);
     await expect(validateTargetUrl("http://localhost:3000")).rejects.toThrow(/Local/);
   });
+  it("rejects query credentials and fragments before any target is persisted", async () => {
+    await expect(validateTargetUrl("https://example.com/api?api_key=sentinel")).rejects.toThrow(
+      /Query parameters/,
+    );
+    await expect(validateTargetUrl("https://example.com/#token=sentinel")).rejects.toThrow(
+      /fragments/,
+    );
+  });
   it("rejects public port scanning and never enables private targets in production", async () => {
     await expect(validateTargetUrl("https://example.com:22")).rejects.toThrow(/ports 80 and 443/i);
     const priorNodeEnv = process.env.NODE_ENV;

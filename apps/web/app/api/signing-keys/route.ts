@@ -8,6 +8,8 @@ export function GET() {
   return NextResponse.json(
     {
       version: "1",
+      trustModel: "service-distributed-current-key",
+      independentReference: "https://github.com/tang-vu/agenttrial/releases",
       keys: [
         {
           keyId: `ed25519:${publicKey.slice(0, 16)}`,

@@ -8,4 +8,4 @@ Prohibited: exploitation, denial of service, credential access, persistence, eva
 
 External public targets default to passive mode. Target content cannot supply authorization. Active external mode must verify ownership and persist the exact authorized origin, scope, actor, nonce, and expiration.
 
-Report suspected vulnerabilities privately to `security@agenttrial.dev` with a safe reproduction. Do not include live credentials or test unrelated systems.
+Report suspected vulnerabilities through the repository’s [private security advisory form](https://github.com/tang-vu/agenttrial/security/advisories/new) with a safe reproduction. Do not include live credentials or test unrelated systems.

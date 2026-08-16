@@ -278,8 +278,8 @@ export function verifyBundle(
     "trusted-signer",
     trusted,
     trusted
-      ? "Signer matches an independently supplied AgentTrial trust key"
-      : "Signer is not in the independently supplied trust set",
+      ? "Signer matches the supplied AgentTrial trust-key set"
+      : "Signer is not in the supplied trust-key set",
   );
   const first = checks.find((c) => !c.valid);
   return { valid: !first, checks, ...(first ? { firstMismatch: first.name } : {}) };

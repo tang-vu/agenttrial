@@ -70,4 +70,12 @@ describe("pipeline integration", () => {
       await new Promise<void>((resolve) => server.close(() => resolve()));
     }
   });
+  it("rejects secret-bearing external URLs before creating a run or event", () => {
+    const before = runs.size;
+    expect(() => createExternalRun("https://example.com/?token=sentinel-secret")).toThrow(
+      /Query parameters/,
+    );
+    expect(runs.size).toBe(before);
+    expect(JSON.stringify([...runs.values()])).not.toContain("sentinel-secret");
+  });
 });

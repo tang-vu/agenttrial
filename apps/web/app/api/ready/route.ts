@@ -21,6 +21,7 @@ export async function GET() {
       fixtureRuntime: true,
       plannerProvider: "deterministic",
       openAIProvider,
+      paidPlannerPolicy: "disabled-for-anonymous-runs",
       persistence,
       attestation: easConfigured ? "configured" : "local-receipt-fallback",
     },

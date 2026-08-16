@@ -1,11 +1,18 @@
 import postgres from "postgres";
+import { mkdir, readFile, readdir, rename, stat, unlink, writeFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import type { RuntimeRun } from "./index";
 
 let client: ReturnType<typeof postgres> | undefined;
 let initialized: Promise<void> | undefined;
+const localWrites = new Map<string, Promise<void>>();
 
 export function persistenceConfigured() {
   return Boolean(process.env.DATABASE_URL);
+}
+export function snapshotPersistenceConfigured() {
+  return persistenceConfigured() || Boolean(process.env.AGENTTRIAL_DATA_DIR);
 }
 export async function closePersistence() {
   if (client) await client.end({ timeout: 5 });
@@ -16,6 +23,97 @@ export async function closePersistence() {
 function sql() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not configured");
   return (client ??= postgres(process.env.DATABASE_URL, { max: 5, idle_timeout: 20 }));
+}
+
+function snapshotDirectory() {
+  const configured = process.env.AGENTTRIAL_DATA_DIR;
+  return configured ? resolve(configured, "runs") : undefined;
+}
+
+function snapshotPath(id: string) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))
+    throw new Error("Invalid run identifier");
+  const directory = snapshotDirectory();
+  return directory ? join(directory, `${id}.json`) : undefined;
+}
+
+async function saveLocalSnapshot(run: RuntimeRun) {
+  const path = snapshotPath(run.id);
+  const directory = snapshotDirectory();
+  if (!path || !directory) return;
+  const serialized = JSON.stringify(run);
+  const previous = localWrites.get(run.id) ?? Promise.resolve();
+  const write = previous
+    .catch(() => undefined)
+    .then(async () => {
+      await mkdir(directory, { recursive: true });
+      const temporary = `${path}.${process.pid}.${Date.now()}.tmp`;
+      await writeFile(temporary, serialized, { encoding: "utf8", mode: 0o600 });
+      try {
+        await replaceSnapshot(temporary, path);
+      } finally {
+        await unlink(temporary).catch(() => undefined);
+      }
+    });
+  localWrites.set(run.id, write);
+  try {
+    await write;
+  } finally {
+    if (localWrites.get(run.id) === write) localWrites.delete(run.id);
+  }
+}
+
+async function replaceSnapshot(temporary: string, destination: string) {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      await rename(temporary, destination);
+      return;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (!(["EPERM", "EACCES"] as Array<string | undefined>).includes(code) || attempt >= 10)
+        throw error;
+      await delay(Math.min(250, 10 * 2 ** attempt));
+    }
+  }
+}
+
+async function loadLocalSnapshot(id: string): Promise<RuntimeRun | undefined> {
+  const path = snapshotPath(id);
+  if (!path) return undefined;
+  try {
+    return JSON.parse(await readFile(path, "utf8")) as RuntimeRun;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return undefined;
+    throw error;
+  }
+}
+
+export async function cleanupExpiredLocalSnapshots(
+  now = Date.now(),
+  retentionDays = Number(process.env.AGENTTRIAL_RETENTION_DAYS ?? 30),
+) {
+  const directory = snapshotDirectory();
+  if (!directory) return 0;
+  const boundedDays = Math.min(365, Math.max(1, retentionDays));
+  const cutoff = now - boundedDays * 24 * 60 * 60 * 1000;
+  await mkdir(directory, { recursive: true });
+  const entries = await readdir(directory);
+  let removed = 0;
+  for (const entry of entries) {
+    const path = join(directory, entry);
+    if (/^[0-9a-f-]{36}\.json\.\d+\.\d+\.tmp$/i.test(entry)) {
+      if ((await stat(path)).mtimeMs < now - 5 * 60 * 1000) {
+        await unlink(path);
+        removed += 1;
+      }
+      continue;
+    }
+    if (!/^[0-9a-f-]{36}\.json$/i.test(entry)) continue;
+    if ((await stat(path)).mtimeMs >= cutoff) continue;
+    await unlink(path);
+    removed += 1;
+  }
+  return removed;
 }
 
 async function initialize() {
@@ -52,6 +150,7 @@ async function initialize() {
 }
 
 export async function saveRun(run: RuntimeRun) {
+  await saveLocalSnapshot(run);
   if (!persistenceConfigured()) return;
   await initialize();
   const db = sql();
@@ -64,10 +163,10 @@ export async function saveRun(run: RuntimeRun) {
 }
 
 export async function loadRun(id: string): Promise<RuntimeRun | undefined> {
-  if (!persistenceConfigured()) return undefined;
+  if (!persistenceConfigured()) return loadLocalSnapshot(id);
   await initialize();
   const rows = await sql()`SELECT snapshot FROM agenttrial_runs WHERE id = ${id}::uuid LIMIT 1`;
-  return rows[0]?.snapshot as RuntimeRun | undefined;
+  return (rows[0]?.snapshot as RuntimeRun | undefined) ?? loadLocalSnapshot(id);
 }
 
 export async function enqueueRun(run: RuntimeRun) {
@@ -118,8 +217,31 @@ export async function heartbeatWorker(workerId: string) {
 }
 
 export async function persistenceReadiness() {
-  if (!persistenceConfigured())
-    return { configured: false, database: true, worker: true, message: "in-process demo mode" };
+  if (!persistenceConfigured()) {
+    const localSnapshots = Boolean(snapshotDirectory());
+    if (localSnapshots) {
+      try {
+        await cleanupExpiredLocalSnapshots();
+      } catch {
+        return {
+          configured: false,
+          database: false,
+          worker: true,
+          localSnapshots: false,
+          message: "local snapshot directory unavailable",
+        };
+      }
+    }
+    return {
+      configured: false,
+      database: true,
+      worker: true,
+      localSnapshots,
+      message: localSnapshots
+        ? "single-node runtime with durable snapshots"
+        : "in-process demo mode",
+    };
+  }
   try {
     await initialize();
     await sql()`SELECT 1`;
@@ -130,9 +252,16 @@ export async function persistenceReadiness() {
       configured: true,
       database: true,
       worker,
+      localSnapshots: Boolean(snapshotDirectory()),
       message: worker ? "database and worker ready" : "no recent worker heartbeat",
     };
   } catch {
-    return { configured: true, database: false, worker: false, message: "database unavailable" };
+    return {
+      configured: true,
+      database: false,
+      worker: false,
+      localSnapshots: Boolean(snapshotDirectory()),
+      message: "database unavailable",
+    };
   }
 }

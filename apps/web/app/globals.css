@@ -705,6 +705,84 @@ button {
   display: grid;
   place-items: center;
 }
+.score-orbit.score-unavailable {
+  background: var(--line);
+}
+.score-orbit.score-unavailable strong {
+  font-size: 32px;
+}
+.surface-scope-card {
+  margin: 24px clamp(22px, 5vw, 72px);
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 24px;
+  align-items: center;
+}
+.surface-scope-card h2,
+.surface-scope-card p {
+  margin: 0;
+}
+.surface-scope-card h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+.surface-scope-card > strong {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.terminal-notice {
+  margin: 24px clamp(22px, 5vw, 72px);
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--steel);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+}
+.terminal-notice.failed {
+  border-left-color: var(--red);
+}
+.terminal-notice h2,
+.terminal-notice p {
+  margin: 6px 0 0;
+}
+.terminal-notice h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+.connection-state {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.connection-state:before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.connection-state.reconnecting:before,
+.connection-state.connecting:before {
+  background: var(--orange);
+}
+.trust-boundary {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #ffffff40;
+}
+.trust-boundary p {
+  margin: 5px 0 0;
+  color: var(--steel);
+  font-size: 12px;
+}
 .score-orbit:before {
   content: "";
   width: 130px;
@@ -1229,7 +1307,8 @@ footer p {
   }
   .new-grid,
   .live-layout,
-  .split-section {
+  .split-section,
+  .surface-scope-card {
     grid-template-columns: 1fr;
   }
   .verdict-card {
@@ -1363,9 +1442,13 @@ footer p {
     grid-template-columns: 1fr;
   }
   .report-disclaimer,
-  .definition-list > div {
+  .definition-list > div,
+  .terminal-notice {
     grid-template-columns: 1fr;
     gap: 7px;
+  }
+  .terminal-notice {
+    display: grid;
   }
   .article-shell {
     padding: 60px 20px;

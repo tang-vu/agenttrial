@@ -29,8 +29,7 @@ import {
   generateFixturePlan,
   type FixtureId,
 } from "@agenttrial/fixtures";
-import { redact } from "@agenttrial/security";
-import { OpenAIPlannerProvider } from "@agenttrial/planner";
+import { normalizeTargetUrl, redact } from "@agenttrial/security";
 import {
   cancelQueuedJob,
   claimRun,
@@ -38,6 +37,7 @@ import {
   finishRunJob,
   loadRun,
   persistenceConfigured,
+  snapshotPersistenceConfigured,
   runCancellationRequested,
   saveRun,
 } from "./persistence";
@@ -67,6 +67,7 @@ const globalStore = globalThis as typeof globalThis & {
 export const runs = (globalStore.__agenttrialRuns ??= new Map());
 const listeners = (globalStore.__agenttrialListeners ??= new Map());
 const cancellationCapabilities = new Map<string, string>();
+const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
 const signingSeedHex = process.env.AGENTTRIAL_SIGNING_SEED;
 if (signingSeedHex && !/^[0-9a-fA-F]{64}$/.test(signingSeedHex))
   throw new Error(
@@ -117,6 +118,7 @@ async function ensureActive(run: RuntimeRun) {
 }
 
 export function createFixtureRun(fixture: FixtureId): RuntimeRun {
+  pruneTerminalRuns();
   if (!fixtures[fixture]) throw new Error("Unknown fixture");
   const cancelToken = randomBytes(32).toString("hex");
   const run: RuntimeRun = {
@@ -140,13 +142,15 @@ export function createFixtureRun(fixture: FixtureId): RuntimeRun {
   return run;
 }
 export function createExternalRun(targetUrl: string, capabilityDescription?: string): RuntimeRun {
+  pruneTerminalRuns();
+  const normalizedTargetUrl = normalizeTargetUrl(targetUrl).toString();
   const cancelToken = randomBytes(32).toString("hex");
   const run: RuntimeRun = {
     id: randomUUID(),
     state: "CREATED",
     events: [],
     cancelled: false,
-    targetUrl,
+    targetUrl: normalizedTargetUrl,
     ...(capabilityDescription ? { capabilityDescription } : {}),
     mode: "passive-external",
     cancelTokenHash: hashText(cancelToken),
@@ -154,7 +158,7 @@ export function createExternalRun(targetUrl: string, capabilityDescription?: str
   cancellationCapabilities.set(run.id, cancelToken);
   runs.set(run.id, run);
   emit(run, "CREATED", "run.created", "Passive evaluation workspace created", {
-    target: targetUrl,
+    target: normalizedTargetUrl,
     mode: "passive",
     authorization: "public metadata discovery only",
   });
@@ -162,12 +166,19 @@ export function createExternalRun(targetUrl: string, capabilityDescription?: str
   else void executeExternalRun(run);
   return run;
 }
+function pruneTerminalRuns() {
+  const terminal = [...runs.values()]
+    .filter((run) => ["COMPLETED", "FAILED", "CANCELLED"].includes(run.state))
+    .sort((a, b) => (a.events.at(-1)?.at ?? "").localeCompare(b.events.at(-1)?.at ?? ""));
+  for (const run of terminal.slice(0, Math.max(0, terminal.length - MAX_IN_MEMORY_TERMINAL_RUNS)))
+    runs.delete(run.id);
+}
 function failQueuedRun(run: RuntimeRun, error: unknown) {
   run.error = error instanceof Error ? error.message : "Could not enqueue run";
   emit(run, "FAILED", "run.failed", "Durable queue submission failed", { error: run.error });
 }
 export async function getRun(id: string) {
-  return persistenceConfigured() ? await loadRun(id) : runs.get(id);
+  return snapshotPersistenceConfigured() ? ((await loadRun(id)) ?? runs.get(id)) : runs.get(id);
 }
 export async function processNextRun(workerId = `worker-${process.pid}`) {
   if (!persistenceConfigured()) return false;
@@ -393,6 +404,7 @@ async function executeRun(run: RuntimeRun) {
       attestation,
     };
     run.state = "COMPLETED";
+    await saveRun(run);
   } catch (error) {
     if ((error as Error).message === "CANCELLED") {
       run.state = "CANCELLED";
@@ -409,6 +421,7 @@ async function executeRun(run: RuntimeRun) {
         error: run.error,
       });
     }
+    await saveRun(run);
   }
 }
 
@@ -425,7 +438,6 @@ async function executeExternalRun(run: RuntimeRun) {
     );
     await ensureActive(run);
     const discovery = await discoverPublicTarget(run.targetUrl!);
-    const openAIPlanner = new OpenAIPlannerProvider();
     let claims = discovery.claims;
     if (run.capabilityDescription)
       claims = [
@@ -443,37 +455,6 @@ async function executeExternalRun(run: RuntimeRun) {
           discoveryLocation: "trial submission",
         },
       ].slice(0, 20);
-    if (openAIPlanner.available()) {
-      try {
-        const planned = await openAIPlanner.discover(discovery.response.body);
-        const aiClaims = planned.claims.map((claim, index) => ({
-          id: `claim_ai_${index + 1}`,
-          capability: claim.capability,
-          advertisedInput: claim.advertisedInput,
-          advertisedOutput: claim.advertisedOutput,
-          dependencies: [],
-          requiredPermissions: [],
-          successCondition: claim.successCondition,
-          evidenceSource: discovery.response.url,
-          confidence: claim.confidence,
-          discoveryLocation: claim.discoveryLocation,
-        }));
-        claims = [...claims, ...aiClaims].slice(0, 20);
-        emit(run, machine.state, "planner.discovery", "Optional AI claim extraction completed", {
-          provider: openAIPlanner.name,
-          addedClaims: aiClaims.length,
-          untrustedContent: "isolated",
-        });
-      } catch (error) {
-        emit(
-          run,
-          machine.state,
-          "planner.provider_failed",
-          "Optional AI discovery failed; deterministic discovery remains available",
-          { error: error instanceof Error ? error.message : "provider failure" },
-        );
-      }
-    }
     machine.transition("CLAIMS_EXTRACTED");
     emit(
       run,
@@ -709,6 +690,7 @@ async function executeExternalRun(run: RuntimeRun) {
       attestation,
     };
     run.state = "COMPLETED";
+    await saveRun(run);
   } catch (error) {
     if ((error as Error).message === "CANCELLED") {
       run.state = "CANCELLED";
@@ -724,5 +706,6 @@ async function executeExternalRun(run: RuntimeRun) {
         { error: run.error, failureClass: "request_failed" },
       );
     }
+    await saveRun(run);
   }
 }

@@ -23,30 +23,80 @@ export function LiveRun({ runId }: { runId: string }) {
   const [events, setEvents] = useState<Event[]>([]);
   const [state, setState] = useState("CREATED");
   const [error, setError] = useState("");
+  const [runError, setRunError] = useState("");
+  const [connection, setConnection] = useState<"connecting" | "live" | "reconnecting">(
+    "connecting",
+  );
   useEffect(() => {
     let source: EventSource | undefined;
-    fetch(`/api/runs/${runId}`)
-      .then(async (r) => {
-        if (!r.ok) throw new Error("Run not found");
-        const data = await r.json();
-        setEvents(data.events);
-        setState(data.state);
-        if (!["COMPLETED", "FAILED", "CANCELLED"].includes(data.state)) {
-          source = new EventSource(`/api/runs/${runId}/events`);
-          source.onmessage = (m) => {
-            const e = JSON.parse(m.data);
-            setEvents((old) => (old.some((x) => x.id === e.id) ? old : [...old, e]));
-            setState(e.state);
-            if (["COMPLETED", "FAILED", "CANCELLED"].includes(e.state)) source?.close();
-          };
-          source.onerror = () => source?.close();
+    let reconnectTimer: ReturnType<typeof setTimeout> | undefined;
+    let disposed = false;
+    let terminal = false;
+    let reconnectAttempt = 0;
+    const terminalStates = ["COMPLETED", "FAILED", "CANCELLED"];
+    function applySnapshot(data: { events: Event[]; state: string; error?: string }) {
+      if (disposed) return;
+      setEvents(data.events);
+      setState(data.state);
+      setRunError(data.error ?? "");
+      terminal = terminalStates.includes(data.state);
+    }
+    async function refresh() {
+      const response = await fetch(`/api/runs/${runId}`, { cache: "no-store" });
+      if (!response.ok) throw new Error("Run not found");
+      applySnapshot(await response.json());
+    }
+    function connect() {
+      if (disposed || terminal) return;
+      source = new EventSource(`/api/runs/${runId}/events`);
+      source.onopen = () => {
+        reconnectAttempt = 0;
+        setConnection("live");
+      };
+      source.onmessage = (message) => {
+        const event = JSON.parse(message.data) as Event;
+        setEvents((old) => (old.some((item) => item.id === event.id) ? old : [...old, event]));
+        setState(event.state);
+        if (event.state === "FAILED" && typeof event.detail?.error === "string")
+          setRunError(event.detail.error);
+        if (terminalStates.includes(event.state)) {
+          terminal = true;
+          source?.close();
         }
+      };
+      source.onerror = () => {
+        source?.close();
+        if (disposed || terminal) return;
+        setConnection("reconnecting");
+        const delay = Math.min(8_000, 500 * 2 ** reconnectAttempt++);
+        reconnectTimer = setTimeout(() => {
+          void refresh()
+            .then(() => connect())
+            .catch(() => connect());
+        }, delay);
+      };
+    }
+    void refresh()
+      .then(() => {
+        if (!terminal) connect();
       })
-      .catch((e) => setError(e.message));
-    return () => source?.close();
+      .catch((caught: Error) => setError(caught.message));
+    return () => {
+      disposed = true;
+      source?.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+    };
   }, [runId]);
-  const activeIndex = useMemo(() => states.indexOf(state), [state]);
+  const activeIndex = useMemo(() => {
+    const latestPipelineState = [...events]
+      .reverse()
+      .find((event) => states.includes(event.state))?.state;
+    return states.indexOf(latestPipelineState ?? state);
+  }, [events, state]);
   const completed = state === "COMPLETED";
+  const failed = state === "FAILED";
+  const cancelled = state === "CANCELLED";
+  const terminal = completed || failed || cancelled;
   async function cancel() {
     const token = sessionStorage.getItem(`agenttrial:cancel:${runId}`) ?? "";
     const response = await fetch(`/api/runs/${runId}`, {
@@ -70,10 +120,24 @@ export function LiveRun({ runId }: { runId: string }) {
       <div className="live-head">
         <div>
           <span className="eyebrow">
-            <span className={`pulse ${completed ? "done" : ""}`} />
-            {completed ? "TRIAL COMPLETE" : "LIVE EXECUTION"}
+            <span className={`pulse ${terminal ? "done" : ""}`} />
+            {completed
+              ? "TRIAL COMPLETE"
+              : failed
+                ? "EVALUATOR FAILURE"
+                : cancelled
+                  ? "TRIAL CANCELLED"
+                  : "LIVE EXECUTION"}
           </span>
-          <h1>{completed ? "Evidence sealed." : "Agent under examination."}</h1>
+          <h1>
+            {completed
+              ? "Evidence sealed."
+              : failed
+                ? "Evaluation stopped safely."
+                : cancelled
+                  ? "Trial cancelled."
+                  : "Agent under examination."}
+          </h1>
           <p className="mono">RUN {runId}</p>
         </div>
         <div className="live-actions">
@@ -96,6 +160,22 @@ export function LiveRun({ runId }: { runId: string }) {
           </button>
         </div>
       </div>
+      {(failed || cancelled) && (
+        <section className={`terminal-notice ${failed ? "failed" : ""}`} role="status">
+          <div>
+            <span className="kicker">{failed ? "REQUEST / EVALUATOR FAILURE" : "CANCELLED"}</span>
+            <h2>{failed ? "No capability verdict was inferred." : "No receipt was issued."}</h2>
+            <p>
+              {failed
+                ? runError || "The evaluator could not complete the bounded request."
+                : "Incomplete observations were discarded to avoid presenting partial work as a verdict."}
+            </p>
+          </div>
+          <Link className="button secondary" href="/new">
+            Start a new trial â†’
+          </Link>
+        </section>
+      )}
       <div className="live-layout">
         <aside className="state-rail" aria-label="Pipeline progress">
           {states.map((s, i) => (
@@ -124,6 +204,7 @@ export function LiveRun({ runId }: { runId: string }) {
               <h2>Autonomy, made visible.</h2>
             </div>
             <span className="event-count">{events.length} events</span>
+            {!terminal && <span className={`connection-state ${connection}`}>{connection}</span>}
           </div>
           <div className="timeline" aria-live="polite">
             {events.map((e) => (
@@ -153,7 +234,7 @@ export function LiveRun({ runId }: { runId: string }) {
                 </div>
               </article>
             ))}
-            {!completed && (
+            {!terminal && (
               <div className="thinking">
                 <i />
                 <i />

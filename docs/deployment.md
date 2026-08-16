@@ -9,6 +9,8 @@ docker compose up --build
 
 Compose starts PostgreSQL, the Next.js web service, and a separately scalable queue worker. Both web and worker must receive the same managed signing seed. PostgreSQL snapshots allow GET, bundle, and SSE endpoints to work across processes and restarts.
 
+For a single-node deployment, set `AGENTTRIAL_DATA_DIR` to an access-controlled persistent directory. The in-process executor then writes each run snapshot atomically, so completed reports and bundles survive application or machine restarts. `AGENTTRIAL_RETENTION_DAYS` defaults to 30 and cleanup runs during readiness checks. Terminal in-memory runs are capped separately. This is not a substitute for PostgreSQL and the worker queue when horizontally scaling.
+
 For Vercel, use the repository root for web only and point `DATABASE_URL` at managed PostgreSQL; deploy the worker target to Railway/Render/Fly. Do not rely on a serverless request continuing background execution.
 
 ## Production hardening still required

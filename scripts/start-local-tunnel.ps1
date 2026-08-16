@@ -14,6 +14,10 @@ $configPath = Join-Path $stateDirectory "cloudflared-agenttrial.yml"
 $credentialsPath = Join-Path $env:USERPROFILE ".cloudflared\$TunnelId.json"
 $cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
 $pnpm = (Get-Command pnpm.cmd -ErrorAction Stop).Source
+$node = (Get-Command node.exe -ErrorAction Stop).Source
+$standaloneServer = Join-Path $repo "apps\web\.next\standalone\apps\web\server.js"
+$staticSource = Join-Path $repo "apps\web\.next\static"
+$staticDestination = Join-Path $repo "apps\web\.next\standalone\apps\web\.next\static"
 
 if (!(Test-Path $cloudflared)) { throw "cloudflared is not installed at $cloudflared" }
 if (!(Test-Path $credentialsPath)) { throw "Tunnel credentials are missing at $credentialsPath" }
@@ -60,6 +64,9 @@ if (!$SkipBuild) {
   & $pnpm build
   if ($LASTEXITCODE -ne 0) { throw "Production build failed." }
 }
+if (!(Test-Path $standaloneServer)) { throw "Standalone production server is missing. Run without -SkipBuild." }
+New-Item -ItemType Directory -Path $staticDestination -Force | Out-Null
+Copy-Item -Path (Join-Path $staticSource "*") -Destination $staticDestination -Recurse -Force
 
 $supervisorLog = Join-Path $stateDirectory "supervisor.out.log"
 $supervisorErrorLog = Join-Path $stateDirectory "supervisor.err.log"
@@ -67,7 +74,7 @@ $supervisor = Start-Process -FilePath powershell.exe -ArgumentList @(
   "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
   ('"' + (Join-Path $PSScriptRoot "run-local-service.ps1") + '"'),
   "-Port", "$Port", "-Hostname", $Hostname, "-ConfigPath", ('"' + $configPath + '"'),
-  "-StateDirectory", ('"' + $stateDirectory + '"'), "-PnpmPath", ('"' + $pnpm + '"'),
+  "-StateDirectory", ('"' + $stateDirectory + '"'), "-NodePath", ('"' + $node + '"'),
   "-CloudflaredPath", ('"' + $cloudflared + '"')
 ) -WorkingDirectory $repo -WindowStyle Hidden -RedirectStandardOutput $supervisorLog `
   -RedirectStandardError $supervisorErrorLog -PassThru

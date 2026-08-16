@@ -113,15 +113,6 @@ export function NewTrialForm() {
             </small>
           </span>
         </label>
-        <label>
-          Optional capability description
-          <textarea
-            value={capabilityDescription}
-            onChange={(event) => setCapabilityDescription(event.target.value.slice(0, 2000))}
-            placeholder="Describe what the agent claims to do. This is recorded as user-asserted, not verified evidence."
-            rows={4}
-          />
-        </label>
         {error && (
           <p className="error-box" role="alert">
             {error}
@@ -148,6 +139,16 @@ export function NewTrialForm() {
             placeholder="https://example.com/.well-known/agent-card.json"
             required
           />
+        </label>
+        <label>
+          Optional capability description
+          <textarea
+            value={capabilityDescription}
+            onChange={(event) => setCapabilityDescription(event.target.value.slice(0, 2000))}
+            placeholder="Describe what the agent claims to do."
+            rows={4}
+          />
+          <small>User-asserted context; passive evaluation will leave the claim untested.</small>
         </label>
         <div className="notice">
           <strong>Passive by default</strong>

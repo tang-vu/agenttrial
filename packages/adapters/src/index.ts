@@ -86,7 +86,7 @@ function pinnedRequest(
       headers: {
         accept: "application/json, application/yaml, text/plain, text/html;q=0.9",
         "accept-encoding": "identity",
-        "user-agent": "AgentTrial-Passive-Evaluator/1.0 (+https://agenttrial.dev/security)",
+        "user-agent": "AgentTrial-Passive-Evaluator/1.0 (+https://agenttrial.tangvu.dev/security)",
       },
       lookup: (_hostname, _options, callback) => callback(null, pinned, family),
       servername: url.hostname,

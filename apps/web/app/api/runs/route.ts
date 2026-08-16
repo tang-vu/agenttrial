@@ -5,7 +5,7 @@ import {
   takeCancellationCapability,
 } from "@agenttrial/runtime";
 import type { FixtureId } from "@agenttrial/fixtures";
-import { consumeRateLimit } from "@agenttrial/security";
+import { UnsafeTargetError, consumeRateLimit } from "@agenttrial/security";
 import { z } from "zod";
 const requestSchema = z.union([
   z
@@ -81,7 +81,10 @@ export async function POST(request: Request) {
       { runId: run.id, state: run.state, cancelToken: takeCancellationCapability(run.id) },
       { status: 201, headers: { "cache-control": "no-store" } },
     );
-  } catch {
-    return NextResponse.json({ error: "Invalid trial request." }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof UnsafeTargetError ? error.message : "Invalid trial request." },
+      { status: 400 },
+    );
   }
 }

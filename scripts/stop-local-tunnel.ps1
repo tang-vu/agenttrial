@@ -27,7 +27,7 @@ function Stop-VerifiedProcess([int]$ProcessId, [string]$Pattern) {
 
 Stop-VerifiedProcess $state.supervisorPid "run-local-service.ps1"
 Stop-VerifiedProcess $state.tunnelPid "cloudflared-agenttrial.yml"
-Stop-VerifiedProcess $state.webLauncherPid "@agenttrial/web"
+Stop-VerifiedProcess $state.webLauncherPid "standalone\apps\web\server.js"
 
 $listener = Get-NetTCPConnection -LocalPort $state.port -State Listen -ErrorAction SilentlyContinue
 if ($listener -and $listener.OwningProcess -eq $state.webPid) {

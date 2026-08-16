@@ -54,6 +54,7 @@ export function ReportView({ runId }: { runId: string }) {
   const passed = report.assertions.filter((a) => a.passed).length;
   const failed = report.assertions.length - passed;
   const untestedClaims = new Set(report.score.untestedClaims);
+  const capabilityScoreAvailable = report.score.coverage > 0;
   const verdictHeadline =
     report.score.badge === "not-verified"
       ? "Capability claims remain unverified."
@@ -87,22 +88,30 @@ export function ReportView({ runId }: { runId: string }) {
       </div>
       <section className="verdict-card">
         <div
-          className="score-orbit"
-          style={{ "--score": `${report.score.overall * 3.6}deg` } as React.CSSProperties}
+          className={`score-orbit ${capabilityScoreAvailable ? "" : "score-unavailable"}`}
+          style={
+            {
+              "--score": `${capabilityScoreAvailable ? report.score.overall * 3.6 : 0}deg`,
+            } as React.CSSProperties
+          }
         >
           <div>
-            <strong>{report.score.overall}</strong>
-            <span>/100</span>
+            <strong>{capabilityScoreAvailable ? report.score.overall : "N/A"}</strong>
+            <span>{capabilityScoreAvailable ? "/100" : "capability"}</span>
           </div>
         </div>
         <div className="verdict-copy">
-          <span className={`badge ${report.score.overall >= 75 ? "good" : "bad"}`}>
+          <span
+            className={`badge ${report.score.badge === "evidence-backed" ? "good" : report.score.badge === "not-verified" ? "neutral" : "bad"}`}
+          >
             {report.score.badge.replace("-", " ")}
           </span>
           <h2>{verdictHeadline}</h2>
           <p>
             {failed === 0
-              ? "Every deterministic assertion passed."
+              ? capabilityScoreAvailable
+                ? "Every deterministic assertion passed."
+                : "Every bounded public-surface check passed; no advertised capability was exercised."
               : `${failed} of ${report.assertions.length} deterministic assertions failed.`}{" "}
             Coverage is {report.score.coverage}% with {report.score.confidence} confidence.
           </p>
@@ -141,20 +150,34 @@ export function ReportView({ runId }: { runId: string }) {
           )}
         </div>
       </section>
-      <section className="dimension-grid">
-        {Object.entries(report.score.dimensions).map(([key, value]) => (
-          <div key={key}>
-            <span>{labels[key]}</span>
-            <strong>
-              {value}
-              <small>/{max[key]}</small>
-            </strong>
-            <div className="bar">
-              <i style={{ width: `${(value / max[key]!) * 100}%` }} />
+      {capabilityScoreAvailable ? (
+        <section className="dimension-grid">
+          {Object.entries(report.score.dimensions).map(([key, value]) => (
+            <div key={key}>
+              <span>{labels[key]}</span>
+              <strong>
+                {value}
+                <small>/{max[key]}</small>
+              </strong>
+              <div className="bar">
+                <i style={{ width: `${(value / max[key]!) * 100}%` }} />
+              </div>
             </div>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      ) : (
+        <section className="surface-scope-card">
+          <span className="kicker">ASSESSMENT SCOPE</span>
+          <h2>Public surface checks only</h2>
+          <p>
+            Availability, transport, provenance capture, latency, and request budget were checked.
+            Capability execution, safety, reliability, and recovery were not scored.
+          </p>
+          <strong>
+            {passed}/{report.assertions.length} checks passed
+          </strong>
+        </section>
+      )}
       <div className="report-tabs" role="tablist">
         <button role="tab" aria-selected={tab === "findings"} onClick={() => setTab("findings")}>
           Findings

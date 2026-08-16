@@ -49,6 +49,65 @@ test("active consent is required and cancellation is typed", async ({ request })
     ).status(),
   );
 });
+test("cancelled live run stops progress and explains receipt semantics", async ({
+  page,
+  request,
+}) => {
+  const created = await request.post("/api/runs", {
+    data: { fixture: "evidence-researcher", activeConsent: true },
+  });
+  const { runId, cancelToken } = await created.json();
+  await request.delete(`/api/runs/${runId}`, {
+    headers: { "x-agenttrial-cancel-token": cancelToken },
+  });
+  await page.goto(`/live/${runId}`);
+  await expect(page.getByRole("heading", { name: "Trial cancelled." })).toBeVisible();
+  await expect(page.getByText("No receipt was issued.")).toBeVisible();
+  await expect(page.getByText("Evaluator is working")).toHaveCount(0);
+});
+
+test("zero-coverage reports never present an agent score", async ({ page, request }) => {
+  const created = await request.post("/api/runs", {
+    data: { fixture: "evidence-researcher", activeConsent: true },
+  });
+  const { runId } = await created.json();
+  let source:
+    | {
+        state: string;
+        report: {
+          target: { controlled: boolean };
+          score: {
+            coverage: number;
+            confidence: string;
+            badge: string;
+            untestedClaims: string[];
+          };
+          claims: Array<{ id: string }>;
+        };
+      }
+    | undefined;
+  for (let attempt = 0; attempt < 80; attempt += 1) {
+    const response = await request.get(`/api/runs/${runId}`);
+    source = await response.json();
+    if (source.state === "COMPLETED") break;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  if (!source?.report) throw new Error("Fixture report did not complete");
+  source.report.target.controlled = false;
+  source.report.score.coverage = 0;
+  source.report.score.confidence = "low";
+  source.report.score.badge = "not-verified";
+  source.report.score.untestedClaims = source.report.claims.map(
+    (claim: { id: string }) => claim.id,
+  );
+  await page.route("**/api/runs/passive-preview", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(source) }),
+  );
+  await page.goto("/reports/passive-preview");
+  await expect(page.getByText("N/A")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Public surface checks only" })).toBeVisible();
+  await expect(page.getByText("Capability claims remain unverified.")).toBeVisible();
+});
 test("landing has no serious accessibility violations", async ({ page }) => {
   await page.goto("/");
   const results = await new AxeBuilder({ page }).analyze();
@@ -78,4 +137,7 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
   const descriptorBody = await descriptor.json();
   expect(descriptorBody.a2a.supported).toBe(false);
   expect((await request.get(new URL(descriptorBody.schema).pathname)).status()).toBe(200);
+  const security = await request.get("/.well-known/security.txt");
+  expect(security.status()).toBe(200);
+  expect(await security.text()).toContain("agenttrial.tangvu.dev/.well-known/security.txt");
 });

@@ -77,8 +77,20 @@ export default function Security() {
         <h2>Report abuse</h2>
         <p>
           For security reports, include the affected surface, a safe reproduction, and impact. Do
-          not include live secrets or test third-party targets without permission. Contact:{" "}
-          <a href="mailto:security@agenttrial.dev">security@agenttrial.dev</a>.
+          not include live secrets or test third-party targets without permission. Use the project’s{" "}
+          <a href="https://github.com/tang-vu/agenttrial/security/advisories/new">
+            private GitHub security advisory form
+          </a>
+          .
+        </p>
+      </section>
+      <section>
+        <h2>Data handling</h2>
+        <p>
+          Public targets cannot include credentials, query parameters, or fragments. Bounded
+          response evidence is redacted before persistence and hashing. This single-node service
+          retains durable run snapshots for 30 days by default; operators of PostgreSQL deployments
+          must configure an equivalent retention and backup policy.
         </p>
       </section>
     </main>

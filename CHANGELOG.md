@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 â€” 2026-08-16
+
+- Added atomic single-node report snapshots, 30-day configurable retention, bounded terminal-run memory, and verified recovery across a killed/restarted web process.
+- Added a least-privilege Windows supervisor and Named Tunnel deployment at `agenttrial.tangvu.dev`; neither the repository nor public evaluator runs as `SYSTEM`.
+- Removed paid planner calls from anonymous evaluation, rejected secret-bearing URL queries/fragments before run creation, and published a canonical `security.txt` disclosure route.
+- Added SSE reconnect/fallback behavior, explicit failed/cancelled screens, and scoped passive reports that show capability score `N/A` instead of a misleading agent score.
+- Clarified cryptographic integrity versus independent issuer trust and expanded secret scanning to the working tree, ignored environment files, and full Git history.
+
 ## 0.2.0 — 2026-08-15
 
 - Added DNS-pinned passive website, API, OpenAI-compatible, A2A Card, and GitHub discovery.
