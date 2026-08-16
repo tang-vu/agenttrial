@@ -64,7 +64,12 @@ export {
   publicAuthorization,
   verifyAuthorizationChallenge,
 } from "./authorizations";
-export { closePersistence, heartbeatWorker, persistenceReadiness } from "./persistence";
+export {
+  cleanupExpiredDatabaseRecords,
+  closePersistence,
+  heartbeatWorker,
+  persistenceReadiness,
+} from "./persistence";
 export { consumeDistributedRateLimit } from "./persistence";
 
 export interface RuntimeRun {

@@ -136,6 +136,7 @@ GitHub Actions runs the complete quality gate with PostgreSQL. Manually approved
 - [Architecture](docs/architecture.md)
 - [Evaluation methodology](docs/methodology.md)
 - [Threat model](docs/threat-model.md)
+- [Data governance and retention](docs/data-governance.md)
 - [Responsible use](docs/responsible-use.md)
 - [API](docs/api.md)
 - [Deployment](docs/deployment.md)

@@ -394,6 +394,33 @@ export async function heartbeatWorker(workerId: string) {
     ON CONFLICT (worker_id) DO UPDATE SET last_seen = now()`;
 }
 
+export async function cleanupExpiredDatabaseRecords(
+  retentionDays = Number(process.env.AGENTTRIAL_RETENTION_DAYS ?? 30),
+) {
+  if (!persistenceConfigured()) return { runs: 0, authorizations: 0, buckets: 0, workers: 0 };
+  await initialize();
+  const boundedDays = Math.min(365, Math.max(1, Math.floor(retentionDays)));
+  const db = sql();
+  return db.begin(async (transaction) => {
+    const tx = transaction as unknown as ReturnType<typeof sql>;
+    const runs = await tx`DELETE FROM agenttrial_runs
+      WHERE state IN ('COMPLETED','FAILED','CANCELLED')
+        AND updated_at < now() - (${boundedDays} * interval '1 day') RETURNING id`;
+    const authorizations = await tx`DELETE FROM agenttrial_authorizations
+      WHERE expires_at < now() - interval '1 day' RETURNING id`;
+    const buckets = await tx`DELETE FROM agenttrial_rate_limits
+      WHERE reset_at < now() - interval '1 day' RETURNING bucket_key`;
+    const workers = await tx`DELETE FROM agenttrial_workers
+      WHERE last_seen < now() - interval '1 day' RETURNING worker_id`;
+    return {
+      runs: runs.length,
+      authorizations: authorizations.length,
+      buckets: buckets.length,
+      workers: workers.length,
+    };
+  });
+}
+
 export async function persistenceReadiness() {
   if (!persistenceConfigured()) {
     const localSnapshots = Boolean(snapshotDirectory());

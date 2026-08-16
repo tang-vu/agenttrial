@@ -15,7 +15,8 @@ For Vercel, use the repository root for web only and point `DATABASE_URL` at man
 
 ## Production hardening still required
 
-1. Managed migrations/backups, retention, distributed per-target limits, and idempotency records.
+1. Managed migrations/backups and idempotency records. The worker enforces terminal-run retention;
+   production operators must still use migration-only credentials and test encrypted restores.
 2. LISTEN/NOTIFY or Redis pub-sub can replace the current bounded PostgreSQL SSE polling at higher scale.
 3. A separate browser worker with denied private-network egress, non-root Chromium, no receipt key, and strict quotas before enabling browser tests.
 4. Replace the dedicated signer container's seed with managed KMS/HSM signing for higher-assurance deployments.

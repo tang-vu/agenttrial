@@ -1,8 +1,13 @@
-import { heartbeatWorker, processNextRun } from "@agenttrial/runtime";
+import {
+  cleanupExpiredDatabaseRecords,
+  heartbeatWorker,
+  processNextRun,
+} from "@agenttrial/runtime";
 
 const workerId = `agenttrial-worker-${process.pid}`;
 let stopping = false;
 let lastHeartbeat = 0;
+let lastCleanup = 0;
 process.once("SIGTERM", () => {
   stopping = true;
 });
@@ -15,6 +20,10 @@ while (!stopping) {
     if (Date.now() - lastHeartbeat > 10_000) {
       await heartbeatWorker(workerId);
       lastHeartbeat = Date.now();
+    }
+    if (Date.now() - lastCleanup > 60 * 60 * 1_000) {
+      await cleanupExpiredDatabaseRecords();
+      lastCleanup = Date.now();
     }
     const processed = await processNextRun(workerId);
     if (!processed) await new Promise((resolve) => setTimeout(resolve, 500));

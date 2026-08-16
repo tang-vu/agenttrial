@@ -88,9 +88,10 @@ export default function Security() {
         <h2>Data handling</h2>
         <p>
           Public targets cannot include credentials, query parameters, or fragments. Bounded
-          response evidence is redacted before persistence and hashing. This single-node service
-          retains durable run snapshots for 30 days by default; operators of PostgreSQL deployments
-          must configure an equivalent retention and backup policy.
+          response evidence is redacted before persistence and hashing. Both single-node snapshots
+          and PostgreSQL terminal runs expire after 30 days by default. Authorization proofs, stale
+          quota buckets, and worker heartbeats have shorter cleanup windows. Operators must still
+          configure encrypted backups and test restoration for their deployment.
         </p>
       </section>
     </main>
