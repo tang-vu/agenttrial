@@ -255,7 +255,13 @@ export function verifyBundle(
     bundle.receipt.payload.methodologyVersion === bundle.report.score.methodologyVersion &&
     bundle.receipt.payload.seedCommitment === bundle.report.plan.seedCommitment &&
     bundle.receipt.payload.mode ===
-      (bundle.report.target.controlled ? "active-controlled" : "passive-external") &&
+      (bundle.report.target.controlled
+        ? "active-controlled"
+        : bundle.report.plan.trials.some(
+              (trial) => trial.mode === "active" && trial.authorizationRequired,
+            )
+          ? "active-external"
+          : "passive-external") &&
     bundle.receipt.payload.keyId === `ed25519:${bundle.receipt.publicKey.slice(0, 16)}` &&
     bundle.receipt.payload.scoreBasisPoints === Math.round(bundle.report.score.overall * 100) &&
     bundle.receipt.payload.coverageBasisPoints === Math.round(bundle.report.score.coverage * 100);

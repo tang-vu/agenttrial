@@ -6,6 +6,7 @@ import {
   verifyAuthorizationChallenge,
 } from "./authorizations";
 import { createAuthorizedA2ARun, getRun } from "./index";
+import { verifyBundle } from "@agenttrial/evidence";
 
 describe("A2A domain-control authorization", () => {
   afterEach(() => delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS);
@@ -84,6 +85,7 @@ describe("A2A domain-control authorization", () => {
     expect(completed?.state, completed?.error).toBe("COMPLETED");
     expect(completed?.report?.score.coverage).toBe(100);
     expect(completed?.report?.observations[0]?.status).toBe("completed");
+    expect(verifyBundle(completed!.bundle!).valid).toBe(true);
     expect(messageCalls).toBe(2);
     await new Promise<void>((resolve) => server.close(() => resolve()));
   });
