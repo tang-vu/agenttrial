@@ -4,9 +4,15 @@ import {
   getRun,
   getSigningPublicKey,
   processNextRun,
+  processNextSigningJob,
 } from "../packages/runtime/src/index.ts";
 import { verifyBundle } from "../packages/evidence/src/index.ts";
-import { claimRun, finishRunJob, renewRunLease } from "../packages/runtime/src/persistence.ts";
+import {
+  claimRun,
+  finishRunJob,
+  renewRunLease,
+  saveRun,
+} from "../packages/runtime/src/persistence.ts";
 
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -49,12 +55,23 @@ async function main() {
     throw new Error("Replacement worker could not finish reclaimed job");
 
   const created = createFixtureRun("evidence-researcher");
+  process.env.AGENTTRIAL_EXECUTION_ONLY = "true";
   let claimed = false;
   for (let attempt = 0; attempt < 30 && !claimed; attempt += 1) {
     claimed = await processNextRun("ci-smoke-worker");
     if (!claimed) await new Promise((resolve) => setTimeout(resolve, 100));
   }
   if (!claimed) throw new Error("Worker did not claim the queued run");
+  const unsigned = await getRun(created.id);
+  if (unsigned?.state !== "SCORING" || !unsigned.pendingFinalization || unsigned.bundle)
+    throw new Error("Execution worker did not stop at the unsigned signing boundary");
+  delete process.env.AGENTTRIAL_EXECUTION_ONLY;
+  let signed = false;
+  for (let attempt = 0; attempt < 30 && !signed; attempt += 1) {
+    signed = await processNextSigningJob("ci-smoke-signer");
+    if (!signed) await pause(100);
+  }
+  if (!signed) throw new Error("Signer did not claim the unsigned run");
   const completed = await getRun(created.id);
   if (!completed?.bundle || completed.state !== "COMPLETED")
     throw new Error(`Durable run did not complete: ${completed?.state ?? "missing"}`);
@@ -63,6 +80,21 @@ async function main() {
   });
   if (!verification.valid)
     throw new Error(`Persisted bundle failed verification at ${verification.firstMismatch}`);
+
+  const malicious = createFixtureRun("evidence-researcher");
+  process.env.AGENTTRIAL_EXECUTION_ONLY = "true";
+  if (!(await processNextRun("ci-malicious-worker")))
+    throw new Error("Malicious unsigned probe was not executed");
+  const mutated = await getRun(malicious.id);
+  if (!mutated?.pendingFinalization) throw new Error("Unsigned probe payload missing");
+  mutated.pendingFinalization.report.score.overall = 1000;
+  await saveRun(mutated);
+  delete process.env.AGENTTRIAL_EXECUTION_ONLY;
+  if (!(await processNextSigningJob("ci-validating-signer")))
+    throw new Error("Signer did not inspect malicious unsigned probe");
+  const rejected = await getRun(malicious.id);
+  if (rejected?.state !== "FAILED" || rejected.bundle)
+    throw new Error("Signer accepted a manipulated deterministic score");
   console.log(`Durable PostgreSQL queue smoke passed for ${created.id}`);
 }
 

@@ -7,6 +7,7 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json apps/web/package.json
 COPY apps/worker/package.json apps/worker/package.json
+COPY apps/signer/package.json apps/signer/package.json
 COPY packages/adapters/package.json packages/adapters/package.json
 COPY packages/core/package.json packages/core/package.json
 COPY packages/eas/package.json packages/eas/package.json
@@ -27,6 +28,13 @@ COPY . .
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs worker
 USER worker
 CMD ["pnpm", "--filter", "@agenttrial/worker", "start"]
+
+FROM deps AS signer
+ENV NODE_ENV=production
+COPY . .
+RUN groupadd --system --gid 1002 nodejs && useradd --system --uid 1002 --gid nodejs signer
+USER signer
+CMD ["pnpm", "--filter", "@agenttrial/signer", "start"]
 
 FROM node:24-bookworm-slim AS runner
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0

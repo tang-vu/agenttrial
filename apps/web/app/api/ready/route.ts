@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const persistence = await persistenceReadiness();
-  const ready = persistence.database && persistence.worker;
+  const ready = persistence.database && persistence.worker && persistence.signer;
   const openAIProvider =
     process.env.OPENAI_API_KEY && process.env.OPENAI_MODEL
       ? "configured-optional"

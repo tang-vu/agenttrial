@@ -42,13 +42,19 @@ import {
   claimRun,
   LeaseLostError,
   enqueueRun,
+  enqueueSigningJob,
   finishRunJob,
+  finishSigningJob,
+  claimSigningJob,
   loadRun,
   persistenceConfigured,
   renewRunLease,
+  registerSigningPublicKey,
+  loadSigningPublicKeys,
   snapshotPersistenceConfigured,
   runCancellationRequested,
   saveRun,
+  saveSignedRun,
 } from "./persistence";
 import type { JobLease } from "./persistence";
 export {
@@ -71,6 +77,10 @@ export interface RuntimeRun {
   targetUrl?: string;
   capabilityDescription?: string;
   authorization?: AuthorizationRecord;
+  pendingFinalization?: {
+    report: TrialReport;
+    mode: "active-controlled" | "passive-external" | "active-external";
+  };
   mode: "active-controlled" | "passive-external" | "active-external";
   cancelTokenHash: string;
 }
@@ -94,15 +104,39 @@ if (signingSeedHex && !/^[0-9a-fA-F]{64}$/.test(signingSeedHex))
   throw new Error(
     "AGENTTRIAL_SIGNING_SEED must be exactly 32 bytes encoded as 64 hexadecimal characters",
   );
-if (process.env.DATABASE_URL && !signingSeedHex)
-  throw new Error(
-    "A stable AGENTTRIAL_SIGNING_SEED is required when the durable multi-process runtime is enabled",
-  );
-const signingKey = (globalStore.__agenttrialKey ??= createSigningKey(
-  signingSeedHex ? Uint8Array.from(Buffer.from(signingSeedHex, "hex")) : undefined,
-));
+function requireSigningKey() {
+  if (process.env.AGENTTRIAL_EXECUTION_ONLY === "true")
+    throw new Error("Execution workers cannot access receipt signing authority.");
+  if (process.env.DATABASE_URL && !signingSeedHex)
+    throw new Error("The dedicated signer requires AGENTTRIAL_SIGNING_SEED.");
+  return (globalStore.__agenttrialKey ??= createSigningKey(
+    signingSeedHex ? Uint8Array.from(Buffer.from(signingSeedHex, "hex")) : undefined,
+  ));
+}
 export function getSigningPublicKey() {
-  return Buffer.from(signingKey.publicKey).toString("hex");
+  const configured = process.env.AGENTTRIAL_SIGNING_PUBLIC_KEY;
+  if (configured) {
+    if (!/^[0-9a-fA-F]{64}$/.test(configured))
+      throw new Error("AGENTTRIAL_SIGNING_PUBLIC_KEY must be 32 bytes of hexadecimal data.");
+    return configured.toLowerCase();
+  }
+  return Buffer.from(requireSigningKey().publicKey).toString("hex");
+}
+export async function getSigningKeyRegistry() {
+  const persisted = await loadSigningPublicKeys();
+  if (persisted.length)
+    return persisted.map((key) => ({ ...key, registeredAt: key.registeredAt.toISOString() }));
+  if (persistenceConfigured() && !signingSeedHex && !process.env.AGENTTRIAL_SIGNING_PUBLIC_KEY)
+    return [];
+  const publicKey = getSigningPublicKey();
+  return [
+    {
+      keyId: `ed25519:${publicKey.slice(0, 16)}`,
+      publicKey,
+      status: "active" as const,
+      registeredAt: new Date().toISOString(),
+    },
+  ];
 }
 
 export function subscribe(runId: string, listener: EventListener) {
@@ -145,6 +179,17 @@ async function persistExecutionRun(run: RuntimeRun) {
   const leaseState = activeLeases.get(run.id);
   if (leaseState?.lost) throw new LeaseLostError();
   await saveRun(run, leaseState?.lease);
+}
+async function queueSigningIfSeparated(
+  run: RuntimeRun,
+  report: TrialReport,
+  mode: RuntimeRun["mode"],
+) {
+  if (!(persistenceConfigured() && process.env.AGENTTRIAL_EXECUTION_ONLY === "true")) return false;
+  run.pendingFinalization = { report, mode };
+  run.state = "SCORING";
+  await enqueueSigningJob(run);
+  return true;
 }
 
 export function createFixtureRun(fixture: FixtureId): RuntimeRun {
@@ -440,6 +485,7 @@ async function executeRun(run: RuntimeRun) {
       startedAt,
       completedAt: new Date().toISOString(),
     };
+    if (await queueSigningIfSeparated(run, report, "active-controlled")) return;
     machine.transition("RECEIPT_SIGNED");
     emit(run, machine.state, "receipt.signed", "Evidence root committed with an Ed25519 receipt", {
       algorithm: "Ed25519",
@@ -478,8 +524,8 @@ async function executeRun(run: RuntimeRun) {
         issuedAt: new Date().toISOString(),
         keyId: `ed25519:${publicKey.slice(0, 16)}`,
       },
-      signingKey.secretKey,
-      signingKey.publicKey,
+      requireSigningKey().secretKey,
+      requireSigningKey().publicKey,
     );
     run.report = report;
     run.bundle = {
@@ -729,6 +775,7 @@ async function executeExternalRun(run: RuntimeRun) {
       startedAt,
       completedAt,
     };
+    if (await queueSigningIfSeparated(run, report, "passive-external")) return;
     machine.transition("RECEIPT_SIGNED");
     emit(
       run,
@@ -771,8 +818,8 @@ async function executeExternalRun(run: RuntimeRun) {
         issuedAt: new Date().toISOString(),
         keyId: `ed25519:${publicKey.slice(0, 16)}`,
       },
-      signingKey.secretKey,
-      signingKey.publicKey,
+      requireSigningKey().secretKey,
+      requireSigningKey().publicKey,
     );
     run.report = report;
     run.bundle = {
@@ -1047,6 +1094,7 @@ async function executeAuthorizedExternalRun(run: RuntimeRun) {
       startedAt,
       completedAt,
     };
+    if (await queueSigningIfSeparated(run, report, "active-external")) return;
     machine.transition("RECEIPT_SIGNED");
     emit(run, machine.state, "receipt.signed", "Preparing receipt for authorized A2A evidence", {
       algorithm: "Ed25519",
@@ -1082,8 +1130,8 @@ async function executeAuthorizedExternalRun(run: RuntimeRun) {
         issuedAt: new Date().toISOString(),
         keyId: `ed25519:${publicKey.slice(0, 16)}`,
       },
-      signingKey.secretKey,
-      signingKey.publicKey,
+      requireSigningKey().secretKey,
+      requireSigningKey().publicKey,
     );
     run.report = report;
     run.bundle = {
@@ -1118,4 +1166,161 @@ async function executeAuthorizedExternalRun(run: RuntimeRun) {
     }
     await persistExecutionRun(run);
   }
+}
+
+function appendSignerEvent(
+  run: RuntimeRun,
+  state: PipelineState,
+  type: string,
+  message: string,
+  detail?: Record<string, unknown>,
+) {
+  run.state = state;
+  appendEvent(run.events, {
+    at: new Date().toISOString(),
+    state,
+    type,
+    message,
+    ...(detail ? { detail } : {}),
+  });
+}
+
+function validatePendingReport(report: TrialReport) {
+  if (hashObject(report.plan) !== report.planHash) throw new Error("Unsigned plan hash mismatch.");
+  const claimIds = new Set(report.claims.map((claim) => claim.id));
+  const trialIds = new Set(report.plan.trials.map((trial) => trial.id));
+  const evidenceIds = new Set(report.evidence.map((item) => item.id));
+  if (
+    claimIds.size !== report.claims.length ||
+    trialIds.size !== report.plan.trials.length ||
+    evidenceIds.size !== report.evidence.length
+  )
+    throw new Error("Unsigned evaluation contains duplicate identifiers.");
+  if (
+    report.observations.length !== report.plan.trials.length ||
+    report.observations.some(
+      (observation) =>
+        !trialIds.has(observation.trialId) ||
+        observation.evidenceIds.some((id) => !evidenceIds.has(id)),
+    )
+  )
+    throw new Error("Unsigned evaluation contains missing or dangling observations.");
+  const assertions = report.plan.trials.flatMap((trial) => {
+    const observation = report.observations.find((item) => item.trialId === trial.id);
+    if (!observation) throw new Error(`Missing observation for ${trial.id}.`);
+    return evaluateAssertions(trial.assertions, observation);
+  });
+  const testedClaims = new Set(
+    report.plan.trials
+      .filter((trial) =>
+        report.observations.some(
+          (observation) => observation.trialId === trial.id && observation.status !== "not_tested",
+        ),
+      )
+      .flatMap((trial) => trial.claimIds),
+  );
+  const score = calculateScore(assertions, report.claims, testedClaims);
+  if (
+    hashObject(assertions) !== hashObject(report.assertions) ||
+    hashObject(score) !== hashObject(report.score)
+  )
+    throw new Error("Unsigned assertions or score failed deterministic recomputation.");
+}
+
+function finalizePendingRun(run: RuntimeRun) {
+  const pending = run.pendingFinalization;
+  if (!pending) throw new Error("Unsigned finalization payload is missing.");
+  validatePendingReport(pending.report);
+  appendSignerEvent(
+    run,
+    "RECEIPT_SIGNED",
+    "receipt.signed",
+    "Dedicated signer validated and signed the deterministic evaluation",
+    {
+      algorithm: "Ed25519",
+      trustBoundary: "no target-network access",
+    },
+  );
+  const attestation = attestationStatus();
+  appendSignerEvent(run, "ATTESTING", "attestation.status", attestation.message, {
+    status: attestation.status,
+    network: "Base Sepolia",
+  });
+  appendSignerEvent(run, "COMPLETED", "run.completed", "Signed evidence bundle is ready", {
+    score: pending.report.score.overall,
+    coverage: pending.report.score.coverage,
+  });
+  const root = evidenceRoot(pending.report.evidence);
+  const publicKey = getSigningPublicKey();
+  const key = requireSigningKey();
+  const receipt = signReceipt(
+    {
+      receiptVersion: "1.0.0",
+      methodologyVersion: METHODOLOGY_VERSION,
+      runId: run.id,
+      targetId: pending.report.target.id,
+      mode: pending.mode,
+      planHash: pending.report.planHash,
+      seedCommitment: pending.report.plan.seedCommitment,
+      evidenceRoot: root,
+      evidenceItemHashes: pending.report.evidence.map(hashObject),
+      reportHash: hashObject(pending.report),
+      eventChainHead: run.events.at(-1)!.hash,
+      scoreBasisPoints: Math.round(pending.report.score.overall * 100),
+      coverageBasisPoints: Math.round(pending.report.score.coverage * 100),
+      issuedAt: new Date().toISOString(),
+      keyId: `ed25519:${publicKey.slice(0, 16)}`,
+    },
+    key.secretKey,
+    key.publicKey,
+  );
+  run.report = pending.report;
+  run.bundle = {
+    schemaVersion: "1.0.0",
+    report: pending.report,
+    events: run.events,
+    evidenceRoot: root,
+    receipt,
+    attestation,
+  };
+  delete run.pendingFinalization;
+  run.state = "COMPLETED";
+}
+
+export async function processNextSigningJob(workerId = `signer-${process.pid}`) {
+  if (!persistenceConfigured()) return false;
+  const key = requireSigningKey();
+  const publicKey = Buffer.from(key.publicKey).toString("hex");
+  await registerSigningPublicKey(publicKey);
+  const lease = await claimSigningJob(workerId);
+  if (!lease) return false;
+  const run = await loadRun(lease.id);
+  if (!run) {
+    await finishSigningJob(lease, "Unsigned run snapshot missing");
+    return true;
+  }
+  try {
+    finalizePendingRun(run);
+    await saveSignedRun(run, lease);
+    if (!(await finishSigningJob(lease))) throw new LeaseLostError();
+    runs.set(run.id, run);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Signer validation failed";
+    run.error = message;
+    delete run.bundle;
+    delete run.report;
+    delete run.pendingFinalization;
+    appendSignerEvent(
+      run,
+      "FAILED",
+      "run.failed",
+      "Dedicated signer rejected the unsigned evaluation",
+      {
+        error: message,
+      },
+    );
+    await saveSignedRun(run, lease).catch(() => undefined);
+    await finishSigningJob(lease, message);
+  }
+  return true;
 }

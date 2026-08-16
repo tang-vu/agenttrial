@@ -54,6 +54,12 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(@types/node@24.3.0)(vite@7.3.6(@types/node@24.3.0)(tsx@4.23.12))
 
+  apps/signer:
+    dependencies:
+      "@agenttrial/runtime":
+        specifier: workspace:*
+        version: link:../../packages/runtime
+
   apps/web:
     dependencies:
       "@agenttrial/core":

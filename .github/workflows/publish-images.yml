@@ -23,6 +23,8 @@ jobs:
             target: runner
           - component: worker
             target: worker
+          - component: signer
+            target: signer
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3

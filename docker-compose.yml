@@ -11,13 +11,13 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+    networks: [backend]
   web:
     build: .
     ports: ["3000:3000"]
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_APP_URL: http://localhost:3000
-      AGENTTRIAL_SIGNING_SEED: ${AGENTTRIAL_SIGNING_SEED:?Generate a stable 64-character hex seed}
       DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
     depends_on:
       postgres:
@@ -37,10 +37,31 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
+    networks: [backend, egress]
   worker:
     build:
       context: .
       target: worker
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
+      AGENTTRIAL_EXECUTION_ONLY: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    pids_limit: 128
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 768M }
+    networks: [backend, egress]
+  signer:
+    build:
+      context: .
+      target: signer
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
@@ -52,6 +73,16 @@ services:
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
+    pids_limit: 64
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 256M }
+    networks: [backend]
 
 volumes:
   agenttrial-data:
+
+networks:
+  backend:
+    internal: true
+  egress:

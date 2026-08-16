@@ -8,6 +8,7 @@ AgentTrial is a TypeScript/pnpm workspace whose trust boundary is deliberately s
 | ------------------- | ----------------------------------------------------- | -------------------------- |
 | `apps/web`          | Public UI, API routes, SSE, report and local verifier | Public edge                |
 | `apps/worker`       | Durable queue execution and worker heartbeat          | Isolated execution plane   |
+| `apps/signer`       | Revalidate unsigned results and issue receipts        | No-egress signing plane    |
 | `packages/runtime`  | Explicit orchestration and cancellation               | Trusted coordinator        |
 | `packages/adapters` | Bounded discovery and DNS-pinned HTTP transport       | Untrusted network boundary |
 | `packages/core`     | Schemas, state transitions, assertions, scoring       | Deterministic trusted core |
@@ -26,6 +27,7 @@ sequenceDiagram
     participant R as Runtime
     participant F as Fixture
     participant C as Core verifier
+    participant S as Dedicated signer
     participant B as Browser verifier
     U->>API: POST /api/runs + controlled consent
     API->>R: create fresh UUID + seed
@@ -37,14 +39,16 @@ sequenceDiagram
     end
     R->>C: deterministic assertions + score
     C-->>R: verdict, coverage, evidence links
-    R->>R: evidence root + Ed25519 signature
+    R->>S: unsigned deterministic evaluation
+    S->>S: recompute assertions, score, roots and references
+    S-->>R: Ed25519 receipt or typed rejection
     U->>B: open/download bundle
     B->>B: verify locally without upload
 ```
 
 ## Persistence and deployment
 
-The credential-free development fallback uses a `globalThis` run store. A single-node operator can configure `AGENTTRIAL_DATA_DIR` for atomic snapshots and bounded retention, preserving completed reports and bundles across process or machine restarts. When `DATABASE_URL` is configured, snapshots are revisioned in PostgreSQL, jobs are atomically claimed with `FOR UPDATE SKIP LOCKED`, a separate worker executes them, and SSE polls the durable snapshot so web and worker need not share a process.
+The credential-free development fallback uses a `globalThis` run store. A single-node operator can configure `AGENTTRIAL_DATA_DIR` for atomic snapshots and bounded retention, preserving completed reports and bundles across process or machine restarts. When `DATABASE_URL` is configured, snapshots are revisioned in PostgreSQL, jobs are atomically claimed with fenced leases, a network-capable worker stops at an unsigned `SCORING` snapshot, and a no-egress signer recomputes deterministic outputs before issuing the receipt. SSE polls the durable snapshot so services need not share a process.
 
 The public workstation deployment runs the web origin and Cloudflare Named Tunnel behind a least-privilege Windows supervisor. It is durable for completed artifacts but remains a single-node topology; multi-node or high-volume deployments must use PostgreSQL and the worker service.
 

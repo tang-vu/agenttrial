@@ -7,7 +7,7 @@ export AGENTTRIAL_SIGNING_SEED=$(node -e "console.log(require('crypto').randomBy
 docker compose up --build
 ```
 
-Compose starts PostgreSQL, the Next.js web service, and a separately scalable queue worker. Both web and worker must receive the same managed signing seed. PostgreSQL snapshots allow GET, bundle, and SSE endpoints to work across processes and restarts.
+Compose starts PostgreSQL, the Next.js web service, a separately scalable queue worker, and a dedicated signer. Only the signer receives the managed seed; web and the target-facing worker have no signing authority. The signer is attached only to the internal database network, recomputes the plan, observations, assertions, score, roots, and references, then publishes the public key registry through PostgreSQL.
 
 For a single-node deployment, set `AGENTTRIAL_DATA_DIR` to an access-controlled persistent directory. The in-process executor then writes each run snapshot atomically, so completed reports and bundles survive application or machine restarts. `AGENTTRIAL_RETENTION_DAYS` defaults to 30 and cleanup runs during readiness checks. Terminal in-memory runs are capped separately. This is not a substitute for PostgreSQL and the worker queue when horizontally scaling.
 
@@ -18,7 +18,7 @@ For Vercel, use the repository root for web only and point `DATABASE_URL` at man
 1. Managed migrations/backups, retention, distributed per-target limits, and idempotency records.
 2. LISTEN/NOTIFY or Redis pub-sub can replace the current bounded PostgreSQL SSE polling at higher scale.
 3. A separate browser worker with denied private-network egress, non-root Chromium, no receipt key, and strict quotas before enabling browser tests.
-4. Web/receipt service with signing key in managed KMS/secret storage.
+4. Replace the dedicated signer container's seed with managed KMS/HSM signing for higher-assurance deployments.
 5. Immutable object storage for canonical bundles and a pinned public-key registry.
 
 ## Base Sepolia
@@ -28,5 +28,5 @@ Fund a dedicated testnet-only wallet, set `EAS_RPC_URL`, `EAS_PRIVATE_KEY`, and 
 ## GitHub delivery workflows
 
 - `quality-gate` provisions PostgreSQL and verifies the durable queue in addition to all unit, build, browser and security checks.
-- `publish-deployment-images` builds separate web and worker targets and pushes them to GHCR only after the operator types `PUBLISH` and approves the `production` environment.
+- `publish-deployment-images` builds separate web, worker, and signer targets and pushes them to GHCR only after the operator types `PUBLISH` and approves the `production` environment.
 - `attest-base-sepolia` downloads a reviewed HTTPS bundle, verifies its trusted receipt locally, and broadcasts only after `ATTEST_BASE_SEPOLIA` plus approval of the protected `base-sepolia` environment.

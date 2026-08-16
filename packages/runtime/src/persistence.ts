@@ -161,6 +161,25 @@ async function initialize() {
         worker_id text PRIMARY KEY,
         last_seen timestamptz NOT NULL DEFAULT now()
       )`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_signing_jobs (
+        id uuid PRIMARY KEY REFERENCES agenttrial_runs(id) ON DELETE CASCADE,
+        status text NOT NULL DEFAULT 'queued',
+        attempts integer NOT NULL DEFAULT 0,
+        worker_id text,
+        lease_token text,
+        locked_until timestamptz,
+        available_at timestamptz NOT NULL DEFAULT now(),
+        finished_at timestamptz,
+        last_error text
+      )`;
+      await db`CREATE INDEX IF NOT EXISTS agenttrial_signing_jobs_queue_idx
+        ON agenttrial_signing_jobs(status, available_at)`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_signing_keys (
+        key_id text PRIMARY KEY,
+        public_key text NOT NULL,
+        status text NOT NULL,
+        registered_at timestamptz NOT NULL DEFAULT now()
+      )`;
     })();
   return initialized;
 }
@@ -289,6 +308,7 @@ export async function persistenceReadiness() {
           configured: false,
           database: false,
           worker: true,
+          signer: true,
           localSnapshots: false,
           message: "local snapshot directory unavailable",
         };
@@ -298,6 +318,7 @@ export async function persistenceReadiness() {
       configured: false,
       database: true,
       worker: true,
+      signer: true,
       localSnapshots,
       message: localSnapshots
         ? "single-node runtime with durable snapshots"
@@ -307,23 +328,104 @@ export async function persistenceReadiness() {
   try {
     await initialize();
     await sql()`SELECT 1`;
-    const workers =
-      await sql()`SELECT count(*)::int AS count FROM agenttrial_workers WHERE last_seen > now() - interval '30 seconds'`;
+    const workers = await sql()`SELECT count(*)::int AS count FROM agenttrial_workers
+      WHERE worker_id LIKE 'agenttrial-worker-%' AND last_seen > now() - interval '30 seconds'`;
+    const signers = await sql()`SELECT count(*)::int AS count FROM agenttrial_workers
+      WHERE worker_id LIKE 'agenttrial-signer-%' AND last_seen > now() - interval '30 seconds'`;
     const worker = Number(workers[0]?.count ?? 0) > 0;
+    const signer = Number(signers[0]?.count ?? 0) > 0;
     return {
       configured: true,
       database: true,
       worker,
+      signer,
       localSnapshots: Boolean(snapshotDirectory()),
-      message: worker ? "database and worker ready" : "no recent worker heartbeat",
+      message:
+        worker && signer
+          ? "database, worker, and signer ready"
+          : !worker
+            ? "no recent worker heartbeat"
+            : "no recent signer heartbeat",
     };
   } catch {
     return {
       configured: true,
       database: false,
       worker: false,
+      signer: false,
       localSnapshots: Boolean(snapshotDirectory()),
       message: "database unavailable",
     };
   }
+}
+
+export async function enqueueSigningJob(run: RuntimeRun) {
+  await initialize();
+  const db = sql();
+  await db`UPDATE agenttrial_runs SET state = ${run.state}, revision = ${run.events.length},
+    snapshot = ${db.json(run as never)}, updated_at = now() WHERE id = ${run.id}::uuid`;
+  await db`INSERT INTO agenttrial_signing_jobs (id) VALUES (${run.id}::uuid)
+    ON CONFLICT (id) DO NOTHING`;
+}
+
+export async function claimSigningJob(
+  workerId: string,
+  leaseMs = 30_000,
+): Promise<JobLease | undefined> {
+  await initialize();
+  const token = randomUUID();
+  const rows = await sql()`WITH next_job AS (
+      SELECT id FROM agenttrial_signing_jobs
+      WHERE ((status = 'queued' AND available_at <= now())
+        OR (status = 'running' AND locked_until < now())) AND attempts < 3
+      ORDER BY available_at FOR UPDATE SKIP LOCKED LIMIT 1
+    ) UPDATE agenttrial_signing_jobs SET status = 'running', worker_id = ${workerId},
+      lease_token = ${token}, attempts = attempts + 1,
+      locked_until = now() + (${leaseMs} * interval '1 millisecond')
+    WHERE id = (SELECT id FROM next_job) RETURNING id`;
+  const id = rows[0]?.id as string | undefined;
+  return id ? { id, workerId, token, leaseMs } : undefined;
+}
+
+export async function saveSignedRun(run: RuntimeRun, lease: JobLease) {
+  await initialize();
+  const db = sql();
+  const rows =
+    await db`UPDATE agenttrial_runs SET state = ${run.state}, revision = ${run.events.length},
+    snapshot = ${db.json(run as never)}, updated_at = now()
+    WHERE id = ${run.id}::uuid AND EXISTS (
+      SELECT 1 FROM agenttrial_signing_jobs WHERE id = ${run.id}::uuid
+        AND status = 'running' AND worker_id = ${lease.workerId}
+        AND lease_token = ${lease.token} AND locked_until > now()
+    ) RETURNING id`;
+  if (rows.length !== 1) throw new LeaseLostError();
+}
+
+export async function finishSigningJob(lease: JobLease, error?: string) {
+  const rows =
+    await sql()`UPDATE agenttrial_signing_jobs SET status = ${error ? "failed" : "completed"},
+    finished_at = now(), locked_until = null, lease_token = null, last_error = ${error ?? null}
+    WHERE id = ${lease.id}::uuid AND status = 'running' AND worker_id = ${lease.workerId}
+      AND lease_token = ${lease.token} AND locked_until > now() RETURNING id`;
+  return rows.length === 1;
+}
+
+export async function registerSigningPublicKey(publicKey: string) {
+  await initialize();
+  const keyId = `ed25519:${publicKey.slice(0, 16)}`;
+  await sql()`UPDATE agenttrial_signing_keys SET status = 'previous' WHERE status = 'active' AND key_id <> ${keyId}`;
+  await sql()`INSERT INTO agenttrial_signing_keys (key_id, public_key, status)
+    VALUES (${keyId}, ${publicKey}, 'active') ON CONFLICT (key_id) DO UPDATE SET status = 'active'`;
+}
+
+export async function loadSigningPublicKeys() {
+  if (!persistenceConfigured()) return [];
+  await initialize();
+  return (await sql()`SELECT key_id AS "keyId", public_key AS "publicKey", status,
+    registered_at AS "registeredAt" FROM agenttrial_signing_keys ORDER BY registered_at DESC`) as Array<{
+    keyId: string;
+    publicKey: string;
+    status: "active" | "previous" | "revoked";
+    registeredAt: Date;
+  }>;
 }

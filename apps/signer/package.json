@@ -1,0 +1,12 @@
+{
+  "name": "@agenttrial/signer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "pnpm exec tsx src/index.ts"
+  },
+  "dependencies": {
+    "@agenttrial/runtime": "workspace:*"
+  }
+}

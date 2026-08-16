@@ -62,7 +62,7 @@ pnpm secret-scan
 - Passive website/OpenAPI/OpenAI-compatible/A2A/GitHub discovery with DNS/IP pinning, redirect revalidation, byte/time budgets, redaction, and explicit low coverage.
 - One-time HTTPS domain-control challenges and a real, bounded A2A HTTP+JSON 1.0 active adapter with two-call repeatability evidence and private session capabilities.
 - Base Sepolia EAS schema encoding, guarded registration/attestation scripts, and local receipt fallback.
-- PostgreSQL snapshots, a `SKIP LOCKED` durable job queue, separate worker, cross-process SSE polling, and private cancellation capabilities.
+- PostgreSQL snapshots, fenced durable queues, a target-facing worker with no signing seed, a no-egress validating signer, cross-process SSE polling, and private cancellation capabilities.
 - OpenAPI 3.1 schemas, a truthful machine descriptor, `llms.txt`, health, and readiness endpoints. A2A is not advertised until its full task lifecycle exists.
 
 ## Architecture
@@ -73,15 +73,17 @@ flowchart LR
     W --> P[(PostgreSQL + durable queue)]
     P --> R[Isolated trial worker]
     R --> D[Discovery + deterministic planner]
-    R --> F[Controlled fixture adapter]
+    R --> F[Controlled fixture / authorized A2A adapter]
     F --> A[Code assertions]
     A --> S[Versioned scorer]
-    S --> E[Canonical evidence + Ed25519]
+    S --> Q[(Unsigned signing queue)]
+    Q --> K[No-egress validating signer]
+    K --> E[Canonical evidence + Ed25519]
     E --> V[Browser-local verifier]
     E -. optional .-> B[Base Sepolia EAS]
 ```
 
-Workspace packages separate typed domain logic (`core`), adapters, fixtures, evidence, network safety, planner providers, runtime orchestration, and EAS encoding. Without `DATABASE_URL`, local development intentionally falls back to one process; Docker Compose enables the durable PostgreSQL/worker path.
+Workspace packages separate typed domain logic (`core`), adapters, fixtures, evidence, network safety, planner providers, runtime orchestration, and EAS encoding. Without `DATABASE_URL`, local development intentionally falls back to one process; Docker Compose enables the durable PostgreSQL/worker/signer path.
 
 ## Environment
 
@@ -117,7 +119,7 @@ These commands spend Base Sepolia test ETH. Mainnet broadcasting is intentionall
 
 ## Deploy
 
-For the durable local stack, generate a shared signing seed and start PostgreSQL, web, and worker:
+For the durable local stack, generate a signing seed and start PostgreSQL, web, worker, and the isolated signer. Compose injects the seed only into the signer:
 
 ```bash
 $env:AGENTTRIAL_SIGNING_SEED = node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
