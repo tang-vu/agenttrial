@@ -1,5 +1,11 @@
 import { randomBytes, randomUUID } from "node:crypto";
-import { discoverPublicTarget, safePublicFetch } from "@agenttrial/adapters";
+import {
+  discoverPublicTarget,
+  parseA2AAgentCard,
+  safeAuthorizedA2ASend,
+  safePublicFetch,
+  validateAuthorizedA2ASelection,
+} from "@agenttrial/adapters";
 import {
   TrialStateMachine,
   calculateScore,
@@ -11,6 +17,7 @@ import {
   type RunEvent,
   type TrialReport,
   type TrialPlan,
+  type AuthorizationRecord,
 } from "@agenttrial/core";
 import {
   appendEvent,
@@ -44,6 +51,12 @@ import {
   saveRun,
 } from "./persistence";
 import type { JobLease } from "./persistence";
+export {
+  consumeAuthorization,
+  issueAuthorizationChallenge,
+  publicAuthorization,
+  verifyAuthorizationChallenge,
+} from "./authorizations";
 export { closePersistence, heartbeatWorker, persistenceReadiness } from "./persistence";
 
 export interface RuntimeRun {
@@ -57,7 +70,8 @@ export interface RuntimeRun {
   fixture?: FixtureId;
   targetUrl?: string;
   capabilityDescription?: string;
-  mode: "active-controlled" | "passive-external";
+  authorization?: AuthorizationRecord;
+  mode: "active-controlled" | "passive-external" | "active-external";
   cancelTokenHash: string;
 }
 export type EventListener = (event: RunEvent) => void;
@@ -70,7 +84,10 @@ const globalStore = globalThis as typeof globalThis & {
 export const runs = (globalStore.__agenttrialRuns ??= new Map());
 const listeners = (globalStore.__agenttrialListeners ??= new Map());
 const cancellationCapabilities = new Map<string, string>();
-const activeLeases = new Map<string, { lease: JobLease; lost: boolean }>();
+const activeLeases = new Map<
+  string,
+  { lease: JobLease; lost: boolean; controller: AbortController }
+>();
 const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
 const signingSeedHex = process.env.AGENTTRIAL_SIGNING_SEED;
 if (signingSeedHex && !/^[0-9a-fA-F]{64}$/.test(signingSeedHex))
@@ -121,7 +138,7 @@ function emit(
 }
 const pause = (ms = 90) => new Promise((resolve) => setTimeout(resolve, ms));
 async function ensureActive(run: RuntimeRun) {
-  if (activeLeases.get(run.id)?.lost) throw new Error("LEASE_LOST");
+  if (activeLeases.get(run.id)?.lost) throw new LeaseLostError();
   if (run.cancelled || (await runCancellationRequested(run.id))) throw new Error("CANCELLED");
 }
 async function persistExecutionRun(run: RuntimeRun) {
@@ -179,6 +196,32 @@ export function createExternalRun(targetUrl: string, capabilityDescription?: str
   else void executeExternalRun(run);
   return run;
 }
+export function createAuthorizedA2ARun(authorization: AuthorizationRecord): RuntimeRun {
+  pruneTerminalRuns();
+  if (authorization.status !== "consumed") throw new Error("Authorization must be consumed.");
+  const cancelToken = randomBytes(32).toString("hex");
+  const run: RuntimeRun = {
+    id: randomUUID(),
+    state: "CREATED",
+    events: [],
+    cancelled: false,
+    targetUrl: authorization.cardUrl,
+    authorization,
+    mode: "active-external",
+    cancelTokenHash: hashText(cancelToken),
+  };
+  cancellationCapabilities.set(run.id, cancelToken);
+  runs.set(run.id, run);
+  emit(run, "CREATED", "run.created", "Authorized A2A evaluation workspace created", {
+    target: authorization.origin,
+    mode: "active",
+    authorizationId: authorization.id,
+    scopeHash: authorization.scopeHash,
+  });
+  if (persistenceConfigured()) void enqueueRun(run).catch((error) => failQueuedRun(run, error));
+  else void executeAuthorizedExternalRun(run);
+  return run;
+}
 function pruneTerminalRuns() {
   const terminal = [...runs.values()]
     .filter((run) => ["COMPLETED", "FAILED", "CANCELLED"].includes(run.state))
@@ -203,7 +246,7 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
     return true;
   }
   runs.set(lease.id, run);
-  const leaseState = { lease, lost: false };
+  const leaseState = { lease, lost: false, controller: new AbortController() };
   activeLeases.set(lease.id, leaseState);
   let renewing = false;
   const renewal = setInterval(
@@ -212,10 +255,14 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
       renewing = true;
       void renewRunLease(lease)
         .then((renewed) => {
-          if (!renewed) leaseState.lost = true;
+          if (!renewed) {
+            leaseState.lost = true;
+            leaseState.controller.abort(new LeaseLostError());
+          }
         })
         .catch(() => {
           leaseState.lost = true;
+          leaseState.controller.abort(new LeaseLostError());
         })
         .finally(() => {
           renewing = false;
@@ -225,6 +272,7 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
   );
   try {
     if (run.mode === "passive-external") await executeExternalRun(run);
+    else if (run.mode === "active-external") await executeAuthorizedExternalRun(run);
     else await executeRun(run);
     if (leaseState.lost) throw new LeaseLostError();
     await saveRun(run, lease);
@@ -234,6 +282,7 @@ export async function processNextRun(workerId = `worker-${process.pid}`) {
     await finishRunJob(lease, error instanceof Error ? error.message : "Worker failure");
   } finally {
     clearInterval(renewal);
+    leaseState.controller.abort();
     activeLeases.delete(lease.id);
   }
   return true;
@@ -475,7 +524,11 @@ async function executeExternalRun(run: RuntimeRun) {
       "Fetching bounded public metadata through a DNS-pinned connection",
     );
     await ensureActive(run);
-    const discovery = await discoverPublicTarget(run.targetUrl!);
+    const discovery = await discoverPublicTarget(run.targetUrl!, {
+      ...(activeLeases.get(run.id)?.controller.signal
+        ? { signal: activeLeases.get(run.id)!.controller.signal }
+        : {}),
+    });
     let claims = discovery.claims;
     if (run.capabilityDescription)
       claims = [
@@ -597,6 +650,9 @@ async function executeExternalRun(run: RuntimeRun) {
       timeoutMs: 6_000,
       maxBytes: 1_000_000,
       maxRedirects: 3,
+      ...(activeLeases.get(run.id)?.controller.signal
+        ? { signal: activeLeases.get(run.id)!.controller.signal }
+        : {}),
     });
     const completedAt = new Date().toISOString();
     const observation: Observation = {
@@ -742,6 +798,322 @@ async function executeExternalRun(run: RuntimeRun) {
         "run.failed",
         "Public target request failed; no capability verdict was inferred",
         { error: run.error, failureClass: "request_failed" },
+      );
+    }
+    await persistExecutionRun(run);
+  }
+}
+
+async function executeAuthorizedExternalRun(run: RuntimeRun) {
+  const machine = new TrialStateMachine();
+  const startedAt = new Date().toISOString();
+  const authorization = run.authorization;
+  if (!authorization || authorization.status !== "consumed")
+    throw new Error("A consumed authorization is required for active execution.");
+  try {
+    machine.transition("DISCOVERING");
+    emit(
+      run,
+      machine.state,
+      "discovery.started",
+      "Revalidating the authorized Agent Card before active execution",
+      { authorizationId: authorization.id, scopeHash: authorization.scopeHash },
+    );
+    await ensureActive(run);
+    const cardResponse = await safePublicFetch(authorization.cardUrl, {
+      timeoutMs: 5_000,
+      maxBytes: 64 * 1024,
+      maxRedirects: 0,
+      ...(activeLeases.get(run.id)?.controller.signal
+        ? { signal: activeLeases.get(run.id)!.controller.signal }
+        : {}),
+    });
+    if (hashText(cardResponse.body) !== authorization.cardHash)
+      throw new Error("Agent Card changed after authorization; active execution was blocked.");
+    const card = parseA2AAgentCard(cardResponse.body);
+    const selected = validateAuthorizedA2ASelection(
+      card,
+      authorization.interfaceUrl,
+      authorization.skillId,
+    );
+    const claims = [
+      {
+        id: `claim_a2a_${authorization.skillId}`,
+        capability: selected.skill.name.slice(0, 240),
+        advertisedInput: "A2A text/plain message",
+        advertisedOutput: selected.skill.description.slice(0, 500),
+        dependencies: ["A2A HTTP+JSON 1.0"],
+        requiredPermissions: ["HTTPS domain-control authorization"],
+        successCondition: `Response contains the authorized expected marker: ${authorization.expectedSubstring}`,
+        evidenceSource: authorization.cardUrl,
+        confidence: 0.98,
+        discoveryLocation: `skills[id=${authorization.skillId}]`,
+      },
+    ];
+    machine.transition("CLAIMS_EXTRACTED");
+    emit(run, machine.state, "claims.normalized", "One authorized A2A skill claim selected", {
+      skillId: authorization.skillId,
+    });
+    machine.transition("PLANNING");
+    emit(run, machine.state, "planner.started", "Constructing a bounded A2A SendMessage trial", {
+      provider: "deterministic A2A planner",
+      maxMessages: authorization.grant.maxMessages,
+    });
+    const seed = randomBytes(16).toString("hex");
+    const seedCommitment = hashObject({ seed, runId: run.id, scopeHash: authorization.scopeHash });
+    const trialId = "trial_authorized_a2a_send";
+    const plan: TrialPlan = {
+      version: METHODOLOGY_VERSION,
+      seedCommitment,
+      trials: [
+        {
+          id: trialId,
+          claimIds: [claims[0]!.id],
+          category: "Authorized A2A functionality and structured output",
+          input: {
+            protocol: "A2A HTTP+JSON 1.0",
+            skillId: authorization.skillId,
+            messageHash: hashText(authorization.testMessage),
+            authorizationId: authorization.id,
+            scopeHash: authorization.scopeHash,
+          },
+          expectedBehavior:
+            "The authorized skill returns a conforming text response containing the builder-declared marker on two independent executions.",
+          assertions: [
+            {
+              id: "assert_a2a_expected_marker",
+              type: "contains",
+              field: "responseText",
+              expected: authorization.expectedSubstring,
+              dimension: "capability",
+              weight: 3,
+              description: "Authorized A2A output contains the expected capability marker",
+            },
+            {
+              id: "assert_a2a_protocol",
+              type: "equals",
+              field: "protocolValid",
+              expected: true,
+              dimension: "evidence",
+              weight: 2,
+              description: "Response conforms to the bounded A2A HTTP+JSON profile",
+            },
+            {
+              id: "assert_a2a_repeatable",
+              type: "repeatable",
+              field: "repeatable",
+              expected: true,
+              dimension: "reliability",
+              weight: 2,
+              description: "Independent authorized executions return the same normalized text",
+            },
+            {
+              id: "assert_a2a_budget",
+              type: "lte",
+              field: "$calls",
+              expected: authorization.grant.maxMessages,
+              dimension: "efficiency",
+              weight: 1,
+              description: "Active A2A execution stayed within the authorized message budget",
+            },
+            {
+              id: "assert_a2a_latency",
+              type: "lte",
+              field: "$latency",
+              expected: authorization.grant.timeoutMs * authorization.grant.maxMessages,
+              dimension: "efficiency",
+              weight: 1,
+              description: "Authorized messages completed within the sealed wall-clock budget",
+            },
+          ],
+          timeoutMs: authorization.grant.timeoutMs * authorization.grant.maxMessages,
+          maxCalls: authorization.grant.maxMessages,
+          severity: "high",
+          seed: seedCommitment.slice(0, 16),
+          mode: "active",
+          authorizationRequired: true,
+        },
+      ],
+    };
+    machine.transition("PLAN_SEALED");
+    const planHash = hashObject(plan);
+    emit(run, machine.state, "plan.sealed", "Authorized A2A plan sealed before execution", {
+      planHash,
+      authorizationId: authorization.id,
+    });
+    machine.transition("EXECUTING");
+    const results = [];
+    for (let index = 0; index < authorization.grant.maxMessages; index += 1) {
+      await ensureActive(run);
+      emit(run, machine.state, "tool.call", "Sending one authorized A2A message", {
+        trialId,
+        call: index + 1,
+        maxCalls: authorization.grant.maxMessages,
+      });
+      results.push(
+        await safeAuthorizedA2ASend(authorization.interfaceUrl, authorization.testMessage, run.id, {
+          timeoutMs: authorization.grant.timeoutMs,
+          maxRequestBytes: authorization.grant.maxRequestBytes,
+          maxResponseBytes: authorization.grant.maxResponseBytes,
+          ...(authorization.tenant ? { tenant: authorization.tenant } : {}),
+          ...(activeLeases.get(run.id)?.controller.signal
+            ? { signal: activeLeases.get(run.id)!.controller.signal }
+            : {}),
+        }),
+      );
+    }
+    const completedAt = new Date().toISOString();
+    const normalizedTexts = results.map((result) => result.text.trim().replace(/\s+/g, " "));
+    const evidence: EvidenceItem[] = results.map((result, index) => ({
+      id: `ev_a2a_${index + 1}`,
+      kind: "authorized-a2a-response",
+      trialId,
+      capturedAt: completedAt,
+      data: redact({
+        authorizationId: authorization.id,
+        scopeHash: authorization.scopeHash,
+        ...(authorization.verificationEvidence?.proofHash
+          ? { proofHash: authorization.verificationEvidence.proofHash }
+          : {}),
+        url: result.response.url,
+        status: result.response.status,
+        latencyMs: result.response.latencyMs,
+        bytes: result.response.bytes,
+        protocolValid: result.protocolValid,
+        ...(result.taskState ? { taskState: result.taskState } : {}),
+        responseText: result.text,
+      }) as Record<string, unknown>,
+      redactions: [],
+    }));
+    const observation: Observation = {
+      trialId,
+      startedAt,
+      completedAt,
+      latencyMs: results.reduce((sum, result) => sum + result.response.latencyMs, 0),
+      calls: results.length,
+      status: results.some((result) => result.capabilityFailed) ? "capability_failed" : "completed",
+      output: {
+        responseText: results[0]?.text ?? "",
+        protocolValid: results.every((result) => result.protocolValid),
+        repeatable:
+          normalizedTexts.length === authorization.grant.maxMessages &&
+          new Set(normalizedTexts).size === 1,
+      },
+      evidenceIds: evidence.map((item) => item.id),
+      retryCount: 0,
+    };
+    emit(run, machine.state, "evidence.captured", "Authorized A2A responses captured", {
+      calls: observation.calls,
+      evidenceIds: observation.evidenceIds,
+    });
+    machine.transition("VERIFYING");
+    const assertions = evaluateAssertions(plan.trials[0]!.assertions, observation);
+    for (const result of assertions)
+      emit(
+        run,
+        machine.state,
+        result.passed ? "assertion.passed" : "assertion.failed",
+        result.description,
+        { assertionId: result.id, evidenceIds: result.evidenceIds },
+      );
+    machine.transition("SCORING");
+    const score = calculateScore(assertions, claims, new Set([claims[0]!.id]));
+    emit(
+      run,
+      machine.state,
+      "score.calculated",
+      `Authorized capability score: ${score.overall}/100`,
+      {
+        coverage: score.coverage,
+      },
+    );
+    const report: TrialReport = {
+      runId: run.id,
+      target: {
+        id: `a2a:${authorization.origin}:${authorization.skillId}`,
+        name: card.name,
+        type: "a2a",
+        locator: authorization.cardUrl,
+        controlled: false,
+      },
+      state: "COMPLETED",
+      claims,
+      plan,
+      planHash,
+      observations: [observation],
+      assertions,
+      evidence,
+      score,
+      startedAt,
+      completedAt,
+    };
+    machine.transition("RECEIPT_SIGNED");
+    emit(run, machine.state, "receipt.signed", "Preparing receipt for authorized A2A evidence", {
+      algorithm: "Ed25519",
+    });
+    machine.transition("ATTESTING");
+    const attestation = attestationStatus();
+    emit(run, machine.state, "attestation.status", attestation.message, {
+      status: attestation.status,
+      network: "Base Sepolia",
+    });
+    machine.transition("COMPLETED");
+    emit(run, machine.state, "run.completed", "Authorized A2A evaluation complete", {
+      score: score.overall,
+      coverage: score.coverage,
+    });
+    const root = evidenceRoot(evidence);
+    const publicKey = getSigningPublicKey();
+    const receipt = signReceipt(
+      {
+        receiptVersion: "1.0.0",
+        methodologyVersion: METHODOLOGY_VERSION,
+        runId: run.id,
+        targetId: report.target.id,
+        mode: "active-external",
+        planHash,
+        seedCommitment,
+        evidenceRoot: root,
+        evidenceItemHashes: evidence.map(hashObject),
+        reportHash: hashObject(report),
+        eventChainHead: run.events.at(-1)!.hash,
+        scoreBasisPoints: Math.round(score.overall * 100),
+        coverageBasisPoints: Math.round(score.coverage * 100),
+        issuedAt: new Date().toISOString(),
+        keyId: `ed25519:${publicKey.slice(0, 16)}`,
+      },
+      signingKey.secretKey,
+      signingKey.publicKey,
+    );
+    run.report = report;
+    run.bundle = {
+      schemaVersion: "1.0.0",
+      report,
+      events: run.events,
+      evidenceRoot: root,
+      receipt,
+      attestation,
+    };
+    run.state = "COMPLETED";
+    await persistExecutionRun(run);
+  } catch (error) {
+    if ((error as Error).message === "CANCELLED") {
+      run.state = "CANCELLED";
+      emit(run, "CANCELLED", "run.cancelled", "Authorized A2A trial cancelled");
+    } else if (error instanceof LeaseLostError) {
+      throw error;
+    } else {
+      run.state = "FAILED";
+      run.error = error instanceof Error ? error.message : "Unknown authorized A2A failure";
+      emit(
+        run,
+        "FAILED",
+        "run.failed",
+        "Authorized target request failed; no capability verdict was inferred",
+        {
+          error: run.error,
+          failureClass: "request_failed",
+        },
       );
     }
     await persistExecutionRun(run);

@@ -28,6 +28,22 @@ export function NewTrialForm() {
   const [externalUrl, setExternalUrl] = useState("");
   const [capabilityDescription, setCapabilityDescription] = useState("");
   const [externalLoading, setExternalLoading] = useState(false);
+  const [active, setActive] = useState({
+    cardUrl: "",
+    interfaceUrl: "",
+    skillId: "",
+    proofUrl: "",
+    testMessage: "",
+    expectedSubstring: "",
+  });
+  const [challenge, setChallenge] = useState<{
+    id: string;
+    verificationToken: string;
+    document: Record<string, unknown>;
+    proofUrl: string;
+  }>();
+  const [authorizationVerified, setAuthorizationVerified] = useState(false);
+  const [activeLoading, setActiveLoading] = useState(false);
   async function start() {
     setLoading(true);
     setError("");
@@ -66,6 +82,69 @@ export function NewTrialForm() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start passive discovery");
       setExternalLoading(false);
+    }
+  }
+  async function createChallenge() {
+    setActiveLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/authorizations", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(active),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setChallenge(data);
+      setAuthorizationVerified(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not create authorization challenge");
+    } finally {
+      setActiveLoading(false);
+    }
+  }
+  async function verifyChallenge() {
+    if (!challenge) return;
+    setActiveLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/authorizations/${challenge.id}/verify`, {
+        method: "POST",
+        headers: { "x-agenttrial-verification-token": challenge.verificationToken },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setAuthorizationVerified(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not verify domain control");
+    } finally {
+      setActiveLoading(false);
+    }
+  }
+  async function startAuthorized() {
+    if (!challenge) return;
+    setActiveLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/runs", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-agenttrial-verification-token": challenge.verificationToken,
+        },
+        body: JSON.stringify({
+          mode: "active",
+          authorizationId: challenge.id,
+          activeConsent: true,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      sessionStorage.setItem(`agenttrial:cancel:${data.runId}`, data.cancelToken);
+      router.push(`/live/${data.runId}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not start authorized evaluation");
+      setActiveLoading(false);
     }
   }
   return (
@@ -164,6 +243,81 @@ export function NewTrialForm() {
         >
           {externalLoading ? "Starting passive evaluation…" : "Evaluate public surface →"}
         </button>
+      </section>
+      <section className="external-card">
+        <div className="section-label">
+          <span>03</span>
+          <div>
+            <strong>Authorized A2A agent</strong>
+            <small>Active HTTP+JSON 1.0 evaluation</small>
+          </div>
+        </div>
+        <div className="notice">
+          <strong>HTTPS domain-control authorization</strong>
+          <p>
+            Publish one short-lived challenge on the target origin. This proves control of the HTTPS
+            domain for the exact card, interface, skill, message, and two-call budget—not legal
+            ownership or safety.
+          </p>
+        </div>
+        {(
+          [
+            ["cardUrl", "Agent Card URL", "https://agent.example/.well-known/agent-card.json"],
+            ["interfaceUrl", "A2A interface URL", "https://agent.example/a2a/"],
+            ["skillId", "Advertised skill ID", "research"],
+            [
+              "proofUrl",
+              "Proof document URL",
+              "https://agent.example/.well-known/agenttrial-proof.json",
+            ],
+            ["testMessage", "Bounded test message", "Return the marker EVIDENCE-OK."],
+            ["expectedSubstring", "Expected response marker", "EVIDENCE-OK"],
+          ] as const
+        ).map(([key, label, placeholder]) => (
+          <label key={key}>
+            {label}
+            <input
+              type={key.endsWith("Url") ? "url" : "text"}
+              value={active[key]}
+              onChange={(event) =>
+                setActive((current) => ({ ...current, [key]: event.target.value }))
+              }
+              placeholder={placeholder}
+              disabled={Boolean(challenge)}
+            />
+          </label>
+        ))}
+        {!challenge ? (
+          <button
+            className="button secondary full"
+            onClick={createChallenge}
+            disabled={activeLoading || Object.values(active).some((value) => !value)}
+          >
+            {activeLoading ? "Inspecting Agent Card…" : "Create authorization challenge →"}
+          </button>
+        ) : (
+          <div className="evidence-card">
+            <strong>Publish this exact JSON at {challenge.proofUrl}</strong>
+            <pre>{JSON.stringify(challenge.document, null, 2)}</pre>
+            <small>
+              The private verification token stays only in this browser session and is never
+              included in the public proof or evidence bundle.
+            </small>
+            {!authorizationVerified ? (
+              <button
+                className="button secondary full"
+                onClick={verifyChallenge}
+                disabled={activeLoading}
+              >
+                {activeLoading ? "Verifying proof…" : "Verify published proof →"}
+              </button>
+            ) : (
+              <button className="button full" onClick={startAuthorized} disabled={activeLoading}>
+                {activeLoading ? "Sealing active trial…" : "Run authorized A2A trial →"}
+              </button>
+            )}
+          </div>
+        )}
       </section>
     </div>
   );

@@ -14,6 +14,7 @@
     "@agenttrial/fixtures": "workspace:*",
     "@agenttrial/planner": "workspace:*",
     "@agenttrial/security": "workspace:*",
-    "postgres": "3.4.8"
+    "postgres": "3.4.8",
+    "zod": "4.4.3"
   }
 }

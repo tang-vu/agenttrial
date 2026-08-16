@@ -15,9 +15,45 @@ const spec = {
   },
   servers: [{ url: "/" }],
   paths: {
+    "/api/authorizations": {
+      post: {
+        summary: "Issue a short-lived A2A HTTPS domain-control challenge",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/AuthorizationChallengeRequest" },
+            },
+          },
+        },
+        responses: {
+          "201": { description: "Exact proof document and private verification token issued" },
+          "400": { $ref: "#/components/responses/Error" },
+        },
+      },
+    },
+    "/api/authorizations/{id}/verify": {
+      post: {
+        summary: "Verify the exact published proof and unchanged Agent Card",
+        parameters: [
+          idParameter,
+          {
+            name: "x-agenttrial-verification-token",
+            in: "header",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
+        responses: {
+          "200": { description: "Authorization verified" },
+          "400": { $ref: "#/components/responses/Error" },
+          "401": { $ref: "#/components/responses/Error" },
+        },
+      },
+    },
     "/api/runs": {
       post: {
-        summary: "Start a controlled fixture or passive public-target trial",
+        summary: "Start a fixture, passive public, or authorized A2A trial",
         requestBody: {
           required: true,
           content: {
@@ -26,6 +62,7 @@ const spec = {
                 oneOf: [
                   { $ref: "#/components/schemas/FixtureRunRequest" },
                   { $ref: "#/components/schemas/PassiveRunRequest" },
+                  { $ref: "#/components/schemas/ActiveA2ARunRequest" },
                 ],
               },
             },
@@ -162,6 +199,36 @@ const spec = {
           },
         },
       },
+      ActiveA2ARunRequest: {
+        type: "object",
+        additionalProperties: false,
+        required: ["mode", "authorizationId", "activeConsent"],
+        properties: {
+          mode: { const: "active" },
+          authorizationId: { type: "string", format: "uuid" },
+          activeConsent: { const: true },
+        },
+      },
+      AuthorizationChallengeRequest: {
+        type: "object",
+        additionalProperties: false,
+        required: [
+          "cardUrl",
+          "interfaceUrl",
+          "skillId",
+          "proofUrl",
+          "testMessage",
+          "expectedSubstring",
+        ],
+        properties: {
+          cardUrl: { type: "string", format: "uri", maxLength: 2048 },
+          interfaceUrl: { type: "string", format: "uri", maxLength: 2048 },
+          skillId: { type: "string", maxLength: 160 },
+          proofUrl: { type: "string", format: "uri", maxLength: 2048 },
+          testMessage: { type: "string", maxLength: 1000 },
+          expectedSubstring: { type: "string", maxLength: 120 },
+        },
+      },
       RunCreated: {
         type: "object",
         required: ["runId", "state", "cancelToken"],
@@ -237,7 +304,7 @@ const spec = {
               methodologyVersion: { type: "string" },
               runId: { type: "string", format: "uuid" },
               targetId: { type: "string" },
-              mode: { enum: ["active-controlled", "passive-external"] },
+              mode: { enum: ["active-controlled", "passive-external", "active-external"] },
               planHash: { type: "string", pattern: "^[0-9a-f]{64}$" },
               seedCommitment: { type: "string", pattern: "^[0-9a-f]{64}$" },
               evidenceRoot: { type: "string", pattern: "^[0-9a-f]{64}$" },

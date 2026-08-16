@@ -166,8 +166,7 @@ async function initialize() {
 }
 
 export async function saveRun(run: RuntimeRun, lease?: JobLease) {
-  await saveLocalSnapshot(run);
-  if (!persistenceConfigured()) return;
+  if (!persistenceConfigured()) return saveLocalSnapshot(run);
   await initialize();
   const db = sql();
   const revision = run.events.length;
@@ -184,13 +183,14 @@ export async function saveRun(run: RuntimeRun, lease?: JobLease) {
             AND locked_until > now()
         ) RETURNING id`;
     if (updated.length === 0) throw new LeaseLostError();
-    return;
+    return saveLocalSnapshot(run);
   }
   await db`INSERT INTO agenttrial_runs ${db({ id: run.id, state: run.state, revision, snapshot: db.json(run as never) })}
     ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, revision = EXCLUDED.revision,
       snapshot = EXCLUDED.snapshot, updated_at = now()
     WHERE agenttrial_runs.revision <= EXCLUDED.revision
       AND (agenttrial_runs.state <> 'CANCELLED' OR EXCLUDED.state = 'CANCELLED')`;
+  await saveLocalSnapshot(run);
 }
 
 export async function loadRun(id: string): Promise<RuntimeRun | undefined> {
@@ -252,7 +252,8 @@ export async function finishRunJob(lease: JobLease, error?: string) {
   const rows = await sql()`UPDATE agenttrial_jobs SET status = ${status}, finished_at = now(),
     locked_until = null, lease_token = null, last_error = ${error ?? null}
     WHERE id = ${lease.id}::uuid AND status = 'running'
-      AND worker_id = ${lease.workerId} AND lease_token = ${lease.token} RETURNING id`;
+      AND worker_id = ${lease.workerId} AND lease_token = ${lease.token}
+      AND locked_until > now() RETURNING id`;
   return rows.length === 1;
 }
 export async function cancelQueuedJob(id: string) {

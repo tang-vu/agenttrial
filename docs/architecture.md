@@ -48,4 +48,4 @@ The credential-free development fallback uses a `globalThis` run store. A single
 
 The public workstation deployment runs the web origin and Cloudflare Named Tunnel behind a least-privilege Windows supervisor. It is durable for completed artifacts but remains a single-node topology; multi-node or high-volume deployments must use PostgreSQL and the worker service.
 
-Passive HTTP discovery is enabled through the policy-enforcing adapter. External browser execution remains disabled; safe activation requires a separate non-root browser worker with network egress denial for private/special ranges, disposable contexts, and no receipt-signing keys.
+Passive HTTP discovery and the ownership-challenged A2A HTTP+JSON 1.0 adapter are enabled through policy-enforcing DNS-pinned transports. External browser execution remains disabled; safe browser activation requires a separate non-root browser worker with network egress denial for private/special ranges, disposable contexts, and no receipt-signing keys.

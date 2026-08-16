@@ -91,6 +91,60 @@ export const ObservationSchema = z.object({
 });
 export type Observation = z.infer<typeof ObservationSchema>;
 
+export const AuthorizationGrantSchema = z
+  .object({
+    mode: z.literal("active"),
+    actions: z.tuple([z.literal("SendMessage")]),
+    trialCategories: z
+      .array(z.enum(["core-functionality", "structured-output"]))
+      .min(1)
+      .max(2),
+    maxMessages: z.number().int().min(1).max(2),
+    maxRequestBytes: z.number().int().min(256).max(16_384),
+    maxResponseBytes: z.number().int().min(1_024).max(1_000_000),
+    timeoutMs: z.number().int().min(1_000).max(15_000),
+  })
+  .strict();
+export type AuthorizationGrant = z.infer<typeof AuthorizationGrantSchema>;
+
+export const AuthorizationRecordSchema = z
+  .object({
+    id: z.string().uuid(),
+    status: z.enum(["issued", "verified", "consumed", "expired", "revoked"]),
+    origin: z.string().url(),
+    cardUrl: z.string().url(),
+    cardHash: z.string().regex(/^[0-9a-f]{64}$/),
+    interfaceUrl: z.string().url(),
+    protocolBinding: z.literal("HTTP+JSON"),
+    protocolVersion: z.literal("1.0"),
+    tenant: z.string().min(1).max(160).optional(),
+    skillId: z.string().min(1).max(160),
+    proofUrl: z.string().url(),
+    scopeHash: z.string().regex(/^[0-9a-f]{64}$/),
+    documentHash: z.string().regex(/^[0-9a-f]{64}$/),
+    nonceHash: z.string().regex(/^[0-9a-f]{64}$/),
+    verificationTokenHash: z.string().regex(/^[0-9a-f]{64}$/),
+    actorId: z.string().min(1).max(120),
+    grant: AuthorizationGrantSchema,
+    testMessage: z.string().min(1).max(1_000),
+    expectedSubstring: z.string().min(1).max(120),
+    issuedAt: z.string().datetime(),
+    expiresAt: z.string().datetime(),
+    verifiedAt: z.string().datetime().optional(),
+    consumedAt: z.string().datetime().optional(),
+    verificationEvidence: z
+      .object({
+        proofHash: z.string().regex(/^[0-9a-f]{64}$/),
+        verifiedAt: z.string().datetime(),
+        cardHash: z.string().regex(/^[0-9a-f]{64}$/),
+        proofUrl: z.string().url(),
+      })
+      .strict()
+      .optional(),
+  })
+  .strict();
+export type AuthorizationRecord = z.infer<typeof AuthorizationRecordSchema>;
+
 export const AssertionResultSchema = z.object({
   id: z.string(),
   trialId: z.string(),

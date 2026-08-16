@@ -337,8 +337,11 @@ button {
 }
 .new-grid {
   display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
+  grid-template-columns: 1fr 1fr;
   gap: 30px;
+}
+.new-grid > section:first-child {
+  grid-column: 1 / -1;
 }
 .new-grid > section {
   border-top: 3px solid var(--ink);
@@ -1310,6 +1313,9 @@ footer p {
   .split-section,
   .surface-scope-card {
     grid-template-columns: 1fr;
+  }
+  .new-grid > section:first-child {
+    grid-column: auto;
   }
   .verdict-card {
     grid-template-columns: 150px 1fr;

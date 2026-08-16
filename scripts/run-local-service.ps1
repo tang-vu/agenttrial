@@ -35,8 +35,21 @@ function Start-Web {
   $env:HOSTNAME = "127.0.0.1"
   $env:PORT = "$Port"
   try {
-    $standaloneServer = Join-Path $repo "apps\web\.next\standalone\apps\web\server.js"
+    $webRoot = Join-Path $repo "apps\web"
+    $standaloneRoot = Join-Path $webRoot ".next\standalone\apps\web"
+    $standaloneServer = Join-Path $standaloneRoot "server.js"
     if (!(Test-Path $standaloneServer)) { throw "Standalone production server is missing." }
+    $sourceStatic = Join-Path $webRoot ".next\static"
+    $targetStatic = Join-Path $standaloneRoot ".next\static"
+    if (!(Test-Path $sourceStatic)) { throw "Next.js static assets are missing." }
+    New-Item -ItemType Directory -Path $targetStatic -Force | Out-Null
+    Copy-Item -Path (Join-Path $sourceStatic "*") -Destination $targetStatic -Recurse -Force
+    $sourcePublic = Join-Path $webRoot "public"
+    if (Test-Path $sourcePublic) {
+      $targetPublic = Join-Path $standaloneRoot "public"
+      New-Item -ItemType Directory -Path $targetPublic -Force | Out-Null
+      Copy-Item -Path (Join-Path $sourcePublic "*") -Destination $targetPublic -Recurse -Force
+    }
     $script:webLauncher = Start-Process -FilePath $NodePath -ArgumentList @(
       ('"' + $standaloneServer + '"')
     ) -WorkingDirectory $repo -WindowStyle Hidden -RedirectStandardOutput $webLog `

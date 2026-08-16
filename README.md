@@ -60,6 +60,7 @@ pnpm secret-scan
 - Real SSE timeline, full report, bundle download, tamper demo, methodology/security/developer screens, polished errors, and responsive accessibility.
 - Current OpenAI Responses API provider with structured Zod output plus a deterministic no-key provider.
 - Passive website/OpenAPI/OpenAI-compatible/A2A/GitHub discovery with DNS/IP pinning, redirect revalidation, byte/time budgets, redaction, and explicit low coverage.
+- One-time HTTPS domain-control challenges and a real, bounded A2A HTTP+JSON 1.0 active adapter with two-call repeatability evidence and private session capabilities.
 - Base Sepolia EAS schema encoding, guarded registration/attestation scripts, and local receipt fallback.
 - PostgreSQL snapshots, a `SKIP LOCKED` durable job queue, separate worker, cross-process SSE polling, and private cancellation capabilities.
 - OpenAPI 3.1 schemas, a truthful machine descriptor, `llms.txt`, health, and readiness endpoints. A2A is not advertised until its full task lifecycle exists.
@@ -123,7 +124,7 @@ $env:AGENTTRIAL_SIGNING_SEED = node -e "console.log(require('crypto').randomByte
 docker compose up --build
 ```
 
-The containers run as non-root users with read-only filesystems, no Linux capabilities, and `no-new-privileges`. Passive HTTP discovery is enabled; browser navigation and arbitrary external active tests remain disabled.
+The containers run as non-root users with read-only filesystems, no Linux capabilities, and `no-new-privileges`. Passive HTTP discovery and narrowly authorized A2A `SendMessage` trials are enabled; browser navigation and arbitrary REST execution remain disabled.
 
 GitHub Actions runs the complete quality gate with PostgreSQL. Manually approved workflows can publish immutable web/worker images to GHCR or attest a reviewed bundle on Base Sepolia; both require an explicit confirmation input and protected environment approval.
 

@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { afterEach, describe, expect, it } from "vitest";
-import { normalizeDiscoveryUrl, safePublicFetch } from "./index";
+import { normalizeDiscoveryUrl, safeAuthorizedA2ASend, safePublicFetch } from "./index";
 
 describe("safe public adapter", () => {
   afterEach(() => delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS);
@@ -48,5 +48,70 @@ describe("descriptor routing", () => {
     expect(normalizeDiscoveryUrl("https://example.com/agent-card.json")).toBe(
       "https://example.com/agent-card.json",
     );
+  });
+});
+
+describe("authorized A2A adapter", () => {
+  afterEach(() => delete process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS);
+  it("sends only the bounded HTTP+JSON 1.0 profile and validates the response", async () => {
+    process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS = "true";
+    let captured: { url?: string; version?: string; body?: unknown } = {};
+    const server = createServer((request, response) => {
+      const chunks: Buffer[] = [];
+      request.on("data", (chunk: Buffer) => chunks.push(chunk));
+      request.on("end", () => {
+        captured = {
+          url: request.url ?? "",
+          version: request.headers["a2a-version"] as string,
+          body: JSON.parse(Buffer.concat(chunks).toString("utf8")),
+        };
+        response.writeHead(200, { "content-type": "application/a2a+json" });
+        response.end(
+          JSON.stringify({
+            message: {
+              messageId: "response-1",
+              role: "ROLE_AGENT",
+              parts: [{ text: "EVIDENCE-OK" }],
+            },
+          }),
+        );
+      });
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    const port = typeof address === "object" && address ? address.port : 0;
+    const result = await safeAuthorizedA2ASend(
+      `http://127.0.0.1:${port}/a2a/`,
+      "Return EVIDENCE-OK",
+      "run-test",
+      { timeoutMs: 1_000, maxRequestBytes: 16_384, maxResponseBytes: 16_384 },
+    );
+    expect(result.text).toBe("EVIDENCE-OK");
+    expect(captured.url).toBe("/a2a/message:send");
+    expect(captured.version).toBe("1.0");
+    expect(captured.body).toMatchObject({
+      message: { role: "ROLE_USER", parts: [{ text: "Return EVIDENCE-OK" }] },
+      configuration: { acceptedOutputModes: ["text/plain"], historyLength: 0 },
+    });
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  });
+
+  it("refuses active redirects", async () => {
+    process.env.AGENTTRIAL_ALLOW_PRIVATE_TEST_TARGETS = "true";
+    const server = createServer((_request, response) => {
+      response.writeHead(307, { location: "/other" });
+      response.end();
+    });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    const port = typeof address === "object" && address ? address.port : 0;
+    await expect(
+      safeAuthorizedA2ASend(`http://127.0.0.1:${port}/`, "test", "run-test", {
+        timeoutMs: 1_000,
+        maxRequestBytes: 16_384,
+        maxResponseBytes: 16_384,
+      }),
+    ).rejects.toThrow(/never follow redirects/i);
+    await new Promise<void>((resolve) => server.close(() => resolve()));
   });
 });
