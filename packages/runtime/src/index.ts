@@ -33,14 +33,17 @@ import { normalizeTargetUrl, redact } from "@agenttrial/security";
 import {
   cancelQueuedJob,
   claimRun,
+  LeaseLostError,
   enqueueRun,
   finishRunJob,
   loadRun,
   persistenceConfigured,
+  renewRunLease,
   snapshotPersistenceConfigured,
   runCancellationRequested,
   saveRun,
 } from "./persistence";
+import type { JobLease } from "./persistence";
 export { closePersistence, heartbeatWorker, persistenceReadiness } from "./persistence";
 
 export interface RuntimeRun {
@@ -67,6 +70,7 @@ const globalStore = globalThis as typeof globalThis & {
 export const runs = (globalStore.__agenttrialRuns ??= new Map());
 const listeners = (globalStore.__agenttrialListeners ??= new Map());
 const cancellationCapabilities = new Map<string, string>();
+const activeLeases = new Map<string, { lease: JobLease; lost: boolean }>();
 const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
 const signingSeedHex = process.env.AGENTTRIAL_SIGNING_SEED;
 if (signingSeedHex && !/^[0-9a-fA-F]{64}$/.test(signingSeedHex))
@@ -109,12 +113,21 @@ function emit(
     ...(detail ? { detail } : {}),
   });
   listeners.get(run.id)?.forEach((fn) => fn(event));
-  void saveRun(run).catch(() => undefined);
+  const leaseState = activeLeases.get(run.id);
+  void saveRun(run, leaseState?.lease).catch((error) => {
+    if (error instanceof LeaseLostError && leaseState) leaseState.lost = true;
+  });
   return event;
 }
 const pause = (ms = 90) => new Promise((resolve) => setTimeout(resolve, ms));
 async function ensureActive(run: RuntimeRun) {
+  if (activeLeases.get(run.id)?.lost) throw new Error("LEASE_LOST");
   if (run.cancelled || (await runCancellationRequested(run.id))) throw new Error("CANCELLED");
+}
+async function persistExecutionRun(run: RuntimeRun) {
+  const leaseState = activeLeases.get(run.id);
+  if (leaseState?.lost) throw new LeaseLostError();
+  await saveRun(run, leaseState?.lease);
 }
 
 export function createFixtureRun(fixture: FixtureId): RuntimeRun {
@@ -182,21 +195,46 @@ export async function getRun(id: string) {
 }
 export async function processNextRun(workerId = `worker-${process.pid}`) {
   if (!persistenceConfigured()) return false;
-  const id = await claimRun(workerId);
-  if (!id) return false;
-  const run = await loadRun(id);
+  const lease = await claimRun(workerId);
+  if (!lease) return false;
+  const run = await loadRun(lease.id);
   if (!run) {
-    await finishRunJob(id, "Run snapshot missing");
+    await finishRunJob(lease, "Run snapshot missing");
     return true;
   }
-  runs.set(id, run);
+  runs.set(lease.id, run);
+  const leaseState = { lease, lost: false };
+  activeLeases.set(lease.id, leaseState);
+  let renewing = false;
+  const renewal = setInterval(
+    () => {
+      if (renewing || leaseState.lost) return;
+      renewing = true;
+      void renewRunLease(lease)
+        .then((renewed) => {
+          if (!renewed) leaseState.lost = true;
+        })
+        .catch(() => {
+          leaseState.lost = true;
+        })
+        .finally(() => {
+          renewing = false;
+        });
+    },
+    Math.max(250, Math.floor(lease.leaseMs / 3)),
+  );
   try {
     if (run.mode === "passive-external") await executeExternalRun(run);
     else await executeRun(run);
-    await saveRun(run);
-    await finishRunJob(id, run.state === "FAILED" ? run.error : undefined);
+    if (leaseState.lost) throw new LeaseLostError();
+    await saveRun(run, lease);
+    if (!(await finishRunJob(lease, run.state === "FAILED" ? run.error : undefined)))
+      throw new LeaseLostError();
   } catch (error) {
-    await finishRunJob(id, error instanceof Error ? error.message : "Worker failure");
+    await finishRunJob(lease, error instanceof Error ? error.message : "Worker failure");
+  } finally {
+    clearInterval(renewal);
+    activeLeases.delete(lease.id);
   }
   return true;
 }
@@ -404,7 +442,7 @@ async function executeRun(run: RuntimeRun) {
       attestation,
     };
     run.state = "COMPLETED";
-    await saveRun(run);
+    await persistExecutionRun(run);
   } catch (error) {
     if ((error as Error).message === "CANCELLED") {
       run.state = "CANCELLED";
@@ -421,7 +459,7 @@ async function executeRun(run: RuntimeRun) {
         error: run.error,
       });
     }
-    await saveRun(run);
+    await persistExecutionRun(run);
   }
 }
 
@@ -690,7 +728,7 @@ async function executeExternalRun(run: RuntimeRun) {
       attestation,
     };
     run.state = "COMPLETED";
-    await saveRun(run);
+    await persistExecutionRun(run);
   } catch (error) {
     if ((error as Error).message === "CANCELLED") {
       run.state = "CANCELLED";
@@ -706,6 +744,6 @@ async function executeExternalRun(run: RuntimeRun) {
         { error: run.error, failureClass: "request_failed" },
       );
     }
-    await saveRun(run);
+    await persistExecutionRun(run);
   }
 }

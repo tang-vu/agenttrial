@@ -6,11 +6,47 @@ import {
   processNextRun,
 } from "../packages/runtime/src/index.ts";
 import { verifyBundle } from "../packages/evidence/src/index.ts";
+import { claimRun, finishRunJob, renewRunLease } from "../packages/runtime/src/persistence.ts";
+
+const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function main() {
   if (!process.env.DATABASE_URL)
     throw new Error("DATABASE_URL is required for the durable smoke test");
   if (!process.env.AGENTTRIAL_SIGNING_SEED) throw new Error("AGENTTRIAL_SIGNING_SEED is required");
+
+  const fenced = createFixtureRun("evidence-researcher");
+  let firstLease: Awaited<ReturnType<typeof claimRun>>;
+  for (let attempt = 0; attempt < 30 && !firstLease; attempt += 1) {
+    firstLease = await claimRun("lease-worker-a", 200);
+    if (!firstLease) await pause(50);
+  }
+  if (!firstLease || firstLease.id !== fenced.id) throw new Error("Lease probe was not claimed");
+  await pause(80);
+  if (!(await renewRunLease(firstLease))) throw new Error("Current lease did not renew");
+  await pause(140);
+  if (await claimRun("lease-worker-b", 200)) throw new Error("Renewed job was reclaimed");
+  const forgedLease = { ...firstLease, token: "00000000-0000-4000-8000-000000000000" };
+  if (await renewRunLease(forgedLease)) throw new Error("Foreign fencing token renewed a lease");
+  if (await finishRunJob(forgedLease)) throw new Error("Foreign fencing token finished a job");
+  if (!(await finishRunJob(firstLease, "lease fencing probe complete")))
+    throw new Error("Current fencing token could not finish its job");
+
+  const reclaimed = createFixtureRun("evidence-researcher");
+  let staleLease: Awaited<ReturnType<typeof claimRun>>;
+  for (let attempt = 0; attempt < 30 && !staleLease; attempt += 1) {
+    staleLease = await claimRun("stale-worker", 80);
+    if (!staleLease) await pause(50);
+  }
+  if (!staleLease || staleLease.id !== reclaimed.id) throw new Error("Stale probe was not claimed");
+  await pause(120);
+  const replacement = await claimRun("replacement-worker", 500);
+  if (!replacement || replacement.id !== reclaimed.id)
+    throw new Error("Expired lease was not reclaimed");
+  if (await renewRunLease(staleLease)) throw new Error("Stale worker renewed after fencing");
+  if (await finishRunJob(staleLease)) throw new Error("Stale worker finished after fencing");
+  if (!(await finishRunJob(replacement, "reclaim probe complete")))
+    throw new Error("Replacement worker could not finish reclaimed job");
 
   const created = createFixtureRun("evidence-researcher");
   let claimed = false;

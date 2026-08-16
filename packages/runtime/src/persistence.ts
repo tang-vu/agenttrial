@@ -1,4 +1,5 @@
 import postgres from "postgres";
+import { randomUUID } from "node:crypto";
 import { mkdir, readFile, readdir, rename, stat, unlink, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -7,6 +8,20 @@ import type { RuntimeRun } from "./index";
 let client: ReturnType<typeof postgres> | undefined;
 let initialized: Promise<void> | undefined;
 const localWrites = new Map<string, Promise<void>>();
+
+export interface JobLease {
+  id: string;
+  workerId: string;
+  token: string;
+  leaseMs: number;
+}
+
+export class LeaseLostError extends Error {
+  constructor() {
+    super("Worker lease is no longer current");
+    this.name = "LeaseLostError";
+  }
+}
 
 export function persistenceConfigured() {
   return Boolean(process.env.DATABASE_URL);
@@ -140,6 +155,7 @@ async function initialize() {
         last_error text
       )`;
       await db`ALTER TABLE agenttrial_jobs ADD COLUMN IF NOT EXISTS locked_until timestamptz`;
+      await db`ALTER TABLE agenttrial_jobs ADD COLUMN IF NOT EXISTS lease_token text`;
       await db`CREATE INDEX IF NOT EXISTS agenttrial_jobs_queue_idx ON agenttrial_jobs(status, available_at)`;
       await db`CREATE TABLE IF NOT EXISTS agenttrial_workers (
         worker_id text PRIMARY KEY,
@@ -149,12 +165,27 @@ async function initialize() {
   return initialized;
 }
 
-export async function saveRun(run: RuntimeRun) {
+export async function saveRun(run: RuntimeRun, lease?: JobLease) {
   await saveLocalSnapshot(run);
   if (!persistenceConfigured()) return;
   await initialize();
   const db = sql();
   const revision = run.events.length;
+  if (lease) {
+    const updated =
+      await db`UPDATE agenttrial_runs SET state = ${run.state}, revision = ${revision},
+        snapshot = ${db.json(run as never)}, updated_at = now()
+      WHERE id = ${run.id}::uuid
+        AND revision <= ${revision}
+        AND EXISTS (
+          SELECT 1 FROM agenttrial_jobs
+          WHERE id = ${run.id}::uuid AND status = 'running'
+            AND worker_id = ${lease.workerId} AND lease_token = ${lease.token}
+            AND locked_until > now()
+        ) RETURNING id`;
+    if (updated.length === 0) throw new LeaseLostError();
+    return;
+  }
   await db`INSERT INTO agenttrial_runs ${db({ id: run.id, state: run.state, revision, snapshot: db.json(run as never) })}
     ON CONFLICT (id) DO UPDATE SET state = EXCLUDED.state, revision = EXCLUDED.revision,
       snapshot = EXCLUDED.snapshot, updated_at = now()
@@ -176,8 +207,23 @@ export async function enqueueRun(run: RuntimeRun) {
   await db`INSERT INTO agenttrial_jobs ${db({ id: run.id, payload: db.json({ id: run.id }) })} ON CONFLICT (id) DO NOTHING`;
 }
 
-export async function claimRun(workerId: string, leaseMs = 30_000): Promise<string | undefined> {
+async function failExhaustedJobs() {
+  const message = "Evaluator job exhausted its retry budget after repeated worker lease loss";
+  await sql()`WITH exhausted AS (
+      UPDATE agenttrial_jobs SET status = 'failed', finished_at = now(), locked_until = null,
+        lease_token = null, last_error = ${message}
+      WHERE status = 'running' AND locked_until < now() AND attempts >= 3
+      RETURNING id
+    ) UPDATE agenttrial_runs AS runs SET state = 'FAILED', updated_at = now(),
+      snapshot = jsonb_set(jsonb_set(runs.snapshot, '{state}', '"FAILED"'::jsonb),
+        '{error}', to_jsonb(${message}::text))
+    FROM exhausted WHERE runs.id = exhausted.id`;
+}
+
+export async function claimRun(workerId: string, leaseMs = 30_000): Promise<JobLease | undefined> {
   await initialize();
+  await failExhaustedJobs();
+  const token = randomUUID();
   const rows = await sql()`WITH next_job AS (
       SELECT id FROM agenttrial_jobs
       WHERE ((status = 'queued' AND available_at <= now())
@@ -185,20 +231,35 @@ export async function claimRun(workerId: string, leaseMs = 30_000): Promise<stri
         AND attempts < 3
       ORDER BY available_at FOR UPDATE SKIP LOCKED LIMIT 1
     ) UPDATE agenttrial_jobs SET status = 'running', worker_id = ${workerId},
-      attempts = attempts + 1, started_at = now(),
+      lease_token = ${token}, attempts = attempts + 1, started_at = COALESCE(started_at, now()),
       locked_until = now() + (${leaseMs} * interval '1 millisecond')
     WHERE id = (SELECT id FROM next_job) RETURNING id`;
-  return rows[0]?.id as string | undefined;
+  const id = rows[0]?.id as string | undefined;
+  return id ? { id, workerId, token, leaseMs } : undefined;
 }
 
-export async function finishRunJob(id: string, error?: string) {
+export async function renewRunLease(lease: JobLease) {
+  const rows = await sql()`UPDATE agenttrial_jobs
+    SET locked_until = now() + (${lease.leaseMs} * interval '1 millisecond')
+    WHERE id = ${lease.id}::uuid AND status = 'running'
+      AND worker_id = ${lease.workerId} AND lease_token = ${lease.token}
+      AND locked_until > now() RETURNING id`;
+  return rows.length === 1;
+}
+
+export async function finishRunJob(lease: JobLease, error?: string) {
   const status = error ? "failed" : "completed";
-  await sql()`UPDATE agenttrial_jobs SET status = ${status}, finished_at = now(), locked_until = null, last_error = ${error ?? null} WHERE id = ${id}::uuid`;
+  const rows = await sql()`UPDATE agenttrial_jobs SET status = ${status}, finished_at = now(),
+    locked_until = null, lease_token = null, last_error = ${error ?? null}
+    WHERE id = ${lease.id}::uuid AND status = 'running'
+      AND worker_id = ${lease.workerId} AND lease_token = ${lease.token} RETURNING id`;
+  return rows.length === 1;
 }
 export async function cancelQueuedJob(id: string) {
   if (!persistenceConfigured()) return;
   await initialize();
-  await sql()`UPDATE agenttrial_jobs SET status = 'cancelled', finished_at = now(), locked_until = null WHERE id = ${id}::uuid AND status IN ('queued', 'running')`;
+  await sql()`UPDATE agenttrial_jobs SET status = 'cancelled', finished_at = now(), locked_until = null,
+    lease_token = null WHERE id = ${id}::uuid AND status IN ('queued', 'running')`;
 }
 
 export async function runCancellationRequested(id: string) {
