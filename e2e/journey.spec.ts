@@ -137,6 +137,22 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
   const descriptorBody = await descriptor.json();
   expect(descriptorBody.a2a.supported).toBe(false);
   expect((await request.get(new URL(descriptorBody.schema).pathname)).status()).toBe(200);
+  const openapi = await (await request.get("/openapi.json")).json();
+  expect(openapi.openapi).toBe("3.1.0");
+  for (const schema of [
+    "Claim",
+    "Trial",
+    "Observation",
+    "AssertionResult",
+    "Score",
+    "EvidenceItem",
+    "Report",
+    "Receipt",
+    "EvidenceBundle",
+  ])
+    expect(openapi.components.schemas[schema], `${schema} schema`).toBeTruthy();
+  expect(openapi.components.schemas.Run.required).toContain("id");
+  expect(openapi.components.schemas.EvidenceBundle.properties.report.$ref).toContain("Report");
   const security = await request.get("/.well-known/security.txt");
   expect(security.status()).toBe(200);
   expect(await security.text()).toContain("agenttrial.tangvu.dev/.well-known/security.txt");
