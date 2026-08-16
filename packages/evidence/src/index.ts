@@ -65,6 +65,9 @@ export interface ReceiptPayload {
   mode: string;
   planHash: string;
   seedCommitment: string;
+  evaluatorBuild: string;
+  assertionRegistryHash: string;
+  reportSchema: string;
   evidenceRoot: string;
   evidenceItemHashes: string[];
   reportHash: string;
@@ -255,6 +258,38 @@ export function verifyBundle(
     computedPlanHash === bundle.report.planHash
       ? "Plan was sealed before execution"
       : "Trial plan mismatch",
+  );
+  const seedOpened = bundle.report.seedReveal
+    ? hashObject({ seed: bundle.report.seedReveal, runId: bundle.report.runId }) ===
+      bundle.report.plan.seedCommitment
+    : bundle.report.score.methodologyVersion === "agenttrial-1.0.0";
+  add(
+    "seed-opening",
+    seedOpened,
+    seedOpened
+      ? bundle.report.seedReveal
+        ? "Revealed seed matches the pre-execution commitment"
+        : "Legacy methodology did not require seed opening"
+      : "Revealed seed does not match the sealed commitment",
+  );
+  const legacyMethodology = bundle.report.score.methodologyVersion === "agenttrial-1.0.0";
+  const provenanceMatches =
+    legacyMethodology ||
+    Boolean(
+      bundle.report.provenance &&
+        bundle.receipt.payload.evaluatorBuild === bundle.report.provenance.evaluatorBuild &&
+        bundle.receipt.payload.assertionRegistryHash ===
+          bundle.report.provenance.assertionRegistryHash &&
+        bundle.receipt.payload.reportSchema === bundle.report.provenance.reportSchema,
+    );
+  add(
+    "evaluator-provenance",
+    provenanceMatches,
+    provenanceMatches
+      ? legacyMethodology
+        ? "Legacy methodology did not commit evaluator provenance"
+        : `Build ${bundle.report.provenance!.evaluatorBuild.slice(0, 12)} and assertion registry committed`
+      : "Evaluator build or assertion registry provenance mismatch",
   );
   const recomputedAssertions = bundle.report.plan.trials.flatMap((trial) => {
     const observation = bundle.report.observations.find(

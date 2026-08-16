@@ -11,7 +11,11 @@ import {
   verifySignature,
   type EvidenceBundle,
 } from "./index";
-import { METHODOLOGY_VERSION, type TrialReport } from "@agenttrial/core";
+import {
+  ASSERTION_REGISTRY_MANIFEST,
+  METHODOLOGY_VERSION,
+  type TrialReport,
+} from "@agenttrial/core";
 function bundle(): EvidenceBundle {
   const events: EvidenceBundle["events"] = [];
   appendEvent(events, {
@@ -29,7 +33,12 @@ function bundle(): EvidenceBundle {
       redactions: [],
     },
   ];
-  const plan = { version: "1", seedCommitment: "seed", trials: [] };
+  const seedReveal = "00".repeat(16);
+  const plan = {
+    version: "1",
+    seedCommitment: hashObject({ seed: seedReveal, runId: "run" }),
+    trials: [],
+  };
   const planHash = hashObject(plan);
   const report = {
     runId: "run",
@@ -58,6 +67,13 @@ function bundle(): EvidenceBundle {
       methodologyVersion: METHODOLOGY_VERSION,
       badge: "not-verified",
     },
+    seedReveal,
+    provenance: {
+      evaluatorBuild: "test-build",
+      runtimeVersion: "0.5.0",
+      assertionRegistryHash: hashObject(ASSERTION_REGISTRY_MANIFEST),
+      reportSchema: "https://agenttrial.tangvu.dev/openapi.json#/components/schemas/Report",
+    },
     startedAt: "2026-01-01T00:00:00.000Z",
     completedAt: "2026-01-01T00:00:01.000Z",
   } satisfies TrialReport;
@@ -70,7 +86,10 @@ function bundle(): EvidenceBundle {
     targetId: "target",
     mode: "active-controlled",
     planHash,
-    seedCommitment: "seed",
+    seedCommitment: plan.seedCommitment,
+    evaluatorBuild: report.provenance.evaluatorBuild,
+    assertionRegistryHash: report.provenance.assertionRegistryHash,
+    reportSchema: report.provenance.reportSchema,
     evidenceRoot: root,
     evidenceItemHashes: evidence.map(hashObject),
     reportHash: hashObject(report),
@@ -102,6 +121,22 @@ describe("canonical evidence", () => {
     expect(verifyBundle(b, { trustedPublicKeys: [b.receipt.publicKey] }).firstMismatch).toBe(
       "evidence-items",
     );
+  });
+  it("opens the sealed seed and binds evaluator provenance", () => {
+    const valid = bundle();
+    expect(verifyBundle(valid, { trustedPublicKeys: [valid.receipt.publicKey] }).valid).toBe(true);
+    const changedSeed = bundle();
+    changedSeed.report.seedReveal = "ff".repeat(16);
+    expect(
+      verifyBundle(changedSeed, { trustedPublicKeys: [changedSeed.receipt.publicKey] })
+        .firstMismatch,
+    ).toBe("report");
+    const changedBuild = bundle();
+    changedBuild.receipt.payload.evaluatorBuild = "foreign-build";
+    expect(
+      verifyBundle(changedBuild, { trustedPublicKeys: [changedBuild.receipt.publicKey] })
+        .firstMismatch,
+    ).toBe("evaluator-provenance");
   });
   it("rejects an otherwise valid receipt from an untrusted injected key", () => {
     const b = bundle();

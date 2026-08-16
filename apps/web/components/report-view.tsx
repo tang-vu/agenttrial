@@ -144,6 +144,13 @@ export function ReportView({ runId }: { runId: string }) {
           </p>
           <code>{report.planHash.slice(0, 18)}…</code>
           <small>Plan sealed before execution</small>
+          {report.provenance && report.seedReveal && (
+            <>
+              <code>{report.provenance.evaluatorBuild.slice(0, 18)}</code>
+              <small>Build + assertion registry committed</small>
+              <small>Seed opened after execution</small>
+            </>
+          )}
           {attestation?.status === "anchored" && attestation.explorerUrl ? (
             <a href={attestation.explorerUrl} target="_blank" rel="noreferrer">
               View Base Sepolia attestation ↗

@@ -212,6 +212,13 @@ export interface TrialReport {
   assertions: AssertionResult[];
   evidence: EvidenceItem[];
   score: Score;
+  seedReveal?: string;
+  provenance?: {
+    evaluatorBuild: string;
+    runtimeVersion: string;
+    assertionRegistryHash: string;
+    reportSchema: string;
+  };
   startedAt: string;
   completedAt: string;
 }

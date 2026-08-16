@@ -1,6 +1,6 @@
 import type { AssertionResult, Claim, Dimension, Score } from "./types";
 
-export const METHODOLOGY_VERSION = "agenttrial-1.0.0";
+export const METHODOLOGY_VERSION = "agenttrial-1.1.0";
 export const DIMENSION_POINTS: Record<Dimension, number> = {
   capability: 30,
   evidence: 20,
@@ -9,6 +9,23 @@ export const DIMENSION_POINTS: Record<Dimension, number> = {
   efficiency: 10,
   recovery: 5,
 };
+
+export const ASSERTION_REGISTRY_MANIFEST = {
+  version: "assertion-registry-1.1.0",
+  assertionTypes: [
+    "contains",
+    "not_contains",
+    "equals",
+    "lte",
+    "gte",
+    "valid_json",
+    "citation",
+    "refusal",
+    "repeatable",
+  ],
+  dimensionPoints: DIMENSION_POINTS,
+  scoreAuthority: "deterministic-code-only",
+} as const;
 
 export function calculateScore(
   assertions: AssertionResult[],

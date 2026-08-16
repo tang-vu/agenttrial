@@ -26,6 +26,10 @@ describe("pipeline integration", () => {
     expect(a.bundle?.receipt.payload.seedCommitment).not.toBe(
       b.bundle?.receipt.payload.seedCommitment,
     );
+    expect(a.report?.seedReveal).toMatch(/^[0-9a-f]{32}$/);
+    expect(a.bundle?.receipt.payload.assertionRegistryHash).toBe(
+      a.report?.provenance?.assertionRegistryHash,
+    );
     expect(a.report?.score.overall).toBe(100);
   });
   it("produces a materially lower vulnerable verdict", async () => {

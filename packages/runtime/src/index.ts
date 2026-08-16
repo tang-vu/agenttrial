@@ -8,6 +8,7 @@ import {
 } from "@agenttrial/adapters";
 import {
   TrialStateMachine,
+  ASSERTION_REGISTRY_MANIFEST,
   calculateScore,
   evaluateAssertions,
   METHODOLOGY_VERSION,
@@ -111,6 +112,17 @@ const activeLeases = new Map<
   }
 >();
 const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
+const REPORT_SCHEMA_URI = "https://agenttrial.tangvu.dev/openapi.json#/components/schemas/Report";
+const RUNTIME_VERSION = "0.5.0";
+function evaluatorProvenance() {
+  const candidate = process.env.AGENTTRIAL_BUILD_COMMIT ?? process.env.GITHUB_SHA;
+  return {
+    evaluatorBuild: candidate && /^[0-9a-f]{7,64}$/i.test(candidate) ? candidate : "development",
+    runtimeVersion: RUNTIME_VERSION,
+    assertionRegistryHash: hashObject(ASSERTION_REGISTRY_MANIFEST),
+    reportSchema: REPORT_SCHEMA_URI,
+  };
+}
 const signingSeedHex = process.env.AGENTTRIAL_SIGNING_SEED;
 if (signingSeedHex && !/^[0-9a-fA-F]{64}$/.test(signingSeedHex))
   throw new Error(
@@ -529,6 +541,8 @@ async function executeRun(run: RuntimeRun) {
       assertions,
       evidence,
       score,
+      seedReveal: seed,
+      provenance: evaluatorProvenance(),
       startedAt,
       completedAt: new Date().toISOString(),
     };
@@ -562,6 +576,9 @@ async function executeRun(run: RuntimeRun) {
         mode: "active-controlled",
         planHash,
         seedCommitment: plan.seedCommitment,
+        evaluatorBuild: report.provenance!.evaluatorBuild,
+        assertionRegistryHash: report.provenance!.assertionRegistryHash,
+        reportSchema: report.provenance!.reportSchema,
         evidenceRoot: root,
         evidenceItemHashes: evidence.map(hashObject),
         reportHash: hashObject(report),
@@ -819,6 +836,8 @@ async function executeExternalRun(run: RuntimeRun) {
       assertions,
       evidence,
       score,
+      seedReveal: seed,
+      provenance: evaluatorProvenance(),
       startedAt,
       completedAt,
     };
@@ -856,6 +875,9 @@ async function executeExternalRun(run: RuntimeRun) {
         mode: "passive-external",
         planHash,
         seedCommitment,
+        evaluatorBuild: report.provenance!.evaluatorBuild,
+        assertionRegistryHash: report.provenance!.assertionRegistryHash,
+        reportSchema: report.provenance!.reportSchema,
         evidenceRoot: root,
         evidenceItemHashes: evidence.map(hashObject),
         reportHash: hashObject(report),
@@ -954,7 +976,7 @@ async function executeAuthorizedExternalRun(run: RuntimeRun) {
       maxMessages: authorization.grant.maxMessages,
     });
     const seed = randomBytes(16).toString("hex");
-    const seedCommitment = hashObject({ seed, runId: run.id, scopeHash: authorization.scopeHash });
+    const seedCommitment = hashObject({ seed, runId: run.id });
     const trialId = "trial_authorized_a2a_send";
     const plan: TrialPlan = {
       version: METHODOLOGY_VERSION,
@@ -1138,6 +1160,8 @@ async function executeAuthorizedExternalRun(run: RuntimeRun) {
       assertions,
       evidence,
       score,
+      seedReveal: seed,
+      provenance: evaluatorProvenance(),
       startedAt,
       completedAt,
     };
@@ -1168,6 +1192,9 @@ async function executeAuthorizedExternalRun(run: RuntimeRun) {
         mode: "active-external",
         planHash,
         seedCommitment,
+        evaluatorBuild: report.provenance!.evaluatorBuild,
+        assertionRegistryHash: report.provenance!.assertionRegistryHash,
+        reportSchema: report.provenance!.reportSchema,
         evidenceRoot: root,
         evidenceItemHashes: evidence.map(hashObject),
         reportHash: hashObject(report),
@@ -1234,6 +1261,14 @@ function appendSignerEvent(
 
 function validatePendingReport(report: TrialReport) {
   if (hashObject(report.plan) !== report.planHash) throw new Error("Unsigned plan hash mismatch.");
+  if (
+    !report.seedReveal ||
+    hashObject({ seed: report.seedReveal, runId: report.runId }) !== report.plan.seedCommitment
+  )
+    throw new Error("Unsigned evaluation seed does not open its sealed commitment.");
+  const expectedProvenance = evaluatorProvenance();
+  if (!report.provenance || hashObject(report.provenance) !== hashObject(expectedProvenance))
+    throw new Error("Unsigned evaluation provenance does not match the validating signer build.");
   const claimIds = new Set(report.claims.map((claim) => claim.id));
   const trialIds = new Set(report.plan.trials.map((trial) => trial.id));
   const evidenceIds = new Set(report.evidence.map((item) => item.id));
@@ -1309,6 +1344,9 @@ function finalizePendingRun(run: RuntimeRun) {
       mode: pending.mode,
       planHash: pending.report.planHash,
       seedCommitment: pending.report.plan.seedCommitment,
+      evaluatorBuild: pending.report.provenance!.evaluatorBuild,
+      assertionRegistryHash: pending.report.provenance!.assertionRegistryHash,
+      reportSchema: pending.report.provenance!.reportSchema,
       evidenceRoot: root,
       evidenceItemHashes: pending.report.evidence.map(hashObject),
       reportHash: hashObject(pending.report),

@@ -12,7 +12,7 @@ export default function Methodology() {
   return (
     <main id="main" className="article-shell">
       <header>
-        <span className="kicker">METHODOLOGY / V1.0.0</span>
+        <span className="kicker">METHODOLOGY / V1.1.0</span>
         <h1>
           Models investigate.
           <br />
@@ -81,6 +81,19 @@ export default function Methodology() {
         <aside>
           LLM qualitative observations are labeled as such and never override a deterministic
           failure.
+        </aside>
+      </section>
+      <section>
+        <h2>Reproducibility contract</h2>
+        <p>
+          Before execution, the receipt pipeline commits to a random seed and canonical trial plan.
+          After execution, the report reveals that seed so the browser verifier can open the
+          commitment. The signed report also commits to the evaluator build, runtime version,
+          assertion-registry hash, and report-schema URI.
+        </p>
+        <aside>
+          A matching seed proves the tested plan was fixed before observations arrived; it does not
+          turn a technical evaluation into a legal certification or safety guarantee.
         </aside>
       </section>
     </main>

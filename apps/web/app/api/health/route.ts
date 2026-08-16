@@ -3,7 +3,7 @@ export function GET() {
   return NextResponse.json({
     status: "ok",
     service: "agenttrial-web",
-    version: "0.1.0",
+    version: "0.5.0",
     timestamp: new Date().toISOString(),
   });
 }

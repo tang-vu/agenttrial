@@ -17,6 +17,8 @@ test("judge can run, inspect, verify, and tamper", async ({ page }) => {
   await expect(page.getByText("Tested claims held up under pressure.")).toBeVisible();
   await page.getByRole("link", { name: /Verify receipt/ }).click();
   await expect(page.getByText("Receipt is cryptographically valid")).toBeVisible();
+  await expect(page.getByText("seed opening")).toBeVisible();
+  await expect(page.getByText("evaluator provenance")).toBeVisible();
   await page.getByRole("button", { name: /Modify one byte/ }).click();
   await expect(page.getByText("Verification failed")).toBeVisible();
 });

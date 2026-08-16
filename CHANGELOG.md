@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 — 2026-08-17
+
+- Opened post-execution random seeds against their pre-execution commitments and added browser-side
+  verification of that opening.
+- Bound evaluator build, runtime version, assertion-registry hash, and canonical report schema into
+  both the signed report and receipt payload.
+- Bumped the deterministic methodology to `agenttrial-1.1.0`; legacy 1.0 receipts remain locally
+  verifiable with their explicitly narrower provenance contract.
+
 ## 0.4.0 — 2026-08-16
 
 - Added one-time HTTPS domain-control authorization and a strict, bounded A2A HTTP+JSON 1.0 active

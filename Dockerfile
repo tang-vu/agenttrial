@@ -23,21 +23,24 @@ COPY . .
 RUN pnpm build
 
 FROM deps AS worker
-ENV NODE_ENV=production
+ARG AGENTTRIAL_BUILD_COMMIT=development
+ENV NODE_ENV=production AGENTTRIAL_BUILD_COMMIT=$AGENTTRIAL_BUILD_COMMIT
 COPY . .
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs worker
 USER worker
 CMD ["pnpm", "--filter", "@agenttrial/worker", "start"]
 
 FROM deps AS signer
-ENV NODE_ENV=production
+ARG AGENTTRIAL_BUILD_COMMIT=development
+ENV NODE_ENV=production AGENTTRIAL_BUILD_COMMIT=$AGENTTRIAL_BUILD_COMMIT
 COPY . .
 RUN groupadd --system --gid 1002 nodejs && useradd --system --uid 1002 --gid nodejs signer
 USER signer
 CMD ["pnpm", "--filter", "@agenttrial/signer", "start"]
 
 FROM node:24-bookworm-slim AS runner
-ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
+ARG AGENTTRIAL_BUILD_COMMIT=development
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0 AGENTTRIAL_BUILD_COMMIT=$AGENTTRIAL_BUILD_COMMIT
 WORKDIR /app
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs nextjs
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
