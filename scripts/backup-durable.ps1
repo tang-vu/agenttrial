@@ -19,7 +19,12 @@ New-Item -ItemType Directory -Path $BackupDirectory -Force | Out-Null
 $resolvedRoot = [IO.Path]::GetFullPath($BackupDirectory).TrimEnd('\') + '\'
 $archivePath = Join-Path $BackupDirectory $archiveName
 $linuxArchivePath = ConvertTo-WslPath $archivePath
-$postgresId = (& docker compose --project-directory $repo -p agenttrial ps -q postgres).Trim()
+Push-Location $repo
+try {
+  $postgresId = (& docker compose -p agenttrial ps -q postgres).Trim()
+} finally {
+  Pop-Location
+}
 if (!$postgresId) { throw "AgentTrial PostgreSQL container is not running." }
 
 try {

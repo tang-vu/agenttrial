@@ -17,8 +17,12 @@ if (!$SkipBuild) {
   $env:AGENTTRIAL_BUILD_COMMIT = (& git -C $repo rev-parse HEAD).Trim()
   $env:WSLENV = ((@($previousWslEnv, "AGENTTRIAL_SIGNING_SEED/u", "AGENTTRIAL_BUILD_COMMIT/u") `
     | Where-Object { $_ }) -join ":")
-  try { & docker compose --project-directory $repo -p agenttrial build }
+  try {
+    Push-Location $repo
+    & docker compose -p agenttrial build
+  }
   finally {
+    Pop-Location
     Remove-Item Env:AGENTTRIAL_SIGNING_SEED -ErrorAction SilentlyContinue
     Remove-Item Env:AGENTTRIAL_BUILD_COMMIT -ErrorAction SilentlyContinue
     if ($null -eq $previousWslEnv) { Remove-Item Env:WSLENV -ErrorAction SilentlyContinue }

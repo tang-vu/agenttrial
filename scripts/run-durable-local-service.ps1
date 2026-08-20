@@ -44,9 +44,11 @@ function Clear-ComposeEnvironment {
 function Start-DurableStack {
   Set-ComposeEnvironment
   try {
-    & docker compose --project-directory $repo -p agenttrial up -d --remove-orphans
+    Push-Location $repo
+    & docker compose -p agenttrial up -d --remove-orphans
     if ($LASTEXITCODE -ne 0) { throw "Docker Compose failed with exit code $LASTEXITCODE." }
   } finally {
+    Pop-Location
     Clear-ComposeEnvironment
   }
 }
