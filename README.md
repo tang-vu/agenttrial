@@ -36,6 +36,12 @@ To publish the local production build at the configured Cloudflare Named Tunnel 
 .\scripts\stop-local-tunnel.ps1 -DisableAutostart
 ```
 
+For the production-grade local topology (PostgreSQL + isolated worker + dedicated signer), use:
+
+```powershell
+.\scripts\install-durable-autostart.ps1
+```
+
 The default hostname is `https://agenttrial.tangvu.dev`. The signing seed, durable report snapshots, generated tunnel config, logs, and process metadata stay outside the repository under `%LOCALAPPDATA%\AgentTrial`. A supervisor restarts either Next.js or `cloudflared` after a process failure. The installer always uses a least-privilege current-user task and starts when that Windows user logs in after reboot; it deliberately never executes the user-writable repository as `SYSTEM`. The PC must remain powered, awake, and connected to the internet.
 
 When deploying a code update, stop the service before rebuilding because the standalone Node process executes directly from `.next`: `stop-local-tunnel.ps1`, `pnpm build`, then `install-local-autostart.ps1 -SkipBuild`. Completed reports remain in the external snapshot directory throughout the update.

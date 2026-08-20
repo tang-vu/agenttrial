@@ -9,6 +9,22 @@ docker compose up --build
 
 Compose starts PostgreSQL, the Next.js web service, a separately scalable queue worker, and a dedicated signer. Only the signer receives the managed seed; web and the target-facing worker have no signing authority. The signer is attached only to the internal database network, recomputes the plan, observations, assertions, score, roots, and references, then publishes the public key registry through PostgreSQL.
 
+### Durable workstation origin
+
+On the AgentTrial Windows origin, Docker Engine can run that same topology behind the named
+Cloudflare Tunnel on loopback port 4179. The existing managed signing seed remains outside the
+repository under `%LOCALAPPDATA%\AgentTrial\tunnel` and is forwarded only to the signer container.
+
+```powershell
+.\scripts\install-durable-autostart.ps1
+```
+
+The least-privilege scheduled task starts Compose after login, waits for PostgreSQL, worker, and
+signer readiness, then starts the tunnel. Every container uses `restart: unless-stopped`; the
+supervisor also repairs an unhealthy stack or tunnel. Run `stop-local-tunnel.ps1` for a scoped stop.
+Use `AGENTTRIAL_IMPORT_DIR` with `scripts/import-snapshots.mts` once when migrating prior
+single-node JSON receipts into PostgreSQL.
+
 For a single-node deployment, set `AGENTTRIAL_DATA_DIR` to an access-controlled persistent directory. The in-process executor then writes each run snapshot atomically, so completed reports and bundles survive application or machine restarts. `AGENTTRIAL_RETENTION_DAYS` defaults to 30 and cleanup runs during readiness checks. Terminal in-memory runs are capped separately. This is not a substitute for PostgreSQL and the worker queue when horizontally scaling.
 
 For Vercel, use the repository root for web only and point `DATABASE_URL` at managed PostgreSQL; deploy the worker target to Railway/Render/Fly. Do not rely on a serverless request continuing background execution.

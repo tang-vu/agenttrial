@@ -25,6 +25,18 @@ function Stop-VerifiedProcess([int]$ProcessId, [string]$Pattern) {
   }
 }
 
+if ($state.mode -eq "docker-durable") {
+  Stop-VerifiedProcess $state.supervisorPid "run-durable-local-service.ps1"
+  Stop-VerifiedProcess $state.tunnelPid "cloudflared-agenttrial.yml"
+  $expectedRepo = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
+  if ($state.repo -and (Resolve-Path -LiteralPath $state.repo).Path -eq $expectedRepo) {
+    & docker compose --project-directory $state.repo -p agenttrial stop
+  }
+  Remove-Item -LiteralPath $statePath -Force -ErrorAction SilentlyContinue
+  Write-Output "Durable AgentTrial local service stopped. Autostart disabled: $DisableAutostart"
+  exit 0
+}
+
 Stop-VerifiedProcess $state.supervisorPid "run-local-service.ps1"
 Stop-VerifiedProcess $state.tunnelPid "cloudflared-agenttrial.yml"
 Stop-VerifiedProcess $state.webLauncherPid "standalone\apps\web\server.js"

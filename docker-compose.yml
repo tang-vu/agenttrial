@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:17-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: agenttrial
       POSTGRES_USER: agenttrial
@@ -12,13 +13,24 @@ services:
       timeout: 3s
       retries: 10
     networks: [backend]
+    shm_size: 128mb
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 512M }
   web:
-    build: .
-    ports: ["3000:3000"]
+    build:
+      context: .
+      args:
+        AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
+    restart: unless-stopped
+    init: true
+    ports: ["127.0.0.1:${AGENTTRIAL_PORT:-4179}:3000"]
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://agenttrial.tangvu.dev}
       DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
+      AGENTTRIAL_CLOUDFLARE_TUNNEL: "true"
+      AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
     depends_on:
       postgres:
         condition: service_healthy
@@ -38,14 +50,20 @@ services:
       timeout: 5s
       retries: 5
     networks: [backend, egress]
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 512M, pids: 128 }
   worker:
     build:
       context: .
       target: worker
+      args:
+        AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
       AGENTTRIAL_EXECUTION_ONLY: "true"
+      AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
     depends_on:
       postgres:
         condition: service_healthy
@@ -53,19 +71,23 @@ services:
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
-    pids_limit: 128
     deploy:
       resources:
-        limits: { cpus: "1.0", memory: 768M }
+        limits: { cpus: "1.0", memory: 768M, pids: 128 }
     networks: [backend, egress]
+    restart: unless-stopped
+    init: true
   signer:
     build:
       context: .
       target: signer
+      args:
+        AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://agenttrial:agenttrial-local@postgres:5432/agenttrial
       AGENTTRIAL_SIGNING_SEED: ${AGENTTRIAL_SIGNING_SEED:?Generate a stable 64-character hex seed}
+      AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
     depends_on:
       postgres:
         condition: service_healthy
@@ -73,11 +95,12 @@ services:
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
-    pids_limit: 64
     deploy:
       resources:
-        limits: { cpus: "0.5", memory: 256M }
+        limits: { cpus: "0.5", memory: 256M, pids: 64 }
     networks: [backend]
+    restart: unless-stopped
+    init: true
 
 volumes:
   agenttrial-data:
