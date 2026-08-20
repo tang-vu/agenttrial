@@ -32,7 +32,12 @@ archives. Run an immediate backup with:
 
 ```powershell
 .\scripts\backup-durable.ps1
+pnpm test:restore
 ```
+
+The restore drill loads the newest archive into a uniquely named temporary database, validates the
+restored schema and run rows, then removes only that isolated database. It never overwrites the live
+`agenttrial` database.
 
 Copy backups to a separately encrypted/off-host location for real disaster recovery. A local
 backup protects against database/container loss, not physical disk or account compromise.

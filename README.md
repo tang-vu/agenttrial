@@ -55,8 +55,9 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:durable # requires DATABASE_URL and AGENTTRIAL_SIGNING_SEED
+pnpm test:restore # non-destructive drill using the newest local backup
 pnpm build
-pnpm exec playwright install chromium
+pnpm exec playwright install chromium firefox webkit
 pnpm test:e2e
 pnpm audit
 pnpm secret-scan

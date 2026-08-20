@@ -48,7 +48,7 @@ jobs:
         env:
           DATABASE_URL: postgres://agenttrial:agenttrial-ci@127.0.0.1:5432/agenttrial
       - run: pnpm build
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - run: pnpm test:e2e
       - run: pnpm audit --audit-level high
       - run: pnpm secret-scan

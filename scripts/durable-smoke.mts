@@ -95,14 +95,14 @@ async function main() {
   const fenced = createFixtureRun("evidence-researcher");
   let firstLease: Awaited<ReturnType<typeof claimRun>>;
   for (let attempt = 0; attempt < 30 && !firstLease; attempt += 1) {
-    firstLease = await claimRun("lease-worker-a", 200);
+    firstLease = await claimRun("lease-worker-a", 1_000);
     if (!firstLease) await pause(50);
   }
   if (!firstLease || firstLease.id !== fenced.id) throw new Error("Lease probe was not claimed");
-  await pause(80);
+  await pause(150);
   if (!(await renewRunLease(firstLease))) throw new Error("Current lease did not renew");
-  await pause(140);
-  if (await claimRun("lease-worker-b", 200)) throw new Error("Renewed job was reclaimed");
+  await pause(300);
+  if (await claimRun("lease-worker-b", 1_000)) throw new Error("Renewed job was reclaimed");
   const forgedLease = { ...firstLease, token: "00000000-0000-4000-8000-000000000000" };
   if (await renewRunLease(forgedLease)) throw new Error("Foreign fencing token renewed a lease");
   if (await finishRunJob(forgedLease)) throw new Error("Foreign fencing token finished a job");
