@@ -41,4 +41,5 @@ $principal = New-ScheduledTaskPrincipal -UserId $identity.Name -LogonType Intera
 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings `
   -Principal $principal -Description "Keeps durable AgentTrial, workers, signer, and tunnel online." `
   -Force | Out-Null
+Start-ScheduledTask -TaskName $taskName
 Write-Output "Installed durable AgentTrial autostart under $($identity.Name), Limited privilege."
