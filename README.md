@@ -134,6 +134,8 @@ pnpm eas:verify agenttrial-RUN_ID.json 0xATTESTATION_UID
 
 These commands spend Base Sepolia test ETH. Mainnet broadcasting is intentionally unsupported. For a durable run, the workflow stores pending/submitted/anchored/failed state, verifies the mined schema, attestor and decoded receipt fields, and joins the explorer link into subsequent report/bundle reads. Failure never blocks or mutates the signed local receipt.
 
+Live proof: the production fixture receipt for run [`17462463-066f-485d-87b7-ae011b0de19f`](https://agenttrial.tangvu.dev/reports/17462463-066f-485d-87b7-ae011b0de19f) is anchored under schema [`0x5686ff1243dd72b5993ec231fc0594e189babb79334edd84c1911d7decf17357`](https://base-sepolia.easscan.org/schema/view/0x5686ff1243dd72b5993ec231fc0594e189babb79334edd84c1911d7decf17357) with attestation [`0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c`](https://base-sepolia.easscan.org/attestation/view/0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c).
+
 ## Deploy
 
 For the durable local stack, generate a signing seed and start PostgreSQL, web, worker, and the isolated signer. Compose injects the seed only into the signer:

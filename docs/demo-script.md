@@ -14,4 +14,4 @@ Set `DEMO_BASE_URL` to capture another reviewed deployment. The command creates
 
 **68–88s — Independent proof.** Open **Verify receipt**. Show the seed opening, evaluator-build and assertion-registry commitments, hash chain, and Ed25519 check running locally in the browser. Click **Modify one byte** and show the first mismatch.
 
-**88–100s — Marketplace layer.** Flash the machine-readable methodology manifest and ownership-gated A2A evaluator. Close: “Identity says who the agent is. AgentTrial proves what it did. AI agents make claims. AgentTrial makes them prove it.”
+**88–105s — Onchain and marketplace layer.** Open the report's Base Sepolia anchor and show the live EAS schema, attestor, evidence-bound payload, and transaction. Flash the machine-readable methodology manifest and ownership-gated A2A evaluator. Close: “Identity says who the agent is. AgentTrial proves what it did. AI agents make claims. AgentTrial makes them prove it.”
