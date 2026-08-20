@@ -60,5 +60,10 @@ $backupSettings = New-ScheduledTaskSettingsSet -RestartCount 3 `
 Register-ScheduledTask -TaskName $backupTaskName -Action $backupAction -Trigger $backupTrigger `
   -Settings $backupSettings -Principal $principal `
   -Description "Creates and verifies a rolling AgentTrial PostgreSQL backup." -Force | Out-Null
+Stop-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+for ($attempt = 0; $attempt -lt 30; $attempt += 1) {
+  if ((Get-ScheduledTask -TaskName $taskName).State -ne "Running") { break }
+  Start-Sleep -Milliseconds 200
+}
 Start-ScheduledTask -TaskName $taskName
 Write-Output "Installed durable AgentTrial autostart and daily backups under $($identity.Name), Limited privilege."
