@@ -223,11 +223,13 @@ async function initialize() {
         scope_key text NOT NULL,
         idempotency_hash text NOT NULL,
         request_hash text NOT NULL,
-        run_id uuid REFERENCES agenttrial_runs(id) ON DELETE SET NULL,
+        run_id uuid,
         created_at timestamptz NOT NULL DEFAULT now(),
         expires_at timestamptz NOT NULL,
         PRIMARY KEY (scope_key, idempotency_hash)
       )`;
+      await db`ALTER TABLE agenttrial_idempotency
+        DROP CONSTRAINT IF EXISTS agenttrial_idempotency_run_id_fkey`;
       await db`CREATE INDEX IF NOT EXISTS agenttrial_authorizations_expiry_idx
         ON agenttrial_authorizations(status, expires_at)`;
     })();
