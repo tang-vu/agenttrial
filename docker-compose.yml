@@ -98,7 +98,7 @@ services:
     cap_drop: [ALL]
     deploy:
       resources:
-        limits: { cpus: "0.5", memory: 256M, pids: 64 }
+        limits: { cpus: "0.5", memory: 512M, pids: 128 }
     networks: [backend]
     restart: unless-stopped
     init: true
