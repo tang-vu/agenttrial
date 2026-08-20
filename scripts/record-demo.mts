@@ -190,6 +190,8 @@ const encoded = spawnSync(
     "-i",
     recordedPath,
     "-an",
+    "-vf",
+    "setpts=0.9*PTS",
     "-c:v",
     "libx264",
     "-preset",

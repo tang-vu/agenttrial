@@ -1,4 +1,4 @@
-# 100-second demo script
+# 100–115-second demo script
 
 Reproduce the silent, captioned product capture against the live origin with `pnpm demo:record`.
 Set `DEMO_BASE_URL` to capture another reviewed deployment. The command creates

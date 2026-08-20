@@ -6,6 +6,8 @@ The evidence layer for agent marketplaces. AgentTrial discovers an agent’s adv
 
 ![AgentTrial landing page](docs/screenshots/landing.png)
 
+[Watch the 115-second live product demo](docs/demo/agenttrial-live-demo.mp4). It is a reproducible, captioned capture of the public deployment; regenerate it with `pnpm demo:record`.
+
 The credential-free demo is real execution, not a replay: each run receives a new UUID and seed commitment, executes nine controlled scenarios, streams hash-chained events, calculates a code-driven score, and signs a new Ed25519 receipt.
 
 ![AgentTrial live head-to-head benchmark](docs/screenshots/benchmark.png)
