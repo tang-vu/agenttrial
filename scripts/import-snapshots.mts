@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { saveRun, type RuntimeRun } from "@agenttrial/runtime";
+import type { RuntimeRun } from "../packages/runtime/src/index.ts";
+import { saveRun } from "../packages/runtime/src/persistence.ts";
 
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required.");
 if (!process.env.AGENTTRIAL_IMPORT_DIR) throw new Error("AGENTTRIAL_IMPORT_DIR is required.");

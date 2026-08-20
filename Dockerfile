@@ -1,6 +1,6 @@
 FROM node:24-bookworm-slim AS base
-ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable
+ENV PNPM_HOME=/pnpm COREPACK_HOME=/pnpm/corepack PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
+RUN corepack enable && corepack install --global pnpm@11.20.0 && chmod -R a+rX /pnpm
 WORKDIR /app
 
 FROM base AS deps
