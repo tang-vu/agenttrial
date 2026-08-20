@@ -11,7 +11,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: "pnpm --filter @agenttrial/web start --port 4178",
+    command: "pnpm exec tsx scripts/start-e2e-server.mts",
     url: "http://127.0.0.1:4178/api/health",
     reuseExistingServer: true,
     timeout: 120_000,
@@ -19,6 +19,8 @@ export default defineConfig({
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "webkit", use: { ...devices["Desktop Safari"] } },
     { name: "mobile", use: { ...devices["iPhone 13"], browserName: "chromium" } },
   ],
 });

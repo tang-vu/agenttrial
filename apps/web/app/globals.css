@@ -464,6 +464,76 @@ button {
   margin-bottom: 20px;
   resize: vertical;
 }
+.authorization-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 22px 0;
+}
+.authorization-steps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--steel);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.authorization-steps li span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.authorization-steps li.active,
+.authorization-steps li.done {
+  color: var(--ink);
+}
+.authorization-steps li.active span {
+  border-color: var(--red);
+  color: var(--red);
+}
+.authorization-steps li.done span {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--ivory);
+}
+.wizard-guidance {
+  border-top: 1px solid var(--line);
+  padding: 18px 0 12px;
+}
+.wizard-guidance p {
+  color: #62665f;
+  font-size: 13px;
+}
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.text-button {
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  padding: 7px 0;
+  font: 650 10px var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.copy-status {
+  display: block;
+  min-height: 20px;
+  color: var(--green);
+  font: 10px var(--mono);
+}
 .notice {
   background: #ebe5da;
   border-left: 3px solid var(--orange);
@@ -646,7 +716,7 @@ button {
   font-weight: 600;
 }
 .timeline code {
-  color: #787d77;
+  color: #5b605a;
 }
 .event-pass .event-node {
   background: var(--green);

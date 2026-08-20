@@ -141,6 +141,71 @@ test("zero-coverage reports never present an agent score", async ({ page, reques
   await expect(page.getByRole("heading", { name: "Public surface checks only" })).toBeVisible();
   await expect(page.getByText("Capability claims remain unverified.")).toBeVisible();
 });
+test("builder can submit a passive public target from the product UI", async ({ page }) => {
+  let submitted: Record<string, unknown> | undefined;
+  await page.route("**/api/runs", async (route) => {
+    submitted = route.request().postDataJSON() as Record<string, unknown>;
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({ runId: "11111111-1111-4111-8111-111111111111", cancelToken: "test" }),
+    });
+  });
+  await page.goto("/new");
+  await page.getByLabel("Public URL, repository, API, or Agent Card").fill("https://agent.example");
+  await page.getByLabel("Optional capability description").fill("Produces cited research reports");
+  await page.getByRole("button", { name: /Evaluate public surface/ }).click();
+  await expect(page).toHaveURL(/\/live\/11111111-1111-4111-8111-111111111111$/);
+  expect(submitted).toEqual({
+    targetUrl: "https://agent.example",
+    mode: "passive",
+    capabilityDescription: "Produces cited research reports",
+  });
+});
+test("authorized A2A flow is a guided three-step browser journey", async ({ page }) => {
+  const runId = "22222222-2222-4222-8222-222222222222";
+  await page.route("**/api/authorizations", (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "33333333-3333-4333-8333-333333333333",
+        verificationToken: "private-browser-token",
+        proofUrl: "https://agent.example/.well-known/agenttrial-proof.json",
+        document: { schemaVersion: "agenttrial.authorization.v1", nonce: "public-proof" },
+      }),
+    }),
+  );
+  await page.route("**/api/authorizations/*/verify", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: '{"status":"verified"}' }),
+  );
+  await page.route("**/api/runs", (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({ runId, cancelToken: "cancel" }),
+    }),
+  );
+  await page.goto("/new");
+  await expect(page.getByText("STEP 1 OF 3")).toBeVisible();
+  await page.getByLabel("Agent Card URL").fill("https://agent.example/.well-known/agent-card.json");
+  await page.getByLabel("A2A interface URL").fill("https://agent.example/a2a/");
+  await page.getByRole("button", { name: "Continue →" }).click();
+  await expect(page.getByText("STEP 2 OF 3")).toBeVisible();
+  await page.getByLabel("Advertised skill ID").fill("research");
+  await page
+    .getByLabel("Proof document URL")
+    .fill("https://agent.example/.well-known/agenttrial-proof.json");
+  await page.getByRole("button", { name: "Continue →" }).click();
+  await expect(page.getByText("STEP 3 OF 3")).toBeVisible();
+  await page.getByLabel("Bounded test message").fill("Return EVIDENCE-OK");
+  await page.getByLabel("Expected response marker").fill("EVIDENCE-OK");
+  await page.getByRole("button", { name: /Create authorization challenge/ }).click();
+  await expect(page.getByText(/Publish this exact JSON/)).toBeVisible();
+  await page.getByRole("button", { name: /Verify published proof/ }).click();
+  await page.getByRole("button", { name: /Run authorized A2A trial/ }).click();
+  await expect(page).toHaveURL(new RegExp(`/live/${runId}$`));
+});
 test("landing has no serious accessibility violations", async ({ page }) => {
   await page.goto("/");
   const results = await new AxeBuilder({ page }).analyze();
@@ -151,6 +216,27 @@ test("landing has no serious accessibility violations", async ({ page }) => {
 test("key product screens have no serious accessibility violations", async ({ page }) => {
   for (const path of ["/new", "/benchmark", "/verify"]) {
     await page.goto(path);
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(
+      results.violations.filter((violation) =>
+        ["serious", "critical"].includes(violation.impact ?? ""),
+      ),
+    ).toEqual([]);
+  }
+});
+test("dynamic live and report screens have no serious accessibility violations", async ({
+  page,
+}) => {
+  await page.goto("/new");
+  await page.getByRole("button", { name: /Run live trial/ }).click();
+  await expect(page.getByRole("heading", { name: "Evidence sealed." })).toBeVisible({
+    timeout: 30_000,
+  });
+  for (const path of [
+    page.url(),
+    await page.getByRole("link", { name: /Open full report/ }).getAttribute("href"),
+  ]) {
+    if (path) await page.goto(path);
     const results = await new AxeBuilder({ page }).analyze();
     expect(
       results.violations.filter((violation) =>

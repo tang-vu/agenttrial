@@ -44,6 +44,8 @@ export function NewTrialForm() {
   }>();
   const [authorizationVerified, setAuthorizationVerified] = useState(false);
   const [activeLoading, setActiveLoading] = useState(false);
+  const [activeStep, setActiveStep] = useState(1);
+  const [copyStatus, setCopyStatus] = useState("");
   async function start() {
     setLoading(true);
     setError("");
@@ -260,6 +262,30 @@ export function NewTrialForm() {
             ownership or safety.
           </p>
         </div>
+        <ol className="authorization-steps" aria-label="Authorization progress">
+          {["Connect", "Prove control", "Seal trial"].map((label, index) => (
+            <li
+              key={label}
+              className={activeStep === index + 1 ? "active" : activeStep > index + 1 ? "done" : ""}
+              aria-current={activeStep === index + 1 ? "step" : undefined}
+            >
+              <span>{activeStep > index + 1 ? "✓" : index + 1}</span>
+              {label}
+            </li>
+          ))}
+        </ol>
+        {!challenge && (
+          <div className="wizard-guidance">
+            <span className="kicker">STEP {activeStep} OF 3</span>
+            <p>
+              {activeStep === 1
+                ? "Connect the exact Agent Card and advertised HTTP+JSON interface."
+                : activeStep === 2
+                  ? "Choose the advertised skill and same-origin location for the short-lived proof."
+                  : "Define a text-only, two-call trial with no credentials or side effects."}
+            </p>
+          </div>
+        )}
         {(
           [
             ["cardUrl", "Agent Card URL", "https://agent.example/.well-known/agent-card.json"],
@@ -273,21 +299,45 @@ export function NewTrialForm() {
             ["testMessage", "Bounded test message", "Return the marker EVIDENCE-OK."],
             ["expectedSubstring", "Expected response marker", "EVIDENCE-OK"],
           ] as const
-        ).map(([key, label, placeholder]) => (
-          <label key={key}>
-            {label}
-            <input
-              type={key.endsWith("Url") ? "url" : "text"}
-              value={active[key]}
-              onChange={(event) =>
-                setActive((current) => ({ ...current, [key]: event.target.value }))
-              }
-              placeholder={placeholder}
-              disabled={Boolean(challenge)}
-            />
-          </label>
-        ))}
-        {!challenge ? (
+        )
+          .filter((_, index) => challenge || Math.floor(index / 2) + 1 === activeStep)
+          .map(([key, label, placeholder]) => (
+            <label key={key}>
+              {label}
+              <input
+                type={key.endsWith("Url") ? "url" : "text"}
+                value={active[key]}
+                onChange={(event) =>
+                  setActive((current) => ({ ...current, [key]: event.target.value }))
+                }
+                placeholder={placeholder}
+                disabled={Boolean(challenge)}
+              />
+            </label>
+          ))}
+        {!challenge && (
+          <div className="wizard-actions">
+            {activeStep > 1 && (
+              <button className="text-button" onClick={() => setActiveStep((step) => step - 1)}>
+                ← Back
+              </button>
+            )}
+            {activeStep < 3 && (
+              <button
+                className="button secondary"
+                onClick={() => setActiveStep((step) => step + 1)}
+                disabled={
+                  activeStep === 1
+                    ? !active.cardUrl || !active.interfaceUrl
+                    : !active.skillId || !active.proofUrl
+                }
+              >
+                Continue →
+              </button>
+            )}
+          </div>
+        )}
+        {!challenge && activeStep === 3 ? (
           <button
             className="button secondary full"
             onClick={createChallenge}
@@ -295,10 +345,22 @@ export function NewTrialForm() {
           >
             {activeLoading ? "Inspecting Agent Card…" : "Create authorization challenge →"}
           </button>
-        ) : (
+        ) : challenge ? (
           <div className="evidence-card">
             <strong>Publish this exact JSON at {challenge.proofUrl}</strong>
             <pre>{JSON.stringify(challenge.document, null, 2)}</pre>
+            <button
+              className="text-button"
+              onClick={() => {
+                void navigator.clipboard.writeText(JSON.stringify(challenge.document, null, 2));
+                setCopyStatus("Challenge JSON copied");
+              }}
+            >
+              Copy challenge JSON
+            </button>
+            <span className="copy-status" role="status">
+              {copyStatus}
+            </span>
             <small>
               The private verification token stays only in this browser session and is never
               included in the public proof or evidence bundle.
@@ -317,7 +379,7 @@ export function NewTrialForm() {
               </button>
             )}
           </div>
-        )}
+        ) : null}
       </section>
     </div>
   );

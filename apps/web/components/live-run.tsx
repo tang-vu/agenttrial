@@ -206,7 +206,12 @@ export function LiveRun({ runId }: { runId: string }) {
             <span className="event-count">{events.length} events</span>
             {!terminal && <span className={`connection-state ${connection}`}>{connection}</span>}
           </div>
-          <div className="timeline" aria-live="polite">
+          <div
+            className="timeline"
+            aria-live="polite"
+            aria-label="Hash-chained evaluation events"
+            tabIndex={0}
+          >
             {events.map((e) => (
               <article
                 key={e.id}
