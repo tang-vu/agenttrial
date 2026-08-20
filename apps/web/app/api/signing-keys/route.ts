@@ -8,7 +8,7 @@ export async function GET() {
   return NextResponse.json(
     {
       version: "1",
-      trustModel: "service-distributed-current-key",
+      trustModel: "service-distributed-versioned-registry",
       independentReference: "https://github.com/tang-vu/agenttrial/releases",
       keys: keys.map((key) => ({ ...key, algorithm: "Ed25519" })),
     },

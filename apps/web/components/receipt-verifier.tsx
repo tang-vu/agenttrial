@@ -1,19 +1,21 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { verifyBundle, type EvidenceBundle, type VerificationResult } from "@agenttrial/evidence";
+import {
+  trustedPublicKeysAt,
+  verifyBundle,
+  type EvidenceBundle,
+  type TrustKeyRecord,
+  type VerificationResult,
+} from "@agenttrial/evidence";
 export function ReceiptVerifier() {
   const params = useSearchParams();
   const [bundle, setBundle] = useState<EvidenceBundle>();
   const [result, setResult] = useState<VerificationResult>();
   const [error, setError] = useState("");
   const [tampered, setTampered] = useState(false);
-  const [trustedKeys, setTrustedKeys] = useState<string[]>([]);
+  const [trustedKeys, setTrustedKeys] = useState<TrustKeyRecord[]>([]);
   const [pinnedKey, setPinnedKey] = useState("");
-  const effectiveTrustedKeys = [
-    ...trustedKeys,
-    ...(/^[0-9a-fA-F]{64}$/.test(pinnedKey.trim()) ? [pinnedKey.trim().toLowerCase()] : []),
-  ];
   function inspect(next: EvidenceBundle, isTampered = false) {
     try {
       if (
@@ -24,8 +26,14 @@ export function ReceiptVerifier() {
         !next.receipt?.payload
       )
         throw new Error("Bundle does not match the supported AgentTrial 1.0 schema.");
+      const registryKeys = trustedPublicKeysAt(trustedKeys, next.receipt.payload.issuedAt);
+      const independentlyPinned = /^[0-9a-fA-F]{64}$/.test(pinnedKey.trim())
+        ? [pinnedKey.trim().toLowerCase()]
+        : [];
       setBundle(next);
-      setResult(verifyBundle(next, { trustedPublicKeys: effectiveTrustedKeys }));
+      setResult(
+        verifyBundle(next, { trustedPublicKeys: [...registryKeys, ...independentlyPinned] }),
+      );
       setTampered(isTampered);
       setError("");
     } catch (e) {
@@ -35,13 +43,7 @@ export function ReceiptVerifier() {
   useEffect(() => {
     fetch("/api/signing-keys", { cache: "no-store" })
       .then((response) => response.json())
-      .then((data) =>
-        setTrustedKeys(
-          data.keys
-            .filter((key: { status: string }) => key.status !== "revoked")
-            .map((key: { publicKey: string }) => key.publicKey),
-        ),
-      )
+      .then((data) => setTrustedKeys(data.keys as TrustKeyRecord[]))
       .catch(() => setTrustedKeys([]));
   }, []);
   useEffect(() => {

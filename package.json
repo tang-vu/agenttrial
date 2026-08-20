@@ -20,7 +20,8 @@
     "secret-scan": "node scripts/secret-scan.mjs",
     "eas:register": "tsx scripts/eas-register.mjs",
     "eas:attest": "tsx scripts/eas-attest.mjs",
-    "eas:verify": "tsx scripts/eas-verify.mjs"
+    "eas:verify": "tsx scripts/eas-verify.mjs",
+    "signing-key:revoke": "tsx scripts/revoke-signing-key.mts"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

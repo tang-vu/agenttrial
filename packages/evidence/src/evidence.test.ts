@@ -8,6 +8,7 @@ import {
   hashObject,
   signReceipt,
   verifyBundle,
+  trustedPublicKeysAt,
   verifySignature,
   type EvidenceBundle,
 } from "./index";
@@ -181,5 +182,24 @@ describe("canonical evidence", () => {
     expect(verifyBundle(b, { trustedPublicKeys: [b.receipt.publicKey] }).firstMismatch).toBe(
       "attestation-attachment",
     );
+  });
+  it("applies signer validity windows and revocation without invalidating historical math", () => {
+    const publicKey = "ab".repeat(32);
+    const previous = {
+      publicKey,
+      status: "previous" as const,
+      notBefore: "2026-01-01T00:00:00.000Z",
+      notAfter: "2026-02-01T00:00:00.000Z",
+      revokedAt: null,
+    };
+    expect(trustedPublicKeysAt([previous], "2026-01-15T00:00:00.000Z")).toEqual([publicKey]);
+    expect(trustedPublicKeysAt([previous], "2026-02-02T00:00:00.000Z")).toEqual([]);
+    expect(
+      trustedPublicKeysAt(
+        [{ ...previous, status: "revoked", revokedAt: "2026-01-20T00:00:00.000Z" }],
+        "2026-01-15T00:00:00.000Z",
+      ),
+    ).toEqual([]);
+    expect(trustedPublicKeysAt([previous], "not-a-date")).toEqual([]);
   });
 });

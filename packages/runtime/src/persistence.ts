@@ -184,6 +184,10 @@ async function initialize() {
         status text NOT NULL,
         registered_at timestamptz NOT NULL DEFAULT now()
       )`;
+      await db`ALTER TABLE agenttrial_signing_keys ADD COLUMN IF NOT EXISTS not_before timestamptz`;
+      await db`ALTER TABLE agenttrial_signing_keys ADD COLUMN IF NOT EXISTS not_after timestamptz`;
+      await db`ALTER TABLE agenttrial_signing_keys ADD COLUMN IF NOT EXISTS revoked_at timestamptz`;
+      await db`UPDATE agenttrial_signing_keys SET not_before = registered_at WHERE not_before IS NULL`;
       await db`CREATE TABLE IF NOT EXISTS agenttrial_attestations (
         run_id uuid PRIMARY KEY REFERENCES agenttrial_runs(id) ON DELETE CASCADE,
         chain_id integer NOT NULL,
@@ -537,20 +541,39 @@ export async function finishSigningJob(lease: JobLease, error?: string) {
 export async function registerSigningPublicKey(publicKey: string) {
   await initialize();
   const keyId = `ed25519:${publicKey.slice(0, 16)}`;
-  await sql()`UPDATE agenttrial_signing_keys SET status = 'previous' WHERE status = 'active' AND key_id <> ${keyId}`;
-  await sql()`INSERT INTO agenttrial_signing_keys (key_id, public_key, status)
-    VALUES (${keyId}, ${publicKey}, 'active') ON CONFLICT (key_id) DO UPDATE SET status = 'active'`;
+  await sql().begin(async (transaction) => {
+    const tx = transaction as unknown as ReturnType<typeof sql>;
+    await tx`UPDATE agenttrial_signing_keys SET status = 'previous', not_after = COALESCE(not_after, now())
+      WHERE status = 'active' AND key_id <> ${keyId}`;
+    await tx`INSERT INTO agenttrial_signing_keys
+      (key_id, public_key, status, not_before, not_after, revoked_at)
+      VALUES (${keyId}, ${publicKey}, 'active', now(), null, null)
+      ON CONFLICT (key_id) DO UPDATE SET status = 'active', not_after = null, revoked_at = null`;
+  });
+}
+
+export async function revokeSigningPublicKey(keyId: string) {
+  if (!/^ed25519:[0-9a-f]{16}$/i.test(keyId)) throw new Error("Invalid signing key identifier");
+  await initialize();
+  const rows = await sql()`UPDATE agenttrial_signing_keys
+    SET status = 'revoked', revoked_at = now(), not_after = COALESCE(not_after, now())
+    WHERE key_id = ${keyId.toLowerCase()} AND status <> 'revoked' RETURNING key_id`;
+  return rows.length === 1;
 }
 
 export async function loadSigningPublicKeys() {
   if (!persistenceConfigured()) return [];
   await initialize();
   return (await sql()`SELECT key_id AS "keyId", public_key AS "publicKey", status,
-    registered_at AS "registeredAt" FROM agenttrial_signing_keys ORDER BY registered_at DESC`) as Array<{
+    registered_at AS "registeredAt", not_before AS "notBefore", not_after AS "notAfter",
+    revoked_at AS "revokedAt" FROM agenttrial_signing_keys ORDER BY registered_at DESC`) as Array<{
     keyId: string;
     publicKey: string;
     status: "active" | "previous" | "revoked";
     registeredAt: Date;
+    notBefore: Date;
+    notAfter: Date | null;
+    revokedAt: Date | null;
   }>;
 }
 

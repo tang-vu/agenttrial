@@ -70,6 +70,7 @@ export {
   closePersistence,
   heartbeatWorker,
   persistenceReadiness,
+  revokeSigningPublicKey,
 } from "./persistence";
 export { consumeDistributedRateLimit } from "./persistence";
 
@@ -149,7 +150,13 @@ export function getSigningPublicKey() {
 export async function getSigningKeyRegistry() {
   const persisted = await loadSigningPublicKeys();
   if (persisted.length)
-    return persisted.map((key) => ({ ...key, registeredAt: key.registeredAt.toISOString() }));
+    return persisted.map((key) => ({
+      ...key,
+      registeredAt: key.registeredAt.toISOString(),
+      notBefore: key.notBefore.toISOString(),
+      notAfter: key.notAfter?.toISOString() ?? null,
+      revokedAt: key.revokedAt?.toISOString() ?? null,
+    }));
   if (persistenceConfigured() && !signingSeedHex && !process.env.AGENTTRIAL_SIGNING_PUBLIC_KEY)
     return [];
   const publicKey = getSigningPublicKey();
@@ -159,6 +166,9 @@ export async function getSigningKeyRegistry() {
       publicKey,
       status: "active" as const,
       registeredAt: new Date().toISOString(),
+      notBefore: new Date().toISOString(),
+      notAfter: null,
+      revokedAt: null,
     },
   ];
 }

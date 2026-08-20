@@ -182,6 +182,25 @@ export interface VerificationResult {
 export interface VerificationOptions {
   trustedPublicKeys?: readonly string[];
 }
+export interface TrustKeyRecord {
+  publicKey: string;
+  status: "active" | "previous" | "revoked";
+  notBefore: string;
+  notAfter: string | null;
+  revokedAt: string | null;
+}
+export function trustedPublicKeysAt(records: readonly TrustKeyRecord[], issuedAt: string) {
+  const issued = Date.parse(issuedAt);
+  if (!Number.isFinite(issued)) return [];
+  return records
+    .filter((key) => {
+      if (key.status === "revoked" || key.revokedAt) return false;
+      const notBefore = Date.parse(key.notBefore);
+      const notAfter = key.notAfter ? Date.parse(key.notAfter) : Number.POSITIVE_INFINITY;
+      return Number.isFinite(notBefore) && issued >= notBefore && issued <= notAfter;
+    })
+    .map((key) => key.publicKey.toLowerCase());
+}
 export function verifyBundle(
   bundle: EvidenceBundle,
   options: VerificationOptions = {},
