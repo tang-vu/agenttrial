@@ -165,6 +165,10 @@ export async function POST(request: Request) {
         reservation.idempotencyHash,
         reservation.requestHash,
       ).catch(() => undefined);
+    console.error("Trial creation rejected", {
+      name: error instanceof Error ? error.name : "UnknownError",
+      message: error instanceof Error ? error.message : "Unknown failure",
+    });
     return NextResponse.json(
       { error: error instanceof UnsafeTargetError ? error.message : "Invalid trial request." },
       { status: 400 },
