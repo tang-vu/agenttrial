@@ -102,6 +102,7 @@ const globalStore = globalThis as typeof globalThis & {
   __agenttrialRuns?: Map<string, RuntimeRun>;
   __agenttrialListeners?: Map<string, Set<EventListener>>;
   __agenttrialKey?: ReturnType<typeof createSigningKey>;
+  __agenttrialKeyRegisteredAt?: string;
   __agenttrialIdempotency?: Map<string, { requestHash: string; runId?: string; expiresAt: number }>;
 };
 export const runs = (globalStore.__agenttrialRuns ??= new Map());
@@ -185,9 +186,11 @@ function requireSigningKey() {
     throw new Error("Execution workers cannot access receipt signing authority.");
   if (process.env.DATABASE_URL && !signingSeedHex)
     throw new Error("The dedicated signer requires AGENTTRIAL_SIGNING_SEED.");
-  return (globalStore.__agenttrialKey ??= createSigningKey(
+  const key = (globalStore.__agenttrialKey ??= createSigningKey(
     signingSeedHex ? Uint8Array.from(Buffer.from(signingSeedHex, "hex")) : undefined,
   ));
+  globalStore.__agenttrialKeyRegisteredAt ??= new Date().toISOString();
+  return key;
 }
 export function getSigningPublicKey() {
   const configured = process.env.AGENTTRIAL_SIGNING_PUBLIC_KEY;
@@ -211,13 +214,14 @@ export async function getSigningKeyRegistry() {
   if (persistenceConfigured() && !signingSeedHex && !process.env.AGENTTRIAL_SIGNING_PUBLIC_KEY)
     return [];
   const publicKey = getSigningPublicKey();
+  const registeredAt = (globalStore.__agenttrialKeyRegisteredAt ??= new Date().toISOString());
   return [
     {
       keyId: `ed25519:${publicKey.slice(0, 16)}`,
       publicKey,
       status: "active" as const,
-      registeredAt: new Date().toISOString(),
-      notBefore: new Date().toISOString(),
+      registeredAt,
+      notBefore: registeredAt,
       notAfter: null,
       revokedAt: null,
     },

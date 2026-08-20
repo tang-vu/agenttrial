@@ -57,7 +57,8 @@ export async function POST(request: Request) {
           ? (request.headers.get("x-real-ip") ?? "anonymous")
           : "anonymous";
     const createKey = `create:${client}`;
-    const createLimit = client === "anonymous" ? 20 : 10;
+    const createLimit =
+      process.env.AGENTTRIAL_E2E === "true" ? 500 : client === "anonymous" ? 20 : 10;
     const rate =
       (await consumeDistributedRateLimit(createKey, createLimit, 60_000)) ??
       consumeRateLimit(createKey, createLimit, 60_000);

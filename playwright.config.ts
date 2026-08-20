@@ -15,6 +15,7 @@ export default defineConfig({
     url: "http://127.0.0.1:4178/api/health",
     reuseExistingServer: true,
     timeout: 120_000,
+    env: { AGENTTRIAL_E2E: "true" },
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
