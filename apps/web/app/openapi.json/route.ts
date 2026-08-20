@@ -54,6 +54,15 @@ const spec = {
     "/api/runs": {
       post: {
         summary: "Start a fixture, passive public, or authorized A2A trial",
+        parameters: [
+          {
+            name: "Idempotency-Key",
+            in: "header",
+            required: false,
+            description: "8-128 safe ASCII characters; retained for 24 hours per caller.",
+            schema: { type: "string", minLength: 8, maxLength: 128 },
+          },
+        ],
         requestBody: {
           required: true,
           content: {
@@ -69,6 +78,12 @@ const spec = {
           },
         },
         responses: {
+          "200": {
+            description: "Existing run returned for an idempotent replay",
+            content: {
+              "application/json": { schema: { $ref: "#/components/schemas/RunReplay" } },
+            },
+          },
           "201": {
             description: "Run created",
             content: {
@@ -77,6 +92,8 @@ const spec = {
           },
           "400": { description: "Invalid request" },
           "403": { description: "Consent required" },
+          "409": { description: "Original idempotent request is still pending" },
+          "422": { description: "Idempotency key reused with a different request" },
         },
       },
     },
@@ -282,6 +299,16 @@ const spec = {
             type: "string",
             description: "Private cancellation capability; returned only once.",
           },
+        },
+      },
+      RunReplay: {
+        type: "object",
+        additionalProperties: false,
+        required: ["runId", "state", "replayed"],
+        properties: {
+          runId: { type: "string", format: "uuid" },
+          state: { $ref: "#/components/schemas/PipelineState" },
+          replayed: { const: true },
         },
       },
       PipelineState: {

@@ -7,8 +7,14 @@ The canonical OpenAPI 3.1 document is served at `/openapi.json`.
 ```bash
 RUN=$(curl -s -X POST http://localhost:3000/api/runs \
   -H 'content-type: application/json' \
+  -H 'idempotency-key: builder-run-2026-08-20-001' \
   -d '{"fixture":"evidence-researcher","activeConsent":true}')
 ```
+
+`Idempotency-Key` is optional for the browser demo and strongly recommended for machine clients.
+It accepts 8–128 safe ASCII characters and is scoped to the caller for 24 hours. The first request
+returns the private cancellation capability once. An exact retry returns HTTP 200 with the original
+`runId` and `replayed: true`; reusing the key for different input returns HTTP 422.
 
 - `POST /api/runs` — creates a fresh controlled run. Active consent must be literal `true`.
 - `POST /api/runs` with `{"targetUrl":"https://…","mode":"passive"}` — bounded public discovery.

@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
 import {
+  abandonRunIdempotency,
   consumeAuthorization,
   consumeDistributedRateLimit,
   createAuthorizedA2ARun,
   createExternalRun,
   createFixtureRun,
+  finalizeRunIdempotency,
+  getRun,
+  reserveRunIdempotency,
   takeCancellationCapability,
 } from "@agenttrial/runtime";
+import { hashObject } from "@agenttrial/evidence";
 import type { FixtureId } from "@agenttrial/fixtures";
 import { UnsafeTargetError, consumeRateLimit } from "@agenttrial/security";
 import { z } from "zod";
@@ -33,6 +38,9 @@ const requestSchema = z.union([
     .strict(),
 ]);
 export async function POST(request: Request) {
+  let reservation:
+    | { scopeKey: string; idempotencyHash: string; requestHash: string; active: boolean }
+    | undefined;
   try {
     if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json"))
       return NextResponse.json(
@@ -73,6 +81,36 @@ export async function POST(request: Request) {
         { status: 403 },
       );
     const body = requestSchema.parse(parsed);
+    const idempotencyKey = request.headers.get("idempotency-key");
+    if (idempotencyKey) {
+      if (!/^[A-Za-z0-9._:-]{8,128}$/.test(idempotencyKey))
+        return NextResponse.json(
+          { error: "Idempotency-Key must be 8-128 safe ASCII characters." },
+          { status: 400 },
+        );
+      const scopeKey = hashObject({ client });
+      const idempotencyHash = hashObject({ idempotencyKey });
+      const requestHash = hashObject(body);
+      const result = await reserveRunIdempotency(scopeKey, idempotencyHash, requestHash);
+      if (result.status === "conflict")
+        return NextResponse.json(
+          { error: "Idempotency-Key was already used with a different request." },
+          { status: 422 },
+        );
+      if (result.status === "pending")
+        return NextResponse.json(
+          { error: "The idempotent request is still being created." },
+          { status: 409, headers: { "retry-after": "1" } },
+        );
+      if (result.status === "replay") {
+        const existing = await getRun(result.runId);
+        return NextResponse.json(
+          { runId: result.runId, state: existing?.state ?? "CREATED", replayed: true },
+          { status: 200, headers: { "idempotency-replayed": "true" } },
+        );
+      }
+      reservation = { scopeKey, idempotencyHash, requestHash, active: true };
+    }
     if ("targetUrl" in body) {
       const targetOrigin = new URL(body.targetUrl).origin.toLowerCase();
       const targetKey = `target:${targetOrigin}`;
@@ -106,11 +144,27 @@ export async function POST(request: Request) {
       const authorization = await consumeAuthorization(body.authorizationId, verificationToken);
       run = createAuthorizedA2ARun(authorization);
     }
+    if (reservation) {
+      const finalized = await finalizeRunIdempotency(
+        reservation.scopeKey,
+        reservation.idempotencyHash,
+        reservation.requestHash,
+        run.id,
+      );
+      if (!finalized) throw new Error("Could not finalize idempotent request.");
+      reservation.active = false;
+    }
     return NextResponse.json(
       { runId: run.id, state: run.state, cancelToken: takeCancellationCapability(run.id) },
       { status: 201, headers: { "cache-control": "no-store" } },
     );
   } catch (error) {
+    if (reservation?.active)
+      await abandonRunIdempotency(
+        reservation.scopeKey,
+        reservation.idempotencyHash,
+        reservation.requestHash,
+      ).catch(() => undefined);
     return NextResponse.json(
       { error: error instanceof UnsafeTargetError ? error.message : "Invalid trial request." },
       { status: 400 },

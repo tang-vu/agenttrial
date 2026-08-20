@@ -59,6 +59,29 @@ test("active consent is required and cancellation is typed", async ({ request })
     ).status(),
   );
 });
+test("trial creation is idempotent and rejects key reuse with different input", async ({
+  request,
+}) => {
+  const key = `e2e-${Date.now()}-fixture`;
+  const first = await request.post("/api/runs", {
+    headers: { "Idempotency-Key": key },
+    data: { fixture: "evidence-researcher", activeConsent: true },
+  });
+  expect(first.status()).toBe(201);
+  const created = await first.json();
+  const replay = await request.post("/api/runs", {
+    headers: { "Idempotency-Key": key },
+    data: { fixture: "evidence-researcher", activeConsent: true },
+  });
+  expect(replay.status()).toBe(200);
+  expect(replay.headers()["idempotency-replayed"]).toBe("true");
+  expect((await replay.json()).runId).toBe(created.runId);
+  const conflict = await request.post("/api/runs", {
+    headers: { "Idempotency-Key": key },
+    data: { fixture: "gullible-researcher", activeConsent: true },
+  });
+  expect(conflict.status()).toBe(422);
+});
 test("cancelled live run stops progress and explains receipt semantics", async ({
   page,
   request,

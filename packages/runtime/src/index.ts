@@ -39,6 +39,7 @@ import {
 } from "@agenttrial/fixtures";
 import { normalizeTargetUrl, redact } from "@agenttrial/security";
 import {
+  abandonDistributedIdempotency,
   cancelQueuedJob,
   cancelRunDurably,
   claimRun,
@@ -47,18 +48,20 @@ import {
   enqueueSigningJob,
   finishRunJob,
   finishSigningJob,
+  finalizeDistributedIdempotency,
   claimSigningJob,
   loadRun,
   persistenceConfigured,
   renewRunLease,
   registerSigningPublicKey,
+  reserveDistributedIdempotency,
   loadSigningPublicKeys,
   snapshotPersistenceConfigured,
   runCancellationRequested,
   saveRun,
   saveSignedRun,
 } from "./persistence";
-import type { JobLease } from "./persistence";
+import type { IdempotencyReservation, JobLease } from "./persistence";
 export {
   consumeAuthorization,
   issueAuthorizationChallenge,
@@ -99,10 +102,12 @@ const globalStore = globalThis as typeof globalThis & {
   __agenttrialRuns?: Map<string, RuntimeRun>;
   __agenttrialListeners?: Map<string, Set<EventListener>>;
   __agenttrialKey?: ReturnType<typeof createSigningKey>;
+  __agenttrialIdempotency?: Map<string, { requestHash: string; runId?: string; expiresAt: number }>;
 };
 export const runs = (globalStore.__agenttrialRuns ??= new Map());
 const listeners = (globalStore.__agenttrialListeners ??= new Map());
 const cancellationCapabilities = new Map<string, string>();
+const idempotencyRecords = (globalStore.__agenttrialIdempotency ??= new Map());
 const activeLeases = new Map<
   string,
   {
@@ -115,6 +120,52 @@ const activeLeases = new Map<
 const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
 const REPORT_SCHEMA_URI = "https://agenttrial.tangvu.dev/openapi.json#/components/schemas/Report";
 const RUNTIME_VERSION = "0.5.0";
+
+export async function reserveRunIdempotency(
+  scopeKey: string,
+  idempotencyHash: string,
+  requestHash: string,
+): Promise<IdempotencyReservation> {
+  const distributed = await reserveDistributedIdempotency(scopeKey, idempotencyHash, requestHash);
+  if (distributed) return distributed;
+  const now = Date.now();
+  for (const [key, value] of idempotencyRecords)
+    if (value.expiresAt <= now) idempotencyRecords.delete(key);
+  const key = `${scopeKey}:${idempotencyHash}`;
+  const existing = idempotencyRecords.get(key);
+  if (existing) {
+    if (existing.requestHash !== requestHash) return { status: "conflict" };
+    return existing.runId ? { status: "replay", runId: existing.runId } : { status: "pending" };
+  }
+  idempotencyRecords.set(key, { requestHash, expiresAt: now + 24 * 60 * 60 * 1000 });
+  return { status: "reserved" };
+}
+
+export async function finalizeRunIdempotency(
+  scopeKey: string,
+  idempotencyHash: string,
+  requestHash: string,
+  runId: string,
+) {
+  if (persistenceConfigured())
+    return finalizeDistributedIdempotency(scopeKey, idempotencyHash, requestHash, runId);
+  const record = idempotencyRecords.get(`${scopeKey}:${idempotencyHash}`);
+  if (!record || record.requestHash !== requestHash || record.runId) return false;
+  record.runId = runId;
+  return true;
+}
+
+export async function abandonRunIdempotency(
+  scopeKey: string,
+  idempotencyHash: string,
+  requestHash: string,
+) {
+  if (persistenceConfigured())
+    return abandonDistributedIdempotency(scopeKey, idempotencyHash, requestHash);
+  const key = `${scopeKey}:${idempotencyHash}`;
+  const record = idempotencyRecords.get(key);
+  if (record?.requestHash === requestHash && !record.runId) idempotencyRecords.delete(key);
+}
 function evaluatorProvenance() {
   const candidate = process.env.AGENTTRIAL_BUILD_COMMIT ?? process.env.GITHUB_SHA;
   return {

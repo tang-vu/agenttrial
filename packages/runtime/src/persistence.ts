@@ -219,6 +219,15 @@ async function initialize() {
         count integer NOT NULL,
         reset_at timestamptz NOT NULL
       )`;
+      await db`CREATE TABLE IF NOT EXISTS agenttrial_idempotency (
+        scope_key text NOT NULL,
+        idempotency_hash text NOT NULL,
+        request_hash text NOT NULL,
+        run_id uuid REFERENCES agenttrial_runs(id) ON DELETE SET NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        expires_at timestamptz NOT NULL,
+        PRIMARY KEY (scope_key, idempotency_hash)
+      )`;
       await db`CREATE INDEX IF NOT EXISTS agenttrial_authorizations_expiry_idx
         ON agenttrial_authorizations(status, expires_at)`;
     })();
@@ -401,7 +410,8 @@ export async function heartbeatWorker(workerId: string) {
 export async function cleanupExpiredDatabaseRecords(
   retentionDays = Number(process.env.AGENTTRIAL_RETENTION_DAYS ?? 30),
 ) {
-  if (!persistenceConfigured()) return { runs: 0, authorizations: 0, buckets: 0, workers: 0 };
+  if (!persistenceConfigured())
+    return { runs: 0, authorizations: 0, buckets: 0, workers: 0, idempotency: 0 };
   await initialize();
   const boundedDays = Math.min(365, Math.max(1, Math.floor(retentionDays)));
   const db = sql();
@@ -416,13 +426,74 @@ export async function cleanupExpiredDatabaseRecords(
       WHERE reset_at < now() - interval '1 day' RETURNING bucket_key`;
     const workers = await tx`DELETE FROM agenttrial_workers
       WHERE last_seen < now() - interval '1 day' RETURNING worker_id`;
+    const idempotency = await tx`DELETE FROM agenttrial_idempotency
+      WHERE expires_at < now() RETURNING idempotency_hash`;
     return {
       runs: runs.length,
       authorizations: authorizations.length,
       buckets: buckets.length,
       workers: workers.length,
+      idempotency: idempotency.length,
     };
   });
+}
+
+export type IdempotencyReservation =
+  | { status: "reserved" }
+  | { status: "replay"; runId: string }
+  | { status: "pending" }
+  | { status: "conflict" };
+
+export async function reserveDistributedIdempotency(
+  scopeKey: string,
+  idempotencyHash: string,
+  requestHash: string,
+  ttlMs = 24 * 60 * 60 * 1000,
+): Promise<IdempotencyReservation | undefined> {
+  if (!persistenceConfigured()) return undefined;
+  await initialize();
+  const inserted = await sql()`INSERT INTO agenttrial_idempotency
+    (scope_key, idempotency_hash, request_hash, expires_at)
+    VALUES (${scopeKey}, ${idempotencyHash}, ${requestHash},
+      now() + (${ttlMs} * interval '1 millisecond'))
+    ON CONFLICT (scope_key, idempotency_hash) DO NOTHING RETURNING idempotency_hash`;
+  if (inserted.length === 1) return { status: "reserved" };
+  const rows = await sql()`SELECT request_hash, run_id FROM agenttrial_idempotency
+    WHERE scope_key = ${scopeKey} AND idempotency_hash = ${idempotencyHash}
+      AND expires_at > now() LIMIT 1`;
+  if (!rows[0]) {
+    await sql()`DELETE FROM agenttrial_idempotency WHERE scope_key = ${scopeKey}
+      AND idempotency_hash = ${idempotencyHash} AND expires_at <= now()`;
+    return reserveDistributedIdempotency(scopeKey, idempotencyHash, requestHash, ttlMs);
+  }
+  if (rows[0].request_hash !== requestHash) return { status: "conflict" };
+  return rows[0].run_id
+    ? { status: "replay", runId: String(rows[0].run_id) }
+    : { status: "pending" };
+}
+
+export async function finalizeDistributedIdempotency(
+  scopeKey: string,
+  idempotencyHash: string,
+  requestHash: string,
+  runId: string,
+) {
+  if (!persistenceConfigured()) return false;
+  const rows = await sql()`UPDATE agenttrial_idempotency SET run_id = ${runId}::uuid
+    WHERE scope_key = ${scopeKey} AND idempotency_hash = ${idempotencyHash}
+      AND request_hash = ${requestHash} AND run_id IS NULL AND expires_at > now()
+    RETURNING run_id`;
+  return rows.length === 1;
+}
+
+export async function abandonDistributedIdempotency(
+  scopeKey: string,
+  idempotencyHash: string,
+  requestHash: string,
+) {
+  if (!persistenceConfigured()) return;
+  await sql()`DELETE FROM agenttrial_idempotency WHERE scope_key = ${scopeKey}
+    AND idempotency_hash = ${idempotencyHash} AND request_hash = ${requestHash} AND run_id IS NULL`;
 }
 
 export async function persistenceReadiness() {
