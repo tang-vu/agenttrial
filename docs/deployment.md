@@ -22,6 +22,8 @@ repository under `%LOCALAPPDATA%\AgentTrial\tunnel` and is forwarded only to the
 The least-privilege scheduled task starts Compose after login, waits for PostgreSQL, worker, and
 signer readiness, then starts the tunnel. Every container uses `restart: unless-stopped`; the
 supervisor also repairs an unhealthy stack or tunnel. Run `stop-local-tunnel.ps1` for a scoped stop.
+`install-local-autostart.ps1` is intentionally guarded as an ephemeral demo-only fallback; it must
+never be used for the public origin because it has no durable queue or isolated signer.
 Use `AGENTTRIAL_IMPORT_DIR` with `scripts/import-snapshots.mts` once when migrating prior
 single-node JSON receipts into PostgreSQL.
 

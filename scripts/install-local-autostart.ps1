@@ -1,6 +1,9 @@
-param([switch]$SkipBuild)
+param([switch]$SkipBuild, [switch]$AllowEphemeral)
 
 $ErrorActionPreference = "Stop"
+if (!$AllowEphemeral) {
+  throw "The in-process autostart is demo-only. Use install-durable-autostart.ps1 for the public service, or pass -AllowEphemeral explicitly for a disposable local demo."
+}
 $taskName = "AgentTrial Local Service"
 $repo = Split-Path -Parent $PSScriptRoot
 $startScript = Join-Path $PSScriptRoot "start-local-tunnel.ps1"
