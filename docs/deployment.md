@@ -25,14 +25,27 @@ supervisor also repairs an unhealthy stack or tunnel. Run `stop-local-tunnel.ps1
 Use `AGENTTRIAL_IMPORT_DIR` with `scripts/import-snapshots.mts` once when migrating prior
 single-node JSON receipts into PostgreSQL.
 
+The installer also registers a least-privilege daily PostgreSQL backup at 03:00 local time.
+Backups are custom-format `pg_dump` archives under `%LOCALAPPDATA%\AgentTrial\backups`, are
+validated with `pg_restore --list`, receive a SHA-256 metadata sidecar, and retain the newest 14
+archives. Run an immediate backup with:
+
+```powershell
+.\scripts\backup-durable.ps1
+```
+
+Copy backups to a separately encrypted/off-host location for real disaster recovery. A local
+backup protects against database/container loss, not physical disk or account compromise.
+
 For a single-node deployment, set `AGENTTRIAL_DATA_DIR` to an access-controlled persistent directory. The in-process executor then writes each run snapshot atomically, so completed reports and bundles survive application or machine restarts. `AGENTTRIAL_RETENTION_DAYS` defaults to 30 and cleanup runs during readiness checks. Terminal in-memory runs are capped separately. This is not a substitute for PostgreSQL and the worker queue when horizontally scaling.
 
 For Vercel, use the repository root for web only and point `DATABASE_URL` at managed PostgreSQL; deploy the worker target to Railway/Render/Fly. Do not rely on a serverless request continuing background execution.
 
 ## Production hardening still required
 
-1. Managed migrations/backups and idempotency records. The worker enforces terminal-run retention;
-   production operators must still use migration-only credentials and test encrypted restores.
+1. Versioned migration-only credentials and API idempotency records. The worker enforces
+   terminal-run retention and the workstation creates verified local backups; production operators
+   must additionally test encrypted off-host restores.
 2. LISTEN/NOTIFY or Redis pub-sub can replace the current bounded PostgreSQL SSE polling at higher scale.
 3. A separate browser worker with denied private-network egress, non-root Chromium, no receipt key, and strict quotas before enabling browser tests.
 4. Replace the dedicated signer container's seed with managed KMS/HSM signing for higher-assurance deployments.

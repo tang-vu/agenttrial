@@ -2,6 +2,7 @@ param([switch]$SkipBuild)
 
 $ErrorActionPreference = "Stop"
 $taskName = "AgentTrial Local Service"
+$backupTaskName = "AgentTrial Database Backup"
 $repo = Split-Path -Parent $PSScriptRoot
 $runScript = Join-Path $PSScriptRoot "run-durable-local-service.ps1"
 $stateDirectory = Join-Path $env:LOCALAPPDATA "AgentTrial\tunnel"
@@ -41,5 +42,19 @@ $principal = New-ScheduledTaskPrincipal -UserId $identity.Name -LogonType Intera
 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings `
   -Principal $principal -Description "Keeps durable AgentTrial, workers, signer, and tunnel online." `
   -Force | Out-Null
+$backupScript = Join-Path $PSScriptRoot "backup-durable.ps1"
+$backupArguments = @(
+  "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ('"' + $backupScript + '"')
+) -join " "
+$backupAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $backupArguments `
+  -WorkingDirectory $repo
+$backupTrigger = New-ScheduledTaskTrigger -Daily -At "3:00 AM"
+$backupSettings = New-ScheduledTaskSettingsSet -RestartCount 3 `
+  -RestartInterval (New-TimeSpan -Minutes 10) -ExecutionTimeLimit (New-TimeSpan -Hours 1) `
+  -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
+  -MultipleInstances IgnoreNew
+Register-ScheduledTask -TaskName $backupTaskName -Action $backupAction -Trigger $backupTrigger `
+  -Settings $backupSettings -Principal $principal `
+  -Description "Creates and verifies a rolling AgentTrial PostgreSQL backup." -Force | Out-Null
 Start-ScheduledTask -TaskName $taskName
-Write-Output "Installed durable AgentTrial autostart under $($identity.Name), Limited privilege."
+Write-Output "Installed durable AgentTrial autostart and daily backups under $($identity.Name), Limited privilege."
