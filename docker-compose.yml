@@ -7,6 +7,7 @@ services:
       POSTGRES_USER: agenttrial
       POSTGRES_PASSWORD: agenttrial-local
     volumes: [agenttrial-data:/var/lib/postgresql/data]
+    ports: ["127.0.0.1:${AGENTTRIAL_DB_PORT:-55432}:5432"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U agenttrial"]
       interval: 5s
