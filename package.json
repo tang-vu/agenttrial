@@ -20,6 +20,7 @@
     "audit": "pnpm audit --audit-level high",
     "secret-scan": "node scripts/secret-scan.mjs",
     "demo:record": "tsx scripts/record-demo.mts",
+    "demo:voice": "tsx scripts/mimo-demo-audio.mts",
     "eas:register": "tsx scripts/eas-register.mjs",
     "eas:attest": "tsx scripts/eas-attest.mjs",
     "eas:verify": "tsx scripts/eas-verify.mjs",

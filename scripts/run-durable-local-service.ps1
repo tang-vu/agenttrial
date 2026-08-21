@@ -53,6 +53,23 @@ function Start-DurableStack {
   }
 }
 
+function Start-DurableStackWithRetry {
+  param([int]$Attempts = 60, [int]$DelaySeconds = 10)
+
+  $lastError = $null
+  for ($attempt = 1; $attempt -le $Attempts; $attempt += 1) {
+    try {
+      Start-DurableStack
+      return
+    } catch {
+      $lastError = $_
+      Write-Warning "Docker stack start attempt $attempt/$Attempts failed; retrying in $DelaySeconds seconds."
+      if ($attempt -lt $Attempts) { Start-Sleep -Seconds $DelaySeconds }
+    }
+  }
+  throw "Docker did not become available after $Attempts attempts: $($lastError.Exception.Message)"
+}
+
 function Test-Ready {
   try {
     $ready = Invoke-RestMethod "http://127.0.0.1:$Port/api/ready" -TimeoutSec 5
@@ -69,7 +86,7 @@ function Start-Tunnel {
 }
 
 New-Item -ItemType Directory -Path $StateDirectory -Force | Out-Null
-Start-DurableStack
+Start-DurableStackWithRetry
 for ($attempt = 0; $attempt -lt 120 -and !(Test-Ready); $attempt += 1) {
   Start-Sleep -Seconds 1
 }
@@ -88,7 +105,7 @@ Start-Tunnel
 
 while ($true) {
   Start-Sleep -Seconds 10
-  if (!(Test-Ready)) { Start-DurableStack }
+  if (!(Test-Ready)) { Start-DurableStackWithRetry -Attempts 12 -DelaySeconds 5 }
   if (!$tunnel -or $tunnel.HasExited) { Start-Tunnel }
   @{
     mode = "docker-durable"

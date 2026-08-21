@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import { chromium, type Page } from "@playwright/test";
 
 const baseUrl = process.env.DEMO_BASE_URL ?? "https://agenttrial.tangvu.dev";
+const anchoredRunId = process.env.DEMO_ANCHORED_RUN_ID ?? "17462463-066f-485d-87b7-ae011b0de19f";
 const captureDirectory = resolve("test-results", "demo-recording");
 const outputDirectory = resolve("docs", "demo");
 const outputPath = resolve(outputDirectory, "agenttrial-live-demo.mp4");
@@ -57,6 +58,14 @@ async function smoothScroll(page: Page, top: number) {
   await wait(3_500);
 }
 
+async function navigate(page: Page, url: string) {
+  // A production tunnel can keep telemetry or streaming connections open, so
+  // `networkidle` is not a reliable readiness signal. Wait for the rendered
+  // document instead and let each scene assert its own interactive landmark.
+  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  await page.locator("body").waitFor({ state: "visible", timeout: 20_000 });
+}
+
 await rm(captureDirectory, { recursive: true, force: true });
 await mkdir(captureDirectory, { recursive: true });
 await mkdir(outputDirectory, { recursive: true });
@@ -64,16 +73,16 @@ await mkdir(screenshotDirectory, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
-  viewport: { width: 1440, height: 900 },
+  viewport: { width: 1600, height: 900 },
   colorScheme: "dark",
   reducedMotion: "no-preference",
-  recordVideo: { dir: captureDirectory, size: { width: 1440, height: 900 } },
+  recordVideo: { dir: captureDirectory, size: { width: 1600, height: 900 } },
 });
 const page = await context.newPage();
 const video = page.video();
 
 try {
-  await page.goto(baseUrl, { waitUntil: "networkidle" });
+  await navigate(page, baseUrl);
   await page.screenshot({ path: resolve(screenshotDirectory, "landing.png"), fullPage: true });
   await caption(
     page,
@@ -85,7 +94,7 @@ try {
   await smoothScroll(page, 0);
 
   await page
-    .getByRole("link", { name: /Run a live trial/ })
+    .getByRole("link", { name: /Run a live trial/i })
     .first()
     .click();
   await page.waitForURL(/\/new$/);
@@ -145,7 +154,7 @@ try {
   );
   await wait(6_000);
 
-  await page.goto(`${baseUrl}/benchmark`, { waitUntil: "networkidle" });
+  await navigate(page, `${baseUrl}/benchmark`);
   await caption(
     page,
     "07 / SAME CLAIMS, DIFFERENT EVIDENCE",
@@ -164,7 +173,7 @@ try {
   await smoothScroll(page, 560);
   await wait(5_000);
 
-  await page.goto(`${baseUrl}/methodology`, { waitUntil: "networkidle" });
+  await navigate(page, `${baseUrl}/methodology`);
   await caption(
     page,
     "09 / PORTABLE TRUST",
@@ -173,7 +182,21 @@ try {
   await wait(7_000);
   await smoothScroll(page, 520);
   await wait(5_000);
-  await page.goto(baseUrl, { waitUntil: "networkidle" });
+
+  await navigate(page, `${baseUrl}/reports/${anchoredRunId}`);
+  await page.getByText("View Base Sepolia attestation").waitFor({ timeout: 30_000 });
+  await caption(
+    page,
+    "10 / ANCHORED ON BASE SEPOLIA",
+    "A live EAS attestation binds this signed receipt to an independently inspectable record.",
+  );
+  await page.screenshot({
+    path: resolve(screenshotDirectory, "eas-attestation.png"),
+    fullPage: true,
+  });
+  await wait(7_000);
+
+  await navigate(page, baseUrl);
   await caption(page, "AGENTTRIAL", "AI agents make claims. AgentTrial makes them prove it.");
   await wait(7_000);
 } finally {
@@ -197,7 +220,7 @@ const encoded = spawnSync(
     "-preset",
     "slow",
     "-crf",
-    "22",
+    "18",
     "-pix_fmt",
     "yuv420p",
     "-movflags",

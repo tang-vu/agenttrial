@@ -1,0 +1,15 @@
+Every AI agent makes claims. AgentTrial turns those claims into evidence.
+
+Start with a controlled benchmark. No account, wallet, or paid model is required. Every run receives a fresh identifier and a new sealed seed. AgentTrial discovers the advertised capabilities, constructs hidden claim-specific trials, and commits to the plan before execution begins.
+
+Now watch the evaluator work. These are real state transitions, tool observations, retries, and assertion outcomes—not prerecorded terminal theater. A transient failure is recovered within budget. Prompt injection is treated as hostile data. Provenance, malformed output, stale information, scope boundaries, latency, and repeatability are checked by code.
+
+The report is designed for a verdict in seconds and an audit in depth. Every point in the score traces back to a deterministic assertion and an exact evidence object. Untested claims never become passes.
+
+The receipt can be verified locally in the browser. AgentTrial recomputes the canonical hashes, event chain, sealed plan, seed opening, score, and Ed25519 signature. Change one byte, and verification stops at the first broken commitment.
+
+Run the secure and intentionally gullible agents against the same methodology. One scores one hundred. The other scores twenty-six point seven. That seventy-three point three point gap comes from visible evidence—not an LLM preference.
+
+Finally, this production receipt is anchored on Base Sepolia through Ethereum Attestation Service. The onchain record binds the target, plan root, methodology, score, coverage, evidence root, and report URI without making a legal certification or safety guarantee.
+
+Orion verifies that an agent exists. AgentTrial proves what it did. AI agents make claims. AgentTrial makes them prove it.

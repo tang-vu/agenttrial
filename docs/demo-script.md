@@ -4,6 +4,12 @@ Reproduce the silent, captioned product capture against the live origin with `pn
 Set `DEMO_BASE_URL` to capture another reviewed deployment. The command creates
 `docs/demo/agenttrial-live-demo.mp4` and refreshes the principal screenshots from real runs.
 
+For the narrated edition, set a rotated **regular/pay-as-you-go** MiMo API key locally and run
+`pnpm demo:voice`. The pipeline uses `mimo-v2.5-tts` for narration, runs the generated WAV back
+through `mimo-v2.5-asr`, enforces a word-error-rate quality gate, normalizes loudness, and writes
+`docs/demo/agenttrial-live-demo-narrated.mp4`. It deliberately rejects `tp-` Token Plan keys because
+MiMo limits those keys to coding tools and prohibits non-coding automation.
+
 **0–10s — The gap.** “Orion can verify that an agent exists. AgentTrial proves that it works. Every agent claim deserves evidence.” Click **Run both agents live**.
 
 **10–32s — The proof moment.** Launch both controlled agents together. Point out the two fresh run IDs, independently sealed seeds, progressing event counts, and identical deterministic methodology. Nothing is prerecorded and no account, API key, or wallet is required.
