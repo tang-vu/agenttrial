@@ -8,6 +8,10 @@ await cp(resolve("apps/web/.next/static"), resolve(standaloneRoot, ".next/static
   recursive: true,
   force: true,
 });
+await cp(resolve("apps/web/public"), resolve(standaloneRoot, "public"), {
+  recursive: true,
+  force: true,
+});
 const server = spawn(process.execPath, [resolve(standaloneRoot, "server.js")], {
   cwd: standaloneRoot,
   stdio: "inherit",

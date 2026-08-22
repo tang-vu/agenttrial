@@ -125,6 +125,7 @@ try {
 
   await page.getByRole("link", { name: /Open full report/ }).click();
   await page.waitForURL(/\/reports\//);
+  await page.getByText("Tested claims held up under pressure.").waitFor({ timeout: 20_000 });
   await caption(
     page,
     "04 / VERDICT IN 30 SECONDS",

@@ -120,7 +120,7 @@ const activeLeases = new Map<
 >();
 const MAX_IN_MEMORY_TERMINAL_RUNS = 200;
 const REPORT_SCHEMA_URI = "https://agenttrial.tangvu.dev/openapi.json#/components/schemas/Report";
-const RUNTIME_VERSION = "0.5.0";
+const RUNTIME_VERSION = "0.6.0";
 
 export async function reserveRunIdempotency(
   scopeKey: string,

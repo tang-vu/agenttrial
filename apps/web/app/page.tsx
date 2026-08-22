@@ -37,6 +37,9 @@ export default function Home() {
           <Link className="text-link" href="/verify">
             Inspect a receipt <span>→</span>
           </Link>
+          <a className="text-link" href="/demo/agenttrial-live-demo-narrated.mp4">
+            Watch 116s demo <span>▶</span>
+          </a>
         </div>
         <div className="trust-strip">
           <span>No account</span>

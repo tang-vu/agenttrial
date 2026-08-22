@@ -9,7 +9,8 @@ test("judge can run, inspect, verify, and tamper", async ({ page }) => {
     .click();
   await page.getByRole("radio", { name: /Evidence Researcher/ }).click();
   await page.getByRole("button", { name: /Run live trial/ }).click();
-  await expect(page.getByRole("heading", { name: "Agent under examination." })).toBeVisible();
+  await expect(page).toHaveURL(/\/live\//);
+  await expect(page.locator("h1")).toContainText(/Agent under examination\.|Evidence sealed\./);
   await expect(page.getByRole("heading", { name: "Evidence sealed." })).toBeVisible({
     timeout: 30_000,
   });
@@ -252,9 +253,16 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
   expect(body.ready).toBe(true);
   expect(body.plannerProvider).toBe("deterministic");
   expect(body.openAIProvider).toBe("not-configured");
+  const health = await (await request.get("/api/health")).json();
+  expect(health.version).toBe("0.6.0");
+  expect(health.build).toMatch(/^(development|[0-9a-f]{7,64})$/i);
   const descriptor = await request.get("/.well-known/agenttrial.json");
   const descriptorBody = await descriptor.json();
   expect(descriptorBody.a2a.supported).toBe(false);
+  const descriptorOrigin = new URL(descriptorBody.schema).origin;
+  for (const endpoint of Object.values(descriptorBody.endpoints) as string[])
+    expect(new URL(endpoint).origin).toBe(descriptorOrigin);
+  expect(new URL(descriptorBody.schema).hostname).not.toBe("0.0.0.0");
   expect((await request.get(new URL(descriptorBody.schema).pathname)).status()).toBe(200);
   const openapi = await (await request.get("/openapi.json")).json();
   expect(openapi.openapi).toBe("3.1.0");
@@ -280,6 +288,28 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
   const security = await request.get("/.well-known/security.txt");
   expect(security.status()).toBe(200);
   expect(await security.text()).toContain("agenttrial.tangvu.dev/.well-known/security.txt");
+  const robots = await request.get("/robots.txt");
+  expect(await robots.text()).toContain("https://agenttrial.tangvu.dev/sitemap.xml");
+  const sitemap = await request.get("/sitemap.xml");
+  const sitemapText = await sitemap.text();
+  expect(sitemapText).toContain("https://agenttrial.tangvu.dev/benchmark");
+  expect(sitemapText).not.toContain("/reports/");
+  for (const [path, contentType] of [
+    ["/opengraph-image", "image/png"],
+    ["/twitter-image", "image/png"],
+    ["/icon", "image/png"],
+  ] as const) {
+    const asset = await request.get(path);
+    expect(asset.status()).toBe(200);
+    expect(asset.headers()["content-type"]).toContain(contentType);
+  }
+  const landingHtml = await (await request.get("/")).text();
+  expect(landingHtml).toContain('property="og:image"');
+  expect(landingHtml).toContain('name="twitter:card" content="summary_large_image"');
+  expect(landingHtml).toContain('rel="canonical" href="https://agenttrial.tangvu.dev"');
+  const demo = await request.head("/demo/agenttrial-live-demo-narrated.mp4");
+  expect(demo.status()).toBe(200);
+  expect(demo.headers()["content-type"]).toBe("video/mp4");
 });
 
 test("production pages enforce a nonce CSP without inline script execution", async ({

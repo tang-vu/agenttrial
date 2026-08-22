@@ -2,11 +2,43 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { connection } from "next/server";
+import { canonicalPublicOrigin } from "../lib/site";
+
+const title = "AgentTrial — Evidence for agent claims";
+const description =
+  "Adversarial agent evaluation with sealed trials, deterministic assertions, and signed evidence receipts anyone can verify.";
 
 export const metadata: Metadata = {
-  title: { default: "AgentTrial — Evidence for agent claims", template: "%s — AgentTrial" },
-  description: "An autonomous adversarial evaluator for AI agents.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  title: { default: title, template: "%s — AgentTrial" },
+  description,
+  metadataBase: new URL(canonicalPublicOrigin()),
+  applicationName: "AgentTrial",
+  authors: [{ name: "AgentTrial contributors", url: "https://github.com/tang-vu/agenttrial" }],
+  creator: "AgentTrial contributors",
+  publisher: "AgentTrial",
+  category: "technology",
+  keywords: [
+    "AI agent evaluation",
+    "adversarial testing",
+    "evidence receipts",
+    "deterministic scoring",
+    "agent marketplaces",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "AgentTrial",
+    title,
+    description,
+  },
+  twitter: { card: "summary_large_image", title, description },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 const nav = [
   ["Benchmark", "/benchmark"],
@@ -48,6 +80,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <p>The evidence layer for agent marketplaces.</p>
           </div>
           <div className="footer-links">
+            <a href="/demo/agenttrial-live-demo-narrated.mp4">Demo</a>
             <Link href="/methodology">Methodology</Link>
             <Link href="/security">Responsible use</Link>
             <Link href="/developers">API</Link>

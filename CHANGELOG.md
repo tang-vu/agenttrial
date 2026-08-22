@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 — 2026-08-22
+
+- Published a narrated 116-second live demo with a credential-free Windows narration fallback,
+  while retaining the MiMo 2.5 TTS + ASR quality-gated pipeline for regular API keys.
+- Anchored and attached a production receipt on Base Sepolia EAS, and added the complete narrated
+  proof path to the submission documentation.
+- Made the public machine descriptor proxy-safe by pinning endpoint URLs to the configured canonical
+  origin and added regression coverage for internal-host leakage.
+- Added branded Open Graph, Twitter and application icons plus canonical metadata, robots policy,
+  and a sitemap for stronger submission previews and discovery.
+- Hardened standalone deployment builds, fixed report capture readiness, and normalized Apache-2.0
+  license metadata for the submission release.
+
 ## 0.5.0 — 2026-08-17
 
 - Opened post-execution random seeds against their pre-execution commitments and added browser-side

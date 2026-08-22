@@ -23,6 +23,7 @@ services:
       context: .
       args:
         AGENTTRIAL_BUILD_COMMIT: ${AGENTTRIAL_BUILD_COMMIT:-development}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://agenttrial.tangvu.dev}
     restart: unless-stopped
     init: true
     ports: ["127.0.0.1:${AGENTTRIAL_PORT:-4179}:3000"]

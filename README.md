@@ -6,7 +6,7 @@ The evidence layer for agent marketplaces. AgentTrial discovers an agent’s adv
 
 ![AgentTrial landing page](docs/screenshots/landing.png)
 
-[Watch the 116-second live product demo](docs/demo/agenttrial-live-demo.mp4). It is a reproducible, captioned capture of the public deployment, including the production EAS anchor; regenerate it with `pnpm demo:record`. A MiMo TTS narration + ASR verification pipeline is available through `pnpm demo:voice` for regular API keys.
+[Watch the 116-second narrated live product demo](apps/web/public/demo/agenttrial-live-demo-narrated.mp4), or use the [silent captioned edition](docs/demo/agenttrial-live-demo.mp4). The narrated edition is also served directly from the [public deployment](https://agenttrial.tangvu.dev/demo/agenttrial-live-demo-narrated.mp4). It is a reproducible capture of the public deployment, including the production EAS anchor; regenerate the visuals with `pnpm demo:record`. On Windows, `pnpm demo:voice:local` creates narration without an API key. The MiMo TTS narration + ASR verification pipeline remains available through `pnpm demo:voice` for regular pay-as-you-go API keys; restricted Token Plan keys are intentionally rejected.
 
 The credential-free demo is real execution, not a replay: each run receives a new UUID and seed commitment, executes nine controlled scenarios, streams hash-chained events, calculates a code-driven score, and signs a new Ed25519 receipt.
 

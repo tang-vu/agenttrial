@@ -21,10 +21,12 @@ const videoPath = resolve("docs", "demo", "agenttrial-live-demo.mp4");
 const outputDirectory = resolve("test-results", "demo-audio");
 const audioPath = resolve(outputDirectory, "mimo-voiceover.wav");
 const transcriptPath = resolve(outputDirectory, "mimo-asr-transcript.txt");
-const finalPath = resolve("docs", "demo", "agenttrial-live-demo-narrated.mp4");
+const publicDemoDirectory = resolve("apps", "web", "public", "demo");
+const finalPath = resolve(publicDemoDirectory, "agenttrial-live-demo-narrated.mp4");
 const narration = (await readFile(sourcePath, "utf8")).trim();
 
 await mkdir(outputDirectory, { recursive: true });
+await mkdir(publicDemoDirectory, { recursive: true });
 
 async function request(body: unknown) {
   const response = await fetch(`${baseUrl}/chat/completions`, {

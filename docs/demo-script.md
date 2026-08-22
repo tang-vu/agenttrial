@@ -7,8 +7,13 @@ Set `DEMO_BASE_URL` to capture another reviewed deployment. The command creates
 For the narrated edition, set a rotated **regular/pay-as-you-go** MiMo API key locally and run
 `pnpm demo:voice`. The pipeline uses `mimo-v2.5-tts` for narration, runs the generated WAV back
 through `mimo-v2.5-asr`, enforces a word-error-rate quality gate, normalizes loudness, and writes
-`docs/demo/agenttrial-live-demo-narrated.mp4`. It deliberately rejects `tp-` Token Plan keys because
+`apps/web/public/demo/agenttrial-live-demo-narrated.mp4`. It deliberately rejects `tp-` Token Plan keys because
 MiMo limits those keys to coding tools and prohibits non-coding automation.
+
+On Windows, `pnpm demo:voice:local` provides a credential-free fallback using an installed
+System.Speech voice. It enforces the same duration window, normalizes loudness, validates that the
+output contains both audio and video streams, and writes the same narrated MP4 path. Use `-Voice`
+and `-Rate` when invoking `scripts/local-demo-audio.ps1` directly to select another installed voice.
 
 **0–10s — The gap.** “Orion can verify that an agent exists. AgentTrial proves that it works. Every agent claim deserves evidence.” Click **Run both agents live**.
 
