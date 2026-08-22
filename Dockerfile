@@ -21,12 +21,6 @@ RUN pnpm install --frozen-lockfile
 FROM deps AS builder
 COPY . .
 RUN pnpm build
-# Next's standalone file tracer can omit the ESM half of @swc/helpers when pnpm
-# stores both CJS and ESM exports behind a workspace symlink. Repair that traced
-# artifact during the build so the read-only production image is self-contained.
-RUN swc_source="$(find /app/node_modules/.pnpm -path '*/node_modules/@swc/helpers/esm' -type d | head -n 1)" && \
-    swc_target="$(find /app/apps/web/.next/standalone/node_modules/.pnpm -path '*/node_modules/@swc/helpers' -type d | head -n 1)" && \
-    test -n "$swc_source" && test -n "$swc_target" && cp -a "$swc_source" "$swc_target/esm"
 
 FROM deps AS worker
 ARG AGENTTRIAL_BUILD_COMMIT=development
