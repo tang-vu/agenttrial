@@ -72,15 +72,11 @@ button {
   font-size: 18px;
   letter-spacing: -0.03em;
 }
-.brand-mark {
-  width: 31px;
-  height: 31px;
-  background: var(--ink);
-  color: var(--ivory);
-  font-family: var(--serif);
-  font-size: 12px;
-  display: grid;
-  place-items: center;
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 .site-header nav {
   display: flex;
@@ -339,6 +335,10 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 .new-grid > section:first-child {
   grid-column: 1 / -1;
@@ -1605,6 +1605,10 @@ footer p {
 }
 .footer-brand {
   font-size: 15px;
+}
+.footer-brand .brand-logo {
+  width: 32px;
+  height: 32px;
 }
 .footer-links {
   display: flex;

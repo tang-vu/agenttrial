@@ -13,14 +13,26 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#10130f",
-          color: "#f3efe6",
-          borderBottom: "14px solid #bf3c30",
-          fontSize: 64,
-          fontWeight: 800,
+          position: "relative",
+          background: "#f3efe6",
+          color: "#10130f",
+          fontSize: 132,
+          fontWeight: 900,
         }}
       >
-        AT
+        A
+        <span
+          style={{
+            position: "absolute",
+            left: 73,
+            top: 88,
+            width: 34,
+            height: 34,
+            borderRadius: 999,
+            background: "#bf3c30",
+            border: "5px solid #f3efe6",
+          }}
+        />
       </div>
     ),
     size,

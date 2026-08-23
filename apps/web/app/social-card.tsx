@@ -21,16 +21,29 @@ export function socialCard(size: { width: number; height: number }) {
             style={{
               width: 58,
               height: 58,
-              background: "#10130f",
-              color: "#f3efe6",
+              position: "relative",
+              border: "2px solid #10130f",
+              color: "#10130f",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 24,
-              fontWeight: 800,
+              fontSize: 43,
+              fontWeight: 900,
             }}
           >
-            AT
+            A
+            <div
+              style={{
+                position: "absolute",
+                left: 22,
+                top: 28,
+                width: 12,
+                height: 12,
+                borderRadius: 999,
+                background: "#bf3c30",
+                border: "2px solid #f3efe6",
+              }}
+            />
           </div>
           <div style={{ display: "flex", fontSize: 31, fontWeight: 800 }}>AgentTrial</div>
         </div>

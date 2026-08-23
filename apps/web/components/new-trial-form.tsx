@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const options = [
@@ -22,6 +22,7 @@ const options = [
 ];
 export function NewTrialForm() {
   const router = useRouter();
+  const [hydrated, setHydrated] = useState(false);
   const [selected, setSelected] = useState(options[0]!.id);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -46,6 +47,7 @@ export function NewTrialForm() {
   const [activeLoading, setActiveLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [copyStatus, setCopyStatus] = useState("");
+  useEffect(() => setHydrated(true), []);
   async function start() {
     setLoading(true);
     setError("");
@@ -150,7 +152,7 @@ export function NewTrialForm() {
     }
   }
   return (
-    <div className="new-grid">
+    <fieldset className="new-grid" disabled={!hydrated} aria-busy={!hydrated}>
       <section>
         <div className="section-label">
           <span>01</span>
@@ -381,6 +383,6 @@ export function NewTrialForm() {
           </div>
         ) : null}
       </section>
-    </div>
+    </fieldset>
   );
 }

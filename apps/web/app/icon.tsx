@@ -13,14 +13,26 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#10130f",
-          color: "#f3efe6",
-          borderBottom: "6px solid #bf3c30",
-          fontSize: 24,
-          fontWeight: 800,
+          position: "relative",
+          background: "#f3efe6",
+          color: "#10130f",
+          fontSize: 46,
+          fontWeight: 900,
         }}
       >
-        AT
+        A
+        <span
+          style={{
+            position: "absolute",
+            left: 26,
+            top: 31,
+            width: 12,
+            height: 12,
+            borderRadius: 999,
+            background: "#bf3c30",
+            border: "2px solid #f3efe6",
+          }}
+        />
       </div>
     ),
     size,

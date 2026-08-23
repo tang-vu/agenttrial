@@ -10,3 +10,4 @@ test-results
 *.tsbuildinfo
 data/*.json
 !.env.example
+/telegram-post.txt

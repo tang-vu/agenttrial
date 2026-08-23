@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import { connection } from "next/server";
@@ -57,7 +58,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </a>
         <header className="site-header">
           <Link className="brand" href="/" aria-label="AgentTrial home">
-            <span className="brand-mark">AT</span>
+            <Image
+              className="brand-logo"
+              src="/brand/agenttrial-logo-v2.png"
+              alt=""
+              width={36}
+              height={36}
+              priority
+            />
             <span>AgentTrial</span>
           </Link>
           <nav aria-label="Primary">
@@ -75,7 +83,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <footer>
           <div>
             <div className="brand footer-brand">
-              <span className="brand-mark">AT</span>AgentTrial
+              <Image
+                className="brand-logo"
+                src="/brand/agenttrial-logo-v2.png"
+                alt=""
+                width={32}
+                height={32}
+              />
+              AgentTrial
             </div>
             <p>The evidence layer for agent marketplaces.</p>
           </div>

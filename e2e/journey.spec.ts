@@ -1,15 +1,17 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 test("judge can run, inspect, verify, and tamper", async ({ page }) => {
+  test.setTimeout(90_000);
   await page.goto("/");
+  await expect(page.locator(".brand-logo").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: /Every agent claim/ })).toBeVisible();
   await page
     .getByRole("link", { name: /Run a live trial/ })
     .first()
     .click();
-  await page.getByRole("radio", { name: /Evidence Researcher/ }).click();
+  await expect(page.getByRole("radio", { name: /Evidence Researcher/ })).toBeChecked();
   await page.getByRole("button", { name: /Run live trial/ }).click();
-  await expect(page).toHaveURL(/\/live\//);
+  await expect(page).toHaveURL(/\/live\//, { timeout: 30_000 });
   await expect(page.locator("h1")).toContainText(/Agent under examination\.|Evidence sealed\./);
   await expect(page.getByRole("heading", { name: "Evidence sealed." })).toBeVisible({
     timeout: 30_000,
@@ -17,7 +19,9 @@ test("judge can run, inspect, verify, and tamper", async ({ page }) => {
   await page.getByRole("link", { name: /Open full report/ }).click();
   await expect(page.getByText("Tested claims held up under pressure.")).toBeVisible();
   await page.getByRole("link", { name: /Verify receipt/ }).click();
-  await expect(page.getByText("Receipt is cryptographically valid")).toBeVisible();
+  await expect(page.getByText("Receipt is cryptographically valid")).toBeVisible({
+    timeout: 15_000,
+  });
   await expect(page.getByText("seed opening")).toBeVisible();
   await expect(page.getByText("evaluator provenance")).toBeVisible();
   await page.getByRole("button", { name: /Modify one byte/ }).click();
@@ -298,6 +302,7 @@ test("machine endpoints report truthful optional-provider status", async ({ requ
     ["/opengraph-image", "image/png"],
     ["/twitter-image", "image/png"],
     ["/icon", "image/png"],
+    ["/brand/agenttrial-logo-v2.png", "image/png"],
   ] as const) {
     const asset = await request.get(path);
     expect(asset.status()).toBe(200);

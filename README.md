@@ -4,7 +4,25 @@
 
 The evidence layer for agent marketplaces. AgentTrial discovers an agent’s advertised capabilities, seals claim-specific adversarial trials before execution, verifies observations with deterministic assertions, and signs a tamper-evident evidence bundle.
 
+[![quality-gate](https://github.com/tang-vu/agenttrial/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tang-vu/agenttrial/actions/workflows/ci.yml)
+
+**Judge quick links:** [Live product](https://agenttrial.tangvu.dev) · [Run the head-to-head benchmark](https://agenttrial.tangvu.dev/benchmark) · [Watch the 116-second demo](https://agenttrial.tangvu.dev/demo/agenttrial-live-demo-narrated.mp4) · [Inspect a signed production report](https://agenttrial.tangvu.dev/reports/17462463-066f-485d-87b7-ae011b0de19f) · [Verify its Base Sepolia anchor](https://base-sepolia.easscan.org/attestation/view/0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c) · [View the Orion entry](https://orionagents.org/hackathon#entries)
+
 ![AgentTrial landing page](docs/screenshots/landing.png)
+
+## Judge path: 90 seconds
+
+1. Open the [live benchmark](https://agenttrial.tangvu.dev/benchmark) and run both controlled agents. Each receives a fresh run ID, sealed plan, event chain, evidence set, and signed receipt.
+2. Open either report and follow a finding to its exact observation and deterministic assertion. Download the bundle and verify the signature, hash chain, seed opening, evaluator build, and assertion-registry commitment locally in the browser.
+3. Use **Modify one byte** to see first-mismatch reporting, then inspect the independently anchored [production EAS receipt](https://base-sepolia.easscan.org/attestation/view/0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c).
+
+### Why AgentTrial is different
+
+AgentTrial is not a wallet-only risk scanner, a static site audit, or a model-generated reputation score. It evaluates arbitrary advertised agent capabilities through bounded trials whose plan is sealed before execution, keeps missing coverage explicit, and produces portable evidence receipts that marketplaces and users can verify independently.
+
+### Where AI is used
+
+The provider-pluggable AI planner turns untrusted capability descriptions into typed, claim-specific trial plans. The model never assigns points: versioned code assertions are the sole score authority. The credential-free public benchmark uses the same deterministic planner for both fixtures so judges can reproduce the comparison without an account or paid key; an OpenAI Responses structured-output provider is implemented for authenticated, quota-controlled use.
 
 [Watch the 116-second narrated live product demo](apps/web/public/demo/agenttrial-live-demo-narrated.mp4), or use the [silent captioned edition](docs/demo/agenttrial-live-demo.mp4). The narrated edition is also served directly from the [public deployment](https://agenttrial.tangvu.dev/demo/agenttrial-live-demo-narrated.mp4). It is a reproducible capture of the public deployment, including the production EAS anchor; regenerate the visuals with `pnpm demo:record`. On Windows, `pnpm demo:voice:local` creates narration without an API key. The MiMo TTS narration + ASR verification pipeline remains available through `pnpm demo:voice` for regular pay-as-you-go API keys; restricted Token Plan keys are intentionally rejected.
 
@@ -26,42 +44,18 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000), choose **Run a live trial**, then select either controlled fixture. No OpenAI key, wallet, GitHub token, database, or account is required.
 
-To publish the local production build at the configured Cloudflare Named Tunnel hostname on Windows:
-
-```powershell
-.\scripts\start-local-tunnel.ps1
-# Install restart-on-failure plus reboot/logon recovery:
-.\scripts\install-local-autostart.ps1 -SkipBuild
-# Stop only the AgentTrial processes later:
-.\scripts\stop-local-tunnel.ps1
-# Also remove the scheduled task:
-.\scripts\stop-local-tunnel.ps1 -DisableAutostart
-```
-
-For the production-grade local topology (PostgreSQL + isolated worker + dedicated signer), use:
-
-```powershell
-.\scripts\install-durable-autostart.ps1
-```
-
-The default hostname is `https://agenttrial.tangvu.dev`. The signing seed, durable report snapshots, generated tunnel config, logs, and process metadata stay outside the repository under `%LOCALAPPDATA%\AgentTrial`. A supervisor restarts either Next.js or `cloudflared` after a process failure. The installer always uses a least-privilege current-user task and starts when that Windows user logs in after reboot; it deliberately never executes the user-writable repository as `SYSTEM`. The PC must remain powered, awake, and connected to the internet.
-
-When deploying a code update, stop the service before rebuilding because the standalone Node process executes directly from `.next`: `stop-local-tunnel.ps1`, `pnpm build`, then `install-local-autostart.ps1 -SkipBuild`. Completed reports remain in the external snapshot directory throughout the update.
-
 ```bash
-# Full quality gate
+# Full local quality gate
 pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm test:durable # requires DATABASE_URL and AGENTTRIAL_SIGNING_SEED
-pnpm test:restore # non-destructive drill using the newest local backup
 pnpm build
-pnpm exec playwright install chromium firefox webkit
 pnpm test:e2e
-pnpm audit
 pnpm secret-scan
 ```
+
+The CI workflow also exercises durable PostgreSQL persistence, dependency auditing, and the complete Chromium/Firefox/WebKit suite. See [deployment](docs/deployment.md) for the Docker Compose worker/signer topology, least-privilege Windows supervisor, Cloudflare Named Tunnel, backup, and restore procedures.
 
 ## What is implemented
 
