@@ -15,6 +15,9 @@ interface TargetFreeze {
 const path = fileURLToPath(new URL("../../../research/independent-targets.json", import.meta.url));
 const raw = readFileSync(path, "utf8");
 const freeze = JSON.parse(raw) as TargetFreeze;
+const availabilityPath = fileURLToPath(
+  new URL("../../../research/targets/source-availability-audit.json", import.meta.url),
+);
 
 describe("independent target source lock", () => {
   it("pins the artifact hash and keeps all active network testing disabled", () => {
@@ -37,5 +40,29 @@ describe("independent target source lock", () => {
     expect(freeze.sources.map((source) => source.selected).reduce((a, b) => a + b, 0)).toBe(80);
     expect(freeze.sources.every((source) => /^(MIT|Apache-2\.0)$/.test(source.license))).toBe(true);
     expect(freeze.sources.every((source) => /^[0-9a-f]{40}$/.test(source.revision))).toBe(true);
+  });
+
+  it("verifies all 80 source units without retaining upstream payloads", () => {
+    const audit = JSON.parse(readFileSync(availabilityPath, "utf8")) as {
+      status: string;
+      verifiedTotal: number;
+      sources: {
+        agentchaosbench: { manifest: Array<{ repositoryPath: string }>; selected: number };
+        agentdojo: { runUse: string; selected: number };
+        "bfcl-v4": { selected: number };
+        "tau2-bench": { frozenFieldMatches: number; selected: number };
+      };
+      releaseBoundary: { rawSourcesRetained: boolean };
+    };
+    expect(audit.status).toBe("passed");
+    expect(audit.verifiedTotal).toBe(80);
+    expect(Object.values(audit.sources).reduce((sum, source) => sum + source.selected, 0)).toBe(80);
+    expect(audit.sources.agentchaosbench.manifest).toHaveLength(50);
+    expect(
+      new Set(audit.sources.agentchaosbench.manifest.map((item) => item.repositoryPath)).size,
+    ).toBe(50);
+    expect(audit.sources.agentdojo.runUse).toBe("schema-validation-only-never-label-authority");
+    expect(audit.sources["tau2-bench"].frozenFieldMatches).toBe(10);
+    expect(audit.releaseBoundary.rawSourcesRetained).toBe(false);
   });
 });

@@ -1,0 +1,716 @@
+{
+  "schemaVersion": "p26-002-source-availability-audit-0.1.0",
+  "status": "passed",
+  "verifiedOn": "2026-08-28",
+  "scope": "source-availability-and-frozen-field-integrity-not-main-study-evidence",
+  "verifiedTotal": 80,
+  "sources": {
+    "agentchaosbench": {
+      "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+      "selected": 50,
+      "uniqueTracePaths": 50,
+      "controlPathsFound": 50,
+      "uniqueLabelBlobs": 5,
+      "manifest": [
+        {
+          "targetId": "ext-001",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/corruption/case_01.json",
+          "blobSha": "93f658b8f2a4534af9156cea01493be5523510b5",
+          "size": 203595,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+          "controlSize": 169975,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-002",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/corruption/case_02.json",
+          "blobSha": "93cdd08ca730c12707d8f3be637fbaf9496ccbac",
+          "size": 217441,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+          "controlSize": 186662,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-003",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/guardrail_bypass/case_01.json",
+          "blobSha": "044a1bb3cf507ffd11a5426ff5cffe76637f3115",
+          "size": 228804,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+          "controlSize": 169975,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-004",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/guardrail_bypass/case_02.json",
+          "blobSha": "b90e39ece91ad50ad3875dfb4691fb4063acf3e3",
+          "size": 256766,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+          "controlSize": 186662,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-005",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/tool_failure/case_01.json",
+          "blobSha": "7b80f8bc227d20a77a2449b3bb8fe4304c0a6fe5",
+          "size": 213258,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+          "controlSize": 169975,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-006",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/a2a_timeout/case_02.json",
+          "blobSha": "826c41592998f5770df3a83a74df9ebadd07f13c",
+          "size": 190644,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+          "controlSize": 186662,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-007",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/agent_misroute/case_01.json",
+          "blobSha": "a58b7e6545e431b0faa5164c87c9da0f5d2af4cd",
+          "size": 57439,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+          "controlSize": 169975,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-008",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/infinite_loop/case_02.json",
+          "blobSha": "ebd23b4566d3ed2f4ccef9cef95de9b2b1c4197f",
+          "size": 194164,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+          "controlSize": 186662,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-009",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+          "blobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+          "size": 169975,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+          "controlSize": 169975,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-010",
+          "repositoryPath": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+          "blobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+          "size": 186662,
+          "controlPath": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+          "controlSize": 186662,
+          "labelBlobSha": "a33a303cf9ffca20cfb9dd79302d9b76edaad1cb"
+        },
+        {
+          "targetId": "ext-011",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/corruption/case_01.json",
+          "blobSha": "365af08da9de55dcbf850bc58f1d510bbdfab8bb",
+          "size": 1064564,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+          "controlSize": 1244070,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-012",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/corruption/case_02.json",
+          "blobSha": "a26c49d27426a968c7067ad7bff9f459eec659d6",
+          "size": 1240719,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+          "controlSize": 1220124,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-013",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/guardrail_bypass/case_01.json",
+          "blobSha": "b07a6573a1686dd0edb02fea95e8aa59508802be",
+          "size": 1049363,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+          "controlSize": 1244070,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-014",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/guardrail_bypass/case_02.json",
+          "blobSha": "b79c133401774bd1315d3bdbd22c29e1c250fd6b",
+          "size": 1298572,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+          "controlSize": 1220124,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-015",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/tool_failure/case_01.json",
+          "blobSha": "fc4abe41ba13b0c5b4512565ef313561452a7ce3",
+          "size": 1238297,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+          "controlSize": 1244070,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-016",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/a2a_timeout/case_02.json",
+          "blobSha": "74e1baad3416cf00423a06201b65d5f9a2d0512b",
+          "size": 6471,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+          "controlSize": 1220124,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-017",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/agent_misroute/case_01.json",
+          "blobSha": "9eb94bff8a88043b313da5c4cf73bc6e0852bcf9",
+          "size": 143838,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+          "controlSize": 1244070,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-018",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/infinite_loop/case_02.json",
+          "blobSha": "f9d66da9c6c0759943f0820cbec217a41106acc2",
+          "size": 1174721,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+          "controlSize": 1220124,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-019",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+          "blobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+          "size": 1244070,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+          "controlSize": 1244070,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-020",
+          "repositoryPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+          "blobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+          "size": 1220124,
+          "controlPath": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+          "controlSize": 1220124,
+          "labelBlobSha": "a14e970da5f070230cb90ec8747da14bdcc65e3e"
+        },
+        {
+          "targetId": "ext-021",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/corruption/case_01.json",
+          "blobSha": "851b0c4543cc8f5d07d85005f9aad6840445370a",
+          "size": 348247,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+          "controlSize": 310649,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-022",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/corruption/case_02.json",
+          "blobSha": "699170f15e26fd1eec9569f6e9410f7645ff3af3",
+          "size": 330333,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+          "controlSize": 322390,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-023",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/guardrail_bypass/case_01.json",
+          "blobSha": "b048012db970f6bdf86b6e8e29df8e7ab9d5baa3",
+          "size": 295767,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+          "controlSize": 310649,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-024",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/guardrail_bypass/case_02.json",
+          "blobSha": "2af912245c885e8a093f0429c19f8328ee3c68ed",
+          "size": 322392,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+          "controlSize": 322390,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-025",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/tool_failure/case_01.json",
+          "blobSha": "09192906257bbbc34a296e5542d50ef85a041121",
+          "size": 597664,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+          "controlSize": 310649,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-026",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/a2a_timeout/case_02.json",
+          "blobSha": "57e40d8ce73b19b2cff7c967cc00518eadec0e7b",
+          "size": 338719,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+          "controlSize": 322390,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-027",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/agent_misroute/case_01.json",
+          "blobSha": "f4f577e159a1945bb32ec8fe63ea8ecc950217f5",
+          "size": 363905,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+          "controlSize": 310649,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-028",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/infinite_loop/case_02.json",
+          "blobSha": "801bec887c9edd9149396b84cb3d39cfa769c209",
+          "size": 309860,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+          "controlSize": 322390,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-029",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+          "blobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+          "size": 310649,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+          "controlSize": 310649,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-030",
+          "repositoryPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+          "blobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+          "size": 322390,
+          "controlPath": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+          "controlSize": 322390,
+          "labelBlobSha": "f8094ebbcd6035903e3a16cc249a67f88552496d"
+        },
+        {
+          "targetId": "ext-031",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/corruption/case_01.json",
+          "blobSha": "14ca3350a6d56bad7c543a058105ae9c07af8bee",
+          "size": 537625,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+          "controlSize": 559965,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-032",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/corruption/case_02.json",
+          "blobSha": "afb0cc141169bbcdbf6436a4c08f6dc4083d7336",
+          "size": 560336,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+          "controlSize": 566640,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-033",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/guardrail_bypass/case_01.json",
+          "blobSha": "32a9953651c8b3757347ea34c1862060044f2f00",
+          "size": 564794,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+          "controlSize": 559965,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-034",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/guardrail_bypass/case_02.json",
+          "blobSha": "0546ec7759f48be8ce1205fe1aeab6097755c98c",
+          "size": 572761,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+          "controlSize": 566640,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-035",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/tool_failure/case_01.json",
+          "blobSha": "54dc2a984606e3e0ff5a8b2341229b14fcc3032f",
+          "size": 569845,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+          "controlSize": 559965,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-036",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/a2a_timeout/case_02.json",
+          "blobSha": "82c63a534a5d308309d29c874fca927770ef8276",
+          "size": 6506,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+          "controlSize": 566640,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-037",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/agent_misroute/case_01.json",
+          "blobSha": "23110538026992e22943c784360ecd0c0f0cd678",
+          "size": 34542,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+          "controlSize": 559965,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-038",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/infinite_loop/case_02.json",
+          "blobSha": "cfb2eaac2584c3de5d6b51bd9ddfabd0f7539658",
+          "size": 578403,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+          "controlSize": 566640,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-039",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+          "blobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+          "size": 559965,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+          "controlSize": 559965,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-040",
+          "repositoryPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+          "blobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+          "size": 566640,
+          "controlPath": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+          "controlSize": 566640,
+          "labelBlobSha": "cda5367f38eb47599b19a9557c95f516a7f8e3c1"
+        },
+        {
+          "targetId": "ext-041",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/corruption/case_01.json",
+          "blobSha": "7e9b1b5249c996e4ad49df9fa4f7b740e7d9487f",
+          "size": 279971,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+          "controlSize": 708157,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-042",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/corruption/case_02.json",
+          "blobSha": "080232e7a66d9af1cabc9bd2538fa862f9575ff3",
+          "size": 305928,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+          "controlSize": 506378,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-043",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/guardrail_bypass/case_01.json",
+          "blobSha": "6d19537a0b5451bc7cf22486f5e98e941874af55",
+          "size": 1102914,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+          "controlSize": 708157,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-044",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/guardrail_bypass/case_02.json",
+          "blobSha": "67c898d59e125e0f8229a40f4e327b8b0065a849",
+          "size": 538011,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+          "controlSize": 506378,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-045",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/tool_failure/case_01.json",
+          "blobSha": "0b306efb194d0ba8a91e0e145b6620bf95d722a0",
+          "size": 1078835,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+          "controlSize": 708157,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-046",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/a2a_timeout/case_02.json",
+          "blobSha": "b28c930199e1ce2c2d10e994a26d70b389d7993d",
+          "size": 84870,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+          "controlSize": 506378,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-047",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/agent_misroute/case_01.json",
+          "blobSha": "9b50cea922f77507368984a8d58fb1a95ab5c593",
+          "size": 110847,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+          "controlSize": 708157,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-048",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/infinite_loop/case_02.json",
+          "blobSha": "c999db46ec0b11ea58a40aca848459c6f943940a",
+          "size": 656667,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+          "controlSize": 506378,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-049",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+          "blobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+          "size": 708157,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+          "controlBlobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+          "controlSize": 708157,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        },
+        {
+          "targetId": "ext-050",
+          "repositoryPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+          "blobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+          "size": 506378,
+          "controlPath": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+          "controlBlobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+          "controlSize": 506378,
+          "labelBlobSha": "aa5b5e6f6bad2f2d8a4b0f481defe4e4b98d6a18"
+        }
+      ]
+    },
+    "agentdojo": {
+      "revision": "089ed468cf3ed0322acc66b0211f26d9d90dbf60",
+      "selected": 10,
+      "runUse": "schema-validation-only-never-label-authority",
+      "manifest": [
+        {
+          "targetId": "ext-051",
+          "path": "runs/command-r-plus/workspace/user_task_0/important_instructions/injection_task_0.json",
+          "blobSha": "a367df68ebfcb95d04d7cfe8f7d0c3739a11254c",
+          "size": 3838,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-052",
+          "path": "runs/command-r-plus/workspace/user_task_1/important_instructions/injection_task_1.json",
+          "blobSha": "5724bd8d53e822e79ceb2030589698a2092bdc54",
+          "size": 4015,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-053",
+          "path": "runs/command-r-plus/workspace/user_task_2/important_instructions/injection_task_2.json",
+          "blobSha": "8cb9bc97df3a909666c500ba9dd9ecd880f9d881",
+          "size": 4046,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-054",
+          "path": "runs/command-r-plus/banking/user_task_0/important_instructions/injection_task_0.json",
+          "blobSha": "da0ebfe2d411ccf40aa42f0e679bcf2da2c98316",
+          "size": 3403,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-055",
+          "path": "runs/command-r-plus/banking/user_task_2/important_instructions/injection_task_1.json",
+          "blobSha": "60e3500511cb4256d9a82def6c2a564764deeb23",
+          "size": 3272,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-056",
+          "path": "runs/command-r-plus/banking/user_task_6/important_instructions/injection_task_2.json",
+          "blobSha": "170b21e55d35b8a574e89e7ce95509954ea98cf2",
+          "size": 5120,
+          "messages": 7
+        },
+        {
+          "targetId": "ext-057",
+          "path": "runs/command-r-plus/slack/user_task_0/important_instructions/injection_task_1.json",
+          "blobSha": "8b5ee6b2121116665f1a12144235084d877a1c4d",
+          "size": 3139,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-058",
+          "path": "runs/command-r-plus/slack/user_task_1/important_instructions/injection_task_2.json",
+          "blobSha": "e8d8d2c1428d6af1fd74e66a0f17017942a3fecd",
+          "size": 4272,
+          "messages": 7
+        },
+        {
+          "targetId": "ext-059",
+          "path": "runs/command-r-plus/travel/user_task_0/important_instructions/injection_task_0.json",
+          "blobSha": "479014a6a2c873b6b02438fbbd365c79661a6cdf",
+          "size": 3866,
+          "messages": 5
+        },
+        {
+          "targetId": "ext-060",
+          "path": "runs/command-r-plus/travel/user_task_1/important_instructions/injection_task_1.json",
+          "blobSha": "d643c907b6f4d3f97c8ae98f3c239d2700298a11",
+          "size": 5081,
+          "messages": 7
+        }
+      ]
+    },
+    "bfcl-v4": {
+      "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      "selected": 10,
+      "matchedFaultQuestions": 10,
+      "matchedFaultAnswers": 10,
+      "matchedControlQuestions": 10,
+      "matchedControlAnswers": 10,
+      "ids": [
+        {
+          "targetId": "ext-061",
+          "faultId": "multi_turn_miss_param_0",
+          "controlId": "multi_turn_base_0"
+        },
+        {
+          "targetId": "ext-062",
+          "faultId": "multi_turn_miss_param_1",
+          "controlId": "multi_turn_base_1"
+        },
+        {
+          "targetId": "ext-063",
+          "faultId": "multi_turn_miss_param_2",
+          "controlId": "multi_turn_base_2"
+        },
+        {
+          "targetId": "ext-064",
+          "faultId": "multi_turn_miss_param_3",
+          "controlId": "multi_turn_base_3"
+        },
+        {
+          "targetId": "ext-065",
+          "faultId": "multi_turn_miss_param_4",
+          "controlId": "multi_turn_base_4"
+        },
+        {
+          "targetId": "ext-066",
+          "faultId": "multi_turn_miss_param_5",
+          "controlId": "multi_turn_base_5"
+        },
+        {
+          "targetId": "ext-067",
+          "faultId": "multi_turn_miss_param_6",
+          "controlId": "multi_turn_base_6"
+        },
+        {
+          "targetId": "ext-068",
+          "faultId": "multi_turn_miss_param_7",
+          "controlId": "multi_turn_base_7"
+        },
+        {
+          "targetId": "ext-069",
+          "faultId": "multi_turn_miss_param_8",
+          "controlId": "multi_turn_base_8"
+        },
+        {
+          "targetId": "ext-070",
+          "faultId": "multi_turn_miss_param_9",
+          "controlId": "multi_turn_base_9"
+        }
+      ]
+    },
+    "tau2-bench": {
+      "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+      "selected": 10,
+      "frozenFieldMatches": 10,
+      "ids": [
+        {
+          "targetId": "ext-071",
+          "domain": "airline",
+          "taskId": "0"
+        },
+        {
+          "targetId": "ext-072",
+          "domain": "airline",
+          "taskId": "1"
+        },
+        {
+          "targetId": "ext-073",
+          "domain": "airline",
+          "taskId": "2"
+        },
+        {
+          "targetId": "ext-074",
+          "domain": "airline",
+          "taskId": "4"
+        },
+        {
+          "targetId": "ext-075",
+          "domain": "airline",
+          "taskId": "5"
+        },
+        {
+          "targetId": "ext-076",
+          "domain": "retail",
+          "taskId": "10"
+        },
+        {
+          "targetId": "ext-077",
+          "domain": "retail",
+          "taskId": "12"
+        },
+        {
+          "targetId": "ext-078",
+          "domain": "retail",
+          "taskId": "25"
+        },
+        {
+          "targetId": "ext-079",
+          "domain": "retail",
+          "taskId": "50"
+        },
+        {
+          "targetId": "ext-080",
+          "domain": "retail",
+          "taskId": "57"
+        }
+      ]
+    }
+  },
+  "releaseBoundary": {
+    "rawSourcesRetained": false,
+    "publishedArtifact": "source-identifiers-blob-hashes-sizes-and-derived-checks-only"
+  }
+}
