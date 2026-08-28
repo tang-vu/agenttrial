@@ -1,0 +1,826 @@
+{
+  "schemaVersion": "p26-002-power-analysis-0.1.0",
+  "generatedBy": "@agenttrial/research power simulation",
+  "claimUse": "prospective-design-only",
+  "sourceBoundary": "Assumptions are sensitivity values, not effects estimated from the synthetic engineering pilot.",
+  "planHash": "63db0a99cdbfdcce5f1b4ad433c4cbfccbd4313cd75e01330604ca611890f305",
+  "simulation": {
+    "replicates": 3000,
+    "seed": 2600201,
+    "clusterModel": "A Dirichlet draw generates each configuration's four paired outcome probabilities; repetitions are categorical draws nested inside that configuration.",
+    "intraclassCorrelationMapping": "Dirichlet concentration is 1 / ICC - 1, giving the specified exchangeable within-configuration correlation for category indicators.",
+    "test": "studentized mean of within-configuration paired error-rate differences, with configuration as the independent cluster",
+    "planningMultiplicity": "Bonferroni critical value for all three comparisons, conservative relative to Holm",
+    "monteCarloIntervals": "Wilson 95% intervals around simulated success proportions"
+  },
+  "assumptions": {
+    "falseAcceptanceScenarios": [
+      {
+        "id": "pessimistic",
+        "interpretation": "Nine-point paired benefit with strong configuration clustering; this is the binding superiority scenario.",
+        "probabilities": {
+          "neitherError": 0.7,
+          "baselineOnlyError": 0.14,
+          "agenttrialOnlyError": 0.05,
+          "bothError": 0.11
+        },
+        "intraclassCorrelation": 0.3
+      },
+      {
+        "id": "planning",
+        "interpretation": "Sixteen-point paired benefit with moderate configuration clustering.",
+        "probabilities": {
+          "neitherError": 0.68,
+          "baselineOnlyError": 0.2,
+          "agenttrialOnlyError": 0.04,
+          "bothError": 0.08
+        },
+        "intraclassCorrelation": 0.2
+      },
+      {
+        "id": "optimistic",
+        "interpretation": "Twenty-five-point paired benefit with low configuration clustering.",
+        "probabilities": {
+          "neitherError": 0.62,
+          "baselineOnlyError": 0.28,
+          "agenttrialOnlyError": 0.03,
+          "bothError": 0.07
+        },
+        "intraclassCorrelation": 0.1
+      }
+    ],
+    "falseRejectionNoninferiority": {
+      "margin": 0.05,
+      "direction": "AgentTrial minus comparator",
+      "scenarios": [
+        {
+          "id": "safe-plausible",
+          "interpretation": "AgentTrial has one percentage point more false rejection than the comparator.",
+          "probabilities": {
+            "neitherError": 0.94,
+            "baselineOnlyError": 0.01,
+            "agenttrialOnlyError": 0.02,
+            "bothError": 0.03
+          },
+          "intraclassCorrelation": 0.2
+        },
+        {
+          "id": "near-margin-stress",
+          "interpretation": "AgentTrial has three percentage points more false rejection; reported as sensitivity, not a selection gate.",
+          "probabilities": {
+            "neitherError": 0.91,
+            "baselineOnlyError": 0.01,
+            "agenttrialOnlyError": 0.04,
+            "bothError": 0.04
+          },
+          "intraclassCorrelation": 0.2
+        }
+      ]
+    }
+  },
+  "results": {
+    "superiority": [
+      {
+        "scenario": "pessimistic",
+        "configurations": 64,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1280,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.743,
+          "lower": 0.7270590336935508,
+          "upper": 0.7583194230133542
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 64,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1280,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 0.9993333333333333,
+          "lower": 0.9975723154564593,
+          "upper": 0.9998171607396225
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 64,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1280,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 64,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 2560,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.7756666666666666,
+          "lower": 0.760392247052197,
+          "upper": 0.7902359884712741
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 64,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 2560,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 64,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 2560,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 64,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.801,
+          "lower": 0.7863320949126522,
+          "upper": 0.8148980098971355
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 64,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 0.9996666666666667,
+          "lower": 0.9981141326938581,
+          "upper": 0.9999411575717809
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 64,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.175742481602217,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 80,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1600,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.8346666666666667,
+          "lower": 0.8209469920157764,
+          "upper": 0.8475303338192477
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 80,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1600,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 80,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1600,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.8873333333333333,
+          "lower": 0.8755198352254042,
+          "upper": 0.8981561135995938
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 80,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 4800,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.8886666666666667,
+          "lower": 0.8769099961544975,
+          "upper": 0.8994292089487279
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 80,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 4800,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 80,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 4800,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 96,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1920,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.9006666666666666,
+          "lower": 0.8894453562971961,
+          "upper": 0.9108631553100738
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 96,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1920,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 96,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1920,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 96,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.9206666666666666,
+          "lower": 0.9104488327013538,
+          "upper": 0.9298085230793238
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 96,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 96,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "pessimistic",
+        "configurations": 96,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 5760,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.9386666666666666,
+          "lower": 0.9295066610943395,
+          "upper": 0.9467046544424053
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 96,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 5760,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 96,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 5760,
+        "criticalValue": 2.159447872365497,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      }
+    ],
+    "noninferiority": [
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 64,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1280,
+        "criticalValue": 2.175742481602217,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.841,
+          "lower": 0.8274794464333228,
+          "upper": 0.8536483467232805
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 64,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1280,
+        "criticalValue": 2.175742481602217,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.30633333333333335,
+          "lower": 0.2900941087236865,
+          "upper": 0.3230679168638146
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 64,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 2560,
+        "criticalValue": 2.175742481602217,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.8876666666666667,
+          "lower": 0.875867328209393,
+          "upper": 0.8984744346851621
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 64,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 2560,
+        "criticalValue": 2.175742481602217,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.33366666666666667,
+          "lower": 0.3170156342776958,
+          "upper": 0.35074314501346265
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 64,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.175742481602217,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.8986666666666666,
+          "lower": 0.8873529975205098,
+          "upper": 0.9089606296694192
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 64,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.175742481602217,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.3463333333333333,
+          "lower": 0.32951329427051723,
+          "upper": 0.3635464196637995
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 80,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1600,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.916,
+          "lower": 0.9055338768295852,
+          "upper": 0.9254020819772976
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 80,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1600,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.33366666666666667,
+          "lower": 0.3170156342776958,
+          "upper": 0.35074314501346265
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.9433333333333334,
+          "lower": 0.9344786821987704,
+          "upper": 0.9510540303117695
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.38233333333333336,
+          "lower": 0.36510452782596287,
+          "upper": 0.39986310562048794
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 80,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 4800,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.9493333333333334,
+          "lower": 0.94089455316331,
+          "upper": 0.9566228125992523
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 80,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 4800,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.38866666666666666,
+          "lower": 0.37137654811212734,
+          "upper": 0.4062415526559026
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 96,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1920,
+        "criticalValue": 2.159447872365497,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.949,
+          "lower": 0.9405373663325802,
+          "upper": 0.9563141853604251
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 96,
+        "repetitions": 10,
+        "totalFaultAndControlRuns": 1920,
+        "criticalValue": 2.159447872365497,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.37566666666666665,
+          "lower": 0.358505773132581,
+          "upper": 0.3931455789227339
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 96,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.159447872365497,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.9683333333333334,
+          "lower": 0.9614435448867497,
+          "upper": 0.97402522284055
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 96,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3840,
+        "criticalValue": 2.159447872365497,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.43333333333333335,
+          "lower": 0.4156972159904054,
+          "upper": 0.4511399700982354
+        }
+      },
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 96,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 5760,
+        "criticalValue": 2.159447872365497,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.9773333333333334,
+          "lower": 0.9713652722495945,
+          "upper": 0.9820804753557388
+        }
+      },
+      {
+        "scenario": "near-margin-stress",
+        "selectionGate": false,
+        "configurations": 96,
+        "repetitions": 30,
+        "totalFaultAndControlRuns": 5760,
+        "criticalValue": 2.159447872365497,
+        "assumedHarm": 0.03,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.43733333333333335,
+          "lower": 0.41967346692312785,
+          "upper": 0.45515348800019445
+        }
+      }
+    ]
+  },
+  "selection": {
+    "uniqueFaultConfigurations": 80,
+    "matchedControlConfigurations": 80,
+    "repetitionsPerConfiguration": 20,
+    "totalRunArtifacts": 3200,
+    "variantsPerFaultFamily": 10,
+    "rule": "Meet protocol floors and require the 95% Monte Carlo lower bound to be at least 0.80 for all superiority scenarios and the safe-plausible noninferiority scenario.",
+    "passed": true,
+    "selectedSuperiority": [
+      {
+        "scenario": "pessimistic",
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.09000000000000001,
+        "intraclassCorrelation": 0.3,
+        "power": {
+          "estimate": 0.8873333333333333,
+          "lower": 0.8755198352254042,
+          "upper": 0.8981561135995938
+        }
+      },
+      {
+        "scenario": "planning",
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.16,
+        "intraclassCorrelation": 0.2,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      },
+      {
+        "scenario": "optimistic",
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedAbsoluteEffect": 0.25,
+        "intraclassCorrelation": 0.1,
+        "power": {
+          "estimate": 1,
+          "lower": 0.9987211043351955,
+          "upper": 1
+        }
+      }
+    ],
+    "selectedNoninferiority": [
+      {
+        "scenario": "safe-plausible",
+        "selectionGate": true,
+        "configurations": 80,
+        "repetitions": 20,
+        "totalFaultAndControlRuns": 3200,
+        "criticalValue": 2.165916943646196,
+        "assumedHarm": 0.01,
+        "noninferiorityMargin": 0.05,
+        "intraclassCorrelation": 0.2,
+        "probabilityOfEstablishingNoninferiority": {
+          "estimate": 0.9433333333333334,
+          "lower": 0.9344786821987704,
+          "upper": 0.9510540303117695
+        }
+      }
+    ],
+    "rationale": "Independent configurations buy more power under clustering than extra repeats. The 80-by-20 design is lower workload than 64-by-30 and protects the pessimistic nine-point scenario."
+  },
+  "interpretationBoundary": "Power is conditional on prospective sensitivity assumptions. It does not validate an effect, replace independent targets, or convert synthetic pilot outputs into paper evidence."
+}

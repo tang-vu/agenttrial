@@ -8,12 +8,13 @@ import {
   EVALUATION_MODES,
   FAULT_FAMILIES,
   LLM_JUDGE_FREEZE,
+  POWER_ANALYSIS_PLAN,
   SCENARIO_MATRIX,
   researchDesignHash,
 } from "./index";
 
 const artifact = {
-  schemaVersion: "p26-002-design-0.3.0",
+  schemaVersion: "p26-002-design-0.4.0",
   status: "draft-freeze",
   designHash: researchDesignHash(),
   primaryUnit: "unique capability-claim, scenario, and injected-fault configuration",
@@ -22,11 +23,12 @@ const artifact = {
   evaluationModes: EVALUATION_MODES,
   llmJudge: LLM_JUDGE_FREEZE,
   contributionScope: CONTRIBUTION_SCOPE,
+  powerAnalysis: POWER_ANALYSIS_PLAN,
   nearestWorkStatus: "frozen-conditional-go-2026-08-28",
   scenarioCount: SCENARIO_MATRIX.length,
   matchedControlCount: CONTROL_MATRIX.length,
-  repetitionsPerScenario: 20,
-  plannedRunCountPerEvaluationMode: (SCENARIO_MATRIX.length + CONTROL_MATRIX.length) * 20,
+  repetitionsPerScenario: POWER_ANALYSIS_PLAN.selectedDesign.repetitionsPerConfiguration,
+  plannedRunCountPerEvaluationMode: POWER_ANALYSIS_PLAN.selectedDesign.totalRunArtifacts,
   scenarios: SCENARIO_MATRIX,
   matchedControls: CONTROL_MATRIX,
   primaryOutcomes: [
@@ -38,7 +40,9 @@ const artifact = {
   ],
   analysis: {
     intervals: "Wilson 95%",
-    pairedTest: "exact McNemar",
+    pairedTest:
+      "one-sided studentized mean of paired error-rate differences with configuration as the independent cluster",
+    sensitivityTest: "execution-level exact McNemar, reported as a non-primary sensitivity check",
     resampling:
       "hierarchical bootstrap over configurations with repeats nested within configuration",
     multiplicity: "Holm correction across primary baseline comparisons",
@@ -46,7 +50,6 @@ const artifact = {
   interpretationBoundary:
     "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   blockers: [
-    "Simulation-based power analysis is not frozen.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed.",
   ],

@@ -1,5 +1,8 @@
 import { createHash } from "node:crypto";
 import { LOCAL_JUDGE_CANDIDATE } from "./local-judge";
+import { POWER_ANALYSIS_PLAN } from "./power";
+
+export { POWER_ANALYSIS_PLAN } from "./power";
 
 export const FAULT_FAMILIES = [
   "unsupported-provenance",
@@ -127,6 +130,8 @@ export const SCENARIO_VARIANTS = [
   "missing-metadata",
   "high-severity",
   "cross-check",
+  "multi-step",
+  "partial-evidence",
 ] as const;
 export type ScenarioVariant = (typeof SCENARIO_VARIANTS)[number];
 
@@ -315,6 +320,7 @@ export function researchDesignHash(): string {
     matchedControls: CONTROL_MATRIX,
     llmJudge: LLM_JUDGE_FREEZE,
     contributionScope: CONTRIBUTION_SCOPE,
+    powerAnalysis: POWER_ANALYSIS_PLAN,
   };
   return createHash("sha256").update(JSON.stringify(locked)).digest("hex");
 }

@@ -4,78 +4,78 @@
   "claimUse": "pipeline-validation-only",
   "fixtureScope": "synthetic-engineering-fixture",
   "interpretationBoundary": "Synthetic fixtures validate measurement plumbing only. They are not evidence of real-world efficacy, superiority, or publication-ready findings.",
-  "designHash": "08003f2b396801a866451d9ec9def05eff69daedf97a1dcf24d6e03deb0dd939",
+  "designHash": "a79b20b0371ee67b77302d48ae1e0646b54ef8398c70f2293ed227aabd18d8d2",
   "inputs": {
-    "faultConfigurations": 64,
-    "matchedControlConfigurations": 64,
+    "faultConfigurations": 80,
+    "matchedControlConfigurations": 80,
     "repeatsPerConfiguration": 2,
     "evaluationModes": ["final-output-only", "trace-presence", "agenttrial"],
     "llmJudgeStatus": "frozen-separately-and-excluded-from-this-synthetic-plumbing-pilot"
   },
-  "manifestRecords": 768,
+  "manifestRecords": 960,
   "outcomes": [
     {
       "mode": "final-output-only",
-      "records": 256,
+      "records": 320,
       "confusion": {
-        "trueAccept": 128,
+        "trueAccept": 160,
         "trueReject": 0,
-        "falseAccept": 128,
+        "falseAccept": 160,
         "falseReject": 0
       },
       "falseAcceptance": {
         "estimate": 1,
-        "lower": 0.9708620041018919,
-        "upper": 0.9999999999999999
+        "lower": 0.9765529633499672,
+        "upper": 1
       },
       "falseRejection": {
         "estimate": 0,
         "lower": 0,
-        "upper": 0.029137995898108032
+        "upper": 0.023447036650032713
       },
       "faultDetectionPrecision": 0,
       "faultDetectionRecall": 0
     },
     {
       "mode": "trace-presence",
-      "records": 256,
+      "records": 320,
       "confusion": {
-        "trueAccept": 128,
+        "trueAccept": 160,
         "trueReject": 0,
-        "falseAccept": 128,
+        "falseAccept": 160,
         "falseReject": 0
       },
       "falseAcceptance": {
         "estimate": 1,
-        "lower": 0.9708620041018919,
-        "upper": 0.9999999999999999
+        "lower": 0.9765529633499672,
+        "upper": 1
       },
       "falseRejection": {
         "estimate": 0,
         "lower": 0,
-        "upper": 0.029137995898108032
+        "upper": 0.023447036650032713
       },
       "faultDetectionPrecision": 0,
       "faultDetectionRecall": 0
     },
     {
       "mode": "agenttrial",
-      "records": 256,
+      "records": 320,
       "confusion": {
-        "trueAccept": 128,
-        "trueReject": 128,
+        "trueAccept": 160,
+        "trueReject": 160,
         "falseAccept": 0,
         "falseReject": 0
       },
       "falseAcceptance": {
         "estimate": 0,
         "lower": 0,
-        "upper": 0.029137995898108032
+        "upper": 0.023447036650032713
       },
       "falseRejection": {
         "estimate": 0,
         "lower": 0,
-        "upper": 0.029137995898108032
+        "upper": 0.023447036650032713
       },
       "faultDetectionPrecision": 1,
       "faultDetectionRecall": 1
@@ -85,21 +85,21 @@
     {
       "baseline": "final-output-only",
       "comparison": {
-        "total": 128,
+        "total": 160,
         "baseline": {
           "estimate": 1,
-          "lower": 0.9708620041018919,
-          "upper": 0.9999999999999999
+          "lower": 0.9765529633499672,
+          "upper": 1
         },
         "agenttrial": {
           "estimate": 0,
           "lower": 0,
-          "upper": 0.029137995898108032
+          "upper": 0.023447036650032713
         },
         "absoluteDifference": 1,
-        "discordantBaselineOnly": 128,
+        "discordantBaselineOnly": 160,
         "discordantAgentTrialOnly": 0,
-        "pValue": 5.877471754111438e-39
+        "pValue": 1.3684555315672042e-48
       },
       "hierarchicalBootstrap95": {
         "estimate": 1,
@@ -110,21 +110,21 @@
     {
       "baseline": "trace-presence",
       "comparison": {
-        "total": 128,
+        "total": 160,
         "baseline": {
           "estimate": 1,
-          "lower": 0.9708620041018919,
-          "upper": 0.9999999999999999
+          "lower": 0.9765529633499672,
+          "upper": 1
         },
         "agenttrial": {
           "estimate": 0,
           "lower": 0,
-          "upper": 0.029137995898108032
+          "upper": 0.023447036650032713
         },
         "absoluteDifference": 1,
-        "discordantBaselineOnly": 128,
+        "discordantBaselineOnly": 160,
         "discordantAgentTrialOnly": 0,
-        "pValue": 5.877471754111438e-39
+        "pValue": 1.3684555315672042e-48
       },
       "hierarchicalBootstrap95": {
         "estimate": 1,

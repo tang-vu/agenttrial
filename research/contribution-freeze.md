@@ -51,14 +51,15 @@ The paper cannot move from conditional go to empirical claims until all items pa
 
 Completed: a zero-cost local Qwen3-4B Q4_K_M judge, prompt, llama.cpp runtime, EBNF output constraint, and strict parser are frozen by model and runtime hash after a held-out calibration gate. Calibration is baseline selection only and is excluded from paper results.
 
+Completed: a prospective simulation power analysis selected 80 independent fault configurations, 80 matched controls, and 20 nested repetitions. The binding nine-point, ICC 0.30 scenario has estimated power 0.887 with a 95% Monte Carlo interval of 0.876 to 0.898. No engineering-pilot effect was used.
+
 Remaining gates:
 
-1. Complete a simulation-based power analysis using plausible paired-disagreement ranges, not pilot effects.
-2. Select independent, authorized targets that were not built to satisfy AgentTrial's assertions.
-3. Freeze assertion authorship and ground truth independently of the evaluated system.
-4. Run at least 20 repetitions per stochastic configuration and report configuration-clustered uncertainty.
-5. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
-6. Reproduce from a clean environment and audit the public allowlist before release.
+1. Select independent, authorized targets that were not built to satisfy AgentTrial's assertions.
+2. Freeze assertion authorship and ground truth independently of the evaluated system.
+3. Run 20 repetitions for each of the 80 fault configurations and 80 controls, and report configuration-clustered uncertainty.
+4. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
+5. Reproduce from a clean environment and audit the public allowlist before release.
 
 ## Stop or pivot rules
 
@@ -73,4 +74,4 @@ Stop the current paper claim or pivot again if any condition holds:
 
 ## Interpretation of the current engineering pilot
 
-The 768-record pilot and nine-mutation suite validate only that the manifest, evaluator, analysis, and verifier paths execute as designed. Their perfect separation is expected because the fixtures were constructed to exercise known branches. Those values are prohibited from the paper's main results and power assumptions.
+The regenerated 960-record pilot and nine-mutation suite validate only that the manifest, evaluator, analysis, and verifier paths execute as designed. Their perfect separation is expected because the fixtures were constructed to exercise known branches. Those values are prohibited from the paper's main results and power assumptions.

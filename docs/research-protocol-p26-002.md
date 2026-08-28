@@ -4,7 +4,7 @@ Protocol version: 0.2
 Created: 2026-08-27  
 Updated: 2026-08-28
 Study ID: P26-002  
-Status: design freeze in progress  
+Status: G2 method freeze complete; G3 governance pending
 Primary repository: tang-vu/agenttrial
 
 ## Objective
@@ -70,6 +70,8 @@ Prefer a locally runnable open-weight judge for the zero-cost replication path. 
 - Seeds, environment, agent build, evaluator build, assertion registry, and planner configuration are locked before execution.
 
 The final sample-size rationale must use expected paired disagreement rates or a simulation-based power analysis. The minimum counts above are floors, not a substitute for that rationale.
+
+The frozen prospective power analysis expands the design to 80 unique fault configurations and 80 matched controls, with 20 nested repetitions per configuration. This yields 3,200 run artifacts. Selection uses conservative multiplicity planning, configuration-level clustering, plausible paired-disagreement sensitivity ranges, and a false-rejection noninferiority margin. The synthetic pilot contributes no effect estimate to this calculation.
 
 The two-repeat credential-free engineering pilot is excluded from hypothesis testing. Its synthetic fixtures validate only manifest generation, evaluator wiring, analysis functions, and tamper localization. Main-study claims require the locked 20-repeat design on independent authorized targets.
 

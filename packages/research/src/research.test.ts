@@ -30,11 +30,12 @@ import {
   parseJudgeOutput,
   renderJudgeCase,
 } from "./local-judge";
+import { POWER_ANALYSIS_PLAN, runPowerAnalysis } from "./power";
 
 describe("P26-002 frozen research design", () => {
   it("contains at least 60 unique configurations across all locked families", () => {
-    expect(SCENARIO_MATRIX).toHaveLength(64);
-    expect(new Set(SCENARIO_MATRIX.map((item) => item.id)).size).toBe(64);
+    expect(SCENARIO_MATRIX).toHaveLength(80);
+    expect(new Set(SCENARIO_MATRIX.map((item) => item.id)).size).toBe(80);
     expect(new Set(SCENARIO_MATRIX.map((item) => item.family))).toEqual(new Set(FAULT_FAMILIES));
     expect(SCENARIO_MATRIX.every((item) => item.repetitions >= 20)).toBe(true);
   });
@@ -52,7 +53,7 @@ describe("P26-002 frozen research design", () => {
 
   it("pairs every fault configuration with a positive control", () => {
     expect(CONTROL_MATRIX).toHaveLength(SCENARIO_MATRIX.length);
-    expect(new Set(CONTROL_MATRIX.map((item) => item.id)).size).toBe(64);
+    expect(new Set(CONTROL_MATRIX.map((item) => item.id)).size).toBe(80);
     expect(CONTROL_MATRIX.every((item) => item.groundTruth === "accept")).toBe(true);
     expect(CONTROL_MATRIX.map((item) => item.pairedFaultConfigurationId)).toEqual(
       SCENARIO_MATRIX.map((item) => item.id),
@@ -92,6 +93,28 @@ describe("P26-002 frozen research design", () => {
     expect(researchDesignHash()).toMatch(/^[0-9a-f]{64}$/);
     expect(researchDesignHash()).toBe(researchDesignHash());
   });
+});
+
+describe("prospective power analysis", () => {
+  it("selects 80 independent configurations and 20 nested repeats", () => {
+    expect(POWER_ANALYSIS_PLAN.selectedDesign).toMatchObject({
+      uniqueFaultConfigurations: 80,
+      matchedControlConfigurations: 80,
+      repetitionsPerConfiguration: 20,
+      totalRunArtifacts: 3200,
+    });
+  });
+
+  it("passes the conservative Monte Carlo lower-bound gate", () => {
+    const result = runPowerAnalysis();
+    expect(result.selection.passed).toBe(true);
+    expect(result.selection.selectedSuperiority).toHaveLength(3);
+    expect(
+      result.selection.selectedSuperiority.every(
+        (item) => item.power.lower >= POWER_ANALYSIS_PLAN.minimumPower,
+      ),
+    ).toBe(true);
+  }, 30_000);
 });
 
 describe("portable evidence tamper suite", () => {

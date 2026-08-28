@@ -8,11 +8,13 @@
     "./analysis": "./src/analysis.ts",
     "./controlled-agents": "./src/controlled-agents.ts",
     "./local-judge": "./src/local-judge.ts",
+    "./power-analysis": "./src/power.ts",
     "./tamper": "./src/tamper.ts"
   },
   "scripts": {
     "freeze": "node --import tsx src/freeze.ts && prettier --write ../../research/design-freeze.json",
     "pilot": "node --import tsx src/pilot.ts && prettier --write ../../research/pilot/summary.json ../../research/pilot/tamper-summary.json",
+    "power": "node --import tsx src/power.ts && prettier --write ../../research/power/power-analysis.json",
     "calibrate:judge": "node --import tsx src/calibrate-judge.ts && prettier --write ../../research/llm-judge/calibration-summary.json"
   },
   "dependencies": {
