@@ -8,6 +8,8 @@ Verified against primary sources on 2026-08-28. Status: **conditional go with a 
 
 The original broad framing is not defensible as a novelty claim. Prior work already covers signed Trust Certificates, capability-bound certificates, Ed25519 and SHA-256 ledgers, deterministic policy replay, evidence checklists with explicit Unknown outcomes, meta-evaluation of LLM judges, and matched provenance interventions.
 
+An August 2026 audit added AgentChaosBench, which already provides controlled operational faults, aligned no-fault traces, held-out labels, and fault localization across multi-agent telemetry. P26-002 therefore also prohibits novelty claims around runtime-fault benchmarking, trace-based diagnosis, or localization.
+
 P26-002 will therefore study evaluator error. The signed evidence bundle is an experimental treatment and reproducibility mechanism, not a new cryptographic primitive or a proof of semantic correctness.
 
 ## Locked paper question
@@ -34,14 +36,15 @@ P26-002 will therefore study evaluator error. The signed evidence bundle is an e
 
 ## Strongest collisions
 
-| Work                                                                                 | Collision that constrains P26-002                                                  | Remaining empirical gap used by P26-002                                                             |
-| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| [Evidence-Supported Bounds](https://arxiv.org/abs/2605.10448)                        | Locked evidence checklists, Evidence Pass/Fail/Unknown, score-support audit        | Paired evaluator error under injected semantic and integrity faults                                 |
-| [Pre-Deployment Assurance and Trust Certification](https://arxiv.org/abs/2606.04037) | Scenario-bound signed certificate, coverage, deployment gate                       | Deterministic checks and comparative false-acceptance study rather than LLM-judge-led certification |
-| [Governing Dynamic Capabilities](https://arxiv.org/abs/2603.14332)                   | Capability certificates, Ed25519, SHA-256, hash chains, attack detection, overhead | Claim-specific evaluator meta-evaluation across a broader semantic-fault taxonomy                   |
-| [AgentBound](https://arxiv.org/abs/2606.30970)                                       | Signed receipts, policy provenance, deterministic replay, external verification    | Pre-deployment evaluator error rather than runtime governance receipts                              |
-| [AgentRewardBench](https://arxiv.org/abs/2504.08942)                                 | Meta-evaluation of LLM judges against expert labels                                | Same-artifact comparisons including deterministic contracts and portable integrity verification     |
-| [Success Provenance](https://arxiv.org/abs/2607.24054)                               | Matched CLEAN/GOLD/SHAM interventions and paired analysis                          | Fault-specific evidence-contract treatment and false-acceptance localization                        |
+| Work                                                                                 | Collision that constrains P26-002                                                      | Remaining empirical gap used by P26-002                                                             |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [Evidence-Supported Bounds](https://arxiv.org/abs/2605.10448)                        | Locked evidence checklists, Evidence Pass/Fail/Unknown, score-support audit            | Paired evaluator error under injected semantic and integrity faults                                 |
+| [Pre-Deployment Assurance and Trust Certification](https://arxiv.org/abs/2606.04037) | Scenario-bound signed certificate, coverage, deployment gate                           | Deterministic checks and comparative false-acceptance study rather than LLM-judge-led certification |
+| [Governing Dynamic Capabilities](https://arxiv.org/abs/2603.14332)                   | Capability certificates, Ed25519, SHA-256, hash chains, attack detection, overhead     | Claim-specific evaluator meta-evaluation across a broader semantic-fault taxonomy                   |
+| [AgentBound](https://arxiv.org/abs/2606.30970)                                       | Signed receipts, policy provenance, deterministic replay, external verification        | Pre-deployment evaluator error rather than runtime governance receipts                              |
+| [AgentRewardBench](https://arxiv.org/abs/2504.08942)                                 | Meta-evaluation of LLM judges against expert labels                                    | Same-artifact comparisons including deterministic contracts and portable integrity verification     |
+| [Success Provenance](https://arxiv.org/abs/2607.24054)                               | Matched CLEAN/GOLD/SHAM interventions and paired analysis                              | Fault-specific evidence-contract treatment and false-acceptance localization                        |
+| [AgentChaosBench](https://arxiv.org/abs/2608.14680)                                  | Ten runtime faults, aligned controls, 275 sanitized traces, diagnosis and localization | Accept/reject evaluator error under evidence contracts rather than top-k fault-type diagnosis       |
 
 The full 12-work, feature-level audit is in `nearest-work-matrix.json`.
 
@@ -53,10 +56,12 @@ Completed: a zero-cost local Qwen3-4B Q4_K_M judge, prompt, llama.cpp runtime, E
 
 Completed: a prospective simulation power analysis selected 80 independent fault configurations, 80 matched controls, and 20 nested repetitions. The binding nine-point, ICC 0.30 scenario has estimated power 0.887 with a 95% Monte Carlo interval of 0.876 to 0.898. No engineering-pilot effect was used.
 
+Completed: 80 public source units are locked across AgentChaosBench, AgentDojo, BFCL V4, and tau2-bench, with ten units per fault family. Revisions, licenses, upstream label authority, controls, construct limits, and the no-vendoring release boundary are pinned. Adapters and independent construct review remain pending.
+
 Remaining gates:
 
-1. Select independent, authorized targets that were not built to satisfy AgentTrial's assertions.
-2. Freeze assertion authorship and ground truth independently of the evaluated system.
+1. Implement and verify read-only adapters for all 80 locked source units.
+2. Obtain independent review of construct mappings and assertion authorship without exposing evaluator outcomes.
 3. Run 20 repetitions for each of the 80 fault configurations and 80 controls, and report configuration-clustered uncertainty.
 4. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
 5. Reproduce from a clean environment and audit the public allowlist before release.

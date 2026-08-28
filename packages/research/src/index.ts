@@ -261,6 +261,43 @@ export const CONTRIBUTION_SCOPE = {
   syntheticPilotClaimUse: "pipeline-validation-only",
 } as const;
 
+export const INDEPENDENT_TARGET_FREEZE = {
+  artifact: "research/independent-targets.json",
+  artifactSha256: "63f21dd0c2a535a3d0789e7c395a555f381e4de5918f2a0923d1d3dbda07bc8e",
+  status: "source-locked-adapter-pending",
+  totalConfigurations: 80,
+  configurationsPerFamily: 10,
+  sources: [
+    {
+      id: "agentchaosbench",
+      revision: "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+      license: "MIT",
+      selected: 50,
+    },
+    {
+      id: "agentdojo",
+      revision: "089ed468cf3ed0322acc66b0211f26d9d90dbf60",
+      license: "MIT",
+      selected: 10,
+    },
+    {
+      id: "bfcl-v4",
+      revision: "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      license: "Apache-2.0",
+      selected: 10,
+    },
+    {
+      id: "tau2-bench",
+      revision: "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+      license: "MIT",
+      selected: 10,
+    },
+  ],
+  activeNetworkTesting: false,
+  groundTruthPolicy:
+    "Use pinned upstream labels and task criteria, exclude them from evaluator inputs, and require independent construct review before the main run.",
+} as const;
+
 export function evaluateBaseline(
   mode: EvaluationMode,
   artifact: EvaluationArtifact,
@@ -321,6 +358,7 @@ export function researchDesignHash(): string {
     llmJudge: LLM_JUDGE_FREEZE,
     contributionScope: CONTRIBUTION_SCOPE,
     powerAnalysis: POWER_ANALYSIS_PLAN,
+    independentTargets: INDEPENDENT_TARGET_FREEZE,
   };
   return createHash("sha256").update(JSON.stringify(locked)).digest("hex");
 }

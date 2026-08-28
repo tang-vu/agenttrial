@@ -73,6 +73,8 @@ The final sample-size rationale must use expected paired disagreement rates or a
 
 The frozen prospective power analysis expands the design to 80 unique fault configurations and 80 matched controls, with 20 nested repetitions per configuration. This yields 3,200 run artifacts. Selection uses conservative multiplicity planning, configuration-level clustering, plausible paired-disagreement sensitivity ranges, and a false-rejection noninferiority margin. The synthetic pilot contributes no effect estimate to this calculation.
 
+The independent source lock uses 50 AgentChaosBench traces, ten AgentDojo prompt-injection tasks, ten BFCL V4 missing-parameter tasks with matched base entries, and ten tau2-bench scoring-contract omission stress cases. All sources are pinned, public, and MIT or Apache-2.0. Source labels and task criteria remain blinded from evaluator inputs; adapters cannot alter them after results are observed.
+
 The two-repeat credential-free engineering pilot is excluded from hypothesis testing. Its synthetic fixtures validate only manifest generation, evaluator wiring, analysis functions, and tamper localization. Main-study claims require the locked 20-repeat design on independent authorized targets.
 
 ## Outcomes
@@ -150,6 +152,8 @@ All active testing is limited to controlled fixtures or targets with explicit au
 ## Nearest-work boundary
 
 The novelty matrix must cover auditable agent systems, AgentReputation, pre-deployment assurance and trust certification, dynamic capability binding, behavioral integrity verification, and agent benchmark frameworks.
+
+AgentChaosBench is a direct collision on runtime-fault telemetry, aligned controls, detection, and localization. P26-002 does not claim fault-benchmark or diagnosis novelty; it studies accept/reject evaluator error under evidence-contract treatments.
 
 A defensible contribution requires comparative evidence for the complete combination of precommitted claim-specific trials, deterministic score authority, explicit missing coverage, portable evidence, and tamper localization. Product polish, signatures, Merkle trees, and on-chain anchoring alone are not novel.
 

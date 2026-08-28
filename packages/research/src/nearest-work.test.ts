@@ -32,6 +32,7 @@ describe("P26-002 nearest-work freeze", () => {
         "agentbound-2026",
         "lu-et-al-2025-agentrewardbench",
         "gao-zhou-2026-success-provenance",
+        "zhang-et-al-2026-agentchaosbench",
       ]),
     );
   });

@@ -95,6 +95,23 @@
       "relationToP26002": "Relevant to downstream use of verified trials and context-specific claims, but presented as an architectural vision rather than an empirical evaluator benchmark."
     },
     {
+      "id": "zhang-et-al-2026-agentchaosbench",
+      "title": "When Agentic Executions Fail: Detecting and Localizing Runtime Faults from Telemetry",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2608.14680",
+      "primaryObject": "Detection and localization of ten injected operational fault types from 275 sanitized, aligned agent-execution traces",
+      "features": {
+        "matchedControls": "yes",
+        "precommittedClaimChecks": "partial",
+        "deterministicScoring": "yes",
+        "explicitMissingEvidence": "no",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "partial",
+        "pairedEvaluatorErrorComparison": "partial"
+      },
+      "relationToP26002": "The strongest new collision on runtime-fault benchmarks, aligned no-fault controls, telemetry diagnosis, and localization. P26-002 cannot claim novelty for fault detection or localization. Its remaining question is narrower: accept/reject evaluator error under precommitted evidence contracts and portable integrity checks, not top-k fault diagnosis."
+    },
+    {
       "id": "debenedetti-et-al-2024-agentdojo",
       "title": "AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents",
       "year": 2024,

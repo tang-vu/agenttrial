@@ -7,6 +7,7 @@ import {
   CONTRIBUTION_SCOPE,
   EVALUATION_MODES,
   FAULT_FAMILIES,
+  INDEPENDENT_TARGET_FREEZE,
   LLM_JUDGE_FREEZE,
   POWER_ANALYSIS_PLAN,
   SCENARIO_MATRIX,
@@ -24,6 +25,7 @@ const artifact = {
   llmJudge: LLM_JUDGE_FREEZE,
   contributionScope: CONTRIBUTION_SCOPE,
   powerAnalysis: POWER_ANALYSIS_PLAN,
+  independentTargets: INDEPENDENT_TARGET_FREEZE,
   nearestWorkStatus: "frozen-conditional-go-2026-08-28",
   scenarioCount: SCENARIO_MATRIX.length,
   matchedControlCount: CONTROL_MATRIX.length,
@@ -50,6 +52,7 @@ const artifact = {
   interpretationBoundary:
     "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   blockers: [
+    "Independent target sources are locked; adapters and independent construct review remain pending.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed.",
   ],

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "p26-002-design-0.4.0",
   "status": "draft-freeze",
-  "designHash": "a79b20b0371ee67b77302d48ae1e0646b54ef8398c70f2293ed227aabd18d8d2",
+  "designHash": "103570263f2382fea705bf2cb3bc1ffc411cc02c39923781ca497bfc43543a15",
   "primaryUnit": "unique capability-claim, scenario, and injected-fault configuration",
   "faultFamilies": [
     "unsupported-provenance",
@@ -180,6 +180,41 @@
       "totalRunArtifacts": 3200,
       "variantsPerFaultFamily": 10
     }
+  },
+  "independentTargets": {
+    "artifact": "research/independent-targets.json",
+    "artifactSha256": "63f21dd0c2a535a3d0789e7c395a555f381e4de5918f2a0923d1d3dbda07bc8e",
+    "status": "source-locked-adapter-pending",
+    "totalConfigurations": 80,
+    "configurationsPerFamily": 10,
+    "sources": [
+      {
+        "id": "agentchaosbench",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "license": "MIT",
+        "selected": 50
+      },
+      {
+        "id": "agentdojo",
+        "revision": "089ed468cf3ed0322acc66b0211f26d9d90dbf60",
+        "license": "MIT",
+        "selected": 10
+      },
+      {
+        "id": "bfcl-v4",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "license": "Apache-2.0",
+        "selected": 10
+      },
+      {
+        "id": "tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "license": "MIT",
+        "selected": 10
+      }
+    ],
+    "activeNetworkTesting": false,
+    "groundTruthPolicy": "Use pinned upstream labels and task criteria, exclude them from evaluator inputs, and require independent construct review before the main run."
   },
   "nearestWorkStatus": "frozen-conditional-go-2026-08-28",
   "scenarioCount": 80,
@@ -2206,6 +2241,7 @@
   },
   "interpretationBoundary": "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   "blockers": [
+    "Independent target sources are locked; adapters and independent construct review remain pending.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed."
   ]
