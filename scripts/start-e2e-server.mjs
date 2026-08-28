@@ -1,5 +1,5 @@
-import { cp, mkdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { cp, mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const standaloneRoot = resolve("apps/web/.next/standalone/apps/web");
@@ -12,6 +12,7 @@ await cp(resolve("apps/web/public"), resolve(standaloneRoot, "public"), {
   recursive: true,
   force: true,
 });
+
 const server = spawn(process.execPath, [resolve(standaloneRoot, "server.js")], {
   cwd: standaloneRoot,
   stdio: "inherit",
@@ -22,5 +23,6 @@ const server = spawn(process.execPath, [resolve(standaloneRoot, "server.js")], {
     AGENTTRIAL_E2E: "true",
   },
 });
-for (const signal of ["SIGINT", "SIGTERM"] as const) process.on(signal, () => server.kill(signal));
+
+for (const signal of ["SIGINT", "SIGTERM"]) process.on(signal, () => server.kill(signal));
 server.on("exit", (code) => process.exit(code ?? 0));

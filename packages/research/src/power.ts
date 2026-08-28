@@ -238,12 +238,24 @@ function scenarioSeed(base: number, configurations: number, repetitions: number,
   return (base + configurations * 1009 + repetitions * 9176 + index * 65537) >>> 0;
 }
 
-export function runPowerAnalysis() {
+export interface PowerAnalysisOptions {
+  selectedDesignOnly?: boolean;
+}
+
+export function runPowerAnalysis(options: PowerAnalysisOptions = {}) {
   const superiority = [];
   const noninferiority = [];
-  for (const configurations of CONFIGURATION_COUNTS) {
+  const selected = POWER_ANALYSIS_PLAN.selectedDesign;
+  const configurationCounts = options.selectedDesignOnly
+    ? ([selected.uniqueFaultConfigurations] as const)
+    : CONFIGURATION_COUNTS;
+  const repetitionCounts = options.selectedDesignOnly
+    ? ([selected.repetitionsPerConfiguration] as const)
+    : REPETITION_COUNTS;
+
+  for (const configurations of configurationCounts) {
     const criticalValue = CRITICAL_VALUES[configurations];
-    for (const repetitions of REPETITION_COUNTS) {
+    for (const repetitions of repetitionCounts) {
       for (const [
         scenarioIndex,
         assumption,
@@ -335,7 +347,6 @@ export function runPowerAnalysis() {
     }
   }
 
-  const selected = POWER_ANALYSIS_PLAN.selectedDesign;
   const selectedSuperiority = superiority.filter(
     (item) =>
       item.configurations === selected.uniqueFaultConfigurations &&

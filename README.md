@@ -6,7 +6,7 @@ The evidence layer for agent marketplaces. AgentTrial discovers an agent’s adv
 
 [![quality-gate](https://github.com/tang-vu/agenttrial/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tang-vu/agenttrial/actions/workflows/ci.yml)
 
-**Judge quick links:** [Live product](https://agenttrial.tangvu.dev) · [Run the head-to-head benchmark](https://agenttrial.tangvu.dev/benchmark) · [Watch the 116-second demo](https://agenttrial.tangvu.dev/demo/agenttrial-live-demo-narrated.mp4) · [Inspect a signed production report](https://agenttrial.tangvu.dev/reports/17462463-066f-485d-87b7-ae011b0de19f) · [Verify its Base Sepolia anchor](https://base-sepolia.easscan.org/attestation/view/0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c) · [View the Orion entry](https://orionagents.org/hackathon#entries)
+**Judge quick links:** [Live product](https://agenttrial.tangvu.dev) · [Run the head-to-head benchmark](https://agenttrial.tangvu.dev/benchmark) · [Watch the 116-second demo](https://agenttrial.tangvu.dev/demo/agenttrial-live-demo-narrated.mp4) · [Inspect a signed production report](https://agenttrial.tangvu.dev/reports/17462463-066f-485d-87b7-ae011b0de19f) · [Verify its Base Sepolia anchor](https://base-sepolia.easscan.org/attestation/view/0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c) · [Review the v0.7.0 source snapshot](https://github.com/tang-vu/agenttrial/releases/tag/v0.7.0) · [Orion Builder Hackathon](https://orionagents.org/hackathon)
 
 ![AgentTrial landing page](docs/screenshots/landing.png)
 
@@ -15,6 +15,8 @@ The evidence layer for agent marketplaces. AgentTrial discovers an agent’s adv
 1. Open the [live benchmark](https://agenttrial.tangvu.dev/benchmark) and run both controlled agents. Each receives a fresh run ID, sealed plan, event chain, evidence set, and signed receipt.
 2. Open either report and follow a finding to its exact observation and deterministic assertion. Download the bundle and verify the signature, hash chain, seed opening, evaluator build, and assertion-registry commitment locally in the browser.
 3. Use **Modify one byte** to see first-mismatch reporting, then inspect the independently anchored [production EAS receipt](https://base-sepolia.easscan.org/attestation/view/0xc62f196d7486b6463668aff181fe52daa87f362fa665823d44bb9ad348ff594c).
+
+The immutable judge snapshot is [AgentTrial v0.7.0](https://github.com/tang-vu/agenttrial/releases/tag/v0.7.0). Ongoing paper experiments remain outside the product scoring path and cannot change a signed receipt or its embedded evaluator provenance.
 
 ### Why AgentTrial is different
 

@@ -106,7 +106,7 @@ describe("prospective power analysis", () => {
   });
 
   it("passes the conservative Monte Carlo lower-bound gate", () => {
-    const result = runPowerAnalysis();
+    const result = runPowerAnalysis({ selectedDesignOnly: true });
     expect(result.selection.passed).toBe(true);
     expect(result.selection.selectedSuperiority).toHaveLength(3);
     expect(
@@ -114,7 +114,7 @@ describe("prospective power analysis", () => {
         (item) => item.power.lower >= POWER_ANALYSIS_PLAN.minimumPower,
       ),
     ).toBe(true);
-  }, 30_000);
+  }, 15_000);
 });
 
 describe("portable evidence tamper suite", () => {

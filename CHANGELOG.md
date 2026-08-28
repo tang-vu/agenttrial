@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.0 - 2026-08-28
+
+- Locked and verified 80 independent research targets, then projected all 50 AgentChaosBench traces
+  and ten independently labeled AgentDojo fault runs through label-blinded adapters without retaining
+  upstream payloads.
+- Added a durable PM2 workstation supervisor for the PostgreSQL, worker, signer, and Cloudflare
+  Tunnel deployment while preserving least-privilege service boundaries.
+- Reduced the deterministic selected-design Monte Carlo gate from more than 30 seconds to about five
+  seconds under load without changing its 3,000-replicate assumptions, seed, or pass criteria.
+- Replaced the TypeScript E2E web-server launcher with a dependency-free Node launcher so the same
+  quality-gate command starts in restricted cloud environments as well as GitHub and Windows.
+- Published an explicit Orion review snapshot and an owner-only final submission checklist.
+
 ## 0.6.0 — 2026-08-22
 
 - Published a narrated 116-second live demo with a credential-free Windows narration fallback,
