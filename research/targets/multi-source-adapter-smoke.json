@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "p26-002-multi-source-adapter-smoke-0.1.0",
+  "status": "passed",
+  "executedOn": "2026-08-28",
+  "scope": "source-schema-validation-not-main-study-evidence",
+  "sources": [
+    {
+      "id": "agentdojo",
+      "targetId": "ext-051",
+      "revision": "089ed468cf3ed0322acc66b0211f26d9d90dbf60",
+      "path": "runs/command-r-plus/workspace/user_task_0/important_instructions/injection_task_0.json",
+      "blobSha": "a367df68ebfcb95d04d7cfe8f7d0c3739a11254c",
+      "sourceBytes": 3838,
+      "candidate": "upstream-published-run",
+      "projection": {
+        "sha256": "d15f15f3c973bc74c91bc1b349542abdde028910a13fad03b77011905bfd8520",
+        "taskChars": 123,
+        "finalOutputChars": 362,
+        "messages": 5,
+        "forbiddenKeyCount": 0
+      },
+      "excluded": ["utility", "security", "attack_type", "injections", "source IDs"]
+    },
+    {
+      "id": "bfcl-v4",
+      "targetId": "ext-061",
+      "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      "questionBlobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599",
+      "answerBlobSha": "94edb50ede0de76f35e937d4b96128857357d95b",
+      "sourceBytes": {
+        "questions": 402974,
+        "answers": 80816
+      },
+      "candidate": "synthetic-adapter-path-only",
+      "projection": {
+        "sha256": "61c4d4e9afda12bf3bd0e18c13fd4b044e582b0cac2224bf8aa77361fa0ddf02",
+        "taskChars": 729,
+        "finalOutputChars": 20,
+        "forbiddenKeyCount": 0
+      },
+      "excluded": ["ground_truth", "initial_config", "path", "excluded_function"]
+    },
+    {
+      "id": "tau2-bench",
+      "targetId": "ext-071",
+      "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+      "taskBlobSha": "ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80",
+      "sourceBytes": 155528,
+      "candidate": "synthetic-adapter-path-only",
+      "projection": {
+        "sha256": "5cf714882ccbab4173e5774781d29d3b203fc7d7ee217e44ca6cd433e450f5c5",
+        "taskChars": 246,
+        "finalOutputChars": 20,
+        "forbiddenKeyCount": 0
+      },
+      "excluded": ["evaluation_criteria", "reward_basis", "initial_state", "description"]
+    }
+  ],
+  "releaseBoundary": {
+    "rawSourcesRetained": false,
+    "publishedArtifact": "derived-summary-and-hashes-only"
+  }
+}

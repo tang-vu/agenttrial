@@ -29,4 +29,6 @@ Three mappings remain deliberately narrow:
 
 The first read-only adapter smoke test now passes against the pinned 203,596-byte AgentChaosBench trace for `ext-001`: 70 spans were projected, no forbidden key or locked label value leaked, and only the derived projection hash is retained in `targets/agentchaos-adapter-smoke.json`. The source trace is not vendored.
 
-The remaining technical gate is source-specific verification and label-blinded projection for all 80 pinned records. Active external testing remains disabled.
+Source-schema smoke tests also pass for the three remaining source families. An upstream-published AgentDojo run was projected without utility, security, attack setup, or source identifiers. Pinned BFCL and tau2 source records were validated with synthetic candidate executions used only to exercise adapter paths; ground truth, reference paths, initial state, and evaluation criteria were excluded. Derived hashes are recorded in `targets/multi-source-adapter-smoke.json`, and no upstream source payload was retained.
+
+The remaining technical gate is exhaustive source verification and label-blinded projection for all 80 pinned records. The two synthetic adapter candidates are not study evidence. Active external testing remains disabled.
