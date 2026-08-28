@@ -27,4 +27,6 @@ Three mappings remain deliberately narrow:
 - `agent_misroute` and `infinite_loop` are aligned routing/loop divergence proxies, not stochastic instability.
 - tau2 issue 384 is an independently reported open audit. These entries are an evaluator-omission stress set, not a claim that maintainers have adjudicated the issue.
 
-The next technical gate is a read-only adapter that verifies every pinned source record and produces a label-blinded evaluator projection. Active external testing remains disabled.
+The first read-only adapter smoke test now passes against the pinned 203,596-byte AgentChaosBench trace for `ext-001`: 70 spans were projected, no forbidden key or locked label value leaked, and only the derived projection hash is retained in `targets/agentchaos-adapter-smoke.json`. The source trace is not vendored.
+
+The remaining technical gate is source-specific verification and label-blinded projection for all 80 pinned records. Active external testing remains disabled.

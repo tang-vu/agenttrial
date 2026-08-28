@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   createBlindedProjection,
@@ -7,6 +9,18 @@ import {
   type AgentChaosCase,
   type JsonValue,
 } from "./target-adapter";
+
+interface AdapterSmoke {
+  status: string;
+  source: { blobSha: string; sourceBytes: number; traceSpans: number };
+  projection: { forbiddenKeyCount: number; sha256: string };
+  leakChecks: Record<string, boolean>;
+  releaseBoundary: { rawSourceRetained: boolean };
+}
+
+const smokePath = fileURLToPath(
+  new URL("../../../research/targets/agentchaos-adapter-smoke.json", import.meta.url),
+);
 
 describe("label-blinded target adapters", () => {
   const entry = {
@@ -72,5 +86,19 @@ describe("label-blinded target adapters", () => {
     expect(() =>
       projectAgentChaosCase(entry, { ...sourceCase, case_uid: "different/case" }),
     ).toThrow(/does not match/);
+  });
+
+  it("pins a raw-data-free smoke result from the real upstream trace", () => {
+    const smoke = JSON.parse(readFileSync(smokePath, "utf8")) as AdapterSmoke;
+    expect(smoke.status).toBe("passed");
+    expect(smoke.source).toMatchObject({
+      blobSha: "93f658b8f2a4534af9156cea01493be5523510b5",
+      sourceBytes: 203596,
+      traceSpans: 70,
+    });
+    expect(smoke.projection.forbiddenKeyCount).toBe(0);
+    expect(smoke.projection.sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(Object.values(smoke.leakChecks).every((leaked) => leaked === false)).toBe(true);
+    expect(smoke.releaseBoundary.rawSourceRetained).toBe(false);
   });
 });

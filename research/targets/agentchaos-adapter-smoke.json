@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "p26-002-adapter-smoke-0.1.0",
+  "status": "passed",
+  "executedOn": "2026-08-28",
+  "targetId": "ext-001",
+  "source": {
+    "repository": "kevinzck8k/agentic-fault-diagnosis",
+    "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+    "path": "dataset/SQLAssistant-H_A2A/corruption/case_01.json",
+    "blobSha": "93f658b8f2a4534af9156cea01493be5523510b5",
+    "license": "MIT",
+    "sourceBytes": 203596,
+    "traceSpans": 70
+  },
+  "projection": {
+    "schemaVersion": "p26-002-evaluator-projection-0.1.0",
+    "taskChars": 56,
+    "finalOutputChars": 451,
+    "sha256": "aac2a4b71486e15a113b029e6b20fd1b203472c97845eb36088d5ace1ed6abce",
+    "forbiddenKeyCount": 0
+  },
+  "leakChecks": {
+    "caseUid": false,
+    "family": false,
+    "faultType": false,
+    "detectionSignal": false
+  },
+  "releaseBoundary": {
+    "rawSourceRetained": false,
+    "publishedArtifact": "derived-summary-and-hash-only"
+  }
+}
