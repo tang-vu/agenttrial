@@ -136,8 +136,8 @@ export async function cleanupExpiredLocalSnapshots(
 }
 
 async function initialize() {
-  if (!initialized)
-    initialized = (async () => {
+  if (!initialized) {
+    const attempt = (async () => {
       const db = sql();
       await db`CREATE TABLE IF NOT EXISTS agenttrial_runs (
         id uuid PRIMARY KEY,
@@ -233,7 +233,15 @@ async function initialize() {
       await db`CREATE INDEX IF NOT EXISTS agenttrial_authorizations_expiry_idx
         ON agenttrial_authorizations(status, expires_at)`;
     })();
-  return initialized;
+    initialized = attempt;
+    try {
+      await attempt;
+    } catch (error) {
+      if (initialized === attempt) initialized = undefined;
+      throw error;
+    }
+  }
+  await initialized;
 }
 
 export async function saveRun(run: RuntimeRun, lease?: JobLease) {

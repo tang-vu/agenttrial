@@ -19,9 +19,12 @@ repository under `%LOCALAPPDATA%\AgentTrial\tunnel` and is forwarded only to the
 .\scripts\install-durable-autostart.ps1
 ```
 
-The least-privilege scheduled task starts Compose after login, waits for PostgreSQL, worker, and
-signer readiness, then starts the tunnel. Every container uses `restart: unless-stopped`; the
-supervisor also repairs an unhealthy stack or tunnel. Run `stop-local-tunnel.ps1` for a scoped stop.
+The installer adds `agenttrial-stack` and `agenttrial-tunnel` to the workstation's existing PM2
+process list, saves that list for resurrection after login, and removes the legacy per-project
+scheduled task. The stack supervisor waits for Docker and PostgreSQL, repairs stale worker/signer
+connections after Docker daemon restarts, and continuously checks readiness. Every container also
+uses `restart: unless-stopped`. Run `stop-local-tunnel.ps1` for a scoped stop, or pass
+`-DisableAutostart` to remove the two AgentTrial entries from the saved PM2 process list.
 `install-local-autostart.ps1` is intentionally guarded as an ephemeral demo-only fallback; it must
 never be used for the public origin because it has no durable queue or isolated signer.
 Use `AGENTTRIAL_IMPORT_DIR` with `scripts/import-snapshots.mts` once when migrating prior

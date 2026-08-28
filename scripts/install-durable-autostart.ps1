@@ -1,16 +1,19 @@
 param([switch]$SkipBuild)
 
 $ErrorActionPreference = "Stop"
-$taskName = "AgentTrial Local Service"
+$legacyTaskName = "AgentTrial Local Service"
 $backupTaskName = "AgentTrial Database Backup"
 $repo = Split-Path -Parent $PSScriptRoot
-$runScript = Join-Path $PSScriptRoot "run-durable-local-service.ps1"
+$ecosystem = Join-Path $repo "ecosystem.config.cjs"
 $stateDirectory = Join-Path $env:LOCALAPPDATA "AgentTrial\tunnel"
 $configPath = Join-Path $stateDirectory "cloudflared-agenttrial.yml"
 $seedPath = Join-Path $stateDirectory "signing-seed.txt"
-$cloudflared = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
+$pm2 = (Get-Command pm2.cmd -ErrorAction Stop).Source
 
 if (!(Test-Path -LiteralPath $seedPath)) { throw "Existing managed signing seed was not found." }
+if (!(Test-Path -LiteralPath $configPath)) { throw "Cloudflare tunnel config was not found." }
+if (!(Test-Path -LiteralPath $ecosystem)) { throw "PM2 ecosystem config was not found." }
+
 if (!$SkipBuild) {
   $previousWslEnv = $env:WSLENV
   $env:AGENTTRIAL_SIGNING_SEED = (Get-Content -LiteralPath $seedPath -Raw).Trim()
@@ -20,8 +23,7 @@ if (!$SkipBuild) {
   try {
     Push-Location $repo
     & docker compose -p agenttrial build
-  }
-  finally {
+  } finally {
     Pop-Location
     Remove-Item Env:AGENTTRIAL_SIGNING_SEED -ErrorAction SilentlyContinue
     Remove-Item Env:AGENTTRIAL_BUILD_COMMIT -ErrorAction SilentlyContinue
@@ -31,21 +33,22 @@ if (!$SkipBuild) {
   if ($LASTEXITCODE -ne 0) { throw "Docker image build failed." }
 }
 
-$arguments = @(
-  "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ('"' + $runScript + '"'),
-  "-ConfigPath", ('"' + $configPath + '"'), "-StateDirectory", ('"' + $stateDirectory + '"'),
-  "-CloudflaredPath", ('"' + $cloudflared + '"')
-) -join " "
-$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $arguments -WorkingDirectory $repo
-$settings = New-ScheduledTaskSettingsSet -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) `
-  -ExecutionTimeLimit ([TimeSpan]::Zero) -StartWhenAvailable -AllowStartIfOnBatteries `
-  -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
-$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-$trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
-$principal = New-ScheduledTaskPrincipal -UserId $identity.Name -LogonType Interactive -RunLevel Limited
-Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings `
-  -Principal $principal -Description "Keeps durable AgentTrial, workers, signer, and tunnel online." `
-  -Force | Out-Null
+# PM2 already owns startup for the other workstation projects. Remove the old
+# one-project supervisor so only PM2 controls AgentTrial after logon.
+Stop-ScheduledTask -TaskName $legacyTaskName -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName $legacyTaskName -Confirm:$false -ErrorAction SilentlyContinue
+
+Push-Location $repo
+try {
+  & $pm2 delete agenttrial-stack agenttrial-tunnel 2>$null
+  & $pm2 start $ecosystem
+  if ($LASTEXITCODE -ne 0) { throw "PM2 failed to start AgentTrial." }
+  & $pm2 save --force
+  if ($LASTEXITCODE -ne 0) { throw "PM2 failed to save its process list." }
+} finally {
+  Pop-Location
+}
+
 $backupScript = Join-Path $PSScriptRoot "backup-durable.ps1"
 $backupArguments = @(
   "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ('"' + $backupScript + '"')
@@ -57,13 +60,10 @@ $backupSettings = New-ScheduledTaskSettingsSet -RestartCount 3 `
   -RestartInterval (New-TimeSpan -Minutes 10) -ExecutionTimeLimit (New-TimeSpan -Hours 1) `
   -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
   -MultipleInstances IgnoreNew
+$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = New-ScheduledTaskPrincipal -UserId $identity.Name -LogonType Interactive -RunLevel Limited
 Register-ScheduledTask -TaskName $backupTaskName -Action $backupAction -Trigger $backupTrigger `
   -Settings $backupSettings -Principal $principal `
   -Description "Creates and verifies a rolling AgentTrial PostgreSQL backup." -Force | Out-Null
-Stop-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
-for ($attempt = 0; $attempt -lt 30; $attempt += 1) {
-  if ((Get-ScheduledTask -TaskName $taskName).State -ne "Running") { break }
-  Start-Sleep -Milliseconds 200
-}
-Start-ScheduledTask -TaskName $taskName
-Write-Output "Installed durable AgentTrial autostart and daily backups under $($identity.Name), Limited privilege."
+
+Write-Output "Installed AgentTrial under PM2 and saved it for the existing PM2 logon resurrection."
