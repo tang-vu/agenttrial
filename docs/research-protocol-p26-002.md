@@ -1,7 +1,8 @@
 # P26-002 flagship research protocol
 
-Protocol version: 0.1  
+Protocol version: 0.2
 Created: 2026-08-27  
+Updated: 2026-08-28
 Study ID: P26-002  
 Status: design freeze in progress  
 Primary repository: tang-vu/agenttrial
@@ -63,11 +64,14 @@ Prefer a locally runnable open-weight judge for the zero-cost replication path. 
 ## Sample and repetitions
 
 - Minimum 60 unique scenario-fault configurations across the locked failure families.
+- One matched, fault-free grounded control for every scenario-fault configuration, preserving family, claim type, and variant.
 - Minimum 20 repeated executions per stochastic configuration.
 - Deterministic configurations may use fewer repetitions only with a documented invariance check.
 - Seeds, environment, agent build, evaluator build, assertion registry, and planner configuration are locked before execution.
 
 The final sample-size rationale must use expected paired disagreement rates or a simulation-based power analysis. The minimum counts above are floors, not a substitute for that rationale.
+
+The two-repeat credential-free engineering pilot is excluded from hypothesis testing. Its synthetic fixtures validate only manifest generation, evaluator wiring, analysis functions, and tamper localization. Main-study claims require the locked 20-repeat design on independent authorized targets.
 
 ## Outcomes
 

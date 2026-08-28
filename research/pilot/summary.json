@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "p26-002-engineering-pilot-0.1.0",
+  "runId": "p26-002-engineering-pilot-0.1.0",
+  "claimUse": "pipeline-validation-only",
+  "fixtureScope": "synthetic-engineering-fixture",
+  "interpretationBoundary": "Synthetic fixtures validate measurement plumbing only. They are not evidence of real-world efficacy, superiority, or publication-ready findings.",
+  "designHash": "46090e469863d04d5f96317e954cfc1ac57aab887f9b880cadb91697373898ef",
+  "inputs": {
+    "faultConfigurations": 64,
+    "matchedControlConfigurations": 64,
+    "repeatsPerConfiguration": 2,
+    "evaluationModes": ["final-output-only", "trace-presence", "agenttrial"],
+    "llmJudgeStatus": "excluded-until-local-model-and-runtime-are-frozen"
+  },
+  "manifestRecords": 768,
+  "outcomes": [
+    {
+      "mode": "final-output-only",
+      "records": 256,
+      "confusion": {
+        "trueAccept": 128,
+        "trueReject": 0,
+        "falseAccept": 128,
+        "falseReject": 0
+      },
+      "falseAcceptance": {
+        "estimate": 1,
+        "lower": 0.9708620041018919,
+        "upper": 0.9999999999999999
+      },
+      "falseRejection": {
+        "estimate": 0,
+        "lower": 0,
+        "upper": 0.029137995898108032
+      },
+      "faultDetectionPrecision": 0,
+      "faultDetectionRecall": 0
+    },
+    {
+      "mode": "trace-presence",
+      "records": 256,
+      "confusion": {
+        "trueAccept": 128,
+        "trueReject": 0,
+        "falseAccept": 128,
+        "falseReject": 0
+      },
+      "falseAcceptance": {
+        "estimate": 1,
+        "lower": 0.9708620041018919,
+        "upper": 0.9999999999999999
+      },
+      "falseRejection": {
+        "estimate": 0,
+        "lower": 0,
+        "upper": 0.029137995898108032
+      },
+      "faultDetectionPrecision": 0,
+      "faultDetectionRecall": 0
+    },
+    {
+      "mode": "agenttrial",
+      "records": 256,
+      "confusion": {
+        "trueAccept": 128,
+        "trueReject": 128,
+        "falseAccept": 0,
+        "falseReject": 0
+      },
+      "falseAcceptance": {
+        "estimate": 0,
+        "lower": 0,
+        "upper": 0.029137995898108032
+      },
+      "falseRejection": {
+        "estimate": 0,
+        "lower": 0,
+        "upper": 0.029137995898108032
+      },
+      "faultDetectionPrecision": 1,
+      "faultDetectionRecall": 1
+    }
+  ],
+  "pairedFalseAcceptanceEffects": [
+    {
+      "baseline": "final-output-only",
+      "comparison": {
+        "total": 128,
+        "baseline": {
+          "estimate": 1,
+          "lower": 0.9708620041018919,
+          "upper": 0.9999999999999999
+        },
+        "agenttrial": {
+          "estimate": 0,
+          "lower": 0,
+          "upper": 0.029137995898108032
+        },
+        "absoluteDifference": 1,
+        "discordantBaselineOnly": 128,
+        "discordantAgentTrialOnly": 0,
+        "pValue": 5.877471754111438e-39
+      },
+      "hierarchicalBootstrap95": {
+        "estimate": 1,
+        "lower": 1,
+        "upper": 1
+      }
+    },
+    {
+      "baseline": "trace-presence",
+      "comparison": {
+        "total": 128,
+        "baseline": {
+          "estimate": 1,
+          "lower": 0.9708620041018919,
+          "upper": 0.9999999999999999
+        },
+        "agenttrial": {
+          "estimate": 0,
+          "lower": 0,
+          "upper": 0.029137995898108032
+        },
+        "absoluteDifference": 1,
+        "discordantBaselineOnly": 128,
+        "discordantAgentTrialOnly": 0,
+        "pValue": 5.877471754111438e-39
+      },
+      "hierarchicalBootstrap95": {
+        "estimate": 1,
+        "lower": 1,
+        "upper": 1
+      }
+    }
+  ],
+  "tamperVerification": {
+    "validBundleAccepted": true,
+    "mutationCount": 9,
+    "detectedCount": 9,
+    "localizedCount": 9
+  }
+}

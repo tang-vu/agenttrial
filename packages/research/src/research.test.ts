@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   CONTROLLED_AGENTS,
+  CONTROL_MATRIX,
   FAULT_FAMILIES,
   SCENARIO_MATRIX,
   evaluateBaseline,
@@ -13,6 +14,13 @@ import {
   pairedFalseAcceptance,
   wilson,
 } from "./analysis";
+import { executeControlledAgent, FIXTURE_SCOPE } from "./controlled-agents";
+import {
+  TAMPER_MUTATIONS,
+  createPortableEvidenceBundle,
+  runTamperSuite,
+  verifyPortableEvidenceBundle,
+} from "./tamper";
 
 describe("P26-002 frozen research design", () => {
   it("contains at least 60 unique configurations across all locked families", () => {
@@ -33,6 +41,29 @@ describe("P26-002 frozen research design", () => {
     ]);
   });
 
+  it("pairs every fault configuration with a positive control", () => {
+    expect(CONTROL_MATRIX).toHaveLength(SCENARIO_MATRIX.length);
+    expect(new Set(CONTROL_MATRIX.map((item) => item.id)).size).toBe(64);
+    expect(CONTROL_MATRIX.every((item) => item.groundTruth === "accept")).toBe(true);
+    expect(CONTROL_MATRIX.map((item) => item.pairedFaultConfigurationId)).toEqual(
+      SCENARIO_MATRIX.map((item) => item.id),
+    );
+  });
+
+  it("executes all six deterministic controlled-agent profiles", () => {
+    const executions = [...SCENARIO_MATRIX, CONTROL_MATRIX[0]!].map((configuration) =>
+      executeControlledAgent(configuration, 0),
+    );
+    expect(new Set(executions.map((item) => item.agentId))).toEqual(
+      new Set(CONTROLLED_AGENTS.map((item) => item.id)),
+    );
+    expect(executions.every((item) => item.fixtureScope === FIXTURE_SCOPE)).toBe(true);
+    for (const execution of executions) {
+      const verdict = evaluateBaseline("agenttrial", execution.artifact).verdict;
+      expect(verdict).toBe(execution.groundTruth);
+    }
+  });
+
   it("keeps final-output and trace baselines vulnerable to plausible bad artifacts", () => {
     const artifact = {
       finalStatus: "success" as const,
@@ -51,6 +82,24 @@ describe("P26-002 frozen research design", () => {
   it("produces a stable design hash", () => {
     expect(researchDesignHash()).toMatch(/^[0-9a-f]{64}$/);
     expect(researchDesignHash()).toBe(researchDesignHash());
+  });
+});
+
+describe("portable evidence tamper suite", () => {
+  it("accepts an intact signed bundle", () => {
+    expect(verifyPortableEvidenceBundle(createPortableEvidenceBundle())).toEqual({
+      valid: true,
+      firstMismatch: null,
+    });
+  });
+
+  it("detects and localizes all nine preregistered mutations", () => {
+    expect(TAMPER_MUTATIONS).toHaveLength(9);
+    const result = runTamperSuite();
+    expect(result.validBundleAccepted).toBe(true);
+    expect(result.detectedCount).toBe(9);
+    expect(result.localizedCount).toBe(9);
+    expect(result.mutations.every((item) => item.detected && item.localized)).toBe(true);
   });
 });
 

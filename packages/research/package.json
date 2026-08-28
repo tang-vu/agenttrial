@@ -5,10 +5,13 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./analysis": "./src/analysis.ts"
+    "./analysis": "./src/analysis.ts",
+    "./controlled-agents": "./src/controlled-agents.ts",
+    "./tamper": "./src/tamper.ts"
   },
   "scripts": {
-    "freeze": "node --import tsx src/freeze.ts && prettier --write ../../research/design-freeze.json"
+    "freeze": "node --import tsx src/freeze.ts && prettier --write ../../research/design-freeze.json",
+    "pilot": "node --import tsx src/pilot.ts && prettier --write ../../research/pilot/summary.json ../../research/pilot/tamper-summary.json"
   },
   "dependencies": {
     "@agenttrial/core": "workspace:*"

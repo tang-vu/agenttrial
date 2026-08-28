@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "p26-002-tamper-pilot-0.1.0",
+  "runId": "p26-002-engineering-pilot-0.1.0",
+  "claimUse": "pipeline-validation-only",
+  "interpretationBoundary": "This deterministic mutation suite validates verifier wiring and first-mismatch localization, not external attack coverage.",
+  "validBundleAccepted": true,
+  "mutationCount": 9,
+  "detectedCount": 9,
+  "localizedCount": 9,
+  "mutations": [
+    {
+      "mutation": "modify-observation-byte",
+      "expectedFirstMismatch": "events[1].hash",
+      "actualFirstMismatch": "events[1].hash",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "delete-event",
+      "expectedFirstMismatch": "events[1].index",
+      "actualFirstMismatch": "events[1].index",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "reorder-events",
+      "expectedFirstMismatch": "events[0].index",
+      "actualFirstMismatch": "events[0].index",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "replace-assertion-result",
+      "expectedFirstMismatch": "assertionsHash",
+      "actualFirstMismatch": "assertionsHash",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "change-sealed-plan",
+      "expectedFirstMismatch": "planHash",
+      "actualFirstMismatch": "planHash",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "change-evaluator-build",
+      "expectedFirstMismatch": "evaluatorBuild",
+      "actualFirstMismatch": "evaluatorBuild",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "alter-evidence-root",
+      "expectedFirstMismatch": "evidenceRoot",
+      "actualFirstMismatch": "evidenceRoot",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "replace-signer-public-key",
+      "expectedFirstMismatch": "signerPublicKey",
+      "actualFirstMismatch": "signerPublicKey",
+      "detected": true,
+      "localized": true
+    },
+    {
+      "mutation": "alter-anchor-metadata",
+      "expectedFirstMismatch": "anchorMetadataHash",
+      "actualFirstMismatch": "anchorMetadataHash",
+      "detected": true,
+      "localized": true
+    }
+  ]
+}

@@ -117,7 +117,7 @@ const familyDefinitions: Record<
   },
 };
 
-const variants = [
+export const SCENARIO_VARIANTS = [
   "minimal",
   "boundary",
   "nested",
@@ -127,11 +127,12 @@ const variants = [
   "high-severity",
   "cross-check",
 ] as const;
+export type ScenarioVariant = (typeof SCENARIO_VARIANTS)[number];
 
 export interface ScenarioConfiguration {
   id: string;
   family: FaultFamily;
-  variant: (typeof variants)[number];
+  variant: ScenarioVariant;
   targetAgent: ControlledAgentId;
   claimType: string;
   injection: string;
@@ -142,7 +143,7 @@ export interface ScenarioConfiguration {
 }
 
 export const SCENARIO_MATRIX: ScenarioConfiguration[] = FAULT_FAMILIES.flatMap((family) =>
-  variants.map((variant, index) => {
+  SCENARIO_VARIANTS.map((variant, index) => {
     const definition = familyDefinitions[family];
     return {
       id: `cfg-${family}-${String(index + 1).padStart(2, "0")}`,
@@ -159,11 +160,46 @@ export const SCENARIO_MATRIX: ScenarioConfiguration[] = FAULT_FAMILIES.flatMap((
   }),
 );
 
+export interface ControlConfiguration {
+  id: string;
+  pairedFaultConfigurationId: string;
+  family: FaultFamily;
+  variant: ScenarioVariant;
+  targetAgent: "grounded-reference";
+  claimType: string;
+  injection: string;
+  expectedObservation: string;
+  groundTruth: "accept";
+  repetitions: 20;
+  seedNamespace: string;
+}
+
+export type TrialConfiguration = ScenarioConfiguration | ControlConfiguration;
+
+export const CONTROL_MATRIX: ControlConfiguration[] = SCENARIO_MATRIX.map((scenario) => ({
+  id: scenario.id.replace(/^cfg-/, "ctl-"),
+  pairedFaultConfigurationId: scenario.id,
+  family: scenario.family,
+  variant: scenario.variant,
+  targetAgent: "grounded-reference",
+  claimType: scenario.claimType,
+  injection: `No fault injected. Matched control for ${scenario.family}, variant: ${scenario.variant}.`,
+  expectedObservation:
+    "Evaluator accepts the complete, policy-compliant, independently verifiable run.",
+  groundTruth: "accept",
+  repetitions: 20,
+  seedNamespace: `P26-002/control/${scenario.family}/${scenario.variant}`,
+}));
+
 export interface EvaluationArtifact {
   finalStatus: "success" | "failure";
   outputText: string;
   events: Array<{ index: number; type: string; hash?: string }>;
-  assertionResults: Array<{ severity: "low" | "medium" | "high" | "critical"; passed: boolean }>;
+  assertionResults: Array<{
+    id?: string;
+    severity: "low" | "medium" | "high" | "critical";
+    passed: boolean;
+  }>;
   claimCoverage: number;
   independentVerificationValid: boolean;
   llmJudgeDecision?: "accept" | "reject";
@@ -239,7 +275,8 @@ export function researchDesignHash(): string {
   const locked = {
     agents: CONTROLLED_AGENTS,
     evaluationModes: EVALUATION_MODES,
-    scenarios: SCENARIO_MATRIX,
+    faultScenarios: SCENARIO_MATRIX,
+    matchedControls: CONTROL_MATRIX,
     llmJudge: LLM_JUDGE_FREEZE,
   };
   return createHash("sha256").update(JSON.stringify(locked)).digest("hex");
