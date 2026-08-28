@@ -90,6 +90,10 @@ export async function validateTargetUrl(raw: string): Promise<{ url: URL; addres
     hostname.endsWith(".local")
   )
     throw new UnsafeTargetError("Local and metadata targets are blocked.");
+  if (!privateTestTarget && isIP(hostname) && !isPublicIp(hostname))
+    throw new UnsafeTargetError("Target resolves to a private, reserved, or non-routable address.");
+  if (!privateTestTarget && !["80", "443"].includes(effectivePort))
+    throw new UnsafeTargetError("Public targets are restricted to HTTP ports 80 and 443.");
   const direct = isIP(hostname)
     ? [{ address: hostname }]
     : await lookup(hostname, { all: true, verbatim: true });
@@ -98,8 +102,6 @@ export async function validateTargetUrl(raw: string): Promise<{ url: URL; addres
     (!privateTestTarget && direct.some((item) => !isPublicIp(item.address)))
   )
     throw new UnsafeTargetError("Target resolves to a private, reserved, or non-routable address.");
-  if (!privateTestTarget && !["80", "443"].includes(effectivePort))
-    throw new UnsafeTargetError("Public targets are restricted to HTTP ports 80 and 443.");
   return { url, addresses: direct.map((x) => x.address) };
 }
 

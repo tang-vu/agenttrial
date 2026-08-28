@@ -1,0 +1,19 @@
+{
+  "name": "@agenttrial/research",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./analysis": "./src/analysis.ts"
+  },
+  "scripts": {
+    "freeze": "node --import tsx src/freeze.ts && prettier --write ../../research/design-freeze.json"
+  },
+  "dependencies": {
+    "@agenttrial/core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.23.12"
+  }
+}

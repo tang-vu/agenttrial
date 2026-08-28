@@ -1,0 +1,81 @@
+import { describe, expect, it } from "vitest";
+import {
+  CONTROLLED_AGENTS,
+  FAULT_FAMILIES,
+  SCENARIO_MATRIX,
+  evaluateBaseline,
+  researchDesignHash,
+} from "./index";
+import {
+  exactMcNemar,
+  hierarchicalBootstrap,
+  holmAdjust,
+  pairedFalseAcceptance,
+  wilson,
+} from "./analysis";
+
+describe("P26-002 frozen research design", () => {
+  it("contains at least 60 unique configurations across all locked families", () => {
+    expect(SCENARIO_MATRIX).toHaveLength(64);
+    expect(new Set(SCENARIO_MATRIX.map((item) => item.id)).size).toBe(64);
+    expect(new Set(SCENARIO_MATRIX.map((item) => item.family))).toEqual(new Set(FAULT_FAMILIES));
+    expect(SCENARIO_MATRIX.every((item) => item.repetitions >= 20)).toBe(true);
+  });
+
+  it("defines every controlled agent required by the protocol", () => {
+    expect(CONTROLLED_AGENTS.map((agent) => agent.id)).toEqual([
+      "grounded-reference",
+      "gullible-agent",
+      "over-privileged-agent",
+      "evidence-omitting-agent",
+      "timeout-prone-agent",
+      "non-repeatable-agent",
+    ]);
+  });
+
+  it("keeps final-output and trace baselines vulnerable to plausible bad artifacts", () => {
+    const artifact = {
+      finalStatus: "success" as const,
+      outputText: "Completed successfully with a confident answer.",
+      events: [{ index: 0, type: "completed" }],
+      assertionResults: [{ severity: "critical" as const, passed: false }],
+      claimCoverage: 0.5,
+      independentVerificationValid: false,
+    };
+    expect(evaluateBaseline("final-output-only", artifact).verdict).toBe("accept");
+    expect(evaluateBaseline("trace-presence", artifact).verdict).toBe("accept");
+    expect(evaluateBaseline("agenttrial", artifact).verdict).toBe("reject");
+    expect(evaluateBaseline("llm-judge", artifact).verdict).toBe("not-evaluated");
+  });
+
+  it("produces a stable design hash", () => {
+    expect(researchDesignHash()).toMatch(/^[0-9a-f]{64}$/);
+    expect(researchDesignHash()).toBe(researchDesignHash());
+  });
+});
+
+describe("registered analysis functions", () => {
+  const records = Array.from({ length: 20 }, (_, repeat) => ({
+    configurationId: repeat < 10 ? "a" : "b",
+    repeat,
+    baselineFalseAccept: repeat < 12,
+    agenttrialFalseAccept: repeat < 2,
+  }));
+
+  it("computes Wilson intervals and paired effects", () => {
+    expect(wilson(5, 10).estimate).toBe(0.5);
+    const result = pairedFalseAcceptance(records);
+    expect(result.absoluteDifference).toBe(0.5);
+    expect(result.discordantBaselineOnly).toBe(10);
+    expect(result.discordantAgentTrialOnly).toBe(0);
+    expect(result.pValue).toBeLessThan(0.01);
+  });
+
+  it("implements exact paired testing, Holm correction, and hierarchical bootstrap", () => {
+    expect(exactMcNemar(0, 0)).toBe(1);
+    expect(holmAdjust([0.01, 0.04, 0.03])).toEqual([0.03, 0.06, 0.06]);
+    const interval = hierarchicalBootstrap(records, 200, 7);
+    expect(interval.lower).toBeLessThanOrEqual(interval.estimate);
+    expect(interval.upper).toBeGreaterThanOrEqual(interval.estimate);
+  });
+});
