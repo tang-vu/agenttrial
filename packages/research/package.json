@@ -9,6 +9,7 @@
     "./controlled-agents": "./src/controlled-agents.ts",
     "./local-judge": "./src/local-judge.ts",
     "./power-analysis": "./src/power.ts",
+    "./target-adapter": "./src/target-adapter.ts",
     "./tamper": "./src/tamper.ts"
   },
   "scripts": {
