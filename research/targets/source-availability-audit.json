@@ -517,7 +517,7 @@
     "agentdojo": {
       "revision": "089ed468cf3ed0322acc66b0211f26d9d90dbf60",
       "selected": 10,
-      "runUse": "schema-validation-only-never-label-authority",
+      "runUse": "availability-audit-only-outcomes-not-inspected",
       "manifest": [
         {
           "targetId": "ext-051",

@@ -61,7 +61,7 @@ describe("independent target source lock", () => {
     expect(
       new Set(audit.sources.agentchaosbench.manifest.map((item) => item.repositoryPath)).size,
     ).toBe(50);
-    expect(audit.sources.agentdojo.runUse).toBe("schema-validation-only-never-label-authority");
+    expect(audit.sources.agentdojo.runUse).toBe("availability-audit-only-outcomes-not-inspected");
     expect(audit.sources["tau2-bench"].frozenFieldMatches).toBe(10);
     expect(audit.releaseBoundary.rawSourcesRetained).toBe(false);
   });

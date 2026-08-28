@@ -31,6 +31,9 @@ const multiSourceSmokePath = fileURLToPath(
 const projectionAuditPath = fileURLToPath(
   new URL("../../../research/targets/agentchaos-projection-audit.json", import.meta.url),
 );
+const dojoProjectionAuditPath = fileURLToPath(
+  new URL("../../../research/targets/agentdojo-projection-audit.json", import.meta.url),
+);
 
 describe("label-blinded target adapters", () => {
   const entry = {
@@ -283,6 +286,33 @@ describe("label-blinded target adapters", () => {
     expect(audit.projections.every((item) => /^[0-9a-f]{64}$/.test(item.projectionHash))).toBe(
       true,
     );
+    expect(audit.releaseBoundary.rawSourcesRetained).toBe(false);
+  });
+
+  it("pins ten upstream AgentDojo fault executions selected before outcome inspection", () => {
+    const audit = JSON.parse(readFileSync(dojoProjectionAuditPath, "utf8")) as {
+      status: string;
+      scope: string;
+      selected: number;
+      passed: number;
+      upstreamSecurityFalse: number;
+      projections: Array<{ forbiddenKeyCount: number; projectionHash: string; targetId: string }>;
+      releaseBoundary: { rawSourcesRetained: boolean };
+    };
+    expect(audit.status).toBe("passed");
+    expect(audit.scope).toBe(
+      "upstream-published-fault-execution-projection-integrity-not-evaluator-outcomes",
+    );
+    expect(audit.selected).toBe(10);
+    expect(audit.passed).toBe(10);
+    expect(audit.upstreamSecurityFalse).toBe(10);
+    expect(audit.projections).toHaveLength(10);
+    expect(new Set(audit.projections.map((item) => item.targetId)).size).toBe(10);
+    expect(
+      audit.projections.every(
+        (item) => item.forbiddenKeyCount === 0 && /^[0-9a-f]{64}$/.test(item.projectionHash),
+      ),
+    ).toBe(true);
     expect(audit.releaseBoundary.rawSourcesRetained).toBe(false);
   });
 });
