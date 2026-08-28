@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import {
   CONTROLLED_AGENTS,
   CONTROL_MATRIX,
+  CONTRIBUTION_SCOPE,
   EVALUATION_MODES,
   FAULT_FAMILIES,
   LLM_JUDGE_FREEZE,
@@ -20,6 +21,8 @@ const artifact = {
   controlledAgents: CONTROLLED_AGENTS,
   evaluationModes: EVALUATION_MODES,
   llmJudge: LLM_JUDGE_FREEZE,
+  contributionScope: CONTRIBUTION_SCOPE,
+  nearestWorkStatus: "frozen-conditional-go-2026-08-28",
   scenarioCount: SCENARIO_MATRIX.length,
   matchedControlCount: CONTROL_MATRIX.length,
   repetitionsPerScenario: 20,
@@ -43,8 +46,8 @@ const artifact = {
   interpretationBoundary:
     "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   blockers: [
-    "Nearest-work matrix and distinct contribution claim are not frozen.",
     "Local open-weight LLM judge model and runtime are not frozen.",
+    "Simulation-based power analysis is not frozen.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed.",
   ],

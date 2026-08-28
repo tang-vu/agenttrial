@@ -1,7 +1,7 @@
 {
   "schemaVersion": "p26-002-design-0.3.0",
   "status": "draft-freeze",
-  "designHash": "46090e469863d04d5f96317e954cfc1ac57aab887f9b880cadb91697373898ef",
+  "designHash": "eb5a0bf029d0078bd113166ea9d998f9778b05b103711c840097b3d4cfd7ae76",
   "primaryUnit": "unique capability-claim, scenario, and injected-fault configuration",
   "faultFamilies": [
     "unsupported-provenance",
@@ -57,6 +57,15 @@
     },
     "status": "blocked-until-model-and-runtime-are-frozen"
   },
+  "contributionScope": {
+    "version": "p26-002-contribution-0.1.0",
+    "status": "conditional-go",
+    "claimType": "comparative-evaluator-meta-evaluation",
+    "primaryQuestion": "Do precommitted, claim-specific evidence contracts with deterministic assertions and portable integrity verification reduce false acceptance of unreliable AI-agent runs relative to final-output, trace-presence, and frozen LLM-judge evaluators, without materially increasing false rejection on matched fault-free controls?",
+    "cryptographyRole": "experimental-treatment-and-reproducibility-mechanism",
+    "syntheticPilotClaimUse": "pipeline-validation-only"
+  },
+  "nearestWorkStatus": "frozen-conditional-go-2026-08-28",
   "scenarioCount": 64,
   "matchedControlCount": 64,
   "repetitionsPerScenario": 20,
@@ -1680,8 +1689,8 @@
   },
   "interpretationBoundary": "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   "blockers": [
-    "Nearest-work matrix and distinct contribution claim are not frozen.",
     "Local open-weight LLM judge model and runtime are not frozen.",
+    "Simulation-based power analysis is not frozen.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed."
   ]

@@ -4,7 +4,7 @@
   "claimUse": "pipeline-validation-only",
   "fixtureScope": "synthetic-engineering-fixture",
   "interpretationBoundary": "Synthetic fixtures validate measurement plumbing only. They are not evidence of real-world efficacy, superiority, or publication-ready findings.",
-  "designHash": "46090e469863d04d5f96317e954cfc1ac57aab887f9b880cadb91697373898ef",
+  "designHash": "eb5a0bf029d0078bd113166ea9d998f9778b05b103711c840097b3d4cfd7ae76",
   "inputs": {
     "faultConfigurations": 64,
     "matchedControlConfigurations": 64,

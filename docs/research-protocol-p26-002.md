@@ -151,6 +151,8 @@ The novelty matrix must cover auditable agent systems, AgentReputation, pre-depl
 
 A defensible contribution requires comparative evidence for the complete combination of precommitted claim-specific trials, deterministic score authority, explicit missing coverage, portable evidence, and tamper localization. Product polish, signatures, Merkle trees, and on-chain anchoring alone are not novel.
 
+The verified nearest-work audit is maintained in `research/nearest-work-matrix.json`; the narrowed empirical claim, prohibited claims, and stop rules are frozen in `research/contribution-freeze.md`. The cryptographic layer is an experimental treatment and reproducibility mechanism, not the paper's primitive novelty claim.
+
 ## Gate exit criteria
 
 G1 passes only when the nearest-work matrix supports a distinct claim. G2 passes only when the fault taxonomy, scenario set, baselines, outcomes, sample-size rationale, and analysis script interface are frozen. G3 passes only after authorization, data provenance, retention, privacy, and release boundaries are approved. G4 passes only after the preregistered runs, ablations, and error analysis reproduce from a clean environment.

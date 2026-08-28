@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "p26-002-nearest-work-0.1.0",
+  "verifiedOn": "2026-08-28",
+  "ratingScale": {
+    "yes": "directly implemented or evaluated",
+    "partial": "related mechanism or indirect coverage",
+    "no": "outside the stated method",
+    "not-reported": "not established from the primary source reviewed"
+  },
+  "interpretation": "Ratings describe reported scope, not paper quality. Absence is not inferred when the primary source does not establish it.",
+  "works": [
+    {
+      "id": "gao-zhou-2026-evidence-bounds",
+      "title": "Can Agent Benchmarks Support Their Scores? Evidence-Supported Bounds for Interactive-Agent Evaluation",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2605.10448",
+      "primaryObject": "Locked outcome-evidence checklists and Evidence Pass, Evidence Fail, or Unknown bounds for existing benchmarks",
+      "features": {
+        "matchedControls": "no",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "partial",
+        "explicitMissingEvidence": "yes",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "partial"
+      },
+      "relationToP26002": "Direct collision on locked evidence requirements, explicit missing evidence, and auditing whether benchmark scores are supported. P26-002 must not claim these concepts as new."
+    },
+    {
+      "id": "tuan-2026-predeployment-assurance",
+      "title": "Toward Pre-Deployment Assurance for Enterprise AI Agents: Ontology-Grounded Simulation and Trust Certification",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2606.04037",
+      "primaryObject": "Operational envelopes, ontology-grounded scenarios, and a signed Trust Certificate used as a deployment gate",
+      "features": {
+        "matchedControls": "not-reported",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "partial",
+        "explicitMissingEvidence": "partial",
+        "signedPortableEvidence": "yes",
+        "firstMismatchTamperLocalization": "not-reported",
+        "pairedEvaluatorErrorComparison": "no"
+      },
+      "relationToP26002": "Strong collision on pre-deployment testing, scenario-bound certification, coverage reporting, and cryptographic binding. Its semantic verdicts use LLM judges, leaving room for a deterministic-evaluator error study."
+    },
+    {
+      "id": "zhou-2026-dynamic-capabilities",
+      "title": "Governing Dynamic Capabilities: Cryptographic Binding and Reproducibility Verification for AI Agent Tool Use",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2603.14332",
+      "primaryObject": "Capability-bound certificates, reproducibility verification, and tamper-evident interaction ledgers",
+      "features": {
+        "matchedControls": "partial",
+        "precommittedClaimChecks": "partial",
+        "deterministicScoring": "yes",
+        "explicitMissingEvidence": "partial",
+        "signedPortableEvidence": "yes",
+        "firstMismatchTamperLocalization": "partial",
+        "pairedEvaluatorErrorComparison": "partial"
+      },
+      "relationToP26002": "The strongest cryptographic collision. It already evaluates Ed25519, SHA-256, hash chains, attacks, false positives, baselines, and overhead. P26-002 must treat its cryptography as an experimental treatment, not a primitive contribution."
+    },
+    {
+      "id": "agentbound-2026",
+      "title": "AgentBound: Verifiable Behavioral Governance for Autonomous AI Agents",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2606.30970",
+      "primaryObject": "Signed governance receipts with external reconstruction and deterministic policy-decision replay",
+      "features": {
+        "matchedControls": "not-reported",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "yes",
+        "explicitMissingEvidence": "partial",
+        "signedPortableEvidence": "yes",
+        "firstMismatchTamperLocalization": "partial",
+        "pairedEvaluatorErrorComparison": "no"
+      },
+      "relationToP26002": "Direct collision on portable verification, policy provenance, signatures, replay, and tamper-evident audit records. Its scope is runtime governance rather than comparative evaluator measurement."
+    },
+    {
+      "id": "chishti-et-al-2026-agentreputation",
+      "title": "AgentReputation: A Decentralized Agentic AI Reputation Framework",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2605.00073",
+      "primaryObject": "Evidence-based, context-conditioned reputation cards and verification-strength metadata",
+      "features": {
+        "matchedControls": "no",
+        "precommittedClaimChecks": "partial",
+        "deterministicScoring": "not-reported",
+        "explicitMissingEvidence": "partial",
+        "signedPortableEvidence": "partial",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "no"
+      },
+      "relationToP26002": "Relevant to downstream use of verified trials and context-specific claims, but presented as an architectural vision rather than an empirical evaluator benchmark."
+    },
+    {
+      "id": "debenedetti-et-al-2024-agentdojo",
+      "title": "AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents",
+      "year": 2024,
+      "url": "https://arxiv.org/abs/2406.13352",
+      "primaryObject": "Utility and security evaluation under indirect prompt injection in realistic tool environments",
+      "features": {
+        "matchedControls": "yes",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "partial",
+        "explicitMissingEvidence": "no",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "no"
+      },
+      "relationToP26002": "Provides an established environment and attack family for independent external validation. P26-002 should reuse or adapt it instead of claiming prompt-injection scenarios as new."
+    },
+    {
+      "id": "ruan-et-al-2024-toolemu",
+      "title": "Identifying the Risks of LM Agents with an LM-Emulated Sandbox",
+      "year": 2024,
+      "url": "https://arxiv.org/abs/2309.15817",
+      "primaryObject": "Adversarial scenario generation and an LLM-emulated sandbox for high-stakes tool-use risk",
+      "features": {
+        "matchedControls": "partial",
+        "precommittedClaimChecks": "partial",
+        "deterministicScoring": "no",
+        "explicitMissingEvidence": "no",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "partial"
+      },
+      "relationToP26002": "Established prior art for scalable adversarial agent trials. Its LLM emulator and evaluator make it useful as a baseline or external target, not a zero-cost deterministic core."
+    },
+    {
+      "id": "lu-et-al-2025-agentrewardbench",
+      "title": "AgentRewardBench: Evaluating Automatic Evaluations of Web Agent Trajectories",
+      "year": 2025,
+      "url": "https://arxiv.org/abs/2504.08942",
+      "primaryObject": "Meta-evaluation of LLM judges against expert labels for web-agent success, side effects, and repetition",
+      "features": {
+        "matchedControls": "partial",
+        "precommittedClaimChecks": "partial",
+        "deterministicScoring": "no",
+        "explicitMissingEvidence": "partial",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "yes"
+      },
+      "relationToP26002": "Direct collision on meta-evaluating agent evaluators. P26-002 must differentiate through claim-specific contracts, controlled fault and control pairs, deterministic checks, and portable integrity evidence."
+    },
+    {
+      "id": "mazaheri-mazaheri-2026-agentatlas",
+      "title": "AgentAtlas: Beyond Outcome Leaderboards for LLM Agents",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2605.20530",
+      "primaryObject": "Control-decision and trajectory-failure taxonomies plus a benchmark-coverage audit",
+      "features": {
+        "matchedControls": "partial",
+        "precommittedClaimChecks": "partial",
+        "deterministicScoring": "partial",
+        "explicitMissingEvidence": "yes",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "partial"
+      },
+      "relationToP26002": "Constrains taxonomy novelty and supplies coverage axes. P26-002 should map its eight families to this vocabulary and keep its synthetic pilot out of efficacy claims."
+    },
+    {
+      "id": "yao-et-al-2024-tau-bench",
+      "title": "tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains",
+      "year": 2024,
+      "url": "https://arxiv.org/abs/2406.12045",
+      "primaryObject": "Database-state outcome evaluation, domain-policy compliance, and repeat reliability through pass^k",
+      "features": {
+        "matchedControls": "no",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "yes",
+        "explicitMissingEvidence": "no",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "no"
+      },
+      "relationToP26002": "Established prior art for repeated reliability and environment-state checks. It is a candidate external target for testing whether portable evidence changes evaluator error."
+    },
+    {
+      "id": "gao-zhou-2026-success-provenance",
+      "title": "Success Is Not Self-Explanatory: Auditing Success Provenance in Agent Evaluation",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2607.24054",
+      "primaryObject": "Within-unit CLEAN, GOLD, and SHAM interventions that test whether success follows acquired target information",
+      "features": {
+        "matchedControls": "yes",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "partial",
+        "explicitMissingEvidence": "partial",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "yes"
+      },
+      "relationToP26002": "Strong collision on matched provenance interventions and paired analysis. P26-002 should use matched controls and position itself around evaluator false acceptance under evidence contracts, not provenance as a new object."
+    },
+    {
+      "id": "weng-et-al-2025-progent",
+      "title": "Progent: Programmable Privilege Control for LLM Agents",
+      "year": 2025,
+      "url": "https://arxiv.org/abs/2504.11703",
+      "primaryObject": "Deterministic, argument-level tool policies for runtime privilege control",
+      "features": {
+        "matchedControls": "yes",
+        "precommittedClaimChecks": "yes",
+        "deterministicScoring": "yes",
+        "explicitMissingEvidence": "no",
+        "signedPortableEvidence": "no",
+        "firstMismatchTamperLocalization": "no",
+        "pairedEvaluatorErrorComparison": "partial"
+      },
+      "relationToP26002": "Established prior art for deterministic scope enforcement. P26-002 may evaluate permission faults but cannot claim programmable privilege control as a contribution."
+    }
+  ]
+}

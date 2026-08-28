@@ -220,6 +220,16 @@ export const LLM_JUDGE_FREEZE = {
   status: "blocked-until-model-and-runtime-are-frozen",
 } as const;
 
+export const CONTRIBUTION_SCOPE = {
+  version: "p26-002-contribution-0.1.0",
+  status: "conditional-go",
+  claimType: "comparative-evaluator-meta-evaluation",
+  primaryQuestion:
+    "Do precommitted, claim-specific evidence contracts with deterministic assertions and portable integrity verification reduce false acceptance of unreliable AI-agent runs relative to final-output, trace-presence, and frozen LLM-judge evaluators, without materially increasing false rejection on matched fault-free controls?",
+  cryptographyRole: "experimental-treatment-and-reproducibility-mechanism",
+  syntheticPilotClaimUse: "pipeline-validation-only",
+} as const;
+
 export function evaluateBaseline(
   mode: EvaluationMode,
   artifact: EvaluationArtifact,
@@ -278,6 +288,7 @@ export function researchDesignHash(): string {
     faultScenarios: SCENARIO_MATRIX,
     matchedControls: CONTROL_MATRIX,
     llmJudge: LLM_JUDGE_FREEZE,
+    contributionScope: CONTRIBUTION_SCOPE,
   };
   return createHash("sha256").update(JSON.stringify(locked)).digest("hex");
 }
