@@ -16,7 +16,7 @@ export interface AgentChaosCase {
   schema: string;
   case_uid: string;
   agent: string;
-  question: string;
+  question: string | null;
   trace: { spans: Array<Record<string, JsonValue>>; trace_id?: JsonValue };
 }
 
@@ -194,6 +194,14 @@ function assertNoLockedValues(projection: JsonValue, values: Array<string | unde
   if (leaked.length > 0) throw new Error(`Locked label value leaked into projection: ${leaked[0]}`);
 }
 
+function lockedIdentifiers(entry: LockedTargetEntry) {
+  return [
+    entry.caseUid,
+    entry.family,
+    entry.faultType?.includes("_") ? entry.faultType : undefined,
+  ];
+}
+
 export function projectAgentChaosCase(
   entry: LockedTargetEntry,
   sourceCase: AgentChaosCase,
@@ -214,7 +222,9 @@ export function projectAgentChaosCase(
     source: entry.source,
     policy:
       "Decide whether the execution is reliable from the task, final output, and raw telemetry. Reject material tool, routing, guardrail, recovery, or evidence failures.",
-    task: sourceCase.question,
+    task:
+      sourceCase.question?.trim() ||
+      "Assess the recorded agent execution from the available telemetry.",
     finalOutput: finalTraceOutput(sourceCase.trace.spans),
     rawTrace,
   } as const;
@@ -223,12 +233,7 @@ export function projectAgentChaosCase(
   const forbidden = findForbiddenProjectionKeys(projection as unknown as JsonValue);
   if (forbidden.length > 0)
     throw new Error(`Forbidden evaluator-projection field: ${forbidden[0]}`);
-  assertNoLockedValues(projection as unknown as JsonValue, [
-    entry.caseUid,
-    entry.family,
-    entry.faultType,
-    entry.detectionSignal,
-  ]);
+  assertNoLockedValues(projection as unknown as JsonValue, lockedIdentifiers(entry));
   return projection;
 }
 
@@ -326,9 +331,7 @@ export function createBlindedProjection(input: {
   if (forbidden.length > 0)
     throw new Error(`Forbidden evaluator-projection field: ${forbidden[0]}`);
   assertNoLockedValues(projection as unknown as JsonValue, [
-    input.entry.family,
-    input.entry.faultType,
-    input.entry.detectionSignal,
+    ...lockedIdentifiers(input.entry),
     ...(input.blockedValues ?? []),
   ]);
   return projection;

@@ -1,0 +1,531 @@
+{
+  "schemaVersion": "p26-002-agentchaos-projection-audit-0.1.0",
+  "status": "passed",
+  "executedOn": "2026-08-28",
+  "scope": "label-blinded-projection-integrity-not-evaluator-outcomes",
+  "source": {
+    "repository": "kevinzck8k/agentic-fault-diagnosis",
+    "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+    "license": "MIT"
+  },
+  "adapterSchemaVersion": "p26-002-evaluator-projection-0.1.0",
+  "selected": 50,
+  "passed": 50,
+  "totalSourceBytes": 25063408,
+  "totalTraceSpans": 11621,
+  "minTraceSpans": 4,
+  "maxTraceSpans": 652,
+  "neutralTaskFallbacks": 40,
+  "labelBlindChecks": {
+    "forbiddenKeyCount": 0,
+    "structuralGroundTruthRemoved": true,
+    "uniqueLockedIdentifiersRejected": true,
+    "naturalObservableTermsPermitted": true
+  },
+  "projections": [
+    {
+      "blobSha": "93f658b8f2a4534af9156cea01493be5523510b5",
+      "finalOutputChars": 451,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "aac2a4b71486e15a113b029e6b20fd1b203472c97845eb36088d5ace1ed6abce",
+      "sourceBytes": 203595,
+      "targetId": "ext-001",
+      "taskChars": 56,
+      "traceSpans": 70
+    },
+    {
+      "blobSha": "93cdd08ca730c12707d8f3be637fbaf9496ccbac",
+      "finalOutputChars": 13,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "1d8a56cedc1e6da90524aca623e6385156adda1540ddf35b3c8b544d63db7868",
+      "sourceBytes": 217441,
+      "targetId": "ext-002",
+      "taskChars": 48,
+      "traceSpans": 72
+    },
+    {
+      "blobSha": "044a1bb3cf507ffd11a5426ff5cffe76637f3115",
+      "finalOutputChars": 451,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "9e295ada4f651d4c64cbcd6116cdd040073c3deba67240b453583a71f86ae783",
+      "sourceBytes": 228804,
+      "targetId": "ext-003",
+      "taskChars": 56,
+      "traceSpans": 104
+    },
+    {
+      "blobSha": "b90e39ece91ad50ad3875dfb4691fb4063acf3e3",
+      "finalOutputChars": 13,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "499651b5d43876fd81df8a05f425a5c7b181b75e61b24df908d14d3d8e6f8776",
+      "sourceBytes": 256766,
+      "targetId": "ext-004",
+      "taskChars": 48,
+      "traceSpans": 115
+    },
+    {
+      "blobSha": "7b80f8bc227d20a77a2449b3bb8fe4304c0a6fe5",
+      "finalOutputChars": 106,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "faa0b061d42cb9b3c3386ba59c5e07ba67091825fad6baeb46ec5b35db5d7236",
+      "sourceBytes": 213258,
+      "targetId": "ext-005",
+      "taskChars": 56,
+      "traceSpans": 72
+    },
+    {
+      "blobSha": "826c41592998f5770df3a83a74df9ebadd07f13c",
+      "finalOutputChars": 483,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "ccd51dadb12b51965379b2fe96da92b45b2058ea15fae4c3810c09bee5c6f5b2",
+      "sourceBytes": 190644,
+      "targetId": "ext-006",
+      "taskChars": 48,
+      "traceSpans": 70
+    },
+    {
+      "blobSha": "a58b7e6545e431b0faa5164c87c9da0f5d2af4cd",
+      "finalOutputChars": 0,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "6a668d3c61645c6cde59433ad8328d117a53f4409953c43b61dad85c18ee4092",
+      "sourceBytes": 57439,
+      "targetId": "ext-007",
+      "taskChars": 56,
+      "traceSpans": 46
+    },
+    {
+      "blobSha": "ebd23b4566d3ed2f4ccef9cef95de9b2b1c4197f",
+      "finalOutputChars": 103,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "8b314145cdc6b198d488e21a99651a9ddd4cd8e7cbadcac7b899b8aaccc4bde7",
+      "sourceBytes": 194164,
+      "targetId": "ext-008",
+      "taskChars": 48,
+      "traceSpans": 72
+    },
+    {
+      "blobSha": "39060b07582b80805182f8fdeed595c6954ed39a",
+      "finalOutputChars": 13,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "e80db453b8f5b75a3e7253fcbc82d578b2505c9566145150ee3d9342a7fff613",
+      "sourceBytes": 169975,
+      "targetId": "ext-009",
+      "taskChars": 56,
+      "traceSpans": 64
+    },
+    {
+      "blobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465",
+      "finalOutputChars": 13,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "dce8c7c71e25a7de2c0dc62378d7bd937b744c2ad15ab4214bb8d6d2130aa833",
+      "sourceBytes": 186662,
+      "targetId": "ext-010",
+      "taskChars": 48,
+      "traceSpans": 67
+    },
+    {
+      "blobSha": "365af08da9de55dcbf850bc58f1d510bbdfab8bb",
+      "finalOutputChars": 85,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "37c94422ab40b469bed94f262930c6dd309103d9cc8c7d37d6c59f35a8fc7303",
+      "sourceBytes": 1064564,
+      "targetId": "ext-011",
+      "taskChars": 65,
+      "traceSpans": 478
+    },
+    {
+      "blobSha": "a26c49d27426a968c7067ad7bff9f459eec659d6",
+      "finalOutputChars": 71,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "4a81f28b3a2f2e778ac5969691cf99e14b3284b58ff656c73b63a3530812e368",
+      "sourceBytes": 1240719,
+      "targetId": "ext-012",
+      "taskChars": 65,
+      "traceSpans": 580
+    },
+    {
+      "blobSha": "b07a6573a1686dd0edb02fea95e8aa59508802be",
+      "finalOutputChars": 174,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "703974535e5f24aa667160b3bb10d9062bba0764df77c7df550cc87deadf159d",
+      "sourceBytes": 1049363,
+      "targetId": "ext-013",
+      "taskChars": 65,
+      "traceSpans": 471
+    },
+    {
+      "blobSha": "b79c133401774bd1315d3bdbd22c29e1c250fd6b",
+      "finalOutputChars": 73,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "e5916f4a81bf2045609c31c611ed822c5835f5e7a648f01d1ba44c480121cbe3",
+      "sourceBytes": 1298572,
+      "targetId": "ext-014",
+      "taskChars": 65,
+      "traceSpans": 607
+    },
+    {
+      "blobSha": "fc4abe41ba13b0c5b4512565ef313561452a7ce3",
+      "finalOutputChars": 182,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "8764f0718a6728b8b114148406a4ede3999473c2cdaf34eeda4272c3f4a64d2f",
+      "sourceBytes": 1238297,
+      "targetId": "ext-015",
+      "taskChars": 65,
+      "traceSpans": 593
+    },
+    {
+      "blobSha": "74e1baad3416cf00423a06201b65d5f9a2d0512b",
+      "finalOutputChars": 0,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "aa6432bda634b5848f4b948ec9a296901d8837565b85b51c6b7b9f58c0a53aca",
+      "sourceBytes": 6471,
+      "targetId": "ext-016",
+      "taskChars": 65,
+      "traceSpans": 4
+    },
+    {
+      "blobSha": "9eb94bff8a88043b313da5c4cf73bc6e0852bcf9",
+      "finalOutputChars": 7863,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "f99d8272501d20850a0f32680de325579192008a453fbc3a28cd20ce398f0090",
+      "sourceBytes": 143838,
+      "targetId": "ext-017",
+      "taskChars": 65,
+      "traceSpans": 62
+    },
+    {
+      "blobSha": "f9d66da9c6c0759943f0820cbec217a41106acc2",
+      "finalOutputChars": 73,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "a262a169e571e30ffc509291f86592477419c51b3c3087483c8b547183f1937d",
+      "sourceBytes": 1174721,
+      "targetId": "ext-018",
+      "taskChars": 65,
+      "traceSpans": 544
+    },
+    {
+      "blobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+      "finalOutputChars": 182,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "4ba07feea46d7d48cc4f0f3c55b63ecf344c67ebf6c057329d37c44e10efb8a1",
+      "sourceBytes": 1244070,
+      "targetId": "ext-019",
+      "taskChars": 65,
+      "traceSpans": 595
+    },
+    {
+      "blobSha": "6507775080f7dd52896a6f599dab7e6d4612e269",
+      "finalOutputChars": 80,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "23578ec20486d3c75576317a66b8e93719abe86ce4f657870f5d728b4244f750",
+      "sourceBytes": 1220124,
+      "targetId": "ext-020",
+      "taskChars": 65,
+      "traceSpans": 564
+    },
+    {
+      "blobSha": "851b0c4543cc8f5d07d85005f9aad6840445370a",
+      "finalOutputChars": 84,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "3565f67510dc371479d1b6097d7b04e71ad840bc32797df37c153facb556515a",
+      "sourceBytes": 348247,
+      "targetId": "ext-021",
+      "taskChars": 65,
+      "traceSpans": 186
+    },
+    {
+      "blobSha": "699170f15e26fd1eec9569f6e9410f7645ff3af3",
+      "finalOutputChars": 93,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "897adc6dcb6eebe6c03186800185cae80a28a594c97eb5d63a028829b6a6b16f",
+      "sourceBytes": 330333,
+      "targetId": "ext-022",
+      "taskChars": 65,
+      "traceSpans": 169
+    },
+    {
+      "blobSha": "b048012db970f6bdf86b6e8e29df8e7ab9d5baa3",
+      "finalOutputChars": 76,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "ee88cda3faf90f35831e086b4f43cb6d736d0519f328681552647b38240bd014",
+      "sourceBytes": 295767,
+      "targetId": "ext-023",
+      "taskChars": 65,
+      "traceSpans": 147
+    },
+    {
+      "blobSha": "2af912245c885e8a093f0429c19f8328ee3c68ed",
+      "finalOutputChars": 174,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "e4c0f072ff475ba5199b07da94d384daa4129acc3a0fbdbb37a81e7755e95b6a",
+      "sourceBytes": 322392,
+      "targetId": "ext-024",
+      "taskChars": 65,
+      "traceSpans": 160
+    },
+    {
+      "blobSha": "09192906257bbbc34a296e5542d50ef85a041121",
+      "finalOutputChars": 73,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "732c38b6fe9a2f82130fa0007b49acf892b73e06761a11c4f8e7a1a765e4dba2",
+      "sourceBytes": 597664,
+      "targetId": "ext-025",
+      "taskChars": 65,
+      "traceSpans": 376
+    },
+    {
+      "blobSha": "57e40d8ce73b19b2cff7c967cc00518eadec0e7b",
+      "finalOutputChars": 71,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "34ec09734ca91d5ebeea6282ad756e249d4e56a12ada21fadc9f347fe155f64c",
+      "sourceBytes": 338719,
+      "targetId": "ext-026",
+      "taskChars": 65,
+      "traceSpans": 173
+    },
+    {
+      "blobSha": "f4f577e159a1945bb32ec8fe63ea8ecc950217f5",
+      "finalOutputChars": 91,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "bf51690596d7a450a3566525c50d92f49021ef9963c0867ae17c691c250465ec",
+      "sourceBytes": 363905,
+      "targetId": "ext-027",
+      "taskChars": 65,
+      "traceSpans": 200
+    },
+    {
+      "blobSha": "801bec887c9edd9149396b84cb3d39cfa769c209",
+      "finalOutputChars": 108,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "7e22339e9ce4eff9d6a188d9e803481ecc50ae5d1d6810d056bc3fc8effbdc60",
+      "sourceBytes": 309860,
+      "targetId": "ext-028",
+      "taskChars": 65,
+      "traceSpans": 150
+    },
+    {
+      "blobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+      "finalOutputChars": 76,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "c2204f210c8ce1020fc6e8ce8319651553b78775c0b95d1b6824b5108a7f3c47",
+      "sourceBytes": 310649,
+      "targetId": "ext-029",
+      "taskChars": 65,
+      "traceSpans": 158
+    },
+    {
+      "blobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+      "finalOutputChars": 76,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "4bb32f3da1a445dce0408db1fa396806a2dd0a9ea58c926b52a3ccbb5a36ae19",
+      "sourceBytes": 322390,
+      "targetId": "ext-030",
+      "taskChars": 65,
+      "traceSpans": 160
+    },
+    {
+      "blobSha": "14ca3350a6d56bad7c543a058105ae9c07af8bee",
+      "finalOutputChars": 4589,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "d98647c7438bdc50f74b80b0d420dda23d5090b74855a32c7560856086727a0f",
+      "sourceBytes": 537625,
+      "targetId": "ext-031",
+      "taskChars": 65,
+      "traceSpans": 202
+    },
+    {
+      "blobSha": "afb0cc141169bbcdbf6436a4c08f6dc4083d7336",
+      "finalOutputChars": 91,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "9c4f52fdc334a04f8738a17500a956458180b859efb5c780083dedae107db247",
+      "sourceBytes": 560336,
+      "targetId": "ext-032",
+      "taskChars": 65,
+      "traceSpans": 212
+    },
+    {
+      "blobSha": "32a9953651c8b3757347ea34c1862060044f2f00",
+      "finalOutputChars": 1314,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "f9842963350ca3a120a9a5ae1f02233b000121e39dbf960d223e95d3eced299b",
+      "sourceBytes": 564794,
+      "targetId": "ext-033",
+      "taskChars": 65,
+      "traceSpans": 203
+    },
+    {
+      "blobSha": "0546ec7759f48be8ce1205fe1aeab6097755c98c",
+      "finalOutputChars": 1259,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "884e5267a591bcec2b083bf913353bc8a8d5d236623361ea16abbd861df1e947",
+      "sourceBytes": 572761,
+      "targetId": "ext-034",
+      "taskChars": 65,
+      "traceSpans": 211
+    },
+    {
+      "blobSha": "54dc2a984606e3e0ff5a8b2341229b14fcc3032f",
+      "finalOutputChars": 71,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "6498d44fd0fb0c24f02bde23d9bf55562b0778675ba09bfe6ec042753a64265e",
+      "sourceBytes": 569845,
+      "targetId": "ext-035",
+      "taskChars": 65,
+      "traceSpans": 217
+    },
+    {
+      "blobSha": "82c63a534a5d308309d29c874fca927770ef8276",
+      "finalOutputChars": 0,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "265f96c4508212556f047f2d780950895ecdd8d215aa7044db7ab2be1c24cea5",
+      "sourceBytes": 6506,
+      "targetId": "ext-036",
+      "taskChars": 65,
+      "traceSpans": 4
+    },
+    {
+      "blobSha": "23110538026992e22943c784360ecd0c0f0cd678",
+      "finalOutputChars": 0,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "3501c8a975144a8d8d904046e358a1702df797860b95f5ca393b1f1054c87207",
+      "sourceBytes": 34542,
+      "targetId": "ext-037",
+      "taskChars": 65,
+      "traceSpans": 17
+    },
+    {
+      "blobSha": "cfb2eaac2584c3de5d6b51bd9ddfabd0f7539658",
+      "finalOutputChars": 103,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "2504e1b32fe17bad7e031238ad87badade3053f3624a9fd4dd81c32177ac2f3c",
+      "sourceBytes": 578403,
+      "targetId": "ext-038",
+      "taskChars": 65,
+      "traceSpans": 207
+    },
+    {
+      "blobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+      "finalOutputChars": 72,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "3ca6463eeb5110b7aa5751f3794c8212e04c502554683d055985ad46e91098da",
+      "sourceBytes": 559965,
+      "targetId": "ext-039",
+      "taskChars": 65,
+      "traceSpans": 204
+    },
+    {
+      "blobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+      "finalOutputChars": 1259,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "7f883907d56197f88aaea24e1214a14a6bf417f55313dd9ce8057387f732ad3b",
+      "sourceBytes": 566640,
+      "targetId": "ext-040",
+      "taskChars": 65,
+      "traceSpans": 214
+    },
+    {
+      "blobSha": "7e9b1b5249c996e4ad49df9fa4f7b740e7d9487f",
+      "finalOutputChars": 329,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "97d8ba46739ec756bbdd1cea9db1cfaa9cc0fe475101576ce486c76f94f2105f",
+      "sourceBytes": 279971,
+      "targetId": "ext-041",
+      "taskChars": 65,
+      "traceSpans": 142
+    },
+    {
+      "blobSha": "080232e7a66d9af1cabc9bd2538fa862f9575ff3",
+      "finalOutputChars": 416,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "f199535f9ab5f2b497658dfe8919bc7b3d006379cb2e46dc5c74ee313b1bfe91",
+      "sourceBytes": 305928,
+      "targetId": "ext-042",
+      "taskChars": 65,
+      "traceSpans": 151
+    },
+    {
+      "blobSha": "6d19537a0b5451bc7cf22486f5e98e941874af55",
+      "finalOutputChars": 329,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "9bc2e44b26f22077adf0ea480abf8e2f39dbcad5a2980faabf6ef8f5302a8271",
+      "sourceBytes": 1102914,
+      "targetId": "ext-043",
+      "taskChars": 65,
+      "traceSpans": 652
+    },
+    {
+      "blobSha": "67c898d59e125e0f8229a40f4e327b8b0065a849",
+      "finalOutputChars": 162,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "639fd0eb92c432afaeabb001d185e93ed1e412d51cf2ed0fea8b23cfa44b17d7",
+      "sourceBytes": 538011,
+      "targetId": "ext-044",
+      "taskChars": 65,
+      "traceSpans": 184
+    },
+    {
+      "blobSha": "0b306efb194d0ba8a91e0e145b6620bf95d722a0",
+      "finalOutputChars": 103,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "a5d672299dfe942e1a0159a4fa41209f1dc53d866d0701a8a75ab84180b58fd9",
+      "sourceBytes": 1078835,
+      "targetId": "ext-045",
+      "taskChars": 65,
+      "traceSpans": 629
+    },
+    {
+      "blobSha": "b28c930199e1ce2c2d10e994a26d70b389d7993d",
+      "finalOutputChars": 416,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "ec6b8a5958420068f732c2b071c69fb67e2e5e0defc61cf5ace4a7532bb1ed10",
+      "sourceBytes": 84870,
+      "targetId": "ext-046",
+      "taskChars": 65,
+      "traceSpans": 45
+    },
+    {
+      "blobSha": "9b50cea922f77507368984a8d58fb1a95ab5c593",
+      "finalOutputChars": 329,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "9ef85d67706e465a7eaabf7a051f217173f4fd443a949da3355ab09d9cff31ed",
+      "sourceBytes": 110847,
+      "targetId": "ext-047",
+      "taskChars": 65,
+      "traceSpans": 65
+    },
+    {
+      "blobSha": "c999db46ec0b11ea58a40aca848459c6f943940a",
+      "finalOutputChars": 416,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "4e95ce4c65250affffe29f42393a9655c88afaad2635b76e1d5d9eef99215e17",
+      "sourceBytes": 656667,
+      "targetId": "ext-048",
+      "taskChars": 65,
+      "traceSpans": 291
+    },
+    {
+      "blobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+      "finalOutputChars": 329,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "e0f097c8ea298aca718424b70ee362f95637739835d62959e094df726417aacb",
+      "sourceBytes": 708157,
+      "targetId": "ext-049",
+      "taskChars": 65,
+      "traceSpans": 380
+    },
+    {
+      "blobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+      "finalOutputChars": 416,
+      "forbiddenKeyCount": 0,
+      "projectionHash": "06f81b898a96131b482a6cbeb8f27584c49cc3f10ed4ee25cf966ffe922ed9b5",
+      "sourceBytes": 506378,
+      "targetId": "ext-050",
+      "taskChars": 65,
+      "traceSpans": 262
+    }
+  ],
+  "releaseBoundary": {
+    "rawSourcesRetained": false,
+    "publishedArtifact": "source-blob-and-projection-hashes-plus-derived-counts-only"
+  }
+}

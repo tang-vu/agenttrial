@@ -28,6 +28,9 @@ const smokePath = fileURLToPath(
 const multiSourceSmokePath = fileURLToPath(
   new URL("../../../research/targets/multi-source-adapter-smoke.json", import.meta.url),
 );
+const projectionAuditPath = fileURLToPath(
+  new URL("../../../research/targets/agentchaos-projection-audit.json", import.meta.url),
+);
 
 describe("label-blinded target adapters", () => {
   const entry = {
@@ -85,7 +88,7 @@ describe("label-blinded target adapters", () => {
       createBlindedProjection({
         entry,
         policy: "Reject unsupported source integrity.",
-        task: "This task accidentally names corruption.",
+        task: `This task accidentally names ${entry.caseUid}.`,
         finalOutput: "done",
         rawTrace: [],
       }),
@@ -96,6 +99,30 @@ describe("label-blinded target adapters", () => {
     expect(() =>
       projectAgentChaosCase(entry, { ...sourceCase, case_uid: "different/case" }),
     ).toThrow(/does not match/);
+  });
+
+  it("uses a neutral task fallback and preserves natural observable fault words", () => {
+    const projection = projectAgentChaosCase(
+      { ...entry, caseUid: "BookWriter-H_A2A/corruption/case_02" },
+      {
+        ...sourceCase,
+        case_uid: "BookWriter-H_A2A/corruption/case_02",
+        question: null,
+        trace: {
+          spans: [
+            {
+              name: "writer",
+              input: "Discuss political corruption and institutional risk.",
+              output: "Draft complete.",
+            },
+          ],
+        },
+      },
+    );
+    expect(projection.task).toBe(
+      "Assess the recorded agent execution from the available telemetry.",
+    );
+    expect(JSON.stringify(projection)).toContain("political corruption");
   });
 
   it("projects AgentDojo messages without upstream outcome or attack metadata", () => {
@@ -232,5 +259,30 @@ describe("label-blinded target adapters", () => {
       2,
     );
     expect(smoke.releaseBoundary.rawSourcesRetained).toBe(false);
+  });
+
+  it("pins label-blinded projections for all 50 independent AgentChaosBench traces", () => {
+    const audit = JSON.parse(readFileSync(projectionAuditPath, "utf8")) as {
+      status: string;
+      selected: number;
+      passed: number;
+      neutralTaskFallbacks: number;
+      labelBlindChecks: { forbiddenKeyCount: number; naturalObservableTermsPermitted: boolean };
+      projections: Array<{ projectionHash: string; targetId: string }>;
+      releaseBoundary: { rawSourcesRetained: boolean };
+    };
+    expect(audit.status).toBe("passed");
+    expect(audit.selected).toBe(50);
+    expect(audit.passed).toBe(50);
+    expect(audit.neutralTaskFallbacks).toBe(40);
+    expect(audit.labelBlindChecks).toEqual(
+      expect.objectContaining({ forbiddenKeyCount: 0, naturalObservableTermsPermitted: true }),
+    );
+    expect(audit.projections).toHaveLength(50);
+    expect(new Set(audit.projections.map((item) => item.targetId)).size).toBe(50);
+    expect(audit.projections.every((item) => /^[0-9a-f]{64}$/.test(item.projectionHash))).toBe(
+      true,
+    );
+    expect(audit.releaseBoundary.rawSourcesRetained).toBe(false);
   });
 });
