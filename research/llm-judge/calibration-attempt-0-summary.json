@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "p26-002-local-judge-calibration-0.1.0",
+  "claimUse": "baseline-selection-only",
+  "interpretationBoundary": "This held-out synthetic calibration selects a reproducible baseline. It is not a paper result and must not be pooled with the main study.",
+  "candidate": {
+    "modelId": "Qwen/Qwen3-4B-GGUF",
+    "modelFile": "Qwen3-4B-Q4_K_M.gguf",
+    "quantization": "Q4_K_M",
+    "parameterCount": 4022468096,
+    "modelBytes": 2497280256,
+    "modelSha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+    "modelRevision": "bc640142c66e1fdd12af0bd68f40445458f3869b",
+    "license": "Apache-2.0",
+    "runtime": "llama.cpp",
+    "runtimeRelease": "v0.3.0",
+    "runtimeCommit": "c1d0e7a004015f23bc0233470b747b596f29b264",
+    "threads": 8,
+    "contextTokens": 4096,
+    "maxOutputTokens": 80,
+    "temperature": 0,
+    "seed": 26002,
+    "reasoning": "off"
+  },
+  "runtimeNote": "llama.cpp JSON Schema sampler initialization failed in this pinned runtime, so the frozen path uses an explicit minimal EBNF grammar plus strict application parsing.",
+  "calibration": {
+    "uniqueCases": 24,
+    "repeatsPerCase": 2,
+    "totalRecords": 48,
+    "faultyRecords": 32,
+    "controlRecords": 16
+  },
+  "outcomes": {
+    "parsed": 24,
+    "parseRate": 0.5,
+    "correct": 24,
+    "accuracy": 0.5,
+    "falseAcceptance": {
+      "estimate": 0,
+      "lower": 0,
+      "upper": 0.1071827150573635
+    },
+    "falseRejection": {
+      "estimate": 0,
+      "lower": 0,
+      "upper": 0.19361341827271994
+    },
+    "verdictRepeatability": 0.5
+  },
+  "gate": {
+    "parseRateAtLeastOne": false,
+    "accuracyAtLeast80Percent": false,
+    "falseAcceptanceAtMost25Percent": true,
+    "falseRejectionAtMost25Percent": true,
+    "verdictRepeatability100Percent": false
+  },
+  "status": "fail"
+}

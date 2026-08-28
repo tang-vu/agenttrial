@@ -160,7 +160,7 @@ const summary = {
     matchedControlConfigurations: CONTROL_MATRIX.length,
     repeatsPerConfiguration: PILOT_REPEATS,
     evaluationModes: CREDENTIAL_FREE_MODES,
-    llmJudgeStatus: "excluded-until-local-model-and-runtime-are-frozen",
+    llmJudgeStatus: "frozen-separately-and-excluded-from-this-synthetic-plumbing-pilot",
   },
   manifestRecords: records.length,
   outcomes: CREDENTIAL_FREE_MODES.map((mode) => modeSummary(mode, records)),

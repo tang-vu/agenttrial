@@ -46,7 +46,6 @@ const artifact = {
   interpretationBoundary:
     "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   blockers: [
-    "Local open-weight LLM judge model and runtime are not frozen.",
     "Simulation-based power analysis is not frozen.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed.",

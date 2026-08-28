@@ -1,8 +1,10 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   CONTROLLED_AGENTS,
   CONTROL_MATRIX,
   FAULT_FAMILIES,
+  LLM_JUDGE_FREEZE,
   SCENARIO_MATRIX,
   evaluateBaseline,
   researchDesignHash,
@@ -21,6 +23,13 @@ import {
   runTamperSuite,
   verifyPortableEvidenceBundle,
 } from "./tamper";
+import {
+  JUDGE_CALIBRATION_CASES,
+  JUDGE_GRAMMAR,
+  LOCAL_JUDGE_CANDIDATE,
+  parseJudgeOutput,
+  renderJudgeCase,
+} from "./local-judge";
 
 describe("P26-002 frozen research design", () => {
   it("contains at least 60 unique configurations across all locked families", () => {
@@ -100,6 +109,69 @@ describe("portable evidence tamper suite", () => {
     expect(result.detectedCount).toBe(9);
     expect(result.localizedCount).toBe(9);
     expect(result.mutations.every((item) => item.detected && item.localized)).toBe(true);
+  });
+});
+
+describe("local LLM judge candidate", () => {
+  const passingCalibration = JSON.parse(
+    readFileSync(new URL("../../../research/llm-judge/calibration-summary.json", import.meta.url), {
+      encoding: "utf8",
+    }),
+  ) as {
+    attempt: number;
+    outcomes: { parseRate: number; accuracy: number; verdictRepeatability: number };
+    status: string;
+  };
+  const failedCalibration = JSON.parse(
+    readFileSync(
+      new URL("../../../research/llm-judge/calibration-attempt-0-summary.json", import.meta.url),
+      { encoding: "utf8" },
+    ),
+  ) as { outcomes: { parseRate: number }; status: string };
+
+  it("has a balanced, disjoint 24-case calibration set", () => {
+    expect(JUDGE_CALIBRATION_CASES).toHaveLength(24);
+    expect(new Set(JUDGE_CALIBRATION_CASES.map((item) => item.id)).size).toBe(24);
+    expect(JUDGE_CALIBRATION_CASES.filter((item) => item.groundTruth === "reject")).toHaveLength(
+      16,
+    );
+    expect(JUDGE_CALIBRATION_CASES.filter((item) => item.groundTruth === "accept")).toHaveLength(8);
+    const familyCounts = new Map<string, number>();
+    for (const item of JUDGE_CALIBRATION_CASES)
+      familyCounts.set(item.family, (familyCounts.get(item.family) ?? 0) + 1);
+    expect([...familyCounts.values()].every((count) => count === 3)).toBe(true);
+    expect(
+      JUDGE_CALIBRATION_CASES.every((item) => !renderJudgeCase(item).includes("groundTruth")),
+    ).toBe(true);
+  });
+
+  it("pins a credential-free model and strict output parser", () => {
+    expect(LOCAL_JUDGE_CANDIDATE.license).toBe("Apache-2.0");
+    expect(LOCAL_JUDGE_CANDIDATE.modelSha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(JUDGE_GRAMMAR).toContain('\\"accept\\"');
+    expect(parseJudgeOutput('{"verdict":"reject","rationale":"critical scope failure"}')).toEqual({
+      verdict: "reject",
+      rationale: "critical scope failure",
+    });
+    expect(() => parseJudgeOutput('{"verdict":"fail","rationale":"x"}')).toThrow();
+    expect(() => parseJudgeOutput('{"verdict":"accept","rationale":"x","extra":1}')).toThrow();
+  });
+
+  it("freezes the calibrated judge in the research design", () => {
+    expect(LLM_JUDGE_FREEZE.status).toBe("frozen-credential-free");
+    expect(LLM_JUDGE_FREEZE.modelSha256).toBe(LOCAL_JUDGE_CANDIDATE.modelSha256);
+    expect(LLM_JUDGE_FREEZE.excludedInputs).toContain("ground-truth label");
+    expect(LLM_JUDGE_FREEZE.calibration.status).toBe("pass");
+  });
+
+  it("retains the failed calibration attempt and pins the passing artifact", () => {
+    expect(failedCalibration.status).toBe("fail");
+    expect(failedCalibration.outcomes.parseRate).toBeLessThan(1);
+    expect(passingCalibration).toMatchObject({
+      attempt: 1,
+      outcomes: { parseRate: 1, accuracy: 1, verdictRepeatability: 1 },
+      status: "pass",
+    });
   });
 });
 

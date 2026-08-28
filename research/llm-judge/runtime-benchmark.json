@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "p26-002-local-judge-runtime-benchmark-0.1.0",
+  "claimUse": "runtime-selection-only",
+  "capturedOn": "2026-08-28",
+  "hardware": {
+    "cpu": "Intel Xeon Platinum 8370C at 2.80 GHz",
+    "logicalCpuCount": 9,
+    "memoryGiB": 21,
+    "gpu": null
+  },
+  "runtime": {
+    "name": "llama.cpp",
+    "release": "v0.3.0",
+    "commit": "c1d0e7a004015f23bc0233470b747b596f29b264",
+    "compiler": "GNU 13.3.0",
+    "backend": "CPU with native x86 and OpenMP"
+  },
+  "model": {
+    "id": "Qwen/Qwen3-4B-GGUF",
+    "file": "Qwen3-4B-Q4_K_M.gguf",
+    "parameters": 4022468096,
+    "bytes": 2497280256,
+    "sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5"
+  },
+  "method": {
+    "promptTokens": 512,
+    "generatedTokens": 128,
+    "repetitions": 3,
+    "warmup": true
+  },
+  "results": [
+    {
+      "threads": 4,
+      "promptTokensPerSecondMean": 32.377748,
+      "generationTokensPerSecondMean": 7.418088
+    },
+    {
+      "threads": 8,
+      "promptTokensPerSecondMean": 52.827741,
+      "generationTokensPerSecondMean": 10.281718
+    },
+    {
+      "threads": 9,
+      "promptTokensPerSecondMean": 59.244468,
+      "generationTokensPerSecondMean": 8.265187
+    }
+  ],
+  "selectedThreads": 8,
+  "selectionReason": "Highest measured generation throughput; generation dominates the constrained judge workload."
+}

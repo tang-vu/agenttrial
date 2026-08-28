@@ -4,13 +4,13 @@
   "claimUse": "pipeline-validation-only",
   "fixtureScope": "synthetic-engineering-fixture",
   "interpretationBoundary": "Synthetic fixtures validate measurement plumbing only. They are not evidence of real-world efficacy, superiority, or publication-ready findings.",
-  "designHash": "eb5a0bf029d0078bd113166ea9d998f9778b05b103711c840097b3d4cfd7ae76",
+  "designHash": "08003f2b396801a866451d9ec9def05eff69daedf97a1dcf24d6e03deb0dd939",
   "inputs": {
     "faultConfigurations": 64,
     "matchedControlConfigurations": 64,
     "repeatsPerConfiguration": 2,
     "evaluationModes": ["final-output-only", "trace-presence", "agenttrial"],
-    "llmJudgeStatus": "excluded-until-local-model-and-runtime-are-frozen"
+    "llmJudgeStatus": "frozen-separately-and-excluded-from-this-synthetic-plumbing-pilot"
   },
   "manifestRecords": 768,
   "outcomes": [

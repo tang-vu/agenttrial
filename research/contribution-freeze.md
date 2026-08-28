@@ -49,13 +49,16 @@ The full 12-work, feature-level audit is in `nearest-work-matrix.json`.
 
 The paper cannot move from conditional go to empirical claims until all items pass:
 
-1. Freeze a zero-cost local open-weight LLM judge, prompt, runtime, and structured output parser.
-2. Complete a simulation-based power analysis using plausible paired-disagreement ranges, not pilot effects.
-3. Select independent, authorized targets that were not built to satisfy AgentTrial's assertions.
-4. Freeze assertion authorship and ground truth independently of the evaluated system.
-5. Run at least 20 repetitions per stochastic configuration and report configuration-clustered uncertainty.
-6. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
-7. Reproduce from a clean environment and audit the public allowlist before release.
+Completed: a zero-cost local Qwen3-4B Q4_K_M judge, prompt, llama.cpp runtime, EBNF output constraint, and strict parser are frozen by model and runtime hash after a held-out calibration gate. Calibration is baseline selection only and is excluded from paper results.
+
+Remaining gates:
+
+1. Complete a simulation-based power analysis using plausible paired-disagreement ranges, not pilot effects.
+2. Select independent, authorized targets that were not built to satisfy AgentTrial's assertions.
+3. Freeze assertion authorship and ground truth independently of the evaluated system.
+4. Run at least 20 repetitions per stochastic configuration and report configuration-clustered uncertainty.
+5. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
+6. Reproduce from a clean environment and audit the public allowlist before release.
 
 ## Stop or pivot rules
 

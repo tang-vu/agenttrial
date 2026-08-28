@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { LOCAL_JUDGE_CANDIDATE } from "./local-judge";
 
 export const FAULT_FAMILIES = [
   "unsupported-provenance",
@@ -213,11 +214,36 @@ export interface EvaluationVerdict {
 
 export const LLM_JUDGE_FREEZE = {
   provider: "local-open-weight",
-  model: null,
-  temperature: 0,
-  promptVersion: "llm-judge-prompt-0.1.0",
+  model: `${LOCAL_JUDGE_CANDIDATE.modelId}@${LOCAL_JUDGE_CANDIDATE.modelRevision}#${LOCAL_JUDGE_CANDIDATE.quantization}`,
+  modelSha256: LOCAL_JUDGE_CANDIDATE.modelSha256,
+  license: LOCAL_JUDGE_CANDIDATE.license,
+  runtime: `${LOCAL_JUDGE_CANDIDATE.runtime}@${LOCAL_JUDGE_CANDIDATE.runtimeCommit}`,
+  threads: LOCAL_JUDGE_CANDIDATE.threads,
+  contextTokens: LOCAL_JUDGE_CANDIDATE.contextTokens,
+  maxOutputTokens: LOCAL_JUDGE_CANDIDATE.maxOutputTokens,
+  temperature: LOCAL_JUDGE_CANDIDATE.temperature,
+  seed: LOCAL_JUDGE_CANDIDATE.seed,
+  reasoning: LOCAL_JUDGE_CANDIDATE.reasoning,
+  promptVersion: "llm-judge-prompt-0.2.0",
+  grammarVersion: "llm-judge-ebnf-0.2.0",
   outputSchema: { verdict: ["accept", "reject"], rationale: "string" },
-  status: "blocked-until-model-and-runtime-are-frozen",
+  inputProjection: ["policy", "task", "final-output", "raw-trace"],
+  excludedInputs: [
+    "AgentTrial assertion verdicts",
+    "claim-coverage score",
+    "integrity-verification verdict",
+    "ground-truth label",
+  ],
+  calibration: {
+    artifact: "research/llm-judge/calibration-summary.json",
+    attempt: 1,
+    uniqueCases: 24,
+    repeats: 2,
+    status: "pass",
+  },
+  runtimeLimitation:
+    "Pinned llama.cpp JSON Schema sampler failed initialization; the frozen path uses a minimal EBNF grammar and strict parser.",
+  status: "frozen-credential-free",
 } as const;
 
 export const CONTRIBUTION_SCOPE = {
@@ -258,7 +284,7 @@ export function evaluateBaseline(
       : {
           mode,
           verdict: "not-evaluated",
-          reasons: ["Frozen local judge model is not yet selected."],
+          reasons: ["A decision from the frozen local judge was not supplied for this artifact."],
         };
   }
   const failedCritical = artifact.assertionResults.some(

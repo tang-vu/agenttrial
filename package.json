@@ -27,7 +27,8 @@
     "eas:verify": "tsx scripts/eas-verify.mjs",
     "signing-key:revoke": "tsx scripts/revoke-signing-key.mts",
     "research:freeze": "pnpm --filter @agenttrial/research freeze",
-    "research:pilot": "pnpm --filter @agenttrial/research pilot"
+    "research:pilot": "pnpm --filter @agenttrial/research pilot",
+    "research:calibrate-judge": "pnpm --filter @agenttrial/research calibrate:judge"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

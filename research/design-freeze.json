@@ -1,7 +1,7 @@
 {
   "schemaVersion": "p26-002-design-0.3.0",
   "status": "draft-freeze",
-  "designHash": "eb5a0bf029d0078bd113166ea9d998f9778b05b103711c840097b3d4cfd7ae76",
+  "designHash": "08003f2b396801a866451d9ec9def05eff69daedf97a1dcf24d6e03deb0dd939",
   "primaryUnit": "unique capability-claim, scenario, and injected-fault configuration",
   "faultFamilies": [
     "unsupported-provenance",
@@ -48,14 +48,38 @@
   "evaluationModes": ["final-output-only", "trace-presence", "llm-judge", "agenttrial"],
   "llmJudge": {
     "provider": "local-open-weight",
-    "model": null,
+    "model": "Qwen/Qwen3-4B-GGUF@bc640142c66e1fdd12af0bd68f40445458f3869b#Q4_K_M",
+    "modelSha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+    "license": "Apache-2.0",
+    "runtime": "llama.cpp@c1d0e7a004015f23bc0233470b747b596f29b264",
+    "threads": 8,
+    "contextTokens": 4096,
+    "maxOutputTokens": 80,
     "temperature": 0,
-    "promptVersion": "llm-judge-prompt-0.1.0",
+    "seed": 26002,
+    "reasoning": "off",
+    "promptVersion": "llm-judge-prompt-0.2.0",
+    "grammarVersion": "llm-judge-ebnf-0.2.0",
     "outputSchema": {
       "verdict": ["accept", "reject"],
       "rationale": "string"
     },
-    "status": "blocked-until-model-and-runtime-are-frozen"
+    "inputProjection": ["policy", "task", "final-output", "raw-trace"],
+    "excludedInputs": [
+      "AgentTrial assertion verdicts",
+      "claim-coverage score",
+      "integrity-verification verdict",
+      "ground-truth label"
+    ],
+    "calibration": {
+      "artifact": "research/llm-judge/calibration-summary.json",
+      "attempt": 1,
+      "uniqueCases": 24,
+      "repeats": 2,
+      "status": "pass"
+    },
+    "runtimeLimitation": "Pinned llama.cpp JSON Schema sampler failed initialization; the frozen path uses a minimal EBNF grammar and strict parser.",
+    "status": "frozen-credential-free"
   },
   "contributionScope": {
     "version": "p26-002-contribution-0.1.0",
@@ -1689,7 +1713,6 @@
   },
   "interpretationBoundary": "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
   "blockers": [
-    "Local open-weight LLM judge model and runtime are not frozen.",
     "Simulation-based power analysis is not frozen.",
     "Human authorization, data governance, and release boundary approval are pending.",
     "The preregistered main trial on independent targets has not been executed."
