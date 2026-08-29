@@ -182,15 +182,20 @@ function lastMessageOutput(messages: Array<Record<string, JsonValue>>, role: str
   return "";
 }
 
-function projectionHash(projection: Omit<EvaluatorProjection, "projectionHash">) {
+export function evaluatorProjectionHash(projection: Omit<EvaluatorProjection, "projectionHash">) {
   return createHash("sha256").update(JSON.stringify(projection)).digest("hex");
 }
 
-function assertNoLockedValues(projection: JsonValue, values: Array<string | undefined>) {
+export function findLockedProjectionValues(
+  projection: JsonValue,
+  values: Array<string | undefined>,
+) {
   const serialized = JSON.stringify(projection);
-  const leaked = values.filter((value): value is string =>
-    Boolean(value && serialized.includes(value)),
-  );
+  return values.filter((value): value is string => Boolean(value && serialized.includes(value)));
+}
+
+function assertNoLockedValues(projection: JsonValue, values: Array<string | undefined>) {
+  const leaked = findLockedProjectionValues(projection, values);
   if (leaked.length > 0) throw new Error(`Locked label value leaked into projection: ${leaked[0]}`);
 }
 
@@ -228,7 +233,10 @@ export function projectAgentChaosCase(
     finalOutput: finalTraceOutput(sourceCase.trace.spans),
     rawTrace,
   } as const;
-  const projection: EvaluatorProjection = { ...base, projectionHash: projectionHash(base) };
+  const projection: EvaluatorProjection = {
+    ...base,
+    projectionHash: evaluatorProjectionHash(base),
+  };
 
   const forbidden = findForbiddenProjectionKeys(projection as unknown as JsonValue);
   if (forbidden.length > 0)
@@ -326,7 +334,10 @@ export function createBlindedProjection(input: {
     finalOutput: input.finalOutput,
     rawTrace: redactedTrace,
   } as const;
-  const projection: EvaluatorProjection = { ...base, projectionHash: projectionHash(base) };
+  const projection: EvaluatorProjection = {
+    ...base,
+    projectionHash: evaluatorProjectionHash(base),
+  };
   const forbidden = findForbiddenProjectionKeys(projection as unknown as JsonValue);
   if (forbidden.length > 0)
     throw new Error(`Forbidden evaluator-projection field: ${forbidden[0]}`);

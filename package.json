@@ -31,6 +31,8 @@
     "eas:verify": "tsx scripts/eas-verify.mjs",
     "signing-key:revoke": "tsx scripts/revoke-signing-key.mts",
     "research:freeze": "pnpm --filter @agenttrial/research freeze",
+    "research:audit-target-bindings": "pnpm --filter @agenttrial/research audit:target-bindings",
+    "research:gate-main-trial": "pnpm --filter @agenttrial/research gate:main-trial",
     "research:pilot": "pnpm --filter @agenttrial/research pilot",
     "research:power": "pnpm --filter @agenttrial/research power",
     "research:calibrate-judge": "pnpm --filter @agenttrial/research calibrate:judge"

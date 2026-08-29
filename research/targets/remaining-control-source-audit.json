@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "p26-002-remaining-control-source-audit-0.1.0",
+  "status": "pending",
+  "scope": "future-pinned-agentdojo-and-tau2-control-executions-not-main-study-outcomes",
+  "expected": 20,
+  "verified": 0,
+  "controls": [],
+  "evidenceArtifacts": [],
+  "releaseBoundary": {
+    "rawExecutionsRetained": false
+  },
+  "submissionAllowed": false
+}

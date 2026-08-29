@@ -2,9 +2,9 @@
 
 Protocol version: 0.2
 Created: 2026-08-27  
-Updated: 2026-08-28
+Updated: 2026-08-29
 Study ID: P26-002  
-Status: G2 method freeze complete; G3 governance pending
+Status: G2 executable design prepared; independent method-freeze sign-off and G3 governance pending
 Primary repository: tang-vu/agenttrial
 
 ## Objective
@@ -75,6 +75,10 @@ The frozen prospective power analysis expands the design to 80 unique fault conf
 
 The independent source lock uses 50 AgentChaosBench traces, ten AgentDojo prompt-injection tasks, ten BFCL V4 missing-parameter tasks with matched base entries, and ten tau2-bench scoring-contract omission stress cases. All sources are pinned, public, and MIT or Apache-2.0. Source labels and task criteria remain blinded from evaluator inputs; adapters cannot alter them after results are observed.
 
+Source-family membership does not by itself justify a source-unit-to-scenario mapping. `research/targets/target-binding-audit.json` binds each source unit to a draft-frozen fault and control slot provisionally by family order only to prepare a reviewable crosswalk. Two independent human reviewers must assess every row, record a rationale, and use a third independent adjudicator only for disagreements. The packet binds the full target, fault, and control semantics rather than projection-readiness state. No provisional binding may enter the main trial or be described as validated evidence.
+
+Before a main run, all 80 fault source units and 80 target-specific matched-control source or execution units must be pinned, all 160 projections must pass source-bound label-blind audits, the construct review packet must be complete, the design artifact must have independent method-freeze sign-off, and every G3 gate in `research/governance/g3-approval.json` must have documented human approval. The gate verifies named decision metadata, current-input digests, and the bytes of each evidence artifact; human identity remains a governance-process responsibility. Audit regeneration never overwrites any human record. `pnpm research:gate-main-trial` fails closed while any condition is unmet.
+
 The two-repeat credential-free engineering pilot is excluded from hypothesis testing. Its synthetic fixtures validate only manifest generation, evaluator wiring, analysis functions, and tamper localization. Main-study claims require the locked 20-repeat design on independent authorized targets.
 
 ## Outcomes
@@ -134,6 +138,8 @@ The optional blockchain anchor is not part of the primary scientific claim and m
 - Correct for multiple primary baseline comparisons.
 - Report absolute effects and uncertainty, not only p-values.
 - Perform error analysis by failure family and claim type.
+- Report source-stratified sensitivity analyses because benchmark source and fault family are partly confounded.
+- Do not interpret a family effect beyond the benchmark systems that instantiate it.
 - Keep exploratory analyses clearly separated from locked primary analyses.
 
 ## Reproducibility
