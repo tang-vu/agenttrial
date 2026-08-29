@@ -19,13 +19,13 @@ const availabilityPath = fileURLToPath(
   new URL("../../../research/targets/source-availability-audit.json", import.meta.url),
 );
 
-describe("independent target source lock", () => {
+describe("candidate source-unit lock", () => {
   it("pins the artifact hash and keeps all active network testing disabled", () => {
     expect(createHash("sha256").update(raw).digest("hex")).toBe(
       INDEPENDENT_TARGET_FREEZE.artifactSha256,
     );
     expect(freeze.activeNetworkTesting).toBe(false);
-    expect(freeze.status).toBe("source-locked-adapter-pending");
+    expect(freeze.status).toBe("candidate-source-units-locked-redesign-required");
   });
 
   it("selects exactly ten unique source units for every fault family", () => {

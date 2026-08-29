@@ -14,6 +14,8 @@ interface AgentChaosProjectionRecord extends ProjectionRecord {
 export interface AgentChaosProjectionAudit {
   schemaVersion: string;
   status: string;
+  readinessEligible: false;
+  exclusionReason: string;
   adapterSchemaVersion: string;
   source: { revision: string };
   selected: number;
@@ -37,6 +39,8 @@ interface AgentDojoProjectionRecord extends ProjectionRecord {
 export interface AgentDojoProjectionAudit {
   schemaVersion: string;
   status: string;
+  readinessEligible: false;
+  exclusionReason: string;
   source: { revision: string };
   selected: number;
   passed: number;
@@ -118,6 +122,14 @@ function assertProjectionHashes(records: ProjectionRecord[], description: string
   }
 }
 
+export function excludeReplacedLegacyProjectionHashes(
+  legacy: ProjectionRecord[],
+  gateReconstructed: ProjectionRecord[],
+) {
+  const gateReconstructedTargetIds = new Set(gateReconstructed.map((record) => record.targetId));
+  return legacy.filter((record) => !gateReconstructedTargetIds.has(record.targetId));
+}
+
 export function validateAgentChaosProjectionAudit(
   audit: AgentChaosProjectionAudit,
   availability: SourceAvailabilityAudit,
@@ -126,6 +138,8 @@ export function validateAgentChaosProjectionAudit(
   if (
     audit.schemaVersion !== "p26-002-agentchaos-projection-audit-0.1.0" ||
     audit.status !== "passed" ||
+    audit.readinessEligible !== false ||
+    audit.exclusionReason.trim() === "" ||
     audit.adapterSchemaVersion !== "p26-002-evaluator-projection-0.1.0" ||
     audit.source.revision !== availability.sources.agentchaosbench.revision ||
     audit.selected !== 50 ||
@@ -169,6 +183,8 @@ export function validateAgentDojoProjectionAudit(
   if (
     audit.schemaVersion !== "p26-002-agentdojo-projection-audit-0.1.0" ||
     audit.status !== "passed" ||
+    audit.readinessEligible !== false ||
+    audit.exclusionReason.trim() === "" ||
     audit.source.revision !== availability.sources.agentdojo.revision ||
     audit.selected !== 10 ||
     audit.passed !== 10 ||
@@ -210,9 +226,9 @@ export function validateRemainingProjectionAudit(
   targets: IndependentTargetEntry[],
 ) {
   if (
-    audit.schemaVersion !== "p26-002-remaining-projection-audit-0.1.0" ||
+    audit.schemaVersion !== "p26-002-remaining-projection-audit-0.2.0" ||
     !["pending", "passed"].includes(audit.status) ||
-    audit.expected.fault !== 20 ||
+    audit.expected.fault !== 80 ||
     audit.expected.control !== 80 ||
     audit.releaseBoundary.rawSourcesRetained !== false ||
     audit.submissionAllowed !== false
@@ -235,17 +251,15 @@ export function validateRemainingProjectionAudit(
   }
 
   if (
-    audit.faultProjections.length !== 20 ||
+    audit.faultProjections.length !== 80 ||
     audit.controlProjections.length !== 80 ||
     audit.evidenceArtifacts.length === 0 ||
     JSON.stringify(Object.keys(audit.labelBlindChecks).sort()) !==
       JSON.stringify(["control", "fault", "sourceBound", "targetControlPairBound"]) ||
     !Object.values(audit.labelBlindChecks).every((value) => value === true)
   )
-    fail("passed remaining projection audit is not the complete 20-fault/80-control pass");
-  const expectedFaultTargets = targets
-    .filter((target) => target.source === "bfcl-v4" || target.source === "tau2-bench")
-    .map((target) => target.targetId);
+    fail("passed remaining projection audit is not the complete 80-fault/80-control pass");
+  const expectedFaultTargets = targets.map((target) => target.targetId);
   assertExactIds(
     audit.faultProjections.map((record) => record.targetId),
     expectedFaultTargets,

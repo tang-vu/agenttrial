@@ -1,20 +1,46 @@
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parseEvidenceProjection, parseReadinessEvidenceArtifact } from "./audit-target-bindings";
-import type { BfclTargetEntry } from "./target-binding";
+import {
+  requireGateObservedSourceExecutionDerivation,
+  SOURCE_EXECUTION_DERIVATION_CAPABILITY,
+} from "./source-execution-derivation";
+import type {
+  BfclTargetEntry,
+  IndependentTargetEntry,
+  SourceAvailabilityAudit,
+} from "./target-binding";
 
-const target: BfclTargetEntry = {
-  targetId: "ext-061",
-  family: "tool-parameter-error",
-  source: "bfcl-v4",
-  groundTruthAuthority: "upstream executable ground truth",
-  faultId: "multi_turn_miss_param_0",
-  controlId: "multi_turn_base_0",
-  questionBlobSha: "1".repeat(40),
-  answerBlobSha: "2".repeat(40),
-  controlQuestionBlobSha: "3".repeat(40),
-  controlAnswerBlobSha: "4".repeat(40),
+const targets = JSON.parse(
+  readFileSync(new URL("../../../research/independent-targets.json", import.meta.url), "utf8"),
+) as { entries: IndependentTargetEntry[] };
+const target = targets.entries.find((entry) => entry.targetId === "ext-061") as BfclTargetEntry;
+const availability = JSON.parse(
+  readFileSync(
+    new URL("../../../research/targets/source-availability-audit.json", import.meta.url),
+    "utf8",
+  ),
+) as SourceAvailabilityAudit;
+
+const sourceProvenance = {
+  repository: "ShishirPatil/gorilla",
+  revision: availability.sources["bfcl-v4"].revision,
+  unitKind: "benchmark-task",
+  unitId: target.faultId,
+  blobShas: [target.questionBlobSha, target.answerBlobSha],
 };
+const runnerMethodDigest = "5".repeat(64);
+const executionProvenance = {
+  kind: "controlled-run",
+  runnerMethodDigest,
+  fixedRunIdentity: null,
+  runId: "bfcl-ext-061-fault-run-01",
+  seed: 260020061,
+};
+const sourceExecutionReference = `p26-002-execution:${createHash("sha256")
+  .update(JSON.stringify({ sourceProvenance, executionProvenance }))
+  .digest("hex")}`;
 
 function projectionFixture(
   rawTrace: Record<string, unknown> = {
@@ -32,11 +58,13 @@ function projectionFixture(
     rawTrace,
   });
   const sourceExecutionJson = JSON.stringify({
-    schemaVersion: "p26-002-candidate-execution-0.1.0",
+    schemaVersion: "p26-002-candidate-execution-0.2.0",
     targetId: "ext-061",
     source: "bfcl-v4",
     condition: "fault",
-    sourceReference: "bfcl/multi_turn_miss_param_0/run-01",
+    sourceProvenance,
+    executionProvenance,
+    sourceReference: sourceExecutionReference,
     task: "Call the requested function with complete parameters.",
     finalOutput: "Candidate output",
     rawTrace,
@@ -45,7 +73,7 @@ function projectionFixture(
     targetId: "ext-061",
     projectionHash: createHash("sha256").update(projectionJson).digest("hex"),
     projectionJson,
-    sourceExecutionReference: "bfcl/multi_turn_miss_param_0/run-01",
+    sourceExecutionReference,
     sourceExecutionSha256: createHash("sha256").update(sourceExecutionJson).digest("hex"),
     sourceExecutionJson,
   };
@@ -68,10 +96,19 @@ function evidenceEnvelope(checks: Record<string, boolean>) {
 
 describe("structured readiness evidence", () => {
   it("recomputes a projection digest and binds its target source", () => {
-    expect(parseEvidenceProjection(projectionFixture(), target, "a".repeat(64), "fault")).toEqual({
+    expect(
+      parseEvidenceProjection(
+        projectionFixture(),
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toEqual({
       targetId: "ext-061",
       projectionHash: projectionFixture().projectionHash,
-      sourceExecutionReference: "bfcl/multi_turn_miss_param_0/run-01",
+      sourceExecutionReference,
       sourceExecutionSha256: projectionFixture().sourceExecutionSha256,
       evidenceArtifactSha256: "a".repeat(64),
     });
@@ -84,6 +121,8 @@ describe("structured readiness evidence", () => {
         target,
         "a".repeat(64),
         "fault",
+        availability,
+        runnerMethodDigest,
       ),
     ).toThrow(/adapter hash/);
     expect(() =>
@@ -92,6 +131,8 @@ describe("structured readiness evidence", () => {
         target,
         "a".repeat(64),
         "fault",
+        availability,
+        runnerMethodDigest,
       ),
     ).toThrow(/payload is invalid/);
     expect(() =>
@@ -100,6 +141,8 @@ describe("structured readiness evidence", () => {
         target,
         "a".repeat(64),
         "fault",
+        availability,
+        runnerMethodDigest,
       ),
     ).toThrow(/payload is invalid/);
   });
@@ -108,9 +151,16 @@ describe("structured readiness evidence", () => {
     const invalid = projectionFixture();
     invalid.sourceExecutionJson = "{}";
     invalid.sourceExecutionSha256 = createHash("sha256").update("{}").digest("hex");
-    expect(() => parseEvidenceProjection(invalid, target, "a".repeat(64), "fault")).toThrow(
-      /Source execution payload is invalid/,
-    );
+    expect(() =>
+      parseEvidenceProjection(
+        invalid,
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toThrow(/Source execution payload is invalid/);
   });
 
   it("rejects a projection that does not derive from its bound execution", () => {
@@ -121,9 +171,81 @@ describe("structured readiness evidence", () => {
     invalid.sourceExecutionSha256 = createHash("sha256")
       .update(invalid.sourceExecutionJson)
       .digest("hex");
-    expect(() => parseEvidenceProjection(invalid, target, "a".repeat(64), "fault")).toThrow(
-      /Projection evidence payload is invalid/,
-    );
+    expect(() =>
+      parseEvidenceProjection(
+        invalid,
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toThrow(/Projection evidence payload is invalid/);
+  });
+
+  it("rejects source provenance that differs from the frozen revision, unit, or blobs", () => {
+    const invalid = projectionFixture();
+    const execution = JSON.parse(invalid.sourceExecutionJson) as Record<string, unknown>;
+    execution.sourceProvenance = { ...sourceProvenance, revision: "0".repeat(40) };
+    invalid.sourceExecutionJson = JSON.stringify(execution);
+    invalid.sourceExecutionSha256 = createHash("sha256")
+      .update(invalid.sourceExecutionJson)
+      .digest("hex");
+    expect(() =>
+      parseEvidenceProjection(
+        invalid,
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toThrow(/Source execution payload is invalid/);
+  });
+
+  it("rejects a different but well-formed runner digest", () => {
+    const invalid = projectionFixture();
+    const execution = JSON.parse(invalid.sourceExecutionJson) as {
+      executionProvenance: Record<string, unknown>;
+    };
+    execution.executionProvenance.runnerMethodDigest = "6".repeat(64);
+    invalid.sourceExecutionJson = JSON.stringify(execution);
+    invalid.sourceExecutionSha256 = createHash("sha256")
+      .update(invalid.sourceExecutionJson)
+      .digest("hex");
+    expect(() =>
+      parseEvidenceProjection(
+        invalid,
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toThrow(/Execution provenance does not match the gated method/);
+  });
+
+  it("rejects a controlled run without an explicit seed and run identity", () => {
+    const invalid = projectionFixture();
+    const execution = JSON.parse(invalid.sourceExecutionJson) as {
+      executionProvenance: Record<string, unknown>;
+    };
+    execution.executionProvenance.seed = null;
+    execution.executionProvenance.runId = null;
+    invalid.sourceExecutionJson = JSON.stringify(execution);
+    invalid.sourceExecutionSha256 = createHash("sha256")
+      .update(invalid.sourceExecutionJson)
+      .digest("hex");
+    expect(() =>
+      parseEvidenceProjection(
+        invalid,
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toThrow(/Controlled-run identity is invalid/);
   });
 
   it("requires the exact non-vacuous readiness checks", () => {
@@ -140,5 +262,13 @@ describe("structured readiness evidence", () => {
     expect(() => parseReadinessEvidenceArtifact(evidenceEnvelope({}), "evidence.json")).toThrow(
       /envelope is invalid/,
     );
+  });
+
+  it("never promotes metadata-bound evidence without gate-observed source derivation", () => {
+    expect(SOURCE_EXECUTION_DERIVATION_CAPABILITY.readinessEvidenceAllowed).toBe(false);
+    expect(() => requireGateObservedSourceExecutionDerivation(1)).toThrow(
+      /does not yet derive fixed executions from pinned source bytes/,
+    );
+    expect(() => requireGateObservedSourceExecutionDerivation(0)).not.toThrow();
   });
 });

@@ -5,10 +5,11 @@ import type {
   ScenarioConfiguration,
   ScenarioVariant,
 } from "./index";
+import type { DesignValidityAudit } from "./design-validity";
 
 export type HumanGateStatus = "pending-human-review" | "approved" | "rejected";
 export type InputState = "locked" | "condition-only" | "missing";
-export type ProjectionState = "ready" | "missing";
+export type ProjectionState = "ready" | "missing" | "excluded-not-gate-reconstructed";
 
 interface BaseTargetEntry {
   targetId: string;
@@ -189,16 +190,20 @@ export interface TargetBinding {
 }
 
 export interface TargetBindingAudit {
-  schemaVersion: "p26-002-target-binding-audit-0.1.0";
+  schemaVersion: "p26-002-target-binding-audit-0.2.0";
   status: "blocked" | "ready";
   scope: "pre-run-binding-and-readiness-audit-not-main-study-evidence";
   bindings: TargetBinding[];
   summary: {
     bindings: number;
     uniqueTargets: number;
-    faultSourceUnitsPinned: number;
-    controlSourceUnitsPinned: number;
+    faultBindingsWithPinnedInput: number;
+    uniqueFaultInputsPinned: number;
+    controlBindingsWithPinnedInput: number;
+    uniqueControlInputsPinned: number;
+    reusedControlBindings: number;
     controlConditionsOnly: number;
+    legacyFaultProjectionHashesExcluded: number;
     faultProjectionsReady: number;
     controlProjectionsReady: number;
     constructMappingsApproved: number;
@@ -328,11 +333,21 @@ function sourceEvidence(
 function projectionState(
   key: string,
   projectionByKey: ReadonlyMap<string, ProjectionRecord>,
+  excludedByKey: ReadonlyMap<string, ProjectionRecord> = new Map(),
 ): { state: ProjectionState; sha256: string | null } {
   const record = projectionByKey.get(key);
-  if (!record) return { state: "missing", sha256: null };
-  if (!/^[0-9a-f]{64}$/.test(record.projectionHash)) fail(`invalid projection hash for ${key}`);
-  return { state: "ready", sha256: record.projectionHash };
+  const excluded = excludedByKey.get(key);
+  if (record && excluded) fail(`projection ${key} cannot be both ready and excluded`);
+  if (record) {
+    if (!/^[0-9a-f]{64}$/.test(record.projectionHash)) fail(`invalid projection hash for ${key}`);
+    return { state: "ready", sha256: record.projectionHash };
+  }
+  if (excluded) {
+    if (!/^[0-9a-f]{64}$/.test(excluded.projectionHash))
+      fail(`invalid excluded projection hash for ${key}`);
+    return { state: "excluded-not-gate-reconstructed", sha256: excluded.projectionHash };
+  }
+  return { state: "missing", sha256: null };
 }
 
 function controlProjectionKey(targetId: string, controlConfigurationId: string) {
@@ -408,6 +423,49 @@ function validateMethodFreeze(approval: MethodFreezeApproval) {
   validateHumanGate("method-freeze decision", approval.decision);
   if (approval.status !== approval.decision.status)
     fail(`method-freeze approval status must be ${approval.decision.status}`);
+}
+
+function validateDesignValidity(audit: DesignValidityAudit | undefined) {
+  if (!audit) fail("design-validity audit is required");
+  const expectedCheckNames = [
+    "executionRepetitionSupport",
+    "legacyProjectionEligibility",
+    "matchedControlIndependence",
+    "sourceExecutionDerivation",
+    "variantOperationalization",
+  ];
+  const actualCheckNames = Object.keys(audit.checks).sort();
+  const expectedBlockerCodes = [
+    "ineligible-legacy-projections",
+    "non-operational-variants",
+    "reused-matched-control-inputs",
+    "static-target-repeat-mismatch",
+    "unverified-source-execution-derivation",
+  ];
+  const blockerCodes = audit.blockers.map((blocker) => blocker.code).sort();
+  const failedChecks = Object.values(audit.checks).filter((check) => !check.passed).length;
+  const passedChecks = Object.values(audit.checks).length - failedChecks;
+  const valid = failedChecks === 0 && audit.blockers.length === 0;
+  if (
+    audit.schemaVersion !== "p26-002-design-validity-audit-0.3.0" ||
+    audit.scope !== "design-validity-only-no-human-approval-or-main-trial-evidence" ||
+    JSON.stringify(actualCheckNames) !== JSON.stringify(expectedCheckNames) ||
+    audit.summary.scenarios !== 80 ||
+    audit.summary.sourceUnits !== 80 ||
+    audit.summary.designChecksPassed !== passedChecks ||
+    audit.summary.designChecksBlocked !== failedChecks ||
+    audit.blockers.length !== failedChecks ||
+    blockerCodes.length !== new Set(blockerCodes).size ||
+    blockerCodes.some((code) => !expectedBlockerCodes.includes(code)) ||
+    audit.blockers.some((blocker) => blocker.message.trim() === "") ||
+    audit.designValidityPassed !== valid ||
+    audit.status !== (valid ? "valid" : "blocked") ||
+    audit.humanApprovalEvaluated !== false ||
+    audit.mainTrialAllowed !== false ||
+    audit.submissionAllowed !== false
+  )
+    fail("design-validity audit is inconsistent or incomplete");
+  return audit.blockers.map((blocker) => `${blocker.code}: ${blocker.message}`);
 }
 
 function validateReviewer(
@@ -505,12 +563,15 @@ export function buildTargetBindingAudit(input: {
   targets: IndependentTargetEntry[];
   availability: SourceAvailabilityAudit;
   faultProjections: ProjectionRecord[];
+  excludedLegacyFaultProjections?: ProjectionRecord[];
   controlProjections: ControlProjectionRecord[];
   controlSources?: ControlSourceRecord[];
+  designValidity: DesignValidityAudit;
   constructReview: ConstructReviewPacket;
   governance: G3Governance;
   methodFreeze: MethodFreezeApproval;
 }): TargetBindingAudit {
+  const methodValidityBlockers = validateDesignValidity(input.designValidity);
   if (input.constructReview.schemaVersion !== "p26-002-construct-review-packet-0.1.0")
     fail("unexpected construct-review packet schema version");
   if (input.constructReview.humanOnly !== true)
@@ -561,6 +622,12 @@ export function buildTargetBindingAudit(input: {
   );
   if (faultProjectionByTarget.size !== input.faultProjections.length)
     fail("fault projection IDs are not unique");
+  const excludedLegacyFaultProjections = input.excludedLegacyFaultProjections ?? [];
+  const excludedLegacyFaultProjectionByTarget = new Map(
+    excludedLegacyFaultProjections.map((record) => [record.targetId, record]),
+  );
+  if (excludedLegacyFaultProjectionByTarget.size !== excludedLegacyFaultProjections.length)
+    fail("excluded legacy fault projection IDs are not unique");
   const controlProjectionByConfiguration = new Map(
     input.controlProjections.map((record) => [
       controlProjectionKey(record.targetId, record.controlConfigurationId),
@@ -576,6 +643,14 @@ export function buildTargetBindingAudit(input: {
     if (!targetIds.has(record.targetId)) fail(`unexpected fault projection ID ${record.targetId}`);
     if (!/^[0-9a-f]{64}$/.test(record.projectionHash))
       fail(`invalid projection hash for ${record.targetId}`);
+  }
+  for (const record of excludedLegacyFaultProjections) {
+    if (!targetIds.has(record.targetId))
+      fail(`unexpected excluded legacy fault projection ID ${record.targetId}`);
+    if (!/^[0-9a-f]{64}$/.test(record.projectionHash))
+      fail(`invalid excluded legacy projection hash for ${record.targetId}`);
+    if (faultProjectionByTarget.has(record.targetId))
+      fail(`fault projection ${record.targetId} cannot be both ready and excluded`);
   }
   for (const record of input.controlProjections) {
     if (!targetIds.has(record.targetId))
@@ -659,7 +734,11 @@ export function buildTargetBindingAudit(input: {
         bindingMethod: "provisional-family-order-review-required",
         sourceEvidence: {
           ...evidence,
-          faultProjection: projectionState(target.targetId, faultProjectionByTarget),
+          faultProjection: projectionState(
+            target.targetId,
+            faultProjectionByTarget,
+            excludedLegacyFaultProjectionByTarget,
+          ),
           controlProjection: projectionState(
             controlProjectionKey(target.targetId, control.id),
             controlProjectionByConfiguration,
@@ -689,17 +768,26 @@ export function buildTargetBindingAudit(input: {
     if (!expectedControlProjectionKeys.has(key))
       fail(`supplemental control source ${key} does not match the provisional target binding`);
   }
+  const lockedFaultInputReferences = bindings
+    .filter((item) => item.sourceEvidence.faultInput.state === "locked")
+    .map((item) => item.sourceEvidence.faultInput.reference!);
+  const lockedControlInputReferences = bindings
+    .filter((item) => item.sourceEvidence.controlInput.state === "locked")
+    .map((item) => item.sourceEvidence.controlInput.reference!);
   const summary = {
     bindings: bindings.length,
     uniqueTargets: new Set(bindings.map((item) => item.targetId)).size,
-    faultSourceUnitsPinned: bindings.filter(
-      (item) => item.sourceEvidence.faultInput.state === "locked",
-    ).length,
-    controlSourceUnitsPinned: bindings.filter(
-      (item) => item.sourceEvidence.controlInput.state === "locked",
-    ).length,
+    faultBindingsWithPinnedInput: lockedFaultInputReferences.length,
+    uniqueFaultInputsPinned: new Set(lockedFaultInputReferences).size,
+    controlBindingsWithPinnedInput: lockedControlInputReferences.length,
+    uniqueControlInputsPinned: new Set(lockedControlInputReferences).size,
+    reusedControlBindings:
+      lockedControlInputReferences.length - new Set(lockedControlInputReferences).size,
     controlConditionsOnly: bindings.filter(
       (item) => item.sourceEvidence.controlInput.state === "condition-only",
+    ).length,
+    legacyFaultProjectionHashesExcluded: bindings.filter(
+      (item) => item.sourceEvidence.faultProjection.state === "excluded-not-gate-reconstructed",
     ).length,
     faultProjectionsReady: bindings.filter(
       (item) => item.sourceEvidence.faultProjection.state === "ready",
@@ -726,14 +814,26 @@ export function buildTargetBindingAudit(input: {
     fail(`construct-review packet status must be ${expectedConstructReviewStatus}`);
 
   const blockers: string[] = [];
-  if (summary.faultSourceUnitsPinned !== 80)
-    blockers.push(`Only ${summary.faultSourceUnitsPinned}/80 fault source units are pinned.`);
-  if (summary.controlSourceUnitsPinned !== 80)
+  if (summary.faultBindingsWithPinnedInput !== 80)
     blockers.push(
-      `Only ${summary.controlSourceUnitsPinned}/80 matched-control source units are pinned; ${summary.controlConditionsOnly} remain condition-only.`,
+      `Only ${summary.faultBindingsWithPinnedInput}/80 fault bindings have pinned inputs.`,
+    );
+  if (summary.uniqueFaultInputsPinned !== summary.faultBindingsWithPinnedInput)
+    blockers.push(
+      `Only ${summary.uniqueFaultInputsPinned}/${summary.faultBindingsWithPinnedInput} pinned fault bindings use unique source inputs.`,
+    );
+  if (summary.controlBindingsWithPinnedInput !== 80)
+    blockers.push(
+      `Only ${summary.controlBindingsWithPinnedInput}/80 matched-control bindings have pinned inputs; ${summary.controlConditionsOnly} remain condition-only.`,
+    );
+  if (summary.uniqueControlInputsPinned !== summary.controlBindingsWithPinnedInput)
+    blockers.push(
+      `Only ${summary.uniqueControlInputsPinned}/${summary.controlBindingsWithPinnedInput} pinned control bindings use unique source inputs; ${summary.reusedControlBindings} reuse an upstream execution.`,
     );
   if (summary.faultProjectionsReady !== 80)
-    blockers.push(`Only ${summary.faultProjectionsReady}/80 fault projections are ready.`);
+    blockers.push(
+      `Only ${summary.faultProjectionsReady}/80 fault projections are reconstructed by the gate from source-bound evidence; ${summary.legacyFaultProjectionHashesExcluded} legacy hashes are excluded.`,
+    );
   if (summary.controlProjectionsReady !== 80)
     blockers.push(`Only ${summary.controlProjectionsReady}/80 control projections are ready.`);
   if (summary.constructMappingsPending > 0)
@@ -749,10 +849,13 @@ export function buildTargetBindingAudit(input: {
   }
   if (input.methodFreeze.decision.status !== "approved")
     blockers.push("Independent human method-freeze approval is not complete.");
+  for (const blocker of methodValidityBlockers) {
+    blockers.push(`Method validity: ${blocker}`);
+  }
 
   const mainTrialAllowed = blockers.length === 0;
   return {
-    schemaVersion: "p26-002-target-binding-audit-0.1.0",
+    schemaVersion: "p26-002-target-binding-audit-0.2.0",
     status: mainTrialAllowed ? "ready" : "blocked",
     scope: "pre-run-binding-and-readiness-audit-not-main-study-evidence",
     bindings,

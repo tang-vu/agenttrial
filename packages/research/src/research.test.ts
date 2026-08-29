@@ -95,22 +95,25 @@ describe("P26-002 frozen research design", () => {
   });
 });
 
-describe("prospective power analysis", () => {
-  it("selects 80 independent configurations and 20 nested repeats", () => {
-    expect(POWER_ANALYSIS_PLAN.selectedDesign).toMatchObject({
-      uniqueFaultConfigurations: 80,
-      matchedControlConfigurations: 80,
-      repetitionsPerConfiguration: 20,
-      totalRunArtifacts: 3200,
+describe("superseded power sensitivity analysis", () => {
+  it("retains the invalidated 80-by-20 candidate without treating it as eligible", () => {
+    expect(POWER_ANALYSIS_PLAN.status).toBe("superseded-redesign-required");
+    expect(POWER_ANALYSIS_PLAN.candidateDesign).toMatchObject({
+      nominalFaultSlots: 80,
+      matchedControlSlots: 80,
+      requiredExecutionsPerSlot: 20,
+      totalSharedExecutionArtifacts: 3200,
     });
   });
 
-  it("passes the conservative Monte Carlo lower-bound gate", () => {
-    const result = runPowerAnalysis({ selectedDesignOnly: true });
-    expect(result.selection.passed).toBe(true);
-    expect(result.selection.selectedSuperiority).toHaveLength(3);
+  it("preserves the historical threshold result but blocks design selection", () => {
+    const result = runPowerAnalysis({ candidateDesignOnly: true });
+    expect(result.status).toBe("superseded-redesign-required");
+    expect(result.candidateSensitivity.sensitivityThresholdPassed).toBe(true);
+    expect(result.candidateSensitivity.designEligible).toBe(false);
+    expect(result.candidateSensitivity.candidateSuperiority).toHaveLength(3);
     expect(
-      result.selection.selectedSuperiority.every(
+      result.candidateSensitivity.candidateSuperiority.every(
         (item) => item.power.lower >= POWER_ANALYSIS_PLAN.minimumPower,
       ),
     ).toBe(true);

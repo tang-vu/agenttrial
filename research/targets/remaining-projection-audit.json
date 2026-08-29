@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "p26-002-remaining-projection-audit-0.1.0",
+  "schemaVersion": "p26-002-remaining-projection-audit-0.2.0",
   "status": "pending",
-  "scope": "future-source-bound-label-blind-projections-not-main-study-outcomes",
+  "scope": "future-gate-reconstructed-source-bound-label-blind-projections-for-all-80-frozen-targets-not-main-study-outcomes",
   "expected": {
-    "fault": 20,
+    "fault": 80,
     "control": 80
   },
   "verified": {

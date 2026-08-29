@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "p26-002-design-validity-audit-0.3.0",
+  "status": "blocked",
+  "scope": "design-validity-only-no-human-approval-or-main-trial-evidence",
+  "checks": {
+    "variantOperationalization": {
+      "passed": false,
+      "nominalVariants": 80,
+      "operationalProfiles": 8,
+      "families": [
+        {
+          "family": "artifact-tampering",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "evidence-omission",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "non-repeatable-behavior",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "permission-violation",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "prompt-injection",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "timeout-recovery",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "tool-parameter-error",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        },
+        {
+          "family": "unsupported-provenance",
+          "nominalVariants": 10,
+          "operationalProfiles": 1,
+          "appendedLabelOnly": true
+        }
+      ]
+    },
+    "executionRepetitionSupport": {
+      "passed": false,
+      "targetCount": 80,
+      "requiredExecutionsPerTarget": 20,
+      "requiredSharedExecutionArtifacts": 3200,
+      "observedUniqueExecutionIdentities": 60,
+      "crossConditionExecutionIdentities": 10,
+      "fault": {
+        "uniqueExecutionIdentities": 60,
+        "executionBindings": 60,
+        "fixedUpstreamExecutionIdentities": 60,
+        "declaredCandidateExecutionIdentities": 0,
+        "gateVerifiedCandidateExecutionIdentities": 0,
+        "reusedExecutionBindings": 0,
+        "targetsMeetingRequiredExecutions": 0,
+        "fixedUpstreamSingleExecutionTargets": 60,
+        "otherPartiallyPopulatedTargets": 0,
+        "targetsWithoutAnyExecution": 20
+      },
+      "control": {
+        "uniqueExecutionIdentities": 10,
+        "executionBindings": 50,
+        "fixedUpstreamExecutionIdentities": 10,
+        "declaredCandidateExecutionIdentities": 0,
+        "gateVerifiedCandidateExecutionIdentities": 0,
+        "reusedExecutionBindings": 40,
+        "targetsMeetingRequiredExecutions": 0,
+        "fixedUpstreamSingleExecutionTargets": 50,
+        "otherPartiallyPopulatedTargets": 0,
+        "targetsWithoutAnyExecution": 30
+      }
+    },
+    "matchedControlIndependence": {
+      "passed": false,
+      "requiredBindings": 80,
+      "lockedBindings": 60,
+      "uniqueReferences": 20,
+      "reusedBindings": 40
+    },
+    "legacyProjectionEligibility": {
+      "passed": false,
+      "required": {
+        "fault": 80,
+        "control": 80
+      },
+      "observed": {
+        "fault": 60,
+        "control": 0
+      },
+      "mainTrialEligible": {
+        "fault": 0,
+        "control": 0
+      },
+      "legacy": {
+        "fault": 60,
+        "control": 0
+      },
+      "excludedLegacy": {
+        "fault": 60,
+        "control": 0
+      },
+      "gateReconstructedLegacy": {
+        "fault": 0,
+        "control": 0
+      },
+      "notGateReconstructedLegacy": {
+        "fault": 60,
+        "control": 0
+      },
+      "notGateReconstructedIncludedLegacy": {
+        "fault": 0,
+        "control": 0
+      }
+    },
+    "sourceExecutionDerivation": {
+      "passed": false,
+      "capabilityStatus": "not-implemented",
+      "fixedUpstreamVerification": "metadata-only-source-bytes-not-read-by-gate",
+      "controlledRunVerification": "metadata-only-runner-not-reexecuted-or-attested",
+      "readinessEvidenceAllowed": false
+    }
+  },
+  "summary": {
+    "scenarios": 80,
+    "sourceUnits": 80,
+    "designChecksPassed": 0,
+    "designChecksBlocked": 5
+  },
+  "blockers": [
+    {
+      "code": "non-operational-variants",
+      "message": "80 nominal scenarios collapse to 8 operational semantic profiles after appended variant labels are removed."
+    },
+    {
+      "code": "static-target-repeat-mismatch",
+      "message": "The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count until gate-side evidence verification is implemented."
+    },
+    {
+      "code": "reused-matched-control-inputs",
+      "message": "60 locked matched-control bindings resolve to 20 unique references for 80 required controls."
+    },
+    {
+      "code": "ineligible-legacy-projections",
+      "message": "Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes."
+    },
+    {
+      "code": "unverified-source-execution-derivation",
+      "message": "Source-lock metadata and embedded hashes do not prove that claimed task, output, and trace bytes derive from the pinned upstream blob or controlled runner. The gate must fetch/read and adapt exact source bytes, reexecute the pinned runner, or verify a precommitted trusted-runner attestation before readiness evidence can be promoted."
+    }
+  ],
+  "designValidityPassed": false,
+  "humanApprovalEvaluated": false,
+  "mainTrialAllowed": false,
+  "submissionAllowed": false
+}

@@ -15,10 +15,11 @@ import {
 } from "./index";
 
 const artifact = {
-  schemaVersion: "p26-002-design-0.4.0",
-  status: "draft-freeze",
+  schemaVersion: "p26-002-design-0.5.0",
+  status: "redesign-required",
   designHash: researchDesignHash(),
-  primaryUnit: "unique capability-claim, scenario, and injected-fault configuration",
+  primaryUnit:
+    "Not frozen: the candidate source-unit/scenario-slot mapping requires operational and statistical redesign.",
   faultFamilies: FAULT_FAMILIES,
   controlledAgents: CONTROLLED_AGENTS,
   evaluationModes: EVALUATION_MODES,
@@ -26,11 +27,12 @@ const artifact = {
   contributionScope: CONTRIBUTION_SCOPE,
   powerAnalysis: POWER_ANALYSIS_PLAN,
   independentTargets: INDEPENDENT_TARGET_FREEZE,
-  nearestWorkStatus: "frozen-conditional-go-2026-08-28",
+  nearestWorkStatus: "frozen-scope-audit-redesign-required-2026-08-29",
   scenarioCount: SCENARIO_MATRIX.length,
   matchedControlCount: CONTROL_MATRIX.length,
-  repetitionsPerScenario: POWER_ANALYSIS_PLAN.selectedDesign.repetitionsPerConfiguration,
-  plannedRunCountPerEvaluationMode: POWER_ANALYSIS_PLAN.selectedDesign.totalRunArtifacts,
+  candidateExecutionsPerSlot: POWER_ANALYSIS_PLAN.candidateDesign.requiredExecutionsPerSlot,
+  candidateSharedExecutionArtifacts:
+    POWER_ANALYSIS_PLAN.candidateDesign.totalSharedExecutionArtifacts,
   scenarios: SCENARIO_MATRIX,
   matchedControls: CONTROL_MATRIX,
   primaryOutcomes: [
@@ -50,11 +52,16 @@ const artifact = {
     multiplicity: "Holm correction across primary baseline comparisons",
   },
   interpretationBoundary:
-    "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
+    "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. The former 80-by-20 candidate is superseded; publication claims require a redesigned, independently reviewed method on authorized source units.",
   blockers: [
-    "Independent target sources are locked; adapters and independent construct review remain pending.",
+    "The ten scenario variants per family are labels, not operationally distinct scenario definitions.",
+    "Fixed upstream artifacts do not supply the 20 independent executions per target assumed by the current repetition and power plan.",
+    "Sixty historical fault projection hashes are not currently reconstructed by the gate and are excluded from readiness.",
+    "Sixty pinned control bindings resolve to only 20 unique input references, so independence is not established.",
+    "The gate validates exact source-lock metadata but does not yet derive execution bytes from pinned blobs or reexecute/attest controlled runs.",
+    "Candidate public source units are locked; source-bound evidence and independent construct review remain pending.",
     "Human authorization, data governance, and release boundary approval are pending.",
-    "The preregistered main trial on independent targets has not been executed.",
+    "No main-trial method is frozen or authorized, and no main trial has been executed.",
   ],
 };
 

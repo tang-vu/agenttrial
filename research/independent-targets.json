@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "p26-002-independent-targets-0.1.0",
-  "status": "source-locked-adapter-pending",
+  "schemaVersion": "p26-002-independent-targets-0.2.0",
+  "status": "candidate-source-units-locked-redesign-required",
   "lockedOn": "2026-08-28",
-  "claimUse": "prospective-main-study-inputs",
+  "claimUse": "candidate-corpus-only-not-validated-configurations",
   "activeNetworkTesting": false,
   "sourcePolicy": "Public, offline, simulated or sanitized artifacts only. No third-party service probing and no paid API.",
   "sources": [
@@ -59,11 +59,11 @@
       "tool-parameter-error": 10,
       "evidence-omission": 10
     },
-    "rule": "Exactly ten source units per frozen fault family, selected before adapter outcomes. AgentChaosBench uses the first two source cases in each of five systems; BFCL uses IDs 0 through 9; AgentDojo and tau2 task IDs are listed explicitly.",
+    "rule": "Exactly ten source units were provisionally assigned per fault family before adapter outcomes. AgentChaosBench uses the first two source cases in each of five systems; BFCL uses IDs 0 through 9; AgentDojo and tau2 task IDs are listed explicitly. Family assignment remains subject to construct review and redesign.",
     "matchedControlRequired": true,
-    "repetitionsPerConfiguration": 20
+    "supersededCandidateExecutionsPerSlot": 20
   },
-  "independenceControls": [
+  "sourceLockControls": [
     "Upstream revisions and labels are pinned before adapter implementation.",
     "Ground-truth fields are excluded from every evaluator input.",
     "Adapter authors may map fields but may not change upstream labels after viewing evaluator outputs.",

@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "p26-002-design-0.4.0",
-  "status": "draft-freeze",
-  "designHash": "103570263f2382fea705bf2cb3bc1ffc411cc02c39923781ca497bfc43543a15",
-  "primaryUnit": "unique capability-claim, scenario, and injected-fault configuration",
+  "schemaVersion": "p26-002-design-0.5.0",
+  "status": "redesign-required",
+  "designHash": "305b3a356cd63f8757ca2013141b9ec74f108999e452123ac51c26956e6984fe",
+  "primaryUnit": "Not frozen: the candidate source-unit/scenario-slot mapping requires operational and statistical redesign.",
   "faultFamilies": [
     "unsupported-provenance",
     "prompt-injection",
@@ -83,16 +83,18 @@
   },
   "contributionScope": {
     "version": "p26-002-contribution-0.1.0",
-    "status": "conditional-go",
+    "status": "redesign-required",
     "claimType": "comparative-evaluator-meta-evaluation",
     "primaryQuestion": "Do precommitted, claim-specific evidence contracts with deterministic assertions and portable integrity verification reduce false acceptance of unreliable AI-agent runs relative to final-output, trace-presence, and frozen LLM-judge evaluators, without materially increasing false rejection on matched fault-free controls?",
     "cryptographyRole": "experimental-treatment-and-reproducibility-mechanism",
     "syntheticPilotClaimUse": "pipeline-validation-only"
   },
   "powerAnalysis": {
-    "schemaVersion": "p26-002-power-plan-0.1.0",
-    "claimUse": "prospective-design-only",
+    "schemaVersion": "p26-002-power-plan-0.2.0",
+    "status": "superseded-redesign-required",
+    "claimUse": "historical-sensitivity-analysis-only",
     "sourceBoundary": "Assumptions are sensitivity values, not effects estimated from the synthetic engineering pilot.",
+    "validityBoundary": "The simulation assumes operationally distinct independent configuration clusters and independent executions within them. The current P26-002 source binding does not meet those assumptions, so this artifact cannot select or freeze the main-study design.",
     "faultFamilies": 8,
     "candidateConfigurationCounts": [64, 80, 96],
     "candidateRepetitionsPerConfiguration": [10, 20, 30],
@@ -173,20 +175,20 @@
         }
       ]
     },
-    "selectedDesign": {
-      "uniqueFaultConfigurations": 80,
-      "matchedControlConfigurations": 80,
-      "repetitionsPerConfiguration": 20,
-      "totalRunArtifacts": 3200,
-      "variantsPerFaultFamily": 10
+    "candidateDesign": {
+      "nominalFaultSlots": 80,
+      "matchedControlSlots": 80,
+      "requiredExecutionsPerSlot": 20,
+      "totalSharedExecutionArtifacts": 3200,
+      "nominalVariantsPerFaultFamily": 10
     }
   },
   "independentTargets": {
     "artifact": "research/independent-targets.json",
-    "artifactSha256": "63f21dd0c2a535a3d0789e7c395a555f381e4de5918f2a0923d1d3dbda07bc8e",
-    "status": "source-locked-adapter-pending",
-    "totalConfigurations": 80,
-    "configurationsPerFamily": 10,
+    "artifactSha256": "d2fbad38025b790d057b962d955edd4750baa97fedf7aec887f63d1eb33292ca",
+    "status": "candidate-source-units-locked-redesign-required",
+    "candidateSourceUnits": 80,
+    "provisionalUnitsPerFamily": 10,
     "sources": [
       {
         "id": "agentchaosbench",
@@ -216,11 +218,11 @@
     "activeNetworkTesting": false,
     "groundTruthPolicy": "Use pinned upstream labels and task criteria, exclude them from evaluator inputs, and require independent construct review before the main run."
   },
-  "nearestWorkStatus": "frozen-conditional-go-2026-08-28",
+  "nearestWorkStatus": "frozen-scope-audit-redesign-required-2026-08-29",
   "scenarioCount": 80,
   "matchedControlCount": 80,
-  "repetitionsPerScenario": 20,
-  "plannedRunCountPerEvaluationMode": 3200,
+  "candidateExecutionsPerSlot": 20,
+  "candidateSharedExecutionArtifacts": 3200,
   "scenarios": [
     {
       "id": "cfg-unsupported-provenance-01",
@@ -2239,10 +2241,15 @@
     "resampling": "hierarchical bootstrap over configurations with repeats nested within configuration",
     "multiplicity": "Holm correction across primary baseline comparisons"
   },
-  "interpretationBoundary": "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. Publication claims require the preregistered main trial on independent targets.",
+  "interpretationBoundary": "Synthetic controlled fixtures and the credential-free engineering pilot validate measurement plumbing only. The former 80-by-20 candidate is superseded; publication claims require a redesigned, independently reviewed method on authorized source units.",
   "blockers": [
-    "Independent target sources are locked; adapters and independent construct review remain pending.",
+    "The ten scenario variants per family are labels, not operationally distinct scenario definitions.",
+    "Fixed upstream artifacts do not supply the 20 independent executions per target assumed by the current repetition and power plan.",
+    "Sixty historical fault projection hashes are not currently reconstructed by the gate and are excluded from readiness.",
+    "Sixty pinned control bindings resolve to only 20 unique input references, so independence is not established.",
+    "The gate validates exact source-lock metadata but does not yet derive execution bytes from pinned blobs or reexecute/attest controlled runs.",
+    "Candidate public source units are locked; source-bound evidence and independent construct review remain pending.",
     "Human authorization, data governance, and release boundary approval are pending.",
-    "The preregistered main trial on independent targets has not been executed."
+    "No main-trial method is frozen or authorized, and no main trial has been executed."
   ]
 }

@@ -253,7 +253,7 @@ export const LLM_JUDGE_FREEZE = {
 
 export const CONTRIBUTION_SCOPE = {
   version: "p26-002-contribution-0.1.0",
-  status: "conditional-go",
+  status: "redesign-required",
   claimType: "comparative-evaluator-meta-evaluation",
   primaryQuestion:
     "Do precommitted, claim-specific evidence contracts with deterministic assertions and portable integrity verification reduce false acceptance of unreliable AI-agent runs relative to final-output, trace-presence, and frozen LLM-judge evaluators, without materially increasing false rejection on matched fault-free controls?",
@@ -263,10 +263,10 @@ export const CONTRIBUTION_SCOPE = {
 
 export const INDEPENDENT_TARGET_FREEZE = {
   artifact: "research/independent-targets.json",
-  artifactSha256: "63f21dd0c2a535a3d0789e7c395a555f381e4de5918f2a0923d1d3dbda07bc8e",
-  status: "source-locked-adapter-pending",
-  totalConfigurations: 80,
-  configurationsPerFamily: 10,
+  artifactSha256: "d2fbad38025b790d057b962d955edd4750baa97fedf7aec887f63d1eb33292ca",
+  status: "candidate-source-units-locked-redesign-required",
+  candidateSourceUnits: 80,
+  provisionalUnitsPerFamily: 10,
   sources: [
     {
       id: "agentchaosbench",

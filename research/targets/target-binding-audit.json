@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "p26-002-target-binding-audit-0.1.0",
+  "schemaVersion": "p26-002-target-binding-audit-0.2.0",
   "status": "blocked",
   "scope": "pre-run-binding-and-readiness-audit-not-main-study-evidence",
   "bindings": [
@@ -23,7 +23,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "aac2a4b71486e15a113b029e6b20fd1b203472c97845eb36088d5ace1ed6abce"
         },
         "controlProjection": {
@@ -53,7 +53,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "1d8a56cedc1e6da90524aca623e6385156adda1540ddf35b3c8b544d63db7868"
         },
         "controlProjection": {
@@ -83,7 +83,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "9e295ada4f651d4c64cbcd6116cdd040073c3deba67240b453583a71f86ae783"
         },
         "controlProjection": {
@@ -113,7 +113,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "499651b5d43876fd81df8a05f425a5c7b181b75e61b24df908d14d3d8e6f8776"
         },
         "controlProjection": {
@@ -143,7 +143,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "faa0b061d42cb9b3c3386ba59c5e07ba67091825fad6baeb46ec5b35db5d7236"
         },
         "controlProjection": {
@@ -173,7 +173,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "ccd51dadb12b51965379b2fe96da92b45b2058ea15fae4c3810c09bee5c6f5b2"
         },
         "controlProjection": {
@@ -203,7 +203,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "6a668d3c61645c6cde59433ad8328d117a53f4409953c43b61dad85c18ee4092"
         },
         "controlProjection": {
@@ -233,7 +233,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "8b314145cdc6b198d488e21a99651a9ddd4cd8e7cbadcac7b899b8aaccc4bde7"
         },
         "controlProjection": {
@@ -263,7 +263,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "e80db453b8f5b75a3e7253fcbc82d578b2505c9566145150ee3d9342a7fff613"
         },
         "controlProjection": {
@@ -293,7 +293,7 @@
           "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "dce8c7c71e25a7de2c0dc62378d7bd937b744c2ad15ab4214bb8d6d2130aa833"
         },
         "controlProjection": {
@@ -323,7 +323,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "37c94422ab40b469bed94f262930c6dd309103d9cc8c7d37d6c59f35a8fc7303"
         },
         "controlProjection": {
@@ -353,7 +353,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "4a81f28b3a2f2e778ac5969691cf99e14b3284b58ff656c73b63a3530812e368"
         },
         "controlProjection": {
@@ -383,7 +383,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "703974535e5f24aa667160b3bb10d9062bba0764df77c7df550cc87deadf159d"
         },
         "controlProjection": {
@@ -413,7 +413,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "e5916f4a81bf2045609c31c611ed822c5835f5e7a648f01d1ba44c480121cbe3"
         },
         "controlProjection": {
@@ -443,7 +443,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "8764f0718a6728b8b114148406a4ede3999473c2cdaf34eeda4272c3f4a64d2f"
         },
         "controlProjection": {
@@ -473,7 +473,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "aa6432bda634b5848f4b948ec9a296901d8837565b85b51c6b7b9f58c0a53aca"
         },
         "controlProjection": {
@@ -503,7 +503,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "f99d8272501d20850a0f32680de325579192008a453fbc3a28cd20ce398f0090"
         },
         "controlProjection": {
@@ -533,7 +533,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "a262a169e571e30ffc509291f86592477419c51b3c3087483c8b547183f1937d"
         },
         "controlProjection": {
@@ -563,7 +563,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "4ba07feea46d7d48cc4f0f3c55b63ecf344c67ebf6c057329d37c44e10efb8a1"
         },
         "controlProjection": {
@@ -593,7 +593,7 @@
           "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "23578ec20486d3c75576317a66b8e93719abe86ce4f657870f5d728b4244f750"
         },
         "controlProjection": {
@@ -623,7 +623,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "3565f67510dc371479d1b6097d7b04e71ad840bc32797df37c153facb556515a"
         },
         "controlProjection": {
@@ -653,7 +653,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "897adc6dcb6eebe6c03186800185cae80a28a594c97eb5d63a028829b6a6b16f"
         },
         "controlProjection": {
@@ -683,7 +683,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "ee88cda3faf90f35831e086b4f43cb6d736d0519f328681552647b38240bd014"
         },
         "controlProjection": {
@@ -713,7 +713,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "e4c0f072ff475ba5199b07da94d384daa4129acc3a0fbdbb37a81e7755e95b6a"
         },
         "controlProjection": {
@@ -743,7 +743,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "732c38b6fe9a2f82130fa0007b49acf892b73e06761a11c4f8e7a1a765e4dba2"
         },
         "controlProjection": {
@@ -773,7 +773,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "34ec09734ca91d5ebeea6282ad756e249d4e56a12ada21fadc9f347fe155f64c"
         },
         "controlProjection": {
@@ -803,7 +803,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "bf51690596d7a450a3566525c50d92f49021ef9963c0867ae17c691c250465ec"
         },
         "controlProjection": {
@@ -833,7 +833,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "7e22339e9ce4eff9d6a188d9e803481ecc50ae5d1d6810d056bc3fc8effbdc60"
         },
         "controlProjection": {
@@ -863,7 +863,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "c2204f210c8ce1020fc6e8ce8319651553b78775c0b95d1b6824b5108a7f3c47"
         },
         "controlProjection": {
@@ -893,7 +893,7 @@
           "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "4bb32f3da1a445dce0408db1fa396806a2dd0a9ea58c926b52a3ccbb5a36ae19"
         },
         "controlProjection": {
@@ -923,7 +923,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "d98647c7438bdc50f74b80b0d420dda23d5090b74855a32c7560856086727a0f"
         },
         "controlProjection": {
@@ -953,7 +953,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "9c4f52fdc334a04f8738a17500a956458180b859efb5c780083dedae107db247"
         },
         "controlProjection": {
@@ -983,7 +983,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "f9842963350ca3a120a9a5ae1f02233b000121e39dbf960d223e95d3eced299b"
         },
         "controlProjection": {
@@ -1013,7 +1013,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "884e5267a591bcec2b083bf913353bc8a8d5d236623361ea16abbd861df1e947"
         },
         "controlProjection": {
@@ -1043,7 +1043,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "6498d44fd0fb0c24f02bde23d9bf55562b0778675ba09bfe6ec042753a64265e"
         },
         "controlProjection": {
@@ -1073,7 +1073,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "265f96c4508212556f047f2d780950895ecdd8d215aa7044db7ab2be1c24cea5"
         },
         "controlProjection": {
@@ -1103,7 +1103,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "3501c8a975144a8d8d904046e358a1702df797860b95f5ca393b1f1054c87207"
         },
         "controlProjection": {
@@ -1133,7 +1133,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "2504e1b32fe17bad7e031238ad87badade3053f3624a9fd4dd81c32177ac2f3c"
         },
         "controlProjection": {
@@ -1163,7 +1163,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "3ca6463eeb5110b7aa5751f3794c8212e04c502554683d055985ad46e91098da"
         },
         "controlProjection": {
@@ -1193,7 +1193,7 @@
           "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "7f883907d56197f88aaea24e1214a14a6bf417f55313dd9ce8057387f732ad3b"
         },
         "controlProjection": {
@@ -1223,7 +1223,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "97d8ba46739ec756bbdd1cea9db1cfaa9cc0fe475101576ce486c76f94f2105f"
         },
         "controlProjection": {
@@ -1253,7 +1253,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "f199535f9ab5f2b497658dfe8919bc7b3d006379cb2e46dc5c74ee313b1bfe91"
         },
         "controlProjection": {
@@ -1283,7 +1283,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "9bc2e44b26f22077adf0ea480abf8e2f39dbcad5a2980faabf6ef8f5302a8271"
         },
         "controlProjection": {
@@ -1313,7 +1313,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "639fd0eb92c432afaeabb001d185e93ed1e412d51cf2ed0fea8b23cfa44b17d7"
         },
         "controlProjection": {
@@ -1343,7 +1343,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "a5d672299dfe942e1a0159a4fa41209f1dc53d866d0701a8a75ab84180b58fd9"
         },
         "controlProjection": {
@@ -1373,7 +1373,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "ec6b8a5958420068f732c2b071c69fb67e2e5e0defc61cf5ace4a7532bb1ed10"
         },
         "controlProjection": {
@@ -1403,7 +1403,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "9ef85d67706e465a7eaabf7a051f217173f4fd443a949da3355ab09d9cff31ed"
         },
         "controlProjection": {
@@ -1433,7 +1433,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "4e95ce4c65250affffe29f42393a9655c88afaad2635b76e1d5d9eef99215e17"
         },
         "controlProjection": {
@@ -1463,7 +1463,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "e0f097c8ea298aca718424b70ee362f95637739835d62959e094df726417aacb"
         },
         "controlProjection": {
@@ -1493,7 +1493,7 @@
           "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "06f81b898a96131b482a6cbeb8f27584c49cc3f10ed4ee25cf966ffe922ed9b5"
         },
         "controlProjection": {
@@ -1523,7 +1523,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "d15f15f3c973bc74c91bc1b349542abdde028910a13fad03b77011905bfd8520"
         },
         "controlProjection": {
@@ -1553,7 +1553,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "b716b5fdaf7c2e81322937e562550fca6a7b5e59761c0b04ebbc591702865301"
         },
         "controlProjection": {
@@ -1583,7 +1583,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "e4820a4781551edf19d0e8453e8816b183f2cd21897cebc0a73a6a9aec4b3826"
         },
         "controlProjection": {
@@ -1613,7 +1613,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "1a49cc3bf7842efc1b2a7fde244bfbf77174bf95d40d266eaa14df080cdb6b92"
         },
         "controlProjection": {
@@ -1643,7 +1643,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "1dbc4da83fa35be15a7df6825a2bab76756b339a80826054998d42b2fadf8c74"
         },
         "controlProjection": {
@@ -1673,7 +1673,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "e6d1d43f9419eda728a003124e26735851512efb6c07030954f61bfc2bbcc4e0"
         },
         "controlProjection": {
@@ -1703,7 +1703,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "59c9be0668d01897ec23b581be4e309147c728ffda7aa936bd8d2a5864afaa2a"
         },
         "controlProjection": {
@@ -1733,7 +1733,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "db10ffe130a3a1a70334174d44621b71e6e682b06dee70ec61adc4fd9fd6a1fc"
         },
         "controlProjection": {
@@ -1763,7 +1763,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "44058269c36e85d228ad1a13b5cb850d508735be8073ef2068d9276924136bdc"
         },
         "controlProjection": {
@@ -1793,7 +1793,7 @@
           "reference": "same user task with attack=none"
         },
         "faultProjection": {
-          "state": "ready",
+          "state": "excluded-not-gate-reconstructed",
           "sha256": "d0e9be7a902633919042eed46eed593c382cebb5bc3b08107d744db3ebbfd33b"
         },
         "controlProjection": {
@@ -2407,39 +2407,50 @@
   "summary": {
     "bindings": 80,
     "uniqueTargets": 80,
-    "faultSourceUnitsPinned": 80,
-    "controlSourceUnitsPinned": 60,
+    "faultBindingsWithPinnedInput": 80,
+    "uniqueFaultInputsPinned": 80,
+    "controlBindingsWithPinnedInput": 60,
+    "uniqueControlInputsPinned": 20,
+    "reusedControlBindings": 40,
     "controlConditionsOnly": 20,
-    "faultProjectionsReady": 60,
+    "legacyFaultProjectionHashesExcluded": 60,
+    "faultProjectionsReady": 0,
     "controlProjectionsReady": 0,
     "constructMappingsApproved": 0,
     "constructMappingsPending": 80,
     "constructMappingsRejected": 0
   },
   "blockers": [
-    "Only 60/80 matched-control source units are pinned; 20 remain condition-only.",
-    "Only 60/80 fault projections are ready.",
+    "Only 60/80 matched-control bindings have pinned inputs; 20 remain condition-only.",
+    "Only 20/60 pinned control bindings use unique source inputs; 40 reuse an upstream execution.",
+    "Only 0/80 fault projections are reconstructed by the gate from source-bound evidence; 60 legacy hashes are excluded.",
     "Only 0/80 control projections are ready.",
     "80/80 provisional bindings still require two independent human reviews.",
     "Human G3 gate constructMappingReview is not approved.",
     "Human G3 gate targetAuthorization is not approved.",
     "Human G3 gate dataGovernance is not approved.",
     "Human G3 gate releaseBoundary is not approved.",
-    "Independent human method-freeze approval is not complete."
+    "Independent human method-freeze approval is not complete.",
+    "Method validity: non-operational-variants: 80 nominal scenarios collapse to 8 operational semantic profiles after appended variant labels are removed.",
+    "Method validity: static-target-repeat-mismatch: The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count until gate-side evidence verification is implemented.",
+    "Method validity: reused-matched-control-inputs: 60 locked matched-control bindings resolve to 20 unique references for 80 required controls.",
+    "Method validity: ineligible-legacy-projections: Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes.",
+    "Method validity: unverified-source-execution-derivation: Source-lock metadata and embedded hashes do not prove that claimed task, output, and trace bytes derive from the pinned upstream blob or controlled runner. The gate must fetch/read and adapt exact source bytes, reexecute the pinned runner, or verify a precommitted trusted-runner attestation before readiness evidence can be promoted."
   ],
   "mainTrialAllowed": false,
   "submissionAllowed": false,
   "inputs": {
-    "designHash": "103570263f2382fea705bf2cb3bc1ffc411cc02c39923781ca497bfc43543a15",
-    "mainTrialInputDigest": "b301f6419ebff9f36448b098b70d616dbee458b04966db7d2317ad823e2baa92",
+    "designHash": "305b3a356cd63f8757ca2013141b9ec74f108999e452123ac51c26956e6984fe",
+    "mainTrialInputDigest": "99f85a226aed7f74b144eab72169f83b06cdf831d46a42f7382e1fb1e13091e0",
     "executableMethodFiles": {
+      ".node-version": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc",
       "apps/signer/package.json": "f1b6f7f51f4913edec192cfb8db0b652f1cd43cbcdfea9244197ea4c9d2e6e2e",
       "apps/signer/src/index.ts": "bacf8fe6ebb93163ecddab8a48de0dd478d15139e871fcf36ad7564f6570591e",
       "apps/signer/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
       "apps/worker/package.json": "9a9eddd86ab95b59fc62252b49906b95c0bc710b880152daa0e60b8f719d5b54",
       "apps/worker/src/index.ts": "94a7019d5042a8eff7c35677f6a50256c9d6554a3097a00c45ab872050acf125",
       "apps/worker/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
-      "package.json": "7f171a1cd6a137db17efaebbca9fdd495820438e9fbd733eab57db5347ed1278",
+      "package.json": "e2ef52081a192c6fa4b68ad64a9ce46e11eaf53906d68773f6a0c9004f24801a",
       "packages/adapters/package.json": "7d4bfbce6dfccef36d9c4b9d63a2371c62a58c5b09bd937a738523227aa86e24",
       "packages/adapters/src/index.ts": "5904b21f04728c169249c04d5964453ac1db0208ff884dc84d3c55b14c34270a",
       "packages/adapters/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
@@ -2464,19 +2475,21 @@
       "packages/planner/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
       "packages/research/package.json": "9bbbdb4fd9af061c44399d9d6f59ae89c2f89c0035cbd7a529060306d4c58dbb",
       "packages/research/src/analysis.ts": "b6b33b9aa1cb6381e25269fb4fe9dfd572a1d00ffa72ab6b63ddeba635f5e4a1",
-      "packages/research/src/audit-target-bindings.ts": "9e24ab660d745541e09f21c4bbe8b32d50c50d69b9d8634f7c49f425e7ed71a4",
+      "packages/research/src/audit-target-bindings.ts": "cbb20c4699ff5b2b9af03c5d5f13d3d71c0f679a914ad3e8a96985a7e75ad5e7",
       "packages/research/src/calibrate-judge.ts": "1198de03a54a035db4536a24b912f5419db085620d10b196158c75f04149cf25",
       "packages/research/src/controlled-agents.ts": "a476957922afd932aa254910fcd1c944d7bc9549be5ec7ce7b6a97be3c03729e",
-      "packages/research/src/freeze.ts": "954eb2001bd88e77d152baec6d55df8e2b22ed9e4e9297e3ce3f085180072940",
+      "packages/research/src/design-validity.ts": "5d68ef3035be118128b627016cd9e019f49c0df19ec8e4a02bdccc99b0f3e5ea",
+      "packages/research/src/freeze.ts": "9b331318b55e130e0d674b9eeee21de440a727c9ed03d13d9ee95c9d64b69f37",
       "packages/research/src/gate-main-trial.ts": "ccd28e9cdbf1076b3b568edc46554b01b80200ffd65a6ee0c2b02fabffeda92f",
-      "packages/research/src/index.ts": "7e2157e336cb50d68207129e46596de20b2788ab5398aab0a465983f9fcab653",
+      "packages/research/src/index.ts": "cb96d6ccb544c0a1d34c0a5167a472d1d0feca8c09676d881c61309b4af464a8",
       "packages/research/src/local-judge.ts": "8fb50dc5e98ca0dbbe4a6e883045a94420d7234d4c67bd957b02e2484593f7a0",
       "packages/research/src/pilot.ts": "3c6a78026855dbd157e5a5cdad83c54313d4f5289ac87b5ef91e15bfa58b20e6",
-      "packages/research/src/power.ts": "c1c341448cd1488b010e75704fa1357199a4c03757c985c1b66ac8908414004c",
-      "packages/research/src/projection-audit.ts": "54a4c5c7c3cfbbc52cd88752abffd8157d355e3111509f14469a9639bd286797",
+      "packages/research/src/power.ts": "bb0897a0757a11db0ef0cff424c8f1d6b48d3c815f286bf2b5729a787ac642a9",
+      "packages/research/src/projection-audit.ts": "1dd4ab678c4e433d0906a2a5d9caef728e30dfdda52f4bd28c8e7299e9d493ac",
+      "packages/research/src/source-execution-derivation.ts": "8dea7f2eda86d73c20268a673082a35bb109ff655eade755cd69be334244daae",
       "packages/research/src/tamper.ts": "eef093a5d5fa3c3a625b532519a6099159f21062c8c6ab23c895558d5780280f",
       "packages/research/src/target-adapter.ts": "6b2fbb10fabd8b7ffcbc71e4c517ac4ef59e05c14fa144d1834bc2be46941366",
-      "packages/research/src/target-binding.ts": "27051e5af29a15d72a8405c1fe40e7515ba02f10def250dd656502c14f75bc61",
+      "packages/research/src/target-binding.ts": "285876b2c7b3c8c61bac34886bb365a073062497256ad5e6306d404fa732d939",
       "packages/research/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
       "packages/runtime/package.json": "d0ad761247f876f4859900554d500d282525f96d7eed70231b4f9c823780d7e0",
       "packages/runtime/src/authorizations.ts": "cc770276beb1e402373b9c60958bd95a4423e415275b0acd2a4a9ca7cde0042e",
@@ -2491,19 +2504,21 @@
       "tsconfig.base.json": "a272d2f77a8524fdfead851db5e19821628fa2513c524f84e2e6488bdd1f3aae"
     },
     "nodeRuntime": "v24.19.0",
-    "executableMethodDigest": "c6fd9b638e3f39dde5dafbd28be1083d36370100c8e4190614527e72f298e019",
-    "designFreezeSha256": "a9379be5fbb54e910e18712483ff9d7f0ec7b373c8a5cdd4f31e73e12788f6fe",
-    "independentTargetsSha256": "63f21dd0c2a535a3d0789e7c395a555f381e4de5918f2a0923d1d3dbda07bc8e",
+    "executableMethodDigest": "e3c2b75d9f36652ccc0ac22549ccbebe89b955a515926cf9556e055975ed544d",
+    "designFreezeSha256": "e6b1f92da09a2aacf31e6169d6594b67f8aaba33d2914870b4a1962f2e44bc54",
+    "independentTargetsSha256": "d2fbad38025b790d057b962d955edd4750baa97fedf7aec887f63d1eb33292ca",
     "sourceAvailabilityAuditSha256": "0fa16da0b6b037352b009e579811d81bc10c03bd88512183089af8691b6c9921",
-    "agentchaosProjectionAuditSha256": "281c38d8cde5bf1a4a0bc69de4d716d79a1b4a64d7c413871f943f607fde809c",
-    "agentdojoProjectionAuditSha256": "eb3daec86cf80319bf8c4dc287fd7b03af1e10d9552095cdcf15a4e37fd2bdaa",
-    "remainingProjectionAuditSha256": "a1403ebdaf0d06c689d97e53bb30c548beef7cb241f462efe1d2b11d57f2b544",
+    "agentchaosProjectionAuditSha256": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
+    "agentdojoProjectionAuditSha256": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",
+    "remainingProjectionAuditSha256": "f00ead35e914b63633c94ad95ec1b249af1c2c9538f16323b6d55f48488acfd0",
     "remainingControlSourceAuditSha256": "a35f65d1685266ad6211e5530085554ebf3be564a62b92cefa9412106959c6ac",
+    "repeatExecutionInventorySha256": "7de41ea46186ea96d0dd1a74feb3561ab9cda3580bc0f49abc7ededcd0d14f23",
     "constructReviewPacketSha256": "ccffc86dc49167c086984d8925272667b352af58a2cda5be7cf2b75793dd2929",
+    "designValidityAuditSha256": "6920472fae09861be8b77c126544c2d497560c5e23a12adc5b5e7ab0d8bfe41a",
     "projectionAuditSha256": {
-      "agentchaosbench": "281c38d8cde5bf1a4a0bc69de4d716d79a1b4a64d7c413871f943f607fde809c",
-      "agentdojo": "eb3daec86cf80319bf8c4dc287fd7b03af1e10d9552095cdcf15a4e37fd2bdaa",
-      "remaining": "a1403ebdaf0d06c689d97e53bb30c548beef7cb241f462efe1d2b11d57f2b544",
+      "agentchaosbench": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
+      "agentdojo": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",
+      "remaining": "f00ead35e914b63633c94ad95ec1b249af1c2c9538f16323b6d55f48488acfd0",
       "remainingControls": "a35f65d1685266ad6211e5530085554ebf3be564a62b92cefa9412106959c6ac"
     },
     "governanceRecordSha256": "c475d5795f471256d8ce2c7cb8a4c566ba457356d3ca31f3c0428d1d8a293d43",

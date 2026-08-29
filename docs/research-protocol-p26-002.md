@@ -4,7 +4,7 @@ Protocol version: 0.2
 Created: 2026-08-27  
 Updated: 2026-08-29
 Study ID: P26-002  
-Status: G2 executable design prepared; independent method-freeze sign-off and G3 governance pending
+Status: G2 redesign required; independent method-freeze sign-off and G3 governance pending
 Primary repository: tang-vu/agenttrial
 
 ## Objective
@@ -20,9 +20,9 @@ Cryptographic mechanisms are evaluated as integrity and provenance controls. The
 - H3: Independent verification detects every covered single-artifact tampering operation and localizes the first mismatch.
 - H4: Evidence capture and verification overhead remain bounded and are reported with uncertainty, without claiming a universal production threshold.
 
-## Unit of analysis
+## Candidate unit of analysis
 
-The primary unit is a unique capability-claim, scenario, and injected-fault configuration. Repeated executions measure stochastic reliability and are not counted as independent scenarios.
+The former candidate primary unit was a unique capability-claim, scenario, and injected-fault configuration, with repeated executions nested inside it. That unit is not frozen: the current label-only variants do not create distinct configurations, and fixed upstream artifacts cannot supply stochastic execution repeats. The redesign must precommit either a fixed-corpus source-unit analysis with appropriate dependence handling or a genuine repeated-execution design before power is recomputed.
 
 ## Locked failure families
 
@@ -71,15 +71,17 @@ Prefer a locally runnable open-weight judge for the zero-cost replication path. 
 
 The final sample-size rationale must use expected paired disagreement rates or a simulation-based power analysis. The minimum counts above are floors, not a substitute for that rationale.
 
-The frozen prospective power analysis expands the design to 80 unique fault configurations and 80 matched controls, with 20 nested repetitions per configuration. This yields 3,200 run artifacts. Selection uses conservative multiplicity planning, configuration-level clustering, plausible paired-disagreement sensitivity ranges, and a false-rejection noninferiority margin. The synthetic pilot contributes no effect estimate to this calculation.
+The historical prospective simulation evaluated a candidate with 80 nominal fault slots, 80 matched-control slots, and 20 executions per slot, totaling 3,200 shared execution artifacts across evaluator modes. It cleared its Monte Carlo sensitivity threshold under an assumed 80 independent-cluster model. That threshold result is retained for audit history, but it does not select or freeze the current design because the operational and execution-independence assumptions do not hold. The synthetic pilot contributed no effect estimate to the simulation.
 
-The independent source lock uses 50 AgentChaosBench traces, ten AgentDojo prompt-injection tasks, ten BFCL V4 missing-parameter tasks with matched base entries, and ten tau2-bench scoring-contract omission stress cases. All sources are pinned, public, and MIT or Apache-2.0. Source labels and task criteria remain blinded from evaluator inputs; adapters cannot alter them after results are observed.
+This candidate design is not eligible for method freeze. The current ten scenario variants are labels appended to a shared family-level injection rather than operationally distinct scenarios. In addition, the 50 AgentChaosBench targets and ten AgentDojo targets are fixed upstream executions, so evaluating the same artifact 20 times would measure evaluator stability rather than 20 independent agent executions. Such replay cannot satisfy the current repetition model and would be pseudoreplication. The zero-cost redesign must either treat the pinned source units as a fixed-corpus paired evaluator study and recompute power, or acquire genuinely distinct executions under a precommitted execution protocol.
+
+The public source-unit lock uses 50 AgentChaosBench traces, ten AgentDojo prompt-injection tasks, ten BFCL V4 missing-parameter tasks with matched base entries, and ten tau2-bench scoring-contract omission stress cases. All sources are pinned, public, and MIT or Apache-2.0. Source labels and task criteria remain blinded from evaluator inputs; adapters cannot alter them after results are observed. Pinning a source unit does not establish statistical independence or a valid scenario mapping.
 
 Source-family membership does not by itself justify a source-unit-to-scenario mapping. `research/targets/target-binding-audit.json` binds each source unit to a draft-frozen fault and control slot provisionally by family order only to prepare a reviewable crosswalk. Two independent human reviewers must assess every row, record a rationale, and use a third independent adjudicator only for disagreements. The packet binds the full target, fault, and control semantics rather than projection-readiness state. No provisional binding may enter the main trial or be described as validated evidence.
 
-Before a main run, all 80 fault source units and 80 target-specific matched-control source or execution units must be pinned, all 160 projections must pass source-bound label-blind audits, the construct review packet must be complete, the design artifact must have independent method-freeze sign-off, and every G3 gate in `research/governance/g3-approval.json` must have documented human approval. The gate verifies named decision metadata, current-input digests, and the bytes of each evidence artifact; human identity remains a governance-process responsibility. Audit regeneration never overwrites any human record. `pnpm research:gate-main-trial` fails closed while any condition is unmet.
+Before a main run, all 80 fault source units and 80 target-specific matched-control source or execution units must be pinned, all projections must have gate-reconstructed source-bound label-blind evidence, the construct review packet must be complete, the redesigned method must have independent freeze sign-off, and every G3 gate in `research/governance/g3-approval.json` must have documented human approval. Exact source metadata and self-consistent hashes do not establish source derivation. The gate must read and adapt pinned upstream bytes, reexecute the pinned controlled runner, or verify a precommitted trusted-runner attestation before promoting any readiness evidence. A target-specific binding does not create a new independent control execution: the current 50 AgentChaosBench control bindings reuse ten upstream no-fault traces, five times each. The analysis and power model must use unique execution identity or an explicitly approved clustering amendment. The gate verifies named decision metadata, current-input digests, and the bytes of each evidence artifact; human identity remains a governance-process responsibility. Audit regeneration never overwrites any human record. `pnpm research:gate-main-trial` fails closed while any condition is unmet.
 
-The two-repeat credential-free engineering pilot is excluded from hypothesis testing. Its synthetic fixtures validate only manifest generation, evaluator wiring, analysis functions, and tamper localization. Main-study claims require the locked 20-repeat design on independent authorized targets.
+The two-repeat credential-free engineering pilot is excluded from hypothesis testing. Its synthetic fixtures validate only manifest generation, evaluator wiring, analysis functions, and tamper localization. Main-study claims require a redesigned, independently reviewed method on authorized source units with a valid execution and clustering plan.
 
 ## Outcomes
 

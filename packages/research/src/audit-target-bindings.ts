@@ -5,9 +5,11 @@ import { fileURLToPath } from "node:url";
 import {
   CONTROL_MATRIX,
   INDEPENDENT_TARGET_FREEZE,
+  POWER_ANALYSIS_PLAN,
   SCENARIO_MATRIX,
   researchDesignHash,
 } from "./index";
+import { buildDesignValidityAudit, type RepeatExecutionInventory } from "./design-validity";
 import {
   evaluatorProjectionHash,
   findForbiddenProjectionKeys,
@@ -15,7 +17,9 @@ import {
   redactGroundTruth,
   type JsonValue,
 } from "./target-adapter";
+import { requireGateObservedSourceExecutionDerivation } from "./source-execution-derivation";
 import {
+  excludeReplacedLegacyProjectionHashes,
   validateAgentChaosProjectionAudit,
   validateAgentDojoProjectionAudit,
   validateRemainingControlSourceAudit,
@@ -69,7 +73,13 @@ async function executableMethodFileHashes() {
     }
   }
   await Promise.all([walk("packages"), walk("apps/signer"), walk("apps/worker")]);
-  files.push("package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "tsconfig.base.json");
+  files.push(
+    ".node-version",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "tsconfig.base.json",
+  );
   files.sort();
   const entries = await Promise.all(
     files.map(async (path) => {
@@ -126,6 +136,29 @@ interface ReadinessEvidenceArtifact {
   submissionAllowed: boolean;
 }
 
+interface LockedSourceProvenance {
+  repository: string;
+  revision: string;
+  unitKind: "upstream-fixed-execution" | "benchmark-task";
+  unitId: string;
+  blobShas: string[];
+}
+
+interface ExecutionProvenance {
+  kind: "fixed-upstream" | "controlled-run";
+  runnerMethodDigest: string;
+  fixedRunIdentity: string | null;
+  runId: string | null;
+  seed: number | null;
+}
+
+const SOURCE_REPOSITORIES: Record<IndependentTargetEntry["source"], string> = {
+  agentchaosbench: "kevinzck8k/agentic-fault-diagnosis",
+  agentdojo: "ethz-spylab/agentdojo",
+  "bfcl-v4": "ShishirPatil/gorilla",
+  "tau2-bench": "sierra-research/tau2-bench",
+};
+
 function isJsonObject(value: unknown): value is Record<string, JsonValue> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -144,6 +177,155 @@ function blockedValuesForTarget(target: IndependentTargetEntry) {
   return [target.family];
 }
 
+function exactlyOneSourceRecord<T extends { targetId: string }>(
+  records: T[],
+  targetId: string,
+  description: string,
+) {
+  const matches = records.filter((record) => record.targetId === targetId);
+  if (matches.length !== 1)
+    throw new Error(`Expected one ${description} for ${targetId}, found ${matches.length}`);
+  return matches[0]!;
+}
+
+function expectedLockedSourceProvenance(
+  target: IndependentTargetEntry,
+  condition: "fault" | "control",
+  availability: SourceAvailabilityAudit,
+): LockedSourceProvenance {
+  const repository = SOURCE_REPOSITORIES[target.source];
+
+  if (target.source === "agentchaosbench") {
+    const source = availability.sources.agentchaosbench;
+    const record = exactlyOneSourceRecord(
+      source.manifest,
+      target.targetId,
+      "AgentChaosBench source record",
+    );
+    if (
+      record.repositoryPath !== target.repositoryPath ||
+      record.controlPath !== target.controlPath
+    )
+      throw new Error(`AgentChaosBench source lock drift for ${target.targetId}`);
+    return {
+      repository,
+      revision: source.revision,
+      unitKind: "upstream-fixed-execution",
+      unitId: condition === "fault" ? record.repositoryPath : record.controlPath,
+      blobShas: [condition === "fault" ? record.blobSha : record.controlBlobSha],
+    };
+  }
+
+  if (target.source === "agentdojo") {
+    if (condition === "control")
+      throw new Error(`AgentDojo control source provenance is not pinned for ${target.targetId}`);
+    const source = availability.sources.agentdojo;
+    const record = exactlyOneSourceRecord(
+      source.manifest,
+      target.targetId,
+      "AgentDojo source record",
+    );
+    const expectedPath = `runs/command-r-plus/${target.suite}/${target.userTask}/important_instructions/${target.injectionTask}.json`;
+    if (record.path !== expectedPath)
+      throw new Error(`AgentDojo source lock drift for ${target.targetId}`);
+    return {
+      repository,
+      revision: source.revision,
+      unitKind: "upstream-fixed-execution",
+      unitId: record.path,
+      blobShas: [record.blobSha],
+    };
+  }
+
+  if (target.source === "bfcl-v4") {
+    const source = availability.sources["bfcl-v4"];
+    const record = exactlyOneSourceRecord(source.ids, target.targetId, "BFCL source record");
+    if (record.faultId !== target.faultId || record.controlId !== target.controlId)
+      throw new Error(`BFCL source lock drift for ${target.targetId}`);
+    return {
+      repository,
+      revision: source.revision,
+      unitKind: "benchmark-task",
+      unitId: condition === "fault" ? target.faultId : target.controlId,
+      blobShas:
+        condition === "fault"
+          ? [target.questionBlobSha, target.answerBlobSha]
+          : [target.controlQuestionBlobSha, target.controlAnswerBlobSha],
+    };
+  }
+
+  if (condition === "control")
+    throw new Error(`tau2 control source provenance is not pinned for ${target.targetId}`);
+  const source = availability.sources["tau2-bench"];
+  const record = exactlyOneSourceRecord(source.ids, target.targetId, "tau2 source record");
+  if (record.domain !== target.domain || record.taskId !== target.taskId)
+    throw new Error(`tau2 source lock drift for ${target.targetId}`);
+  return {
+    repository,
+    revision: source.revision,
+    unitKind: "benchmark-task",
+    unitId: `${target.domain}/tasks.json#${target.taskId}`,
+    blobShas: [target.taskBlobSha],
+  };
+}
+
+function fixedRunIdentity(source: LockedSourceProvenance) {
+  return `${source.repository}@${source.revision}:${source.unitId}@${source.blobShas.join("+")}`;
+}
+
+function validateExecutionProvenance(
+  value: JsonValue | undefined,
+  source: LockedSourceProvenance,
+  targetId: string,
+  expectedRunnerMethodDigest: string,
+): ExecutionProvenance {
+  if (
+    !isJsonObject(value) ||
+    JSON.stringify(Object.keys(value).sort()) !==
+      JSON.stringify(["fixedRunIdentity", "kind", "runId", "runnerMethodDigest", "seed"]) ||
+    !/^[0-9a-f]{64}$/.test(String(value.runnerMethodDigest)) ||
+    value.runnerMethodDigest !== expectedRunnerMethodDigest
+  )
+    throw new Error(`Execution provenance does not match the gated method for ${targetId}`);
+
+  if (source.unitKind === "upstream-fixed-execution") {
+    if (
+      value.kind !== "fixed-upstream" ||
+      value.fixedRunIdentity !== fixedRunIdentity(source) ||
+      value.runId !== null ||
+      value.seed !== null
+    )
+      throw new Error(`Fixed-run identity does not match the source lock for ${targetId}`);
+  } else if (
+    value.kind !== "controlled-run" ||
+    value.fixedRunIdentity !== null ||
+    typeof value.runId !== "string" ||
+    value.runId.trim() === "" ||
+    !Number.isSafeInteger(value.seed) ||
+    (value.seed as number) < 0
+  ) {
+    throw new Error(`Controlled-run identity is invalid for ${targetId}`);
+  }
+
+  return {
+    kind: value.kind,
+    runnerMethodDigest: value.runnerMethodDigest as string,
+    fixedRunIdentity: value.fixedRunIdentity as string | null,
+    runId: value.runId as string | null,
+    seed: value.seed as number | null,
+  };
+}
+
+function canonicalExecutionReference(
+  sourceProvenance: LockedSourceProvenance,
+  executionProvenance: ExecutionProvenance,
+) {
+  const digest = sha256(
+    Buffer.from(JSON.stringify({ sourceProvenance, executionProvenance }), "utf8"),
+  );
+  return `p26-002-execution:${digest}`;
+}
+
 function parseSourceExecution(
   record: {
     targetId: string;
@@ -154,6 +336,8 @@ function parseSourceExecution(
   },
   target: IndependentTargetEntry,
   condition: "fault" | "control",
+  availability: SourceAvailabilityAudit,
+  expectedRunnerMethodDigest: string,
 ) {
   const execution = JSON.parse(record.sourceExecutionJson) as JsonValue;
   if (!isJsonObject(execution))
@@ -165,21 +349,24 @@ function parseSourceExecution(
     "rawTrace",
     "schemaVersion",
     "source",
+    "sourceProvenance",
     "sourceReference",
     "targetId",
     "task",
+    "executionProvenance",
   ].sort();
   const rawTrace = execution.rawTrace;
   const nonemptyTrace =
     (Array.isArray(rawTrace) && rawTrace.length > 0) ||
     (isJsonObject(rawTrace) && Object.keys(rawTrace).length > 0);
+  const sourceProvenance = expectedLockedSourceProvenance(target, condition, availability);
   if (
     JSON.stringify(Object.keys(execution).sort()) !== JSON.stringify(expectedKeys) ||
-    execution.schemaVersion !== "p26-002-candidate-execution-0.1.0" ||
+    execution.schemaVersion !== "p26-002-candidate-execution-0.2.0" ||
     execution.targetId !== record.targetId ||
     execution.source !== target.source ||
     execution.condition !== condition ||
-    execution.sourceReference !== record.sourceExecutionReference ||
+    JSON.stringify(execution.sourceProvenance) !== JSON.stringify(sourceProvenance) ||
     (condition === "control"
       ? execution.controlConfigurationId !== record.controlConfigurationId
       : "controlConfigurationId" in execution) ||
@@ -191,6 +378,18 @@ function parseSourceExecution(
     findForbiddenProjectionKeys(execution).length !== 0
   )
     throw new Error(`Source execution payload is invalid for ${record.targetId}`);
+  const executionProvenance = validateExecutionProvenance(
+    execution.executionProvenance,
+    sourceProvenance,
+    record.targetId,
+    expectedRunnerMethodDigest,
+  );
+  const expectedReference = canonicalExecutionReference(sourceProvenance, executionProvenance);
+  if (
+    execution.sourceReference !== expectedReference ||
+    record.sourceExecutionReference !== expectedReference
+  )
+    throw new Error(`Source execution reference does not match provenance for ${record.targetId}`);
   const canonicalExecution = {
     schemaVersion: execution.schemaVersion,
     targetId: execution.targetId,
@@ -199,6 +398,8 @@ function parseSourceExecution(
     ...(condition === "control"
       ? { controlConfigurationId: execution.controlConfigurationId }
       : {}),
+    sourceProvenance,
+    executionProvenance,
     sourceReference: execution.sourceReference,
     task: execution.task,
     finalOutput: execution.finalOutput,
@@ -227,9 +428,17 @@ export function parseEvidenceProjection(
   target: IndependentTargetEntry | undefined,
   evidenceArtifactSha256: string,
   condition: "fault" | "control",
+  availability: SourceAvailabilityAudit,
+  expectedRunnerMethodDigest: string,
 ) {
   if (!target) throw new Error(`Unknown target in projection evidence: ${record.targetId}`);
-  const execution = parseSourceExecution(record, target, condition);
+  const execution = parseSourceExecution(
+    record,
+    target,
+    condition,
+    availability,
+    expectedRunnerMethodDigest,
+  );
   const projection = JSON.parse(record.projectionJson) as JsonValue;
   const expectedKeys = [
     "finalOutput",
@@ -322,11 +531,14 @@ async function verifyRemainingEvidenceContents(
   projectionAudit: RemainingProjectionAudit,
   controlSourceAudit: RemainingControlSourceAudit,
   targets: IndependentTargetEntry[],
+  availability: SourceAvailabilityAudit,
+  expectedRunnerMethodDigest: string,
 ) {
   const declaredArtifacts = [
     ...projectionAudit.evidenceArtifacts,
     ...controlSourceAudit.evidenceArtifacts,
   ];
+  requireGateObservedSourceExecutionDerivation(declaredArtifacts.length);
   const evidenceByHash = new Map<string, ReadinessEvidenceArtifact>();
   for (const evidence of declaredArtifacts) {
     if (evidenceByHash.has(evidence.sha256)) continue;
@@ -340,7 +552,14 @@ async function verifyRemainingEvidenceContents(
     evidenceByHash
       .get(evidence.sha256)!
       .faultProjections.map((record) =>
-        parseEvidenceProjection(record, targetById.get(record.targetId), evidence.sha256, "fault"),
+        parseEvidenceProjection(
+          record,
+          targetById.get(record.targetId),
+          evidence.sha256,
+          "fault",
+          availability,
+          expectedRunnerMethodDigest,
+        ),
       ),
   );
   const verifiedControls = projectionAudit.evidenceArtifacts.flatMap((evidence) =>
@@ -352,6 +571,8 @@ async function verifyRemainingEvidenceContents(
         targetById.get(record.targetId),
         evidence.sha256,
         "control",
+        availability,
+        expectedRunnerMethodDigest,
       );
     }),
   );
@@ -374,6 +595,8 @@ async function verifyRemainingEvidenceContents(
         },
         target,
         "control",
+        availability,
+        expectedRunnerMethodDigest,
       );
       return {
         targetId: record.targetId,
@@ -447,6 +670,7 @@ export async function generateTargetBindingAudit() {
     governance,
     methodFreeze,
     designFreeze,
+    repeatExecutionInventory,
   ] = await Promise.all([
     readJson<{ entries: IndependentTargetEntry[] }>("research/independent-targets.json"),
     readJson<SourceAvailabilityAudit>("research/targets/source-availability-audit.json"),
@@ -458,14 +682,15 @@ export async function generateTargetBindingAudit() {
     readJson<G3Governance>("research/governance/g3-approval.json"),
     readJson<MethodFreezeApproval>("research/governance/method-freeze-approval.json"),
     readJson<{ status: string; designHash: string }>("research/design-freeze.json"),
+    readJson<RepeatExecutionInventory>("research/targets/repeat-execution-inventory.json"),
   ]);
 
-  const agentChaosProjections = validateAgentChaosProjectionAudit(
+  const excludedAgentChaosProjectionHashes = validateAgentChaosProjectionAudit(
     agentChaos.value,
     availability.value,
     targets.value.entries,
   );
-  const agentDojoProjections = validateAgentDojoProjectionAudit(
+  const excludedAgentDojoProjectionHashes = validateAgentDojoProjectionAudit(
     agentDojo.value,
     availability.value,
     targets.value.entries,
@@ -478,16 +703,57 @@ export async function generateTargetBindingAudit() {
     remainingControls.value,
     targets.value.entries,
   );
-  await verifyRemainingEvidenceContents(
-    remaining.value,
-    remainingControls.value,
-    targets.value.entries,
-  );
-
   const methodFileHashes = await executableMethodFileHashes();
   const executableMethodDigest = createHash("sha256")
     .update(JSON.stringify(methodFileHashes))
     .digest("hex");
+  await verifyRemainingEvidenceContents(
+    remaining.value,
+    remainingControls.value,
+    targets.value.entries,
+    availability.value,
+    executableMethodDigest,
+  );
+
+  const historicalLegacyFaultProjectionHashes = [
+    ...excludedAgentChaosProjectionHashes,
+    ...excludedAgentDojoProjectionHashes,
+  ];
+  const excludedLegacyFaultProjections = excludeReplacedLegacyProjectionHashes(
+    historicalLegacyFaultProjectionHashes,
+    remainingProjections.faultProjections,
+  );
+  const designValidity = buildDesignValidityAudit({
+    scenarios: SCENARIO_MATRIX,
+    sourceAvailability: availability.value,
+    projectionCounts: {
+      fault: {
+        observed:
+          excludedLegacyFaultProjections.length + remainingProjections.faultProjections.length,
+        mainTrialEligible: remainingProjections.faultProjections.length,
+        legacy: excludedLegacyFaultProjections.length,
+        excludedLegacy: excludedLegacyFaultProjections.length,
+        gateReconstructedLegacy: 0,
+      },
+      control: {
+        observed: remainingProjections.controlProjections.length,
+        mainTrialEligible: remainingProjections.controlProjections.length,
+        legacy: 0,
+        excludedLegacy: 0,
+        gateReconstructedLegacy: 0,
+      },
+    },
+    repetitionPlan: {
+      repetitionsPerScenario: POWER_ANALYSIS_PLAN.candidateDesign.requiredExecutionsPerSlot,
+      matchedControlCount: POWER_ANALYSIS_PLAN.candidateDesign.matchedControlSlots,
+      totalSharedExecutionArtifacts:
+        POWER_ANALYSIS_PLAN.candidateDesign.totalSharedExecutionArtifacts,
+    },
+    repeatExecutionInventory: repeatExecutionInventory.value,
+  });
+  const designValidityBytes = Buffer.from(`${JSON.stringify(designValidity, null, 2)}\n`, "utf8");
+  await writeAtomic("research/design-validity-audit.json", designValidityBytes.toString("utf8"));
+
   const mainTrialInputHashes = {
     nodeRuntime: process.version,
     executableMethodDigest,
@@ -498,7 +764,9 @@ export async function generateTargetBindingAudit() {
     agentdojoProjectionAuditSha256: sha256(agentDojo.bytes),
     remainingProjectionAuditSha256: sha256(remaining.bytes),
     remainingControlSourceAuditSha256: sha256(remainingControls.bytes),
+    repeatExecutionInventorySha256: sha256(repeatExecutionInventory.bytes),
     constructReviewPacketSha256: sha256(constructReview.bytes),
+    designValidityAuditSha256: sha256(designValidityBytes),
   };
   if (mainTrialInputHashes.independentTargetsSha256 !== INDEPENDENT_TARGET_FREEZE.artifactSha256)
     throw new Error("Independent target artifact does not match the executable source freeze");
@@ -512,13 +780,11 @@ export async function generateTargetBindingAudit() {
     controlConfigurations: CONTROL_MATRIX,
     targets: targets.value.entries,
     availability: availability.value,
-    faultProjections: [
-      ...agentChaosProjections,
-      ...agentDojoProjections,
-      ...remainingProjections.faultProjections,
-    ],
+    faultProjections: remainingProjections.faultProjections,
+    excludedLegacyFaultProjections,
     controlProjections: remainingProjections.controlProjections,
     controlSources: remainingControlSources.controls,
+    designValidity,
     constructReview: constructReview.value,
     governance: governance.value,
     methodFreeze: methodFreeze.value,
@@ -526,8 +792,10 @@ export async function generateTargetBindingAudit() {
 
   if (designFreeze.value.designHash !== researchDesignHash())
     throw new Error("Design freeze artifact does not match the executable research design");
-  if (designFreeze.value.status !== "draft-freeze")
-    throw new Error("Executable design artifact must remain draft-freeze until human sign-off");
+  if (designFreeze.value.status !== "redesign-required")
+    throw new Error(
+      "Executable design artifact must remain redesign-required until human sign-off",
+    );
 
   const artifact = {
     ...audit,

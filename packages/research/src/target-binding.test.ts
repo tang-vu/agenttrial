@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CONTROL_MATRIX, SCENARIO_MATRIX } from "./index";
+import type { DesignValidityAudit } from "./design-validity";
 import {
   buildTargetBindingAudit,
   type ConstructReviewPacket,
@@ -36,6 +37,9 @@ const governance = readJson<G3Governance>("../../../research/governance/g3-appro
 const methodFreeze = readJson<MethodFreezeApproval>(
   "../../../research/governance/method-freeze-approval.json",
 );
+const designValidity = readJson<DesignValidityAudit>(
+  "../../../research/design-validity-audit.json",
+);
 const committedAuditPath = new URL(
   "../../../research/targets/target-binding-audit.json",
   import.meta.url,
@@ -51,8 +55,10 @@ function buildAudit() {
     controlConfigurations: CONTROL_MATRIX,
     targets: targetFreeze.entries,
     availability,
-    faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+    faultProjections: [],
+    excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
     controlProjections: [],
+    designValidity,
     constructReview,
     governance,
     methodFreeze,
@@ -80,10 +86,14 @@ describe("independent-target binding and G3 gate", () => {
     expect(audit.summary).toEqual({
       bindings: 80,
       uniqueTargets: 80,
-      faultSourceUnitsPinned: 80,
-      controlSourceUnitsPinned: 60,
+      faultBindingsWithPinnedInput: 80,
+      uniqueFaultInputsPinned: 80,
+      controlBindingsWithPinnedInput: 60,
+      uniqueControlInputsPinned: 20,
+      reusedControlBindings: 40,
       controlConditionsOnly: 20,
-      faultProjectionsReady: 60,
+      legacyFaultProjectionHashesExcluded: 60,
+      faultProjectionsReady: 0,
       controlProjectionsReady: 0,
       constructMappingsApproved: 0,
       constructMappingsPending: 80,
@@ -96,9 +106,44 @@ describe("independent-target binding and G3 gate", () => {
     ).toEqual(
       Array.from({ length: 20 }, (_, index) => `ext-${String(index + 61).padStart(3, "0")}`),
     );
+    expect(
+      audit.bindings
+        .filter(
+          (item) => item.sourceEvidence.faultProjection.state === "excluded-not-gate-reconstructed",
+        )
+        .map((item) => item.targetId),
+    ).toEqual(
+      Array.from({ length: 60 }, (_, index) => `ext-${String(index + 1).padStart(3, "0")}`),
+    );
     expect(audit.status).toBe("blocked");
     expect(audit.mainTrialAllowed).toBe(false);
     expect(audit.submissionAllowed).toBe(false);
+  });
+
+  it("cannot omit or empty the design-validity gate", () => {
+    const input = {
+      faultConfigurations: SCENARIO_MATRIX,
+      controlConfigurations: CONTROL_MATRIX,
+      targets: targetFreeze.entries,
+      availability,
+      faultProjections: [],
+      excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
+      controlProjections: [],
+      designValidity,
+      constructReview,
+      governance,
+      methodFreeze,
+    };
+    delete (input as { designValidity?: DesignValidityAudit }).designValidity;
+    expect(() =>
+      buildTargetBindingAudit(input as Parameters<typeof buildTargetBindingAudit>[0]),
+    ).toThrow(/design-validity audit is required/);
+
+    const inconsistent = structuredClone(designValidity);
+    inconsistent.blockers = [];
+    expect(() => buildTargetBindingAudit({ ...input, designValidity: inconsistent })).toThrow(
+      /design-validity audit is inconsistent or incomplete/,
+    );
   });
 
   it("keeps every G3 approval human-only and unset", () => {
@@ -135,8 +180,15 @@ describe("independent-target binding and G3 gate", () => {
     };
     expect(committed.bindings).toEqual(generated.bindings);
     expect(committed.summary).toEqual(generated.summary);
-    expect(committed.blockers.slice(0, generated.blockers.length)).toEqual(generated.blockers);
-    expect(committed.blockers.at(-1)).toMatch(/method-freeze/);
+    expect(committed.blockers).toEqual(generated.blockers);
+    expect(
+      committed.blockers
+        .filter((blocker) => blocker.startsWith("Method validity:"))
+        .every((blocker) => blocker.startsWith("Method validity:")),
+    ).toBe(true);
+    expect(
+      committed.blockers.filter((blocker) => blocker.startsWith("Method validity:")),
+    ).toHaveLength(5);
     expect(committed.mainTrialAllowed).toBe(false);
     expect(packet.rows).toHaveLength(80);
     expect(
@@ -168,8 +220,10 @@ describe("independent-target binding and G3 gate", () => {
         controlConfigurations: CONTROL_MATRIX,
         targets: targetFreeze.entries.slice(1),
         availability,
-        faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+        faultProjections: [],
+        excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
         controlProjections: [],
+        designValidity,
         constructReview,
         governance,
         methodFreeze,
@@ -184,12 +238,9 @@ describe("independent-target binding and G3 gate", () => {
         controlConfigurations: CONTROL_MATRIX,
         targets: targetFreeze.entries,
         availability,
-        faultProjections: [
-          ...agentChaos.projections,
-          ...agentDojo.projections,
-          { targetId: "ext-999", projectionHash: "a".repeat(64) },
-        ],
+        faultProjections: [{ targetId: "ext-999", projectionHash: "a".repeat(64) }],
         controlProjections: [],
+        designValidity,
         constructReview,
         governance,
         methodFreeze,
@@ -206,8 +257,10 @@ describe("independent-target binding and G3 gate", () => {
         controlConfigurations: CONTROL_MATRIX,
         targets: targetFreeze.entries,
         availability,
-        faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+        faultProjections: [],
+        excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
         controlProjections: [],
+        designValidity,
         constructReview,
         governance: invalidGovernance,
         methodFreeze,
@@ -224,8 +277,10 @@ describe("independent-target binding and G3 gate", () => {
         controlConfigurations: CONTROL_MATRIX,
         targets: targetFreeze.entries,
         availability,
-        faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+        faultProjections: [],
+        excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
         controlProjections: [],
+        designValidity,
         constructReview,
         governance: invalidGovernance,
         methodFreeze,
@@ -242,8 +297,10 @@ describe("independent-target binding and G3 gate", () => {
         controlConfigurations: CONTROL_MATRIX,
         targets: targetFreeze.entries,
         availability,
-        faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+        faultProjections: [],
+        excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
         controlProjections: [],
+        designValidity,
         constructReview,
         governance,
         methodFreeze,
@@ -271,8 +328,10 @@ describe("independent-target binding and G3 gate", () => {
       controlConfigurations: CONTROL_MATRIX,
       targets: targetFreeze.entries,
       availability,
-      faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+      faultProjections: [],
+      excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
       controlProjections: [],
+      designValidity,
       constructReview: approvedReview,
       governance,
       methodFreeze,
@@ -300,8 +359,10 @@ describe("independent-target binding and G3 gate", () => {
         controlConfigurations: CONTROL_MATRIX,
         targets: targetFreeze.entries,
         availability,
-        faultProjections: [...agentChaos.projections, ...agentDojo.projections],
+        faultProjections: [],
+        excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
         controlProjections: [],
+        designValidity,
         constructReview: invalidReview,
         governance,
         methodFreeze,
