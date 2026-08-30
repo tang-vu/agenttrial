@@ -145,7 +145,7 @@ describe("P26-002 design validity audit", () => {
       passed: false,
       capabilityStatus: "not-implemented",
       fixedUpstreamVerification: "metadata-only-source-bytes-not-read-by-gate",
-      controlledRunVerification: "metadata-only-runner-not-reexecuted-or-attested",
+      controlledRunVerification: "contract-and-metadata-only-runner-not-reexecuted-or-attested",
       readinessEvidenceAllowed: false,
     });
     expect(audit.designValidityPassed).toBe(false);

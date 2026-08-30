@@ -27,6 +27,7 @@ export interface AgentChaosTargetEntry extends BaseTargetEntry {
 export interface AgentDojoTargetEntry extends BaseTargetEntry {
   source: "agentdojo";
   suite: string;
+  benchmarkVersion: "v1.2.2";
   userTask: string;
   injectionTask: string;
   controlCondition: string;
@@ -44,9 +45,12 @@ export interface BfclTargetEntry extends BaseTargetEntry {
 
 export interface Tau2TargetEntry extends BaseTargetEntry {
   source: "tau2-bench";
-  domain: string;
+  domain: "airline" | "retail";
   taskId: string;
   taskBlobSha: string;
+  nlAssertions: string[] | null;
+  rewardBasis: string[];
+  auditIssue: "https://github.com/sierra-research/tau2-bench/issues/384";
   controlCondition: string;
 }
 
@@ -99,6 +103,7 @@ export interface ControlProjectionRecord extends ProjectionRecord {
 export interface ControlSourceRecord {
   targetId: string;
   controlConfigurationId: string;
+  controlExecutionContractSha256: string;
   reference: string;
   artifactSha256: string;
 }
@@ -190,7 +195,7 @@ export interface TargetBinding {
 }
 
 export interface TargetBindingAudit {
-  schemaVersion: "p26-002-target-binding-audit-0.2.0";
+  schemaVersion: "p26-002-target-binding-audit-0.3.0";
   status: "blocked" | "ready";
   scope: "pre-run-binding-and-readiness-audit-not-main-study-evidence";
   bindings: TargetBinding[];
@@ -678,7 +683,11 @@ export function buildTargetBindingAudit(input: {
       fail(`target ${record.targetId} does not require supplemental control source evidence`);
     if (!controlIds.has(record.controlConfigurationId))
       fail(`unexpected supplemental control configuration ID ${record.controlConfigurationId}`);
-    if (record.reference.trim() === "" || !/^[0-9a-f]{64}$/.test(record.artifactSha256))
+    if (
+      record.reference.trim() === "" ||
+      !/^[0-9a-f]{64}$/.test(record.artifactSha256) ||
+      !/^[0-9a-f]{64}$/.test(record.controlExecutionContractSha256)
+    )
       fail(`supplemental control source evidence is invalid for ${record.targetId}`);
   }
 
@@ -855,7 +864,7 @@ export function buildTargetBindingAudit(input: {
 
   const mainTrialAllowed = blockers.length === 0;
   return {
-    schemaVersion: "p26-002-target-binding-audit-0.2.0",
+    schemaVersion: "p26-002-target-binding-audit-0.3.0",
     status: mainTrialAllowed ? "ready" : "blocked",
     scope: "pre-run-binding-and-readiness-audit-not-main-study-evidence",
     bindings,

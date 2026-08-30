@@ -2,7 +2,7 @@ export const SOURCE_EXECUTION_DERIVATION_CAPABILITY = {
   schemaVersion: "p26-002-source-execution-derivation-capability-0.1.0",
   status: "not-implemented",
   fixedUpstreamVerification: "metadata-only-source-bytes-not-read-by-gate",
-  controlledRunVerification: "metadata-only-runner-not-reexecuted-or-attested",
+  controlledRunVerification: "contract-and-metadata-only-runner-not-reexecuted-or-attested",
   readinessEvidenceAllowed: false,
 } as const;
 

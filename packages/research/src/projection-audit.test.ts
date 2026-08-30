@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { buildControlExecutionContractArtifact } from "./control-execution-contracts";
+import { CONTROL_MATRIX } from "./index";
 import {
   excludeReplacedLegacyProjectionHashes,
   validateAgentChaosProjectionAudit,
@@ -35,6 +37,11 @@ const remaining = readJson<RemainingProjectionAudit>(
 const remainingControls = readJson<RemainingControlSourceAudit>(
   "../../../research/targets/remaining-control-source-audit.json",
 );
+const controlExecutionContracts = buildControlExecutionContractArtifact({
+  targets,
+  controls: CONTROL_MATRIX,
+  availability,
+});
 
 function completeRemainingProjectionAudit(): RemainingProjectionAudit {
   const evidenceArtifactSha256 = "f".repeat(64);
@@ -160,9 +167,42 @@ describe("projection audit provenance gates", () => {
   });
 
   it("keeps future AgentDojo and tau2 control executions fail-closed while pending", () => {
-    expect(validateRemainingControlSourceAudit(remainingControls, targets)).toEqual({
+    expect(
+      validateRemainingControlSourceAudit(remainingControls, targets, controlExecutionContracts),
+    ).toEqual({
       controls: [],
       evidenceArtifacts: [],
     });
+  });
+
+  it("requires every future control source to bind the predeclared contract digest", () => {
+    const evidenceArtifactSha256 = "e".repeat(64);
+    const complete: RemainingControlSourceAudit = {
+      ...structuredClone(remainingControls),
+      status: "passed",
+      verified: 20,
+      controls: controlExecutionContracts.contracts.map((contract, index) => ({
+        targetId: contract.targetId,
+        controlConfigurationId: contract.controlConfigurationId,
+        controlExecutionContractSha256: contract.contractSha256,
+        reference: `p26-002-execution:${(index + 1).toString(16).padStart(64, "0")}`,
+        artifactSha256: (index + 101).toString(16).padStart(64, "0"),
+        evidenceArtifactSha256,
+      })),
+      evidenceArtifacts: [
+        {
+          path: "research/targets/evidence/complete-control-sources.json",
+          sha256: evidenceArtifactSha256,
+        },
+      ],
+    };
+    expect(
+      validateRemainingControlSourceAudit(complete, targets, controlExecutionContracts).controls,
+    ).toHaveLength(20);
+
+    complete.controls[0]!.controlExecutionContractSha256 = "0".repeat(64);
+    expect(() =>
+      validateRemainingControlSourceAudit(complete, targets, controlExecutionContracts),
+    ).toThrow(/invalid evidence/);
   });
 });

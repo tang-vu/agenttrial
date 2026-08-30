@@ -11,6 +11,12 @@ import {
 } from "./index";
 import { buildDesignValidityAudit, type RepeatExecutionInventory } from "./design-validity";
 import {
+  buildControlExecutionContractArtifact,
+  controlExecutionContractForTarget,
+  validateControlExecutionContractArtifact,
+  type ControlExecutionContractArtifact,
+} from "./control-execution-contracts";
+import {
   evaluatorProjectionHash,
   findForbiddenProjectionKeys,
   findLockedProjectionValues,
@@ -120,6 +126,7 @@ interface EvidenceProjectionRecord {
 interface EvidenceControlSourceRecord {
   targetId: string;
   controlConfigurationId: string;
+  controlExecutionContractSha256: string;
   reference: string;
   artifactSha256: string;
   artifactJson: string;
@@ -192,6 +199,7 @@ function expectedLockedSourceProvenance(
   target: IndependentTargetEntry,
   condition: "fault" | "control",
   availability: SourceAvailabilityAudit,
+  controlContracts?: ControlExecutionContractArtifact,
 ): LockedSourceProvenance {
   const repository = SOURCE_REPOSITORIES[target.source];
 
@@ -217,8 +225,20 @@ function expectedLockedSourceProvenance(
   }
 
   if (target.source === "agentdojo") {
-    if (condition === "control")
-      throw new Error(`AgentDojo control source provenance is not pinned for ${target.targetId}`);
+    if (condition === "control") {
+      if (!controlContracts)
+        throw new Error(`AgentDojo control contract is not loaded for ${target.targetId}`);
+      const contract = controlExecutionContractForTarget(controlContracts, target.targetId);
+      if (contract.source !== "agentdojo")
+        throw new Error(`AgentDojo control contract source drift for ${target.targetId}`);
+      return {
+        repository: contract.sourceLock.repository,
+        revision: contract.sourceLock.revision,
+        unitKind: contract.sourceLock.unitKind,
+        unitId: contract.sourceLock.unitId,
+        blobShas: contract.sourceLock.sourceBlobs.map((blob) => blob.blobSha),
+      };
+    }
     const source = availability.sources.agentdojo;
     const record = exactlyOneSourceRecord(
       source.manifest,
@@ -254,8 +274,20 @@ function expectedLockedSourceProvenance(
     };
   }
 
-  if (condition === "control")
-    throw new Error(`tau2 control source provenance is not pinned for ${target.targetId}`);
+  if (condition === "control") {
+    if (!controlContracts)
+      throw new Error(`tau2 control contract is not loaded for ${target.targetId}`);
+    const contract = controlExecutionContractForTarget(controlContracts, target.targetId);
+    if (contract.source !== "tau2-bench")
+      throw new Error(`tau2 control contract source drift for ${target.targetId}`);
+    return {
+      repository: contract.sourceLock.repository,
+      revision: contract.sourceLock.revision,
+      unitKind: contract.sourceLock.unitKind,
+      unitId: contract.sourceLock.unitId,
+      blobShas: contract.sourceLock.sourceBlobs.map((blob) => blob.blobSha),
+    };
+  }
   const source = availability.sources["tau2-bench"];
   const record = exactlyOneSourceRecord(source.ids, target.targetId, "tau2 source record");
   if (record.domain !== target.domain || record.taskId !== target.taskId)
@@ -319,9 +351,17 @@ function validateExecutionProvenance(
 function canonicalExecutionReference(
   sourceProvenance: LockedSourceProvenance,
   executionProvenance: ExecutionProvenance,
+  controlExecutionContractSha256?: string,
 ) {
   const digest = sha256(
-    Buffer.from(JSON.stringify({ sourceProvenance, executionProvenance }), "utf8"),
+    Buffer.from(
+      JSON.stringify({
+        sourceProvenance,
+        executionProvenance,
+        ...(controlExecutionContractSha256 ? { controlExecutionContractSha256 } : {}),
+      }),
+      "utf8",
+    ),
   );
   return `p26-002-execution:${digest}`;
 }
@@ -338,12 +378,26 @@ function parseSourceExecution(
   condition: "fault" | "control",
   availability: SourceAvailabilityAudit,
   expectedRunnerMethodDigest: string,
+  controlContracts?: ControlExecutionContractArtifact,
 ) {
   const execution = JSON.parse(record.sourceExecutionJson) as JsonValue;
   if (!isJsonObject(execution))
     throw new Error(`Source execution payload is invalid for ${record.targetId}`);
+  const controlContract =
+    condition === "control" && (target.source === "agentdojo" || target.source === "tau2-bench")
+      ? controlContracts
+        ? controlExecutionContractForTarget(controlContracts, target.targetId)
+        : undefined
+      : undefined;
+  if (
+    condition === "control" &&
+    (target.source === "agentdojo" || target.source === "tau2-bench") &&
+    !controlContract
+  )
+    throw new Error(`Control execution contract is not loaded for ${record.targetId}`);
   const expectedKeys = [
     ...(condition === "control" ? ["controlConfigurationId"] : []),
+    ...(controlContract ? ["controlExecutionContractSha256"] : []),
     "condition",
     "finalOutput",
     "rawTrace",
@@ -359,10 +413,15 @@ function parseSourceExecution(
   const nonemptyTrace =
     (Array.isArray(rawTrace) && rawTrace.length > 0) ||
     (isJsonObject(rawTrace) && Object.keys(rawTrace).length > 0);
-  const sourceProvenance = expectedLockedSourceProvenance(target, condition, availability);
+  const sourceProvenance = expectedLockedSourceProvenance(
+    target,
+    condition,
+    availability,
+    controlContracts,
+  );
   if (
     JSON.stringify(Object.keys(execution).sort()) !== JSON.stringify(expectedKeys) ||
-    execution.schemaVersion !== "p26-002-candidate-execution-0.2.0" ||
+    execution.schemaVersion !== "p26-002-candidate-execution-0.3.0" ||
     execution.targetId !== record.targetId ||
     execution.source !== target.source ||
     execution.condition !== condition ||
@@ -370,6 +429,10 @@ function parseSourceExecution(
     (condition === "control"
       ? execution.controlConfigurationId !== record.controlConfigurationId
       : "controlConfigurationId" in execution) ||
+    (controlContract
+      ? execution.controlExecutionContractSha256 !== controlContract.contractSha256 ||
+        execution.controlConfigurationId !== controlContract.controlConfigurationId
+      : "controlExecutionContractSha256" in execution) ||
     typeof execution.finalOutput !== "string" ||
     execution.finalOutput.trim() === "" ||
     typeof execution.task !== "string" ||
@@ -384,7 +447,11 @@ function parseSourceExecution(
     record.targetId,
     expectedRunnerMethodDigest,
   );
-  const expectedReference = canonicalExecutionReference(sourceProvenance, executionProvenance);
+  const expectedReference = canonicalExecutionReference(
+    sourceProvenance,
+    executionProvenance,
+    controlContract?.contractSha256,
+  );
   if (
     execution.sourceReference !== expectedReference ||
     record.sourceExecutionReference !== expectedReference
@@ -398,6 +465,7 @@ function parseSourceExecution(
     ...(condition === "control"
       ? { controlConfigurationId: execution.controlConfigurationId }
       : {}),
+    ...(controlContract ? { controlExecutionContractSha256: controlContract.contractSha256 } : {}),
     sourceProvenance,
     executionProvenance,
     sourceReference: execution.sourceReference,
@@ -430,6 +498,7 @@ export function parseEvidenceProjection(
   condition: "fault" | "control",
   availability: SourceAvailabilityAudit,
   expectedRunnerMethodDigest: string,
+  controlContracts?: ControlExecutionContractArtifact,
 ) {
   if (!target) throw new Error(`Unknown target in projection evidence: ${record.targetId}`);
   const execution = parseSourceExecution(
@@ -438,6 +507,7 @@ export function parseEvidenceProjection(
     condition,
     availability,
     expectedRunnerMethodDigest,
+    controlContracts,
   );
   const projection = JSON.parse(record.projectionJson) as JsonValue;
   const expectedKeys = [
@@ -533,6 +603,7 @@ async function verifyRemainingEvidenceContents(
   targets: IndependentTargetEntry[],
   availability: SourceAvailabilityAudit,
   expectedRunnerMethodDigest: string,
+  controlContracts: ControlExecutionContractArtifact,
 ) {
   const declaredArtifacts = [
     ...projectionAudit.evidenceArtifacts,
@@ -559,6 +630,7 @@ async function verifyRemainingEvidenceContents(
           "fault",
           availability,
           expectedRunnerMethodDigest,
+          controlContracts,
         ),
       ),
   );
@@ -573,6 +645,7 @@ async function verifyRemainingEvidenceContents(
         "control",
         availability,
         expectedRunnerMethodDigest,
+        controlContracts,
       );
     }),
   );
@@ -585,7 +658,7 @@ async function verifyRemainingEvidenceContents(
     evidenceByHash.get(evidence.sha256)!.controlSources.map((record) => {
       const target = targetById.get(record.targetId);
       if (!target) throw new Error(`Unknown target in control source evidence: ${record.targetId}`);
-      parseSourceExecution(
+      const execution = parseSourceExecution(
         {
           targetId: record.targetId,
           controlConfigurationId: record.controlConfigurationId,
@@ -597,10 +670,14 @@ async function verifyRemainingEvidenceContents(
         "control",
         availability,
         expectedRunnerMethodDigest,
+        controlContracts,
       );
+      if (execution.controlExecutionContractSha256 !== record.controlExecutionContractSha256)
+        throw new Error(`Control contract digest mismatch for ${record.targetId}`);
       return {
         targetId: record.targetId,
         controlConfigurationId: record.controlConfigurationId,
+        controlExecutionContractSha256: record.controlExecutionContractSha256,
         reference: record.reference,
         artifactSha256: record.artifactSha256,
         evidenceArtifactSha256: evidence.sha256,
@@ -699,9 +776,28 @@ export async function generateTargetBindingAudit() {
     remaining.value,
     targets.value.entries,
   );
+  const controlExecutionContracts = buildControlExecutionContractArtifact({
+    targets: targets.value.entries,
+    controls: CONTROL_MATRIX,
+    availability: availability.value,
+  });
+  validateControlExecutionContractArtifact(controlExecutionContracts, {
+    targets: targets.value.entries,
+    controls: CONTROL_MATRIX,
+    availability: availability.value,
+  });
+  const controlExecutionContractBytes = Buffer.from(
+    `${JSON.stringify(controlExecutionContracts, null, 2)}\n`,
+    "utf8",
+  );
+  await writeAtomic(
+    "research/targets/control-execution-contracts.json",
+    controlExecutionContractBytes.toString("utf8"),
+  );
   const remainingControlSources = validateRemainingControlSourceAudit(
     remainingControls.value,
     targets.value.entries,
+    controlExecutionContracts,
   );
   const methodFileHashes = await executableMethodFileHashes();
   const executableMethodDigest = createHash("sha256")
@@ -713,6 +809,7 @@ export async function generateTargetBindingAudit() {
     targets.value.entries,
     availability.value,
     executableMethodDigest,
+    controlExecutionContracts,
   );
 
   const historicalLegacyFaultProjectionHashes = [
@@ -764,6 +861,7 @@ export async function generateTargetBindingAudit() {
     agentdojoProjectionAuditSha256: sha256(agentDojo.bytes),
     remainingProjectionAuditSha256: sha256(remaining.bytes),
     remainingControlSourceAuditSha256: sha256(remainingControls.bytes),
+    controlExecutionContractsSha256: sha256(controlExecutionContractBytes),
     repeatExecutionInventorySha256: sha256(repeatExecutionInventory.bytes),
     constructReviewPacketSha256: sha256(constructReview.bytes),
     designValidityAuditSha256: sha256(designValidityBytes),

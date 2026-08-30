@@ -5,6 +5,8 @@ import type {
   ProjectionRecord,
   SourceAvailabilityAudit,
 } from "./target-binding";
+import type { ControlExecutionContractArtifact } from "./control-execution-contracts";
+import { controlExecutionContractForTarget } from "./control-execution-contracts";
 
 interface AgentChaosProjectionRecord extends ProjectionRecord {
   blobSha: string;
@@ -95,6 +97,10 @@ export interface RemainingControlSourceAudit {
   status: "pending" | "passed";
   expected: number;
   verified: number;
+  controlContracts: {
+    path: "research/targets/control-execution-contracts.json";
+    required: 20;
+  };
   controls: Array<ControlSourceRecord & { evidenceArtifactSha256: string }>;
   evidenceArtifacts: ProjectionEvidenceArtifact[];
   releaseBoundary: { rawExecutionsRetained: boolean };
@@ -313,12 +319,15 @@ export function validateRemainingProjectionAudit(
 export function validateRemainingControlSourceAudit(
   audit: RemainingControlSourceAudit,
   targets: IndependentTargetEntry[],
+  contracts: ControlExecutionContractArtifact,
 ) {
   if (
-    audit.schemaVersion !== "p26-002-remaining-control-source-audit-0.1.0" ||
+    audit.schemaVersion !== "p26-002-remaining-control-source-audit-0.2.0" ||
     !["pending", "passed"].includes(audit.status) ||
     audit.expected !== 20 ||
     audit.verified !== audit.controls.length ||
+    audit.controlContracts.path !== "research/targets/control-execution-contracts.json" ||
+    audit.controlContracts.required !== 20 ||
     audit.releaseBoundary.rawExecutionsRetained !== false ||
     audit.submissionAllowed !== false
   )
@@ -340,7 +349,13 @@ export function validateRemainingControlSourceAudit(
     "remaining control source IDs",
   );
   for (const record of audit.controls) {
-    if (record.reference.trim() === "" || !/^[0-9a-f]{64}$/.test(record.artifactSha256))
+    const contract = controlExecutionContractForTarget(contracts, record.targetId);
+    if (
+      record.controlConfigurationId !== contract.controlConfigurationId ||
+      record.controlExecutionContractSha256 !== contract.contractSha256 ||
+      record.reference.trim() === "" ||
+      !/^[0-9a-f]{64}$/.test(record.artifactSha256)
+    )
       fail(`remaining control source ${record.targetId} has invalid evidence`);
   }
   for (const evidence of audit.evidenceArtifacts) {

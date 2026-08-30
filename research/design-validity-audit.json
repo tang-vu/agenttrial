@@ -136,7 +136,7 @@
       "passed": false,
       "capabilityStatus": "not-implemented",
       "fixedUpstreamVerification": "metadata-only-source-bytes-not-read-by-gate",
-      "controlledRunVerification": "metadata-only-runner-not-reexecuted-or-attested",
+      "controlledRunVerification": "contract-and-metadata-only-runner-not-reexecuted-or-attested",
       "readinessEvidenceAllowed": false
     }
   },

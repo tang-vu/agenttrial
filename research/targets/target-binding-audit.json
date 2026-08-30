@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "p26-002-target-binding-audit-0.2.0",
+  "schemaVersion": "p26-002-target-binding-audit-0.3.0",
   "status": "blocked",
   "scope": "pre-run-binding-and-readiness-audit-not-main-study-evidence",
   "bindings": [
@@ -2441,7 +2441,7 @@
   "submissionAllowed": false,
   "inputs": {
     "designHash": "305b3a356cd63f8757ca2013141b9ec74f108999e452123ac51c26956e6984fe",
-    "mainTrialInputDigest": "99f85a226aed7f74b144eab72169f83b06cdf831d46a42f7382e1fb1e13091e0",
+    "mainTrialInputDigest": "b50fc47620b8d6ed7b5b00637cf99400da8fb7232a5596f1f0315cd974179e8b",
     "executableMethodFiles": {
       ".node-version": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc",
       "apps/signer/package.json": "f1b6f7f51f4913edec192cfb8db0b652f1cd43cbcdfea9244197ea4c9d2e6e2e",
@@ -2450,7 +2450,7 @@
       "apps/worker/package.json": "9a9eddd86ab95b59fc62252b49906b95c0bc710b880152daa0e60b8f719d5b54",
       "apps/worker/src/index.ts": "94a7019d5042a8eff7c35677f6a50256c9d6554a3097a00c45ab872050acf125",
       "apps/worker/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
-      "package.json": "e2ef52081a192c6fa4b68ad64a9ce46e11eaf53906d68773f6a0c9004f24801a",
+      "package.json": "448b70fd2126f4bf53fdaa4b328bd3f32e2d4d58c635eef62d54d8462ba26f69",
       "packages/adapters/package.json": "7d4bfbce6dfccef36d9c4b9d63a2371c62a58c5b09bd937a738523227aa86e24",
       "packages/adapters/src/index.ts": "5904b21f04728c169249c04d5964453ac1db0208ff884dc84d3c55b14c34270a",
       "packages/adapters/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
@@ -2475,8 +2475,9 @@
       "packages/planner/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
       "packages/research/package.json": "9bbbdb4fd9af061c44399d9d6f59ae89c2f89c0035cbd7a529060306d4c58dbb",
       "packages/research/src/analysis.ts": "b6b33b9aa1cb6381e25269fb4fe9dfd572a1d00ffa72ab6b63ddeba635f5e4a1",
-      "packages/research/src/audit-target-bindings.ts": "cbb20c4699ff5b2b9af03c5d5f13d3d71c0f679a914ad3e8a96985a7e75ad5e7",
+      "packages/research/src/audit-target-bindings.ts": "0ae14c933d27fcde0669e552c2166169f6ba8ac6d5a2f2cb44d78dca95e5455a",
       "packages/research/src/calibrate-judge.ts": "1198de03a54a035db4536a24b912f5419db085620d10b196158c75f04149cf25",
+      "packages/research/src/control-execution-contracts.ts": "77d95fd26a8599e5d816a0502a546e39849e1e6bcb8d2bafcacf337f50d968bd",
       "packages/research/src/controlled-agents.ts": "a476957922afd932aa254910fcd1c944d7bc9549be5ec7ce7b6a97be3c03729e",
       "packages/research/src/design-validity.ts": "5d68ef3035be118128b627016cd9e019f49c0df19ec8e4a02bdccc99b0f3e5ea",
       "packages/research/src/freeze.ts": "9b331318b55e130e0d674b9eeee21de440a727c9ed03d13d9ee95c9d64b69f37",
@@ -2485,11 +2486,11 @@
       "packages/research/src/local-judge.ts": "8fb50dc5e98ca0dbbe4a6e883045a94420d7234d4c67bd957b02e2484593f7a0",
       "packages/research/src/pilot.ts": "3c6a78026855dbd157e5a5cdad83c54313d4f5289ac87b5ef91e15bfa58b20e6",
       "packages/research/src/power.ts": "bb0897a0757a11db0ef0cff424c8f1d6b48d3c815f286bf2b5729a787ac642a9",
-      "packages/research/src/projection-audit.ts": "1dd4ab678c4e433d0906a2a5d9caef728e30dfdda52f4bd28c8e7299e9d493ac",
-      "packages/research/src/source-execution-derivation.ts": "8dea7f2eda86d73c20268a673082a35bb109ff655eade755cd69be334244daae",
+      "packages/research/src/projection-audit.ts": "f176f497e7cbd3faaa4d32365a5f178d5b46f1f30c6447e412ead27d92bce280",
+      "packages/research/src/source-execution-derivation.ts": "4900e59b6055299529f1c7c5011e4ff846df8d6abb3cf6ad01e58584c409b142",
       "packages/research/src/tamper.ts": "eef093a5d5fa3c3a625b532519a6099159f21062c8c6ab23c895558d5780280f",
       "packages/research/src/target-adapter.ts": "6b2fbb10fabd8b7ffcbc71e4c517ac4ef59e05c14fa144d1834bc2be46941366",
-      "packages/research/src/target-binding.ts": "285876b2c7b3c8c61bac34886bb365a073062497256ad5e6306d404fa732d939",
+      "packages/research/src/target-binding.ts": "a97b52f055905a14ce26a9a7b859cdf45d55b45d4268e378bc09dbc40dde928b",
       "packages/research/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
       "packages/runtime/package.json": "d0ad761247f876f4859900554d500d282525f96d7eed70231b4f9c823780d7e0",
       "packages/runtime/src/authorizations.ts": "cc770276beb1e402373b9c60958bd95a4423e415275b0acd2a4a9ca7cde0042e",
@@ -2504,22 +2505,23 @@
       "tsconfig.base.json": "a272d2f77a8524fdfead851db5e19821628fa2513c524f84e2e6488bdd1f3aae"
     },
     "nodeRuntime": "v24.19.0",
-    "executableMethodDigest": "e3c2b75d9f36652ccc0ac22549ccbebe89b955a515926cf9556e055975ed544d",
+    "executableMethodDigest": "d0cdc6fc79689ac250ff517f1a65246e6c24f17fcc0b0081cec15c69007baab8",
     "designFreezeSha256": "e6b1f92da09a2aacf31e6169d6594b67f8aaba33d2914870b4a1962f2e44bc54",
     "independentTargetsSha256": "d2fbad38025b790d057b962d955edd4750baa97fedf7aec887f63d1eb33292ca",
     "sourceAvailabilityAuditSha256": "0fa16da0b6b037352b009e579811d81bc10c03bd88512183089af8691b6c9921",
     "agentchaosProjectionAuditSha256": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
     "agentdojoProjectionAuditSha256": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",
     "remainingProjectionAuditSha256": "f00ead35e914b63633c94ad95ec1b249af1c2c9538f16323b6d55f48488acfd0",
-    "remainingControlSourceAuditSha256": "a35f65d1685266ad6211e5530085554ebf3be564a62b92cefa9412106959c6ac",
+    "remainingControlSourceAuditSha256": "8af8f371b4bd9deff5987a5c1f93fdc6ba6bd04ce1bea864ff6ad6d35ab6ed97",
+    "controlExecutionContractsSha256": "1e133a61f98f44a9ccd24c355ec771ab81a9d7cc3c5df5f185eb0171b3579144",
     "repeatExecutionInventorySha256": "7de41ea46186ea96d0dd1a74feb3561ab9cda3580bc0f49abc7ededcd0d14f23",
     "constructReviewPacketSha256": "ccffc86dc49167c086984d8925272667b352af58a2cda5be7cf2b75793dd2929",
-    "designValidityAuditSha256": "6920472fae09861be8b77c126544c2d497560c5e23a12adc5b5e7ab0d8bfe41a",
+    "designValidityAuditSha256": "c310c1b24685a6a3520821d3bee38c98c98469684e027f2178b6f7e9192af1a6",
     "projectionAuditSha256": {
       "agentchaosbench": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
       "agentdojo": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",
       "remaining": "f00ead35e914b63633c94ad95ec1b249af1c2c9538f16323b6d55f48488acfd0",
-      "remainingControls": "a35f65d1685266ad6211e5530085554ebf3be564a62b92cefa9412106959c6ac"
+      "remainingControls": "8af8f371b4bd9deff5987a5c1f93fdc6ba6bd04ce1bea864ff6ad6d35ab6ed97"
     },
     "governanceRecordSha256": "c475d5795f471256d8ce2c7cb8a4c566ba457356d3ca31f3c0428d1d8a293d43",
     "methodFreezeApprovalSha256": "0880d272024e7ed772f8cd8d777c3a783c16cb285eabc2a0e8938f7580d8e1a3"
