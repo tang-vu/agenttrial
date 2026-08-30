@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "p26-002-remaining-projection-audit-0.2.0",
+  "schemaVersion": "p26-002-remaining-projection-audit-0.3.0",
   "status": "pending",
   "scope": "future-gate-reconstructed-source-bound-label-blind-projections-for-all-80-frozen-targets-not-main-study-outcomes",
   "expected": {

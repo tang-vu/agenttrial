@@ -24,10 +24,15 @@ export type RepeatExecutionInventoryRecord =
   | (RepeatExecutionInventoryRecordBase & {
       evidenceKind: "candidate-execution-declaration";
       evidenceArtifactSha256: string;
+    })
+  | (RepeatExecutionInventoryRecordBase & {
+      evidenceKind: "gate-verified-controlled-execution";
+      evidenceArtifactSha256: string;
+      sourceExecutionSha256: string;
     });
 
 export interface RepeatExecutionInventory {
-  schemaVersion: "p26-002-repeat-execution-inventory-0.1.0";
+  schemaVersion: "p26-002-repeat-execution-inventory-0.2.0";
   status: "observed";
   scope: "pre-run-repeat-execution-identity-inventory-not-outcome-evidence";
   requiredIndependentExecutionsPerTarget: number;
@@ -77,6 +82,7 @@ export interface DesignValidityInputs {
   projectionCounts: DesignProjectionCounts;
   repetitionPlan: DesignRepetitionPlan;
   repeatExecutionInventory: RepeatExecutionInventory;
+  verifiedControlledSourceExecutionSha256s?: ReadonlySet<string>;
 }
 
 export type DesignValidityBlockerCode =
@@ -215,10 +221,55 @@ function normalizedScenarioSemantics(scenario: ScenarioConfiguration) {
     targetAgent: scenario.targetAgent,
     claimType: scenario.claimType,
     injection,
+    operationalization: scenario.operationalization,
     expectedObservation: scenario.expectedObservation,
     groundTruth: scenario.groundTruth,
     repetitions: scenario.repetitions,
   });
+}
+
+function validateOperationalization(scenario: ScenarioConfiguration) {
+  const value = scenario.operationalization;
+  const expectedKeys = [
+    "competingValidSignal",
+    "crossCheckMode",
+    "evidenceRetention",
+    "minimumSequenceLength",
+    "mutationCardinality",
+    "onsetAfterSuccessfulActions",
+    "operatorVersion",
+    "payloadNestingDepth",
+    "requiredMetadataState",
+    "severityTier",
+    "triggerStage",
+  ];
+  if (
+    !value ||
+    JSON.stringify(Object.keys(value).sort()) !== JSON.stringify(expectedKeys) ||
+    value.operatorVersion !== "p26-002-fault-operator-0.1.0" ||
+    ![
+      "first-eligible-action",
+      "authorization-boundary",
+      "nested-tool-payload",
+      "after-two-compliant-actions",
+      "evidence-reconciliation",
+      "provenance-read",
+      "critical-assertion",
+      "secondary-verification",
+      "ordered-action-sequence",
+      "final-evidence-assembly",
+    ].includes(value.triggerStage) ||
+    ![0, 1, 2].includes(value.payloadNestingDepth) ||
+    ![0, 1, 2].includes(value.onsetAfterSuccessfulActions) ||
+    ![1, 2].includes(value.mutationCardinality) ||
+    typeof value.competingValidSignal !== "boolean" ||
+    !["complete", "omit-one-required-field"].includes(value.requiredMetadataState) ||
+    !["high", "critical"].includes(value.severityTier) ||
+    !["none", "independent-secondary-signal"].includes(value.crossCheckMode) ||
+    ![1, 2, 3].includes(value.minimumSequenceLength) ||
+    !["complete", "omit-one-adverse-slot"].includes(value.evidenceRetention)
+  )
+    fail(`${scenario.id} has an invalid operational fault contract`);
 }
 
 function validateAndAuditVariants(
@@ -234,6 +285,7 @@ function validateAndAuditVariants(
     assertNonEmpty(scenario.family, `family for ${scenario.id}`);
     assertNonEmpty(scenario.variant, `variant for ${scenario.id}`);
     assertNonEmpty(scenario.injection, `injection for ${scenario.id}`);
+    validateOperationalization(scenario);
     if (scenarioIds.has(scenario.id)) fail(`duplicate scenario ID ${scenario.id}`);
     scenarioIds.add(scenario.id);
 
@@ -356,6 +408,7 @@ export function validateRepeatExecutionInventory(
   inventory: RepeatExecutionInventory,
   availability: SourceAvailabilityAudit,
   requiredExecutionsPerTarget: number,
+  verifiedControlledSourceExecutionSha256s: ReadonlySet<string> = new Set(),
 ): RepeatExecutionInventorySummary {
   const expectedKeys = [
     "executions",
@@ -367,7 +420,7 @@ export function validateRepeatExecutionInventory(
     "submissionAllowed",
   ];
   if (
-    inventory.schemaVersion !== "p26-002-repeat-execution-inventory-0.1.0" ||
+    inventory.schemaVersion !== "p26-002-repeat-execution-inventory-0.2.0" ||
     inventory.status !== "observed" ||
     inventory.scope !== "pre-run-repeat-execution-identity-inventory-not-outcome-evidence" ||
     JSON.stringify(Object.keys(inventory).sort()) !== JSON.stringify(expectedKeys) ||
@@ -398,9 +451,18 @@ export function validateRepeatExecutionInventory(
   const executionIdentities = new Set<string>();
   for (const record of inventory.executions) {
     const expectedRecordKeys =
-      record.evidenceKind === "candidate-execution-declaration"
-        ? ["bindings", "evidenceArtifactSha256", "evidenceKind", "executionIdentity", "source"]
-        : ["bindings", "evidenceKind", "executionIdentity", "source"];
+      record.evidenceKind === "gate-verified-controlled-execution"
+        ? [
+            "bindings",
+            "evidenceArtifactSha256",
+            "evidenceKind",
+            "executionIdentity",
+            "source",
+            "sourceExecutionSha256",
+          ]
+        : record.evidenceKind === "candidate-execution-declaration"
+          ? ["bindings", "evidenceArtifactSha256", "evidenceKind", "executionIdentity", "source"]
+          : ["bindings", "evidenceKind", "executionIdentity", "source"];
     if (JSON.stringify(Object.keys(record).sort()) !== JSON.stringify(expectedRecordKeys))
       fail("repeat-execution inventory record has unexpected fields");
     if (!Array.isArray(record.bindings) || record.bindings.length === 0)
@@ -453,6 +515,15 @@ export function validateRepeatExecutionInventory(
         fail("candidate execution declaration lacks a pinned evidence-artifact hash");
       if (record.bindings.length !== 1)
         fail("a candidate execution cannot be reused across target bindings");
+    } else if (record.evidenceKind === "gate-verified-controlled-execution") {
+      if (
+        !/^[0-9a-f]{64}$/.test(record.sourceExecutionSha256) ||
+        record.executionIdentity !== `sha256:${record.sourceExecutionSha256}` ||
+        !/^[0-9a-f]{64}$/.test(record.evidenceArtifactSha256) ||
+        record.bindings.length !== 1 ||
+        !verifiedControlledSourceExecutionSha256s.has(record.sourceExecutionSha256)
+      )
+        fail("controlled execution is not backed by gate-verified source evidence");
     } else {
       fail("repeat-execution evidence kind is invalid");
     }
@@ -463,7 +534,10 @@ export function validateRepeatExecutionInventory(
       if (nextDeclaredCount > requiredExecutionsPerTarget)
         fail(`${binding.condition} ${binding.targetId} exceeds the candidate execution count`);
       declaredCountsByTarget.set(binding.targetId, nextDeclaredCount);
-      if (record.evidenceKind === "fixed-upstream-artifact") {
+      if (
+        record.evidenceKind === "fixed-upstream-artifact" ||
+        record.evidenceKind === "gate-verified-controlled-execution"
+      ) {
         const countsByTarget = countsByConditionAndTarget[binding.condition];
         countsByTarget.set(binding.targetId, (countsByTarget.get(binding.targetId) ?? 0) + 1);
       }
@@ -487,6 +561,10 @@ export function validateRepeatExecutionInventory(
     const declaredCandidateRecords = records.filter(
       (record) => record.evidenceKind === "candidate-execution-declaration",
     );
+    const verifiedCandidateRecords = records.filter(
+      (record) => record.evidenceKind === "gate-verified-controlled-execution",
+    );
+    const eligibleRecords = [...fixedRecords, ...verifiedCandidateRecords];
     const fixedSingleTargets = new Set(
       fixedRecords.flatMap((record) =>
         record.bindings
@@ -496,16 +574,16 @@ export function validateRepeatExecutionInventory(
       ),
     );
     return {
-      uniqueExecutionIdentities: fixedRecords.length,
-      executionBindings: fixedRecords.reduce(
+      uniqueExecutionIdentities: eligibleRecords.length,
+      executionBindings: eligibleRecords.reduce(
         (total, record) =>
           total + record.bindings.filter((binding) => binding.condition === condition).length,
         0,
       ),
       fixedUpstreamExecutionIdentities: fixedRecords.length,
       declaredCandidateExecutionIdentities: declaredCandidateRecords.length,
-      gateVerifiedCandidateExecutionIdentities: 0,
-      reusedExecutionBindings: fixedRecords.reduce(
+      gateVerifiedCandidateExecutionIdentities: verifiedCandidateRecords.length,
+      reusedExecutionBindings: eligibleRecords.reduce(
         (total, record) =>
           total +
           Math.max(
@@ -529,13 +607,16 @@ export function validateRepeatExecutionInventory(
   return {
     targetCount: sourceSummary.targetCount,
     requiredExecutionsPerTarget,
-    observedUniqueExecutionIdentities: inventory.executions.filter(
-      (record) => record.evidenceKind === "fixed-upstream-artifact",
+    observedUniqueExecutionIdentities: inventory.executions.filter((record) =>
+      ["fixed-upstream-artifact", "gate-verified-controlled-execution"].includes(
+        record.evidenceKind,
+      ),
     ).length,
     crossConditionExecutionIdentities: inventory.executions.filter(
       (record) =>
-        record.evidenceKind === "fixed-upstream-artifact" &&
-        new Set(record.bindings.map((binding) => binding.condition)).size > 1,
+        ["fixed-upstream-artifact", "gate-verified-controlled-execution"].includes(
+          record.evidenceKind,
+        ) && new Set(record.bindings.map((binding) => binding.condition)).size > 1,
     ).length,
     fault: summarizeCondition("fault"),
     control: summarizeCondition("control"),
@@ -549,6 +630,7 @@ export function buildDesignValidityAudit(inputs: DesignValidityInputs): DesignVa
     projectionCounts,
     repetitionPlan,
     repeatExecutionInventory,
+    verifiedControlledSourceExecutionSha256s = new Set(),
   } = inputs;
   if (scenarios.length !== 80)
     fail(`the audited candidate matrix must contain 80 slots, found ${scenarios.length}`);
@@ -578,6 +660,7 @@ export function buildDesignValidityAudit(inputs: DesignValidityInputs): DesignVa
     repeatExecutionInventory,
     sourceAvailability,
     repetitionPlan.repetitionsPerScenario,
+    verifiedControlledSourceExecutionSha256s,
   );
 
   const faultLegacyValidity = validateProjectionCounts(projectionCounts.fault, "fault");
@@ -659,7 +742,7 @@ export function buildDesignValidityAudit(inputs: DesignValidityInputs): DesignVa
   if (!executionRepetitionSupport.passed)
     blockers.push({
       code: "static-target-repeat-mismatch",
-      message: `The design requires ${executionRepetitionSupport.requiredExecutionsPerTarget} independent fault and matched-control executions per target (${executionRepetitionSupport.requiredSharedExecutionArtifacts} shared execution artifacts across evaluator modes). Fault inventory: ${executionRepetitionSupport.fault.targetsMeetingRequiredExecutions}/${executionRepetitionSupport.targetCount} targets complete, ${executionRepetitionSupport.fault.fixedUpstreamSingleExecutionTargets} have exactly one fixed upstream execution, and ${executionRepetitionSupport.fault.targetsWithoutAnyExecution} have none. Control inventory: ${executionRepetitionSupport.control.targetsMeetingRequiredExecutions}/${executionRepetitionSupport.targetCount} targets complete, ${executionRepetitionSupport.control.fixedUpstreamSingleExecutionTargets} bind one fixed upstream execution, ${executionRepetitionSupport.control.targetsWithoutAnyExecution} have none, and ${executionRepetitionSupport.control.reusedExecutionBindings} bindings reuse an execution identity. ${executionRepetitionSupport.crossConditionExecutionIdentities} physical identities are bound in both fault and control conditions. Candidate declarations (${executionRepetitionSupport.fault.declaredCandidateExecutionIdentities} fault, ${executionRepetitionSupport.control.declaredCandidateExecutionIdentities} control) do not count until gate-side evidence verification is implemented.`,
+      message: `The design requires ${executionRepetitionSupport.requiredExecutionsPerTarget} independent fault and matched-control executions per target (${executionRepetitionSupport.requiredSharedExecutionArtifacts} shared execution artifacts across evaluator modes). Fault inventory: ${executionRepetitionSupport.fault.targetsMeetingRequiredExecutions}/${executionRepetitionSupport.targetCount} targets complete, ${executionRepetitionSupport.fault.fixedUpstreamSingleExecutionTargets} have exactly one fixed upstream execution, and ${executionRepetitionSupport.fault.targetsWithoutAnyExecution} have none. Control inventory: ${executionRepetitionSupport.control.targetsMeetingRequiredExecutions}/${executionRepetitionSupport.targetCount} targets complete, ${executionRepetitionSupport.control.fixedUpstreamSingleExecutionTargets} bind one fixed upstream execution, ${executionRepetitionSupport.control.targetsWithoutAnyExecution} have none, and ${executionRepetitionSupport.control.reusedExecutionBindings} bindings reuse an execution identity. ${executionRepetitionSupport.crossConditionExecutionIdentities} physical identities are bound in both fault and control conditions. Candidate declarations (${executionRepetitionSupport.fault.declaredCandidateExecutionIdentities} fault, ${executionRepetitionSupport.control.declaredCandidateExecutionIdentities} control) do not count without an exact source-execution hash already accepted by the gate.`,
     });
   if (!matchedControlIndependence.passed)
     blockers.push({

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "p26-002-trusted-runner-policy-0.1.0",
+  "status": "pending-key-registration",
+  "studyId": "P26-002",
+  "designHash": null,
+  "runnerMethodDigest": null,
+  "keys": [],
+  "keyRegistrationHumanRequired": true,
+  "releaseAllowed": false,
+  "submissionAllowed": false
+}

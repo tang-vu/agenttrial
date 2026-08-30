@@ -404,11 +404,13 @@ describe("structured readiness evidence", () => {
     ).toThrow(/envelope is invalid/);
   });
 
-  it("never promotes metadata-bound evidence without gate-observed source derivation", () => {
-    expect(SOURCE_EXECUTION_DERIVATION_CAPABILITY.readinessEvidenceAllowed).toBe(false);
-    expect(() => requireGateObservedSourceExecutionDerivation(1)).toThrow(
-      /fixed upstream verification is implemented, but controlled runs are not yet/,
+  it("allows evidence envelopes only after installing a fail-closed derivation verifier", () => {
+    expect(SOURCE_EXECUTION_DERIVATION_CAPABILITY.readinessEvidenceAllowed).toBe(true);
+    expect(SOURCE_EXECUTION_DERIVATION_CAPABILITY.controlledRunVerification).toBe(
+      "ed25519-precommitted-policy-and-content-hash-binding",
     );
+    expect(() => requireGateObservedSourceExecutionDerivation(1)).not.toThrow();
     expect(() => requireGateObservedSourceExecutionDerivation(0)).not.toThrow();
+    expect(() => requireGateObservedSourceExecutionDerivation(-1)).toThrow(/non-negative integer/);
   });
 });

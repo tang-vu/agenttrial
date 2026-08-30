@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "p26-002-repeat-execution-inventory-0.1.0",
+  "schemaVersion": "p26-002-repeat-execution-inventory-0.2.0",
   "status": "observed",
   "scope": "pre-run-repeat-execution-identity-inventory-not-outcome-evidence",
   "requiredIndependentExecutionsPerTarget": 20,

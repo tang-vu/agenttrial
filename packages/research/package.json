@@ -8,12 +8,15 @@
     "./analysis": "./src/analysis.ts",
     "./controlled-agents": "./src/controlled-agents.ts",
     "./local-judge": "./src/local-judge.ts",
+    "./oracle-adjudication": "./src/oracle-adjudication.ts",
     "./power-analysis": "./src/power.ts",
     "./target-adapter": "./src/target-adapter.ts",
     "./tamper": "./src/tamper.ts"
   },
   "scripts": {
     "audit:target-bindings": "node --import tsx src/audit-target-bindings.ts",
+    "audit:blocker-ledger": "node --import tsx src/blocker-ledger.ts",
+    "refresh:construct-review": "node --import tsx src/refresh-construct-review.ts",
     "freeze": "node --import tsx src/freeze.ts && prettier --write ../../research/design-freeze.json",
     "gate:main-trial": "node --import tsx src/gate-main-trial.ts",
     "pilot": "node --import tsx src/pilot.ts && prettier --write ../../research/pilot/summary.json ../../research/pilot/tamper-summary.json",

@@ -11,8 +11,34 @@ export interface Interval {
   upper: number;
 }
 
+function nonNegativeInteger(value: number, description: string) {
+  if (!Number.isSafeInteger(value) || value < 0)
+    throw new Error(`${description} must be a non-negative integer`);
+}
+
+function validateBinaryPairs(records: BinaryPair[]) {
+  const keys = new Set<string>();
+  for (const record of records) {
+    if (record.configurationId.trim() === "") throw new Error("Configuration ID must not be empty");
+    nonNegativeInteger(record.repeat, `Repeat for ${record.configurationId}`);
+    if (
+      typeof record.baselineFalseAccept !== "boolean" ||
+      typeof record.agenttrialFalseAccept !== "boolean"
+    )
+      throw new Error(`Paired outcomes must be boolean for ${record.configurationId}`);
+    const key = `${record.configurationId}\u0000${record.repeat}`;
+    if (keys.has(key))
+      throw new Error(`Duplicate paired outcome ${record.configurationId}/${record.repeat}`);
+    keys.add(key);
+  }
+}
+
 export function wilson(successes: number, total: number, z = 1.96): Interval {
-  if (total <= 0) return { estimate: 0, lower: 0, upper: 0 };
+  nonNegativeInteger(successes, "Wilson successes");
+  nonNegativeInteger(total, "Wilson total");
+  if (successes > total) throw new Error("Wilson successes cannot exceed total");
+  if (!Number.isFinite(z) || z <= 0) throw new Error("Wilson z must be positive and finite");
+  if (total === 0) return { estimate: 0, lower: 0, upper: 0 };
   const estimate = successes / total;
   const z2 = z * z;
   const denominator = 1 + z2 / total;
@@ -31,6 +57,8 @@ function combination(n: number, k: number): number {
 }
 
 export function exactMcNemar(discordantBaselineOnly: number, discordantAgentTrialOnly: number) {
+  nonNegativeInteger(discordantBaselineOnly, "McNemar baseline-only discordance");
+  nonNegativeInteger(discordantAgentTrialOnly, "McNemar AgentTrial-only discordance");
   const discordant = discordantBaselineOnly + discordantAgentTrialOnly;
   if (discordant === 0) return 1;
   const lowerTail = Math.min(discordantBaselineOnly, discordantAgentTrialOnly);
@@ -41,6 +69,7 @@ export function exactMcNemar(discordantBaselineOnly: number, discordantAgentTria
 }
 
 export function pairedFalseAcceptance(records: BinaryPair[]) {
+  validateBinaryPairs(records);
   const baselineCount = records.filter((record) => record.baselineFalseAccept).length;
   const agenttrialCount = records.filter((record) => record.agenttrialFalseAccept).length;
   const baselineOnly = records.filter(
@@ -61,6 +90,8 @@ export function pairedFalseAcceptance(records: BinaryPair[]) {
 }
 
 export function holmAdjust(pValues: number[]): number[] {
+  if (pValues.some((value) => !Number.isFinite(value) || value < 0 || value > 1))
+    throw new Error("Holm p-values must be finite values between zero and one");
   const ranked = pValues
     .map((value, index) => ({ value, index }))
     .sort((a, b) => a.value - b.value);
@@ -84,6 +115,10 @@ export function hierarchicalBootstrap(
   iterations = 2000,
   seed = 2026002,
 ): Interval {
+  validateBinaryPairs(records);
+  if (!Number.isSafeInteger(iterations) || iterations <= 0)
+    throw new Error("Bootstrap iterations must be a positive integer");
+  nonNegativeInteger(seed, "Bootstrap seed");
   const groups = new Map<string, BinaryPair[]>();
   records.forEach((record) =>
     groups.set(record.configurationId, [...(groups.get(record.configurationId) ?? []), record]),
@@ -100,7 +135,9 @@ export function hierarchicalBootstrap(
       for (let repeat = 0; repeat < group.length; repeat++)
         sample.push(group[Math.floor(random(state) * group.length)]!);
     }
-    estimates.push(pairedFalseAcceptance(sample).absoluteDifference);
+    const baseline = sample.filter((record) => record.baselineFalseAccept).length;
+    const agenttrial = sample.filter((record) => record.agenttrialFalseAccept).length;
+    estimates.push(sample.length === 0 ? 0 : (baseline - agenttrial) / sample.length);
   }
   estimates.sort((a, b) => a - b);
   const observed = pairedFalseAcceptance(records).absoluteDifference;

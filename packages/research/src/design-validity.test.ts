@@ -63,34 +63,32 @@ function buildCurrentAudit() {
 }
 
 describe("P26-002 design validity audit", () => {
-  it("fails closed on all five current design-validity blockers", () => {
+  it("fails closed on the three remaining design-validity blockers", () => {
     const audit = buildCurrentAudit();
 
     expect(audit.status).toBe("blocked");
     expect(audit.summary).toEqual({
       scenarios: 80,
       sourceUnits: 80,
-      designChecksPassed: 0,
-      designChecksBlocked: 5,
+      designChecksPassed: 2,
+      designChecksBlocked: 3,
     });
     expect(audit.blockers.map((blocker) => blocker.code)).toEqual([
-      "non-operational-variants",
       "static-target-repeat-mismatch",
       "reused-matched-control-inputs",
       "ineligible-legacy-projections",
-      "unverified-source-execution-derivation",
     ]);
     expect(audit.checks.variantOperationalization).toMatchObject({
-      passed: false,
+      passed: true,
       nominalVariants: 80,
-      operationalProfiles: 8,
+      operationalProfiles: 80,
     });
     expect(
       audit.checks.variantOperationalization.families.every(
         (family) =>
           family.nominalVariants === 10 &&
-          family.operationalProfiles === 1 &&
-          family.appendedLabelOnly,
+          family.operationalProfiles === 10 &&
+          !family.appendedLabelOnly,
       ),
     ).toBe(true);
     expect(audit.checks.executionRepetitionSupport).toMatchObject({
@@ -142,11 +140,11 @@ describe("P26-002 design validity audit", () => {
       notGateReconstructedLegacy: { fault: 60, control: 0 },
     });
     expect(audit.checks.sourceExecutionDerivation).toEqual({
-      passed: false,
-      capabilityStatus: "fixed-upstream-supported-controlled-run-blocked",
+      passed: true,
+      capabilityStatus: "fixed-upstream-and-trusted-runner-attestation-supported",
       fixedUpstreamVerification: "git-blob-sha-and-deterministic-adapter",
-      controlledRunVerification: "not-implemented-no-reexecution-or-trusted-attestation",
-      readinessEvidenceAllowed: false,
+      controlledRunVerification: "ed25519-precommitted-policy-and-content-hash-binding",
+      readinessEvidenceAllowed: true,
     });
     expect(audit.designValidityPassed).toBe(false);
     expect(audit.humanApprovalEvaluated).toBe(false);
@@ -293,5 +291,33 @@ describe("P26-002 design validity audit", () => {
         20,
       ),
     ).toThrow(/unexpected fields/);
+  });
+
+  it("counts a controlled execution only when its exact source hash passed the gate", () => {
+    const sourceExecutionSha256 = createHash("sha256")
+      .update("verified-controlled-execution")
+      .digest("hex");
+    const inventory = structuredClone(repeatExecutionInventory);
+    inventory.executions.push({
+      source: "bfcl-v4",
+      evidenceKind: "gate-verified-controlled-execution",
+      executionIdentity: `sha256:${sourceExecutionSha256}`,
+      evidenceArtifactSha256: createHash("sha256").update("evidence-artifact").digest("hex"),
+      sourceExecutionSha256,
+      bindings: [{ condition: "fault", targetId: "ext-061" }],
+    });
+
+    expect(() => validateRepeatExecutionInventory(inventory, sourceAvailability, 20)).toThrow(
+      /not backed by gate-verified source evidence/,
+    );
+    const summary = validateRepeatExecutionInventory(
+      inventory,
+      sourceAvailability,
+      20,
+      new Set([sourceExecutionSha256]),
+    );
+    expect(summary.fault.gateVerifiedCandidateExecutionIdentities).toBe(1);
+    expect(summary.fault.uniqueExecutionIdentities).toBe(61);
+    expect(summary.fault.otherPartiallyPopulatedTargets).toBe(1);
   });
 });

@@ -64,7 +64,7 @@ export interface ProjectionEvidenceArtifact {
 
 export interface RemainingProjectionAudit {
   schemaVersion: string;
-  status: "pending" | "passed";
+  status: "pending" | "partial" | "passed";
   expected: { fault: number; control: number };
   verified: { fault: number; control: number };
   labelBlindChecks: {
@@ -232,8 +232,8 @@ export function validateRemainingProjectionAudit(
   targets: IndependentTargetEntry[],
 ) {
   if (
-    audit.schemaVersion !== "p26-002-remaining-projection-audit-0.2.0" ||
-    !["pending", "passed"].includes(audit.status) ||
+    audit.schemaVersion !== "p26-002-remaining-projection-audit-0.3.0" ||
+    !["pending", "partial", "passed"].includes(audit.status) ||
     audit.expected.fault !== 80 ||
     audit.expected.control !== 80 ||
     audit.releaseBoundary.rawSourcesRetained !== false ||
@@ -257,25 +257,32 @@ export function validateRemainingProjectionAudit(
   }
 
   if (
-    audit.faultProjections.length !== 80 ||
-    audit.controlProjections.length !== 80 ||
+    (audit.status === "passed" &&
+      (audit.faultProjections.length !== 80 || audit.controlProjections.length !== 80)) ||
+    (audit.status === "partial" &&
+      (audit.faultProjections.length + audit.controlProjections.length === 0 ||
+        (audit.faultProjections.length === 80 && audit.controlProjections.length === 80))) ||
     audit.evidenceArtifacts.length === 0 ||
     JSON.stringify(Object.keys(audit.labelBlindChecks).sort()) !==
       JSON.stringify(["control", "fault", "sourceBound", "targetControlPairBound"]) ||
-    !Object.values(audit.labelBlindChecks).every((value) => value === true)
+    audit.labelBlindChecks.sourceBound !== true ||
+    audit.labelBlindChecks.fault !== audit.faultProjections.length > 0 ||
+    audit.labelBlindChecks.control !== audit.controlProjections.length > 0 ||
+    (audit.controlProjections.length > 0 &&
+      audit.labelBlindChecks.targetControlPairBound !== true) ||
+    (audit.controlProjections.length === 0 &&
+      audit.labelBlindChecks.targetControlPairBound !== false)
   )
-    fail("passed remaining projection audit is not the complete 80-fault/80-control pass");
-  const expectedFaultTargets = targets.map((target) => target.targetId);
-  assertExactIds(
-    audit.faultProjections.map((record) => record.targetId),
-    expectedFaultTargets,
-    "remaining fault projection IDs",
-  );
-  assertExactIds(
-    audit.controlProjections.map((record) => record.targetId),
-    targets.map((target) => target.targetId),
-    "matched-control projection target IDs",
-  );
+    fail("remaining projection evidence is not a valid partial or complete gate pass");
+  const targetIds = new Set(targets.map((target) => target.targetId));
+  for (const [description, records] of [
+    ["remaining fault projection IDs", audit.faultProjections],
+    ["matched-control projection target IDs", audit.controlProjections],
+  ] as const) {
+    const ids = records.map((record) => record.targetId);
+    if (new Set(ids).size !== ids.length || ids.some((targetId) => !targetIds.has(targetId)))
+      fail(`${description} are duplicated or outside the frozen source partition`);
+  }
   assertProjectionHashes(audit.faultProjections, "remaining fault audit");
   assertProjectionHashes(audit.controlProjections, "matched-control audit");
   for (const record of [...audit.faultProjections, ...audit.controlProjections]) {

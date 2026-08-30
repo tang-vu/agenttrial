@@ -225,4 +225,12 @@ describe("registered analysis functions", () => {
     expect(interval.lower).toBeLessThanOrEqual(interval.estimate);
     expect(interval.upper).toBeGreaterThanOrEqual(interval.estimate);
   });
+
+  it("fails closed on malformed counts, duplicated pairs, and invalid analysis controls", () => {
+    expect(() => wilson(2, 1)).toThrow(/cannot exceed total/);
+    expect(() => exactMcNemar(-1, 2)).toThrow(/non-negative integer/);
+    expect(() => holmAdjust([0.01, Number.NaN])).toThrow(/finite values/);
+    expect(() => pairedFalseAcceptance([...records, records[0]!])).toThrow(/Duplicate paired/);
+    expect(() => hierarchicalBootstrap(records, 0, 7)).toThrow(/positive integer/);
+  });
 });

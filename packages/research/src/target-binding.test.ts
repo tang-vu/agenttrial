@@ -188,7 +188,7 @@ describe("independent-target binding and G3 gate", () => {
     ).toBe(true);
     expect(
       committed.blockers.filter((blocker) => blocker.startsWith("Method validity:")),
-    ).toHaveLength(5);
+    ).toHaveLength(3);
     expect(committed.mainTrialAllowed).toBe(false);
     expect(packet.rows).toHaveLength(80);
     expect(

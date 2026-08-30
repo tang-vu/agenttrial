@@ -62,7 +62,7 @@ Completed: 80 public source units are locked across AgentChaosBench, AgentDojo, 
 
 Remaining gates:
 
-1. Redesign the unit of analysis, operationalize distinct scenarios, and recompute power against the actual fault and control execution inventory.
+1. Obtain independent review of the ten executable operational variant contracts, redesign the unit of analysis, and recompute power against the actual fault and control execution inventory.
 2. Implement and verify read-only adapters for all locked source units under the approved redesign.
 3. Obtain independent review of construct mappings and assertion authorship without exposing evaluator outcomes.
 4. Acquire the approved number of distinct fault and control executions and report uncertainty at the precommitted clustering level.

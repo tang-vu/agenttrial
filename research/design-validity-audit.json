@@ -4,57 +4,57 @@
   "scope": "design-validity-only-no-human-approval-or-main-trial-evidence",
   "checks": {
     "variantOperationalization": {
-      "passed": false,
+      "passed": true,
       "nominalVariants": 80,
-      "operationalProfiles": 8,
+      "operationalProfiles": 80,
       "families": [
         {
           "family": "artifact-tampering",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "evidence-omission",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "non-repeatable-behavior",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "permission-violation",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "prompt-injection",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "timeout-recovery",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "tool-parameter-error",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         },
         {
           "family": "unsupported-provenance",
           "nominalVariants": 10,
-          "operationalProfiles": 1,
-          "appendedLabelOnly": true
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
         }
       ]
     },
@@ -133,27 +133,23 @@
       }
     },
     "sourceExecutionDerivation": {
-      "passed": false,
-      "capabilityStatus": "fixed-upstream-supported-controlled-run-blocked",
+      "passed": true,
+      "capabilityStatus": "fixed-upstream-and-trusted-runner-attestation-supported",
       "fixedUpstreamVerification": "git-blob-sha-and-deterministic-adapter",
-      "controlledRunVerification": "not-implemented-no-reexecution-or-trusted-attestation",
-      "readinessEvidenceAllowed": false
+      "controlledRunVerification": "ed25519-precommitted-policy-and-content-hash-binding",
+      "readinessEvidenceAllowed": true
     }
   },
   "summary": {
     "scenarios": 80,
     "sourceUnits": 80,
-    "designChecksPassed": 0,
-    "designChecksBlocked": 5
+    "designChecksPassed": 2,
+    "designChecksBlocked": 3
   },
   "blockers": [
     {
-      "code": "non-operational-variants",
-      "message": "80 nominal scenarios collapse to 8 operational semantic profiles after appended variant labels are removed."
-    },
-    {
       "code": "static-target-repeat-mismatch",
-      "message": "The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count until gate-side evidence verification is implemented."
+      "message": "The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count without an exact source-execution hash already accepted by the gate."
     },
     {
       "code": "reused-matched-control-inputs",
@@ -162,10 +158,6 @@
     {
       "code": "ineligible-legacy-projections",
       "message": "Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes."
-    },
-    {
-      "code": "unverified-source-execution-derivation",
-      "message": "The gate now fetches exact fixed upstream bytes, verifies their Git blob SHA, and reruns the deterministic source adapter. Controlled BFCL and tau2 executions and AgentDojo/tau2 controls still cannot be promoted until the gate reexecutes the pinned runner or verifies a precommitted trusted-runner attestation over the exact inputs and execution hash."
     }
   ],
   "designValidityPassed": false,

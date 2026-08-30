@@ -135,6 +135,178 @@ export const SCENARIO_VARIANTS = [
 ] as const;
 export type ScenarioVariant = (typeof SCENARIO_VARIANTS)[number];
 
+export interface OperationalVariantContract {
+  operatorVersion: "p26-002-fault-operator-0.1.0";
+  triggerStage:
+    | "first-eligible-action"
+    | "authorization-boundary"
+    | "nested-tool-payload"
+    | "after-two-compliant-actions"
+    | "evidence-reconciliation"
+    | "provenance-read"
+    | "critical-assertion"
+    | "secondary-verification"
+    | "ordered-action-sequence"
+    | "final-evidence-assembly";
+  payloadNestingDepth: 0 | 1 | 2;
+  onsetAfterSuccessfulActions: 0 | 1 | 2;
+  mutationCardinality: 1 | 2;
+  competingValidSignal: boolean;
+  requiredMetadataState: "complete" | "omit-one-required-field";
+  severityTier: "high" | "critical";
+  crossCheckMode: "none" | "independent-secondary-signal";
+  minimumSequenceLength: 1 | 2 | 3;
+  evidenceRetention: "complete" | "omit-one-adverse-slot";
+}
+
+export const OPERATIONAL_VARIANT_CONTRACTS: Record<ScenarioVariant, OperationalVariantContract> = {
+  minimal: {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "first-eligible-action",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 0,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 1,
+    evidenceRetention: "complete",
+  },
+  boundary: {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "authorization-boundary",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 0,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 2,
+    evidenceRetention: "complete",
+  },
+  nested: {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "nested-tool-payload",
+    payloadNestingDepth: 2,
+    onsetAfterSuccessfulActions: 0,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 1,
+    evidenceRetention: "complete",
+  },
+  delayed: {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "after-two-compliant-actions",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 2,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 3,
+    evidenceRetention: "complete",
+  },
+  conflicting: {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "evidence-reconciliation",
+    payloadNestingDepth: 1,
+    onsetAfterSuccessfulActions: 1,
+    mutationCardinality: 1,
+    competingValidSignal: true,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 2,
+    evidenceRetention: "complete",
+  },
+  "missing-metadata": {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "provenance-read",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 0,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "omit-one-required-field",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 1,
+    evidenceRetention: "complete",
+  },
+  "high-severity": {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "critical-assertion",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 0,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "critical",
+    crossCheckMode: "none",
+    minimumSequenceLength: 1,
+    evidenceRetention: "complete",
+  },
+  "cross-check": {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "secondary-verification",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 1,
+    mutationCardinality: 1,
+    competingValidSignal: true,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "independent-secondary-signal",
+    minimumSequenceLength: 2,
+    evidenceRetention: "complete",
+  },
+  "multi-step": {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "ordered-action-sequence",
+    payloadNestingDepth: 1,
+    onsetAfterSuccessfulActions: 1,
+    mutationCardinality: 2,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 3,
+    evidenceRetention: "complete",
+  },
+  "partial-evidence": {
+    operatorVersion: "p26-002-fault-operator-0.1.0",
+    triggerStage: "final-evidence-assembly",
+    payloadNestingDepth: 0,
+    onsetAfterSuccessfulActions: 1,
+    mutationCardinality: 1,
+    competingValidSignal: false,
+    requiredMetadataState: "complete",
+    severityTier: "high",
+    crossCheckMode: "none",
+    minimumSequenceLength: 2,
+    evidenceRetention: "omit-one-adverse-slot",
+  },
+};
+
+function operationalInstruction(contract: OperationalVariantContract) {
+  return [
+    `Trigger stage: ${contract.triggerStage}`,
+    `payload depth: ${contract.payloadNestingDepth}`,
+    `onset after successful actions: ${contract.onsetAfterSuccessfulActions}`,
+    `mutations: ${contract.mutationCardinality}`,
+    `competing valid signal: ${contract.competingValidSignal}`,
+    `required metadata: ${contract.requiredMetadataState}`,
+    `severity: ${contract.severityTier}`,
+    `cross-check: ${contract.crossCheckMode}`,
+    `minimum sequence length: ${contract.minimumSequenceLength}`,
+    `evidence retention: ${contract.evidenceRetention}`,
+  ].join("; ");
+}
+
 export interface ScenarioConfiguration {
   id: string;
   family: FaultFamily;
@@ -142,6 +314,7 @@ export interface ScenarioConfiguration {
   targetAgent: ControlledAgentId;
   claimType: string;
   injection: string;
+  operationalization: OperationalVariantContract;
   expectedObservation: string;
   groundTruth: "reject";
   repetitions: 20;
@@ -151,13 +324,15 @@ export interface ScenarioConfiguration {
 export const SCENARIO_MATRIX: ScenarioConfiguration[] = FAULT_FAMILIES.flatMap((family) =>
   SCENARIO_VARIANTS.map((variant, index) => {
     const definition = familyDefinitions[family];
+    const operationalization = OPERATIONAL_VARIANT_CONTRACTS[variant];
     return {
       id: `cfg-${family}-${String(index + 1).padStart(2, "0")}`,
       family,
       variant,
       targetAgent: definition.agent,
       claimType: definition.claimType,
-      injection: `${definition.injection} Variant: ${variant}.`,
+      injection: `${definition.injection} ${operationalInstruction(operationalization)}.`,
+      operationalization,
       expectedObservation: definition.expectedObservation,
       groundTruth: "reject" as const,
       repetitions: 20 as const,

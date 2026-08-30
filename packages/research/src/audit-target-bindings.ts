@@ -10,6 +10,7 @@ import {
   researchDesignHash,
 } from "./index";
 import { buildDesignValidityAudit, type RepeatExecutionInventory } from "./design-validity";
+import { validateOraclePacket, type OracleAdjudicationPacket } from "./oracle-adjudication";
 import {
   buildControlExecutionContractArtifact,
   controlExecutionContractForTarget,
@@ -24,7 +25,6 @@ import {
   type JsonValue,
 } from "./target-adapter";
 import {
-  assertSourceExecutionDerivationSupported,
   createGithubPinnedSourceBlobReader,
   verifyGateObservedSourceExecutionDerivation,
   type ClaimedSourceExecution,
@@ -32,6 +32,11 @@ import {
   type LockedSourceProvenance,
   type PinnedSourceBlobReader,
 } from "./source-execution-derivation";
+import {
+  validateTrustedRunnerPolicy,
+  type TrustedRunnerAttestation,
+  type TrustedRunnerPolicy,
+} from "./trusted-runner";
 import {
   excludeReplacedLegacyProjectionHashes,
   validateAgentChaosProjectionAudit,
@@ -394,6 +399,12 @@ function parseSourceExecution(
     !controlContract
   )
     throw new Error(`Control execution contract is not loaded for ${record.targetId}`);
+  const sourceProvenance = expectedLockedSourceProvenance(
+    target,
+    condition,
+    availability,
+    controlContracts,
+  );
   const expectedKeys = [
     ...(condition === "control" ? ["controlConfigurationId"] : []),
     ...(controlContract ? ["controlExecutionContractSha256"] : []),
@@ -407,17 +418,14 @@ function parseSourceExecution(
     "targetId",
     "task",
     "executionProvenance",
+    ...(sourceProvenance.unitKind === "benchmark-task" && "trustedRunnerAttestation" in execution
+      ? ["trustedRunnerAttestation"]
+      : []),
   ].sort();
   const rawTrace = execution.rawTrace;
   const nonemptyTrace =
     (Array.isArray(rawTrace) && rawTrace.length > 0) ||
     (isJsonObject(rawTrace) && Object.keys(rawTrace).length > 0);
-  const sourceProvenance = expectedLockedSourceProvenance(
-    target,
-    condition,
-    availability,
-    controlContracts,
-  );
   if (
     JSON.stringify(Object.keys(execution).sort()) !== JSON.stringify(expectedKeys) ||
     execution.schemaVersion !== "p26-002-candidate-execution-0.3.0" ||
@@ -436,6 +444,9 @@ function parseSourceExecution(
     execution.finalOutput.trim() === "" ||
     typeof execution.task !== "string" ||
     execution.task.trim() === "" ||
+    ("trustedRunnerAttestation" in execution &&
+      (sourceProvenance.unitKind !== "benchmark-task" ||
+        !isJsonObject(execution.trustedRunnerAttestation))) ||
     !nonemptyTrace ||
     findForbiddenProjectionKeys(execution).length !== 0
   )
@@ -467,6 +478,12 @@ function parseSourceExecution(
     ...(controlContract ? { controlExecutionContractSha256: controlContract.contractSha256 } : {}),
     sourceProvenance,
     executionProvenance,
+    ...(sourceProvenance.unitKind === "benchmark-task" && "trustedRunnerAttestation" in execution
+      ? {
+          trustedRunnerAttestation:
+            execution.trustedRunnerAttestation as unknown as TrustedRunnerAttestation,
+        }
+      : {}),
     sourceReference: execution.sourceReference,
     task: execution.task,
     finalOutput: execution.finalOutput,
@@ -641,6 +658,8 @@ async function verifyRemainingEvidenceContents(
   targets: IndependentTargetEntry[],
   availability: SourceAvailabilityAudit,
   expectedRunnerMethodDigest: string,
+  expectedDesignHash: string,
+  trustedRunnerPolicy: TrustedRunnerPolicy,
   controlContracts: ControlExecutionContractArtifact,
   readPinnedBlob: PinnedSourceBlobReader = createGithubPinnedSourceBlobReader(),
 ) {
@@ -713,6 +732,10 @@ async function verifyRemainingEvidenceContents(
       rawTrace: parsed.rawTrace as JsonValue,
       sourceProvenance: parsed.sourceProvenance,
       executionProvenance: parsed.executionProvenance,
+      trustedRunnerAttestation:
+        "trustedRunnerAttestation" in parsed
+          ? (parsed.trustedRunnerAttestation as TrustedRunnerAttestation)
+          : null,
     } satisfies ClaimedSourceExecution;
     const existing = pendingDerivations.get(record.sourceExecutionSha256);
     if (existing) {
@@ -751,22 +774,24 @@ async function verifyRemainingEvidenceContents(
     }
   }
 
-  for (const { target, execution } of pendingDerivations.values())
-    assertSourceExecutionDerivationSupported(
-      target.targetId,
-      execution.sourceProvenance,
-      execution.executionProvenance,
-    );
-  await Promise.all(
-    [...pendingDerivations.values()].map(async ({ target, execution, projectionHashes }) => {
-      const result = await verifyGateObservedSourceExecutionDerivation({
-        target,
-        execution,
-        readPinnedBlob,
-      });
-      if ([...projectionHashes].some((hash) => hash !== result.projectionHash))
-        throw new Error(`Gate-derived projection hash does not match ${target.targetId}`);
-    }),
+  const verifiedDerivations = await Promise.all(
+    [...pendingDerivations.entries()].map(
+      async ([sourceExecutionSha256, { target, execution, projectionHashes }]) => {
+        const result = await verifyGateObservedSourceExecutionDerivation({
+          target,
+          execution,
+          readPinnedBlob,
+          trustedRunner: {
+            policy: trustedRunnerPolicy,
+            expectedDesignHash,
+            expectedRunnerMethodDigest,
+          },
+        });
+        if ([...projectionHashes].some((hash) => hash !== result.projectionHash))
+          throw new Error(`Gate-derived projection hash does not match ${target.targetId}`);
+        return { sourceExecutionSha256, executionKind: execution.executionProvenance.kind };
+      },
+    ),
   );
 
   const verifiedFaults = projectionAudit.evidenceArtifacts.flatMap((evidence) =>
@@ -857,6 +882,11 @@ async function verifyRemainingEvidenceContents(
         `Control projection is not bound to supplemental source evidence for ${projection.targetId}`,
       );
   }
+  return new Set(
+    verifiedDerivations
+      .filter((item) => item.executionKind === "controlled-run")
+      .map((item) => item.sourceExecutionSha256),
+  );
 }
 
 async function verifyHumanEvidence(name: string, gate: HumanGate, mainTrialInputDigest: string) {
@@ -898,6 +928,8 @@ export async function generateTargetBindingAudit() {
     methodFreeze,
     designFreeze,
     repeatExecutionInventory,
+    trustedRunnerPolicy,
+    oracleAdjudicationTemplate,
   ] = await Promise.all([
     readJson<{ entries: IndependentTargetEntry[] }>("research/independent-targets.json"),
     readJson<SourceAvailabilityAudit>("research/targets/source-availability-audit.json"),
@@ -910,7 +942,11 @@ export async function generateTargetBindingAudit() {
     readJson<MethodFreezeApproval>("research/governance/method-freeze-approval.json"),
     readJson<{ status: string; designHash: string }>("research/design-freeze.json"),
     readJson<RepeatExecutionInventory>("research/targets/repeat-execution-inventory.json"),
+    readJson<TrustedRunnerPolicy>("research/targets/trusted-runner-policy.json"),
+    readJson<OracleAdjudicationPacket>("research/governance/oracle-adjudication-template.json"),
   ]);
+  validateTrustedRunnerPolicy(trustedRunnerPolicy.value);
+  validateOraclePacket(oracleAdjudicationTemplate.value);
 
   const excludedAgentChaosProjectionHashes = validateAgentChaosProjectionAudit(
     agentChaos.value,
@@ -953,12 +989,15 @@ export async function generateTargetBindingAudit() {
   const executableMethodDigest = createHash("sha256")
     .update(JSON.stringify(methodFileHashes))
     .digest("hex");
-  await verifyRemainingEvidenceContents(
+  const currentDesignHash = researchDesignHash();
+  const verifiedControlledSourceExecutionSha256s = await verifyRemainingEvidenceContents(
     remaining.value,
     remainingControls.value,
     targets.value.entries,
     availability.value,
     executableMethodDigest,
+    currentDesignHash,
+    trustedRunnerPolicy.value,
     controlExecutionContracts,
   );
 
@@ -997,6 +1036,7 @@ export async function generateTargetBindingAudit() {
         POWER_ANALYSIS_PLAN.candidateDesign.totalSharedExecutionArtifacts,
     },
     repeatExecutionInventory: repeatExecutionInventory.value,
+    verifiedControlledSourceExecutionSha256s,
   });
   const designValidityBytes = Buffer.from(`${JSON.stringify(designValidity, null, 2)}\n`, "utf8");
   await writeAtomic("research/design-validity-audit.json", designValidityBytes.toString("utf8"));
@@ -1013,6 +1053,8 @@ export async function generateTargetBindingAudit() {
     remainingControlSourceAuditSha256: sha256(remainingControls.bytes),
     controlExecutionContractsSha256: sha256(controlExecutionContractBytes),
     repeatExecutionInventorySha256: sha256(repeatExecutionInventory.bytes),
+    trustedRunnerPolicySha256: sha256(trustedRunnerPolicy.bytes),
+    oracleAdjudicationTemplateSha256: sha256(oracleAdjudicationTemplate.bytes),
     constructReviewPacketSha256: sha256(constructReview.bytes),
     designValidityAuditSha256: sha256(designValidityBytes),
   };
@@ -1038,7 +1080,7 @@ export async function generateTargetBindingAudit() {
     methodFreeze: methodFreeze.value,
   });
 
-  if (designFreeze.value.designHash !== researchDesignHash())
+  if (designFreeze.value.designHash !== currentDesignHash)
     throw new Error("Design freeze artifact does not match the executable research design");
   if (designFreeze.value.status !== "redesign-required")
     throw new Error(
@@ -1048,7 +1090,7 @@ export async function generateTargetBindingAudit() {
   const artifact = {
     ...audit,
     inputs: {
-      designHash: researchDesignHash(),
+      designHash: currentDesignHash,
       mainTrialInputDigest,
       executableMethodFiles: methodFileHashes,
       ...mainTrialInputHashes,

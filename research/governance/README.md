@@ -10,7 +10,11 @@ Any non-pending decision requires `decidedBy`, a valid `decidedOn` date, and evi
 
 `construct-review-packet.json` contains 80 provisional family-order bindings. Family order is only a deterministic way to prepare the review packet. It is not a scientific justification for matching a source unit to a generic scenario variant. Two different human reviewers must assess every row, and a third person must adjudicate disagreements. The audit validates this packet but never overwrites it.
 
-Each row includes full target, fault, and control descriptors plus canonical hashes. Projection readiness is excluded from the construct decision. Reviewers must follow `construct-mapping-protocol.md`; the current variant labels are not operational definitions and cannot be approved on their names alone.
+`pnpm research:refresh-construct-review` may refresh descriptor hashes only while every human field is still null. It refuses to overwrite a packet containing any human decision.
+
+Each row includes full target, fault, and control descriptors plus canonical hashes. Projection readiness is excluded from the construct decision. Reviewers must follow `construct-mapping-protocol.md`; the operational contracts require independent construct review and cannot be approved from their variant names alone.
+
+`oracle-adjudication-template.json` freezes a separate evaluator-blind two-reviewer and third-adjudicator workflow for execution-level oracle decisions. It remains empty until source-bound execution evidence exists. Evaluator verdicts, evaluator identity, and treatment implementation fields are forbidden from the packet.
 
 The current gate also remains blocked because:
 
@@ -19,9 +23,8 @@ The current gate also remains blocked because:
 - only 60 of 80 control bindings have pinned inputs, and those 60 represent only 20 unique input references;
 - BFCL and tau2 controlled candidate executions do not yet exist;
 - AgentDojo and tau2 control task and acceptance contracts are pinned, but none is a completed execution artifact;
-- scenario variants are not operationally distinct, so the current family-order mappings cannot be approved;
 - fixed upstream executions cannot satisfy the current 20-execution repetition model through evaluator replay;
-- fixed upstream executions have a Git-blob-verified deterministic derivation path, but the gate does not yet reexecute or attest controlled runs;
+- controlled runs require actual Ed25519 attestations from a human-registered key; the verifier exists, but the committed trust policy is intentionally unkeyed;
 - independent method-freeze approval is still pending.
 
 Run `pnpm research:audit-target-bindings` to regenerate `research/design-validity-audit.json`, `research/targets/control-execution-contracts.json`, and the target-binding machine audit. It never overwrites a human record. Run `pnpm research:gate-main-trial` as the main-trial execution gate; a nonzero exit is the correct result while any blocker remains.

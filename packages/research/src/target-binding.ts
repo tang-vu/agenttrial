@@ -473,6 +473,65 @@ function validateDesignValidity(audit: DesignValidityAudit | undefined) {
   return audit.blockers.map((blocker) => `${blocker.code}: ${blocker.message}`);
 }
 
+export function buildBlankConstructReviewPacket(input: {
+  faultConfigurations: ScenarioConfiguration[];
+  controlConfigurations: ControlConfiguration[];
+  targets: IndependentTargetEntry[];
+}): ConstructReviewPacket {
+  if (
+    input.faultConfigurations.length !== 80 ||
+    input.controlConfigurations.length !== 80 ||
+    input.targets.length !== 80
+  )
+    fail("blank construct-review packet requires the complete 80-row candidate universe");
+  const families = new Set(input.faultConfigurations.map((item) => item.family));
+  const rows: ConstructReviewPacket["rows"] = [];
+  for (const family of families) {
+    const faults = input.faultConfigurations
+      .filter((item) => item.family === family)
+      .sort((left, right) => left.id.localeCompare(right.id));
+    const controls = input.controlConfigurations.filter((item) => item.family === family);
+    const targets = input.targets
+      .filter((item) => item.family === family)
+      .sort((left, right) => numericTargetId(left.targetId) - numericTargetId(right.targetId));
+    if (faults.length !== 10 || controls.length !== 10 || targets.length !== 10)
+      fail(`family ${family} does not have exactly 10 faults, controls, and targets`);
+    for (const [index, fault] of faults.entries()) {
+      const target = targets[index]!;
+      const control = exactlyOne(
+        controls.filter((item) => item.pairedFaultConfigurationId === fault.id),
+        `matched control for ${fault.id}`,
+      );
+      const scenarioDescriptor = { fault, control };
+      rows.push({
+        targetId: target.targetId,
+        family,
+        source: target.source,
+        targetDescriptorSha256: targetDescriptorSha256(target),
+        scenarioDescriptorSha256: sha256Canonical(scenarioDescriptor),
+        targetDescriptor: target,
+        scenarioDescriptor,
+        proposedFaultConfigurationId: fault.id,
+        proposedControlConfigurationId: control.id,
+        proposedScenarioVariant: fault.variant,
+        bindingMethod: "provisional-family-order-review-required",
+        reviewerA: { decision: null, reviewer: null, notes: null },
+        reviewerB: { decision: null, reviewer: null, notes: null },
+        adjudication: { decision: null, adjudicator: null, notes: null },
+      });
+    }
+  }
+  rows.sort((left, right) => numericTargetId(left.targetId) - numericTargetId(right.targetId));
+  return {
+    schemaVersion: "p26-002-construct-review-packet-0.1.0",
+    status: "pending-human-review",
+    humanOnly: true,
+    rows,
+    releaseAllowed: false,
+    submissionAllowed: false,
+  };
+}
+
 function validateReviewer(
   targetId: string,
   label: string,

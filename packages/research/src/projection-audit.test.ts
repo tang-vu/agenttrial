@@ -133,7 +133,7 @@ describe("projection audit provenance gates", () => {
     );
   });
 
-  it("requires gate-reconstructed fault projections for all 80 frozen targets", () => {
+  it("accepts partial gate reconstruction but reserves passed for all 80 pairs", () => {
     const complete = completeRemainingProjectionAudit();
     expect(validateRemainingProjectionAudit(complete, targets).faultProjections).toHaveLength(80);
 
@@ -144,8 +144,13 @@ describe("projection audit provenance gates", () => {
       ),
     );
     futureFamiliesOnly.verified.fault = futureFamiliesOnly.faultProjections.length;
+    futureFamiliesOnly.status = "partial";
+    expect(
+      validateRemainingProjectionAudit(futureFamiliesOnly, targets).faultProjections,
+    ).toHaveLength(20);
+    futureFamiliesOnly.status = "passed";
     expect(() => validateRemainingProjectionAudit(futureFamiliesOnly, targets)).toThrow(
-      /complete 80-fault\/80-control pass/,
+      /valid partial or complete gate pass/,
     );
   });
 
@@ -153,7 +158,7 @@ describe("projection audit provenance gates", () => {
     const invalid = completeRemainingProjectionAudit();
     invalid.faultProjections[0]!.targetId = invalid.faultProjections[1]!.targetId;
     expect(() => validateRemainingProjectionAudit(invalid, targets)).toThrow(
-      /do not match the frozen source partition/,
+      /duplicated or outside the frozen source partition/,
     );
   });
 

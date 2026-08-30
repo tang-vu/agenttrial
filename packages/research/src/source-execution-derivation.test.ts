@@ -1,3 +1,4 @@
+import { createHash, generateKeyPairSync, sign } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -14,6 +15,12 @@ import type {
   BfclTargetEntry,
   IndependentTargetEntry,
 } from "./target-binding";
+import {
+  buildTrustedRunnerAttestationPayload,
+  canonicalJson,
+  type ControlledExecutionForAttestation,
+  type TrustedRunnerPolicy,
+} from "./trusted-runner";
 
 const targets = JSON.parse(
   readFileSync(new URL("../../../research/independent-targets.json", import.meta.url), "utf8"),
@@ -73,6 +80,7 @@ function fixedFixture(condition: "fault" | "control" = "fault") {
     rawTrace: projection.rawTrace,
     sourceProvenance,
     executionProvenance,
+    trustedRunnerAttestation: null,
   };
   return { bytes, execution, projection };
 }
@@ -91,6 +99,7 @@ describe("gate-observed source execution derivation", () => {
       condition: "fault",
       gitBlobSha: fixture.execution.sourceProvenance.blobShas[0],
       projectionHash: fixture.projection.projectionHash,
+      derivation: "fixed-upstream",
     });
   });
 
@@ -124,7 +133,7 @@ describe("gate-observed source execution derivation", () => {
     ).rejects.toThrow(/do not match the deterministic adapter/);
   });
 
-  it("fails closed for a controlled run before any source fetch", () => {
+  it("fails closed for a controlled run without an attestation and active trust policy", () => {
     const source: LockedSourceProvenance = {
       repository: "ShishirPatil/gorilla",
       revision: "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
@@ -140,7 +149,92 @@ describe("gate-observed source execution derivation", () => {
         runId: "controlled-run-01",
         seed: 1,
       }),
-    ).toThrow(/has no gate reexecution or precommitted trusted-runner attestation verifier/);
+    ).toThrow(/lacks a verifiable trusted-runner attestation/);
+  });
+
+  it("verifies a controlled run through the precommitted trusted-runner path", async () => {
+    const designHash = "4".repeat(64);
+    const runnerMethodDigest = "5".repeat(64);
+    const sourceProvenance = {
+      repository: "ShishirPatil/gorilla",
+      revision: "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+      unitKind: "benchmark-task",
+      unitId: controlledTarget.faultId,
+      blobShas: [controlledTarget.questionBlobSha, controlledTarget.answerBlobSha],
+    } satisfies LockedSourceProvenance;
+    const executionForAttestation: ControlledExecutionForAttestation = {
+      targetId: controlledTarget.targetId,
+      source: controlledTarget.source,
+      condition: "fault",
+      task: "Call the weather tool for Boston.",
+      finalOutput: "The requested tool call completed.",
+      rawTrace: { calls: [{ name: "weather", arguments: { city: "Boston" } }] },
+      sourceProvenance,
+      executionProvenance: {
+        kind: "controlled-run",
+        runnerMethodDigest,
+        fixedRunIdentity: null,
+        runId: "ext-061-fault-0001",
+        seed: 260020001,
+      },
+    };
+    const { publicKey, privateKey } = generateKeyPairSync("ed25519");
+    const publicDer = publicKey.export({ format: "der", type: "spki" });
+    const payload = buildTrustedRunnerAttestationPayload({
+      execution: executionForAttestation,
+      designHash,
+    });
+    const policy: TrustedRunnerPolicy = {
+      schemaVersion: "p26-002-trusted-runner-policy-0.1.0",
+      status: "active",
+      studyId: "P26-002",
+      designHash,
+      runnerMethodDigest,
+      keys: [
+        {
+          keyId: "integration-runner",
+          algorithm: "ed25519",
+          publicKeySpkiBase64: publicDer.toString("base64"),
+          publicKeySpkiSha256: createHash("sha256").update(publicDer).digest("hex"),
+        },
+      ],
+      keyRegistrationHumanRequired: true,
+      releaseAllowed: false,
+      submissionAllowed: false,
+    };
+    const execution: ClaimedSourceExecution = {
+      ...executionForAttestation,
+      trustedRunnerAttestation: {
+        schemaVersion: "p26-002-trusted-runner-attestation-0.1.0",
+        algorithm: "ed25519",
+        keyId: "integration-runner",
+        payload,
+        signatureBase64: sign(
+          null,
+          Buffer.from(canonicalJson(payload), "utf8"),
+          privateKey,
+        ).toString("base64"),
+      },
+    };
+    const readPinnedBlob = vi.fn(async () => new Uint8Array());
+    await expect(
+      verifyGateObservedSourceExecutionDerivation({
+        target: controlledTarget,
+        execution,
+        readPinnedBlob,
+        trustedRunner: {
+          policy,
+          expectedDesignHash: designHash,
+          expectedRunnerMethodDigest: runnerMethodDigest,
+        },
+      }),
+    ).resolves.toMatchObject({
+      targetId: controlledTarget.targetId,
+      condition: "fault",
+      derivation: "trusted-runner-attestation",
+      attestationKeyId: "integration-runner",
+    });
+    expect(readPinnedBlob).not.toHaveBeenCalled();
   });
 
   it("uses an immutable raw URL, rejects unsafe paths, and caches exact blob reads", async () => {
