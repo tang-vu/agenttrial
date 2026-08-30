@@ -60,6 +60,10 @@ import {
   type MethodFreezeApproval,
   type SourceAvailabilityAudit,
 } from "./target-binding";
+import {
+  validateArtifactTamperingMutationPlan,
+  type ArtifactTamperingMutationPlan,
+} from "./artifact-tampering-plan";
 
 const modulePath = fileURLToPath(import.meta.url);
 const repositoryRoot = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
@@ -946,6 +950,7 @@ export async function generateTargetBindingAudit() {
     repeatExecutionInventory,
     trustedRunnerPolicy,
     oracleAdjudicationTemplate,
+    artifactTamperingPlan,
   ] = await Promise.all([
     readJson<{ entries: IndependentTargetEntry[] }>("research/independent-targets.json"),
     readJson<SourceAvailabilityAudit>("research/targets/source-availability-audit.json"),
@@ -960,9 +965,13 @@ export async function generateTargetBindingAudit() {
     readJson<RepeatExecutionInventory>("research/targets/repeat-execution-inventory.json"),
     readJson<TrustedRunnerPolicy>("research/targets/trusted-runner-policy.json"),
     readJson<OracleAdjudicationPacket>("research/governance/oracle-adjudication-template.json"),
+    readJson<ArtifactTamperingMutationPlan>(
+      "research/targets/artifact-tampering-mutation-plan.json",
+    ),
   ]);
   validateTrustedRunnerPolicy(trustedRunnerPolicy.value);
   validateOraclePacket(oracleAdjudicationTemplate.value);
+  validateArtifactTamperingMutationPlan(artifactTamperingPlan.value);
 
   const excludedAgentChaosProjectionHashes = validateAgentChaosProjectionAudit(
     agentChaos.value,
@@ -1071,6 +1080,7 @@ export async function generateTargetBindingAudit() {
     repeatExecutionInventorySha256: sha256(repeatExecutionInventory.bytes),
     trustedRunnerPolicySha256: sha256(trustedRunnerPolicy.bytes),
     oracleAdjudicationTemplateSha256: sha256(oracleAdjudicationTemplate.bytes),
+    artifactTamperingPlanSha256: sha256(artifactTamperingPlan.bytes),
     constructReviewPacketSha256: sha256(constructReview.bytes),
     designValidityAuditSha256: sha256(designValidityBytes),
   };

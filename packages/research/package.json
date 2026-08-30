@@ -16,6 +16,7 @@
   "scripts": {
     "audit:target-bindings": "node --import tsx src/audit-target-bindings.ts",
     "audit:blocker-ledger": "node --import tsx src/blocker-ledger.ts",
+    "freeze:artifact-tampering-plan": "node --import tsx src/freeze-artifact-tampering-plan.ts",
     "reconstruct:fixed-upstream-faults": "node --import tsx src/reconstruct-fixed-upstream-faults.ts",
     "refresh:construct-review": "node --import tsx src/refresh-construct-review.ts",
     "freeze": "node --import tsx src/freeze.ts && prettier --write ../../research/design-freeze.json",

@@ -18,6 +18,11 @@
       "id": "P26-002-M02",
       "gate": "source-execution-derivation-verifier",
       "evidence": "ed25519-precommitted-policy-and-content-hash-binding"
+    },
+    {
+      "id": "P26-002-M03",
+      "gate": "prospective-artifact-tampering-operator-plan",
+      "evidence": "10/10 source-locked entries; applicationAllowed=false; evidenceMaterialized=false"
     }
   ],
   "blockers": [
@@ -100,7 +105,7 @@
       "cleared": false
     }
   ],
-  "nextSafeMachineAction": "Materialize fixed-upstream evidence through an authorized evidence boundary, specify the artifact-tampering mutation operator, and prepare controlled-run jobs; do not promote unpublished local receipts or unattested controlled evidence.",
+  "nextSafeMachineAction": "Materialize fixed-upstream evidence through an authorized evidence boundary and prepare controlled-run jobs; keep the prospectively specified artifact-tampering operator unapplied until construct review and authorized evidence materialization.",
   "mainTrialAllowed": false,
   "releaseAllowed": false,
   "submissionAllowed": false
