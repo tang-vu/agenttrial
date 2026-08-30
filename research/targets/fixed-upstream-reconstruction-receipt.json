@@ -71,12 +71,12 @@
       "ext-049",
       "ext-050"
     ],
-    "runnerMethodDigest": "775dcde30cc2f86957b4bbf0d368cbc1fce97e0b0332c1eed4e9e9bf49b17ceb"
+    "runnerMethodDigest": "53f92654c8233a49c4f7ff26bfae08ea6d41527e38c4703daa7e14cf236806ad"
   },
   "localArtifact": {
     "path": "research/targets/evidence/fixed-upstream-fault-projections.json.gz",
-    "sha256": "b3493dc01ee9d2113bc6b85e945df71dc18d6e1931856694992e2096a2373855",
-    "byteLength": 3254281,
+    "sha256": "89c3df2f610c3dd6f5b1ee11383192927f2c31e37a06e9aac5965f7c5d19b469",
+    "byteLength": 3254266,
     "gitVersioned": false,
     "published": false
   },

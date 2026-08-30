@@ -8,6 +8,10 @@ import {
   validateArtifactTamperingMutationPlan,
   type ArtifactTamperingMutationPlan,
 } from "./artifact-tampering-plan";
+import {
+  validateControlledRunJobInventory,
+  type ControlledRunJobInventory,
+} from "./controlled-run-job-inventory";
 
 type BlockerClass = "human-only" | "execution-or-source-evidence";
 
@@ -33,9 +37,17 @@ export function buildBlockerLedger(input: {
   designValidity: DesignValidityAudit;
   trustedRunnerPolicy: TrustedRunnerPolicy;
   artifactTamperingPlan: ArtifactTamperingMutationPlan;
+  controlledRunJobInventory: ControlledRunJobInventory;
 }) {
-  const { audit, designValidity, trustedRunnerPolicy, artifactTamperingPlan } = input;
+  const {
+    audit,
+    designValidity,
+    trustedRunnerPolicy,
+    artifactTamperingPlan,
+    controlledRunJobInventory,
+  } = input;
   validateArtifactTamperingMutationPlan(artifactTamperingPlan);
+  validateControlledRunJobInventory(controlledRunJobInventory);
   if (audit.mainTrialAllowed || audit.submissionAllowed !== false)
     throw new Error("Blocker ledger can only be built from a fail-closed readiness audit");
   const blockers = audit.blockers.map((message, index) => ({
@@ -84,10 +96,15 @@ export function buildBlockerLedger(input: {
         gate: "prospective-artifact-tampering-operator-plan",
         evidence: `${artifactTamperingPlan.entries.length}/10 source-locked entries; applicationAllowed=false; evidenceMaterialized=false`,
       },
+      {
+        id: "P26-002-M04",
+        gate: "fail-closed-controlled-run-job-inventory",
+        evidence: `${controlledRunJobInventory.jobs.length}/50 source-locked envelopes; runnableJobs=0; executionAllowed=false`,
+      },
     ],
     blockers,
     nextSafeMachineAction:
-      "Materialize fixed-upstream evidence through an authorized evidence boundary and prepare controlled-run jobs; keep the prospectively specified artifact-tampering operator unapplied until construct review and authorized evidence materialization.",
+      "Materialize fixed-upstream evidence through an authorized evidence boundary and define the 30 missing exact runner contracts; keep all 50 controlled-run envelopes unscheduled and the artifact-tampering operator unapplied until their human and authorization prerequisites are satisfied.",
     mainTrialAllowed: false,
     releaseAllowed: false,
     submissionAllowed: false,
@@ -97,7 +114,13 @@ export function buildBlockerLedger(input: {
 const modulePath = fileURLToPath(import.meta.url);
 if (resolve(process.argv[1] ?? "") === resolve(modulePath)) {
   const repositoryRoot = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
-  const [audit, designValidity, trustedRunnerPolicy, artifactTamperingPlan] = await Promise.all([
+  const [
+    audit,
+    designValidity,
+    trustedRunnerPolicy,
+    artifactTamperingPlan,
+    controlledRunJobInventory,
+  ] = await Promise.all([
     readFile(resolve(repositoryRoot, "research/targets/target-binding-audit.json"), "utf8").then(
       (value) => JSON.parse(value) as TargetBindingAudit,
     ),
@@ -111,12 +134,17 @@ if (resolve(process.argv[1] ?? "") === resolve(modulePath)) {
       resolve(repositoryRoot, "research/targets/artifact-tampering-mutation-plan.json"),
       "utf8",
     ).then((value) => JSON.parse(value) as ArtifactTamperingMutationPlan),
+    readFile(
+      resolve(repositoryRoot, "research/targets/controlled-run-job-inventory.json"),
+      "utf8",
+    ).then((value) => JSON.parse(value) as ControlledRunJobInventory),
   ]);
   const ledger = buildBlockerLedger({
     audit,
     designValidity,
     trustedRunnerPolicy,
     artifactTamperingPlan,
+    controlledRunJobInventory,
   });
   const destination = resolve(repositoryRoot, "research/readiness-blocker-ledger.json");
   const temporary = `${destination}.${process.pid}.tmp`;

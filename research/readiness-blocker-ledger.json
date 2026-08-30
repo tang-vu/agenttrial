@@ -23,6 +23,11 @@
       "id": "P26-002-M03",
       "gate": "prospective-artifact-tampering-operator-plan",
       "evidence": "10/10 source-locked entries; applicationAllowed=false; evidenceMaterialized=false"
+    },
+    {
+      "id": "P26-002-M04",
+      "gate": "fail-closed-controlled-run-job-inventory",
+      "evidence": "50/50 source-locked envelopes; runnableJobs=0; executionAllowed=false"
     }
   ],
   "blockers": [
@@ -105,7 +110,7 @@
       "cleared": false
     }
   ],
-  "nextSafeMachineAction": "Materialize fixed-upstream evidence through an authorized evidence boundary and prepare controlled-run jobs; keep the prospectively specified artifact-tampering operator unapplied until construct review and authorized evidence materialization.",
+  "nextSafeMachineAction": "Materialize fixed-upstream evidence through an authorized evidence boundary and define the 30 missing exact runner contracts; keep all 50 controlled-run envelopes unscheduled and the artifact-tampering operator unapplied until their human and authorization prerequisites are satisfied.",
   "mainTrialAllowed": false,
   "releaseAllowed": false,
   "submissionAllowed": false

@@ -64,6 +64,10 @@ import {
   validateArtifactTamperingMutationPlan,
   type ArtifactTamperingMutationPlan,
 } from "./artifact-tampering-plan";
+import {
+  validateControlledRunJobInventory,
+  type ControlledRunJobInventory,
+} from "./controlled-run-job-inventory";
 
 const modulePath = fileURLToPath(import.meta.url);
 const repositoryRoot = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
@@ -951,6 +955,7 @@ export async function generateTargetBindingAudit() {
     trustedRunnerPolicy,
     oracleAdjudicationTemplate,
     artifactTamperingPlan,
+    controlledRunJobInventory,
   ] = await Promise.all([
     readJson<{ entries: IndependentTargetEntry[] }>("research/independent-targets.json"),
     readJson<SourceAvailabilityAudit>("research/targets/source-availability-audit.json"),
@@ -968,10 +973,12 @@ export async function generateTargetBindingAudit() {
     readJson<ArtifactTamperingMutationPlan>(
       "research/targets/artifact-tampering-mutation-plan.json",
     ),
+    readJson<ControlledRunJobInventory>("research/targets/controlled-run-job-inventory.json"),
   ]);
   validateTrustedRunnerPolicy(trustedRunnerPolicy.value);
   validateOraclePacket(oracleAdjudicationTemplate.value);
   validateArtifactTamperingMutationPlan(artifactTamperingPlan.value);
+  validateControlledRunJobInventory(controlledRunJobInventory.value);
 
   const excludedAgentChaosProjectionHashes = validateAgentChaosProjectionAudit(
     agentChaos.value,
@@ -1081,6 +1088,7 @@ export async function generateTargetBindingAudit() {
     trustedRunnerPolicySha256: sha256(trustedRunnerPolicy.bytes),
     oracleAdjudicationTemplateSha256: sha256(oracleAdjudicationTemplate.bytes),
     artifactTamperingPlanSha256: sha256(artifactTamperingPlan.bytes),
+    controlledRunJobInventorySha256: sha256(controlledRunJobInventory.bytes),
     constructReviewPacketSha256: sha256(constructReview.bytes),
     designValidityAuditSha256: sha256(designValidityBytes),
   };

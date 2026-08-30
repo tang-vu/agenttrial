@@ -5,6 +5,7 @@ import type { DesignValidityAudit } from "./design-validity";
 import type { TargetBindingAudit } from "./target-binding";
 import type { TrustedRunnerPolicy } from "./trusted-runner";
 import type { ArtifactTamperingMutationPlan } from "./artifact-tampering-plan";
+import type { ControlledRunJobInventory } from "./controlled-run-job-inventory";
 
 function readJson<T>(path: string) {
   return JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8")) as T;
@@ -21,6 +22,9 @@ describe("P26-002 readiness blocker ledger", () => {
       artifactTamperingPlan: readJson<ArtifactTamperingMutationPlan>(
         "../../../research/targets/artifact-tampering-mutation-plan.json",
       ),
+      controlledRunJobInventory: readJson<ControlledRunJobInventory>(
+        "../../../research/targets/controlled-run-job-inventory.json",
+      ),
     };
     const generated = buildBlockerLedger(input);
     const committed = readJson<ReturnType<typeof buildBlockerLedger>>(
@@ -34,7 +38,7 @@ describe("P26-002 readiness blocker ledger", () => {
       executionOrSourceEvidence: 7,
     });
     expect(new Set(generated.blockers.map((item) => item.id)).size).toBe(13);
-    expect(generated.completedMachineGates).toHaveLength(3);
+    expect(generated.completedMachineGates).toHaveLength(4);
     expect(generated.mainTrialAllowed).toBe(false);
     expect(generated.submissionAllowed).toBe(false);
   });
