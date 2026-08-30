@@ -380,10 +380,34 @@ describe("structured readiness evidence", () => {
     );
   });
 
+  it("rejects undeclared payload fields at every readiness envelope boundary", () => {
+    const checks = {
+      artifactHashesRecomputed: true,
+      labelBlind: true,
+      projectionHashesRecomputed: true,
+      sourceBound: true,
+      targetControlPairBound: true,
+    };
+    const envelope = JSON.parse(evidenceEnvelope(checks).toString("utf8")) as Record<
+      string,
+      unknown
+    >;
+    envelope.rawSourcePayload = { hidden: true };
+    expect(() =>
+      parseReadinessEvidenceArtifact(Buffer.from(JSON.stringify(envelope)), "evidence.json"),
+    ).toThrow(/envelope is invalid/);
+
+    delete envelope.rawSourcePayload;
+    envelope.faultProjections = [{ ...projectionFixture(), undeclaredPayload: "hidden" }];
+    expect(() =>
+      parseReadinessEvidenceArtifact(Buffer.from(JSON.stringify(envelope)), "evidence.json"),
+    ).toThrow(/envelope is invalid/);
+  });
+
   it("never promotes metadata-bound evidence without gate-observed source derivation", () => {
     expect(SOURCE_EXECUTION_DERIVATION_CAPABILITY.readinessEvidenceAllowed).toBe(false);
     expect(() => requireGateObservedSourceExecutionDerivation(1)).toThrow(
-      /does not yet derive fixed executions from pinned source bytes/,
+      /fixed upstream verification is implemented, but controlled runs are not yet/,
     );
     expect(() => requireGateObservedSourceExecutionDerivation(0)).not.toThrow();
   });

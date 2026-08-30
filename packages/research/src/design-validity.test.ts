@@ -143,9 +143,9 @@ describe("P26-002 design validity audit", () => {
     });
     expect(audit.checks.sourceExecutionDerivation).toEqual({
       passed: false,
-      capabilityStatus: "not-implemented",
-      fixedUpstreamVerification: "metadata-only-source-bytes-not-read-by-gate",
-      controlledRunVerification: "contract-and-metadata-only-runner-not-reexecuted-or-attested",
+      capabilityStatus: "fixed-upstream-supported-controlled-run-blocked",
+      fixedUpstreamVerification: "git-blob-sha-and-deterministic-adapter",
+      controlledRunVerification: "not-implemented-no-reexecution-or-trusted-attestation",
       readinessEvidenceAllowed: false,
     });
     expect(audit.designValidityPassed).toBe(false);

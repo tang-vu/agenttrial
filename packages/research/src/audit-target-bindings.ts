@@ -23,7 +23,15 @@ import {
   redactGroundTruth,
   type JsonValue,
 } from "./target-adapter";
-import { requireGateObservedSourceExecutionDerivation } from "./source-execution-derivation";
+import {
+  assertSourceExecutionDerivationSupported,
+  createGithubPinnedSourceBlobReader,
+  verifyGateObservedSourceExecutionDerivation,
+  type ClaimedSourceExecution,
+  type ExecutionProvenance,
+  type LockedSourceProvenance,
+  type PinnedSourceBlobReader,
+} from "./source-execution-derivation";
 import {
   excludeReplacedLegacyProjectionHashes,
   validateAgentChaosProjectionAudit,
@@ -143,22 +151,6 @@ interface ReadinessEvidenceArtifact {
   submissionAllowed: boolean;
 }
 
-interface LockedSourceProvenance {
-  repository: string;
-  revision: string;
-  unitKind: "upstream-fixed-execution" | "benchmark-task";
-  unitId: string;
-  blobShas: string[];
-}
-
-interface ExecutionProvenance {
-  kind: "fixed-upstream" | "controlled-run";
-  runnerMethodDigest: string;
-  fixedRunIdentity: string | null;
-  runId: string | null;
-  seed: number | null;
-}
-
 const SOURCE_REPOSITORIES: Record<IndependentTargetEntry["source"], string> = {
   agentchaosbench: "kevinzck8k/agentic-fault-diagnosis",
   agentdojo: "ethz-spylab/agentdojo",
@@ -168,6 +160,13 @@ const SOURCE_REPOSITORIES: Record<IndependentTargetEntry["source"], string> = {
 
 function isJsonObject(value: unknown): value is Record<string, JsonValue> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function hasExactKeys(value: unknown, expectedKeys: string[]): value is Record<string, JsonValue> {
+  return (
+    isJsonObject(value) &&
+    JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...expectedKeys].sort())
+  );
 }
 
 function blockedValuesForTarget(target: IndependentTargetEntry) {
@@ -564,7 +563,12 @@ export function parseEvidenceProjection(
 }
 
 export function parseReadinessEvidenceArtifact(bytes: Uint8Array, path: string) {
-  const artifact = JSON.parse(Buffer.from(bytes).toString("utf8")) as ReadinessEvidenceArtifact;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(Buffer.from(bytes).toString("utf8"));
+  } catch {
+    throw new Error(`Readiness evidence is not valid JSON: ${path}`);
+  }
   const expectedCheckKeys = [
     "artifactHashesRecomputed",
     "labelBlind",
@@ -572,14 +576,48 @@ export function parseReadinessEvidenceArtifact(bytes: Uint8Array, path: string) 
     "sourceBound",
     "targetControlPairBound",
   ];
+  const expectedTopLevelKeys = [
+    "checks",
+    "controlProjections",
+    "controlSources",
+    "faultProjections",
+    "releaseBoundary",
+    "schemaVersion",
+    "status",
+    "submissionAllowed",
+  ];
+  if (!hasExactKeys(parsed, expectedTopLevelKeys))
+    throw new Error(`Readiness evidence envelope is invalid: ${path}`);
+  const artifact = parsed as unknown as ReadinessEvidenceArtifact;
+  const faultProjectionKeys = [
+    "projectionHash",
+    "projectionJson",
+    "sourceExecutionJson",
+    "sourceExecutionReference",
+    "sourceExecutionSha256",
+    "targetId",
+  ];
+  const controlProjectionKeys = [...faultProjectionKeys, "controlConfigurationId"];
+  const controlSourceKeys = [
+    "artifactJson",
+    "artifactSha256",
+    "controlConfigurationId",
+    "controlExecutionContractSha256",
+    "reference",
+    "targetId",
+  ];
   if (
     artifact.schemaVersion !== "p26-002-readiness-evidence-0.1.0" ||
     artifact.status !== "passed" ||
-    JSON.stringify(Object.keys(artifact.checks).sort()) !== JSON.stringify(expectedCheckKeys) ||
+    !hasExactKeys(artifact.checks, expectedCheckKeys) ||
     !Object.values(artifact.checks).every((value) => value === true) ||
     !Array.isArray(artifact.faultProjections) ||
     !Array.isArray(artifact.controlProjections) ||
     !Array.isArray(artifact.controlSources) ||
+    artifact.faultProjections.some((record) => !hasExactKeys(record, faultProjectionKeys)) ||
+    artifact.controlProjections.some((record) => !hasExactKeys(record, controlProjectionKeys)) ||
+    artifact.controlSources.some((record) => !hasExactKeys(record, controlSourceKeys)) ||
+    !hasExactKeys(artifact.releaseBoundary, ["rawSourcePayloadsRetained"]) ||
     artifact.releaseBoundary.rawSourcePayloadsRetained !== false ||
     artifact.submissionAllowed !== false
   )
@@ -604,12 +642,12 @@ async function verifyRemainingEvidenceContents(
   availability: SourceAvailabilityAudit,
   expectedRunnerMethodDigest: string,
   controlContracts: ControlExecutionContractArtifact,
+  readPinnedBlob: PinnedSourceBlobReader = createGithubPinnedSourceBlobReader(),
 ) {
   const declaredArtifacts = [
     ...projectionAudit.evidenceArtifacts,
     ...controlSourceAudit.evidenceArtifacts,
   ];
-  requireGateObservedSourceExecutionDerivation(declaredArtifacts.length);
   const evidenceByHash = new Map<string, ReadinessEvidenceArtifact>();
   for (const evidence of declaredArtifacts) {
     if (evidenceByHash.has(evidence.sha256)) continue;
@@ -619,6 +657,118 @@ async function verifyRemainingEvidenceContents(
   }
 
   const targetById = new Map(targets.map((target) => [target.targetId, target]));
+  const projectionEvidenceHashes = new Set(
+    projectionAudit.evidenceArtifacts.map((evidence) => evidence.sha256),
+  );
+  const controlSourceEvidenceHashes = new Set(
+    controlSourceAudit.evidenceArtifacts.map((evidence) => evidence.sha256),
+  );
+  for (const [artifactSha256, artifact] of evidenceByHash) {
+    if (
+      !projectionEvidenceHashes.has(artifactSha256) &&
+      (artifact.faultProjections.length > 0 || artifact.controlProjections.length > 0)
+    )
+      throw new Error(
+        `Readiness evidence ${artifactSha256} contains projection records that no manifest consumes`,
+      );
+    if (!controlSourceEvidenceHashes.has(artifactSha256) && artifact.controlSources.length > 0)
+      throw new Error(
+        `Readiness evidence ${artifactSha256} contains control-source records that no manifest consumes`,
+      );
+  }
+
+  interface PendingDerivation {
+    target: IndependentTargetEntry;
+    execution: ClaimedSourceExecution;
+    projectionHashes: Set<string>;
+  }
+  const pendingDerivations = new Map<string, PendingDerivation>();
+  const queueDerivation = (
+    record: {
+      targetId: string;
+      controlConfigurationId?: string;
+      sourceExecutionReference: string;
+      sourceExecutionSha256: string;
+      sourceExecutionJson: string;
+      projectionHash?: string;
+    },
+    condition: "fault" | "control",
+  ) => {
+    const target = targetById.get(record.targetId);
+    if (!target) throw new Error(`Unknown target in source-execution evidence: ${record.targetId}`);
+    const parsed = parseSourceExecution(
+      record,
+      target,
+      condition,
+      availability,
+      expectedRunnerMethodDigest,
+      controlContracts,
+    );
+    const execution = {
+      targetId: parsed.targetId as string,
+      source: parsed.source as IndependentTargetEntry["source"],
+      condition: parsed.condition as "fault" | "control",
+      task: parsed.task as string,
+      finalOutput: parsed.finalOutput as string,
+      rawTrace: parsed.rawTrace as JsonValue,
+      sourceProvenance: parsed.sourceProvenance,
+      executionProvenance: parsed.executionProvenance,
+    } satisfies ClaimedSourceExecution;
+    const existing = pendingDerivations.get(record.sourceExecutionSha256);
+    if (existing) {
+      if (JSON.stringify(existing.execution) !== JSON.stringify(execution))
+        throw new Error(
+          `Source execution hash is reused for different payloads: ${record.sourceExecutionSha256}`,
+        );
+      if (record.projectionHash) existing.projectionHashes.add(record.projectionHash);
+      return;
+    }
+    pendingDerivations.set(record.sourceExecutionSha256, {
+      target,
+      execution,
+      projectionHashes: new Set(record.projectionHash ? [record.projectionHash] : []),
+    });
+  };
+
+  for (const evidence of projectionAudit.evidenceArtifacts) {
+    const artifact = evidenceByHash.get(evidence.sha256)!;
+    for (const record of artifact.faultProjections) queueDerivation(record, "fault");
+    for (const record of artifact.controlProjections) queueDerivation(record, "control");
+  }
+  for (const evidence of controlSourceAudit.evidenceArtifacts) {
+    const artifact = evidenceByHash.get(evidence.sha256)!;
+    for (const record of artifact.controlSources) {
+      queueDerivation(
+        {
+          targetId: record.targetId,
+          controlConfigurationId: record.controlConfigurationId,
+          sourceExecutionReference: record.reference,
+          sourceExecutionSha256: record.artifactSha256,
+          sourceExecutionJson: record.artifactJson,
+        },
+        "control",
+      );
+    }
+  }
+
+  for (const { target, execution } of pendingDerivations.values())
+    assertSourceExecutionDerivationSupported(
+      target.targetId,
+      execution.sourceProvenance,
+      execution.executionProvenance,
+    );
+  await Promise.all(
+    [...pendingDerivations.values()].map(async ({ target, execution, projectionHashes }) => {
+      const result = await verifyGateObservedSourceExecutionDerivation({
+        target,
+        execution,
+        readPinnedBlob,
+      });
+      if ([...projectionHashes].some((hash) => hash !== result.projectionHash))
+        throw new Error(`Gate-derived projection hash does not match ${target.targetId}`);
+    }),
+  );
+
   const verifiedFaults = projectionAudit.evidenceArtifacts.flatMap((evidence) =>
     evidenceByHash
       .get(evidence.sha256)!

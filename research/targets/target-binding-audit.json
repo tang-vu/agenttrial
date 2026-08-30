@@ -2435,13 +2435,13 @@
     "Method validity: static-target-repeat-mismatch: The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count until gate-side evidence verification is implemented.",
     "Method validity: reused-matched-control-inputs: 60 locked matched-control bindings resolve to 20 unique references for 80 required controls.",
     "Method validity: ineligible-legacy-projections: Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes.",
-    "Method validity: unverified-source-execution-derivation: Source-lock metadata and embedded hashes do not prove that claimed task, output, and trace bytes derive from the pinned upstream blob or controlled runner. The gate must fetch/read and adapt exact source bytes, reexecute the pinned runner, or verify a precommitted trusted-runner attestation before readiness evidence can be promoted."
+    "Method validity: unverified-source-execution-derivation: The gate now fetches exact fixed upstream bytes, verifies their Git blob SHA, and reruns the deterministic source adapter. Controlled BFCL and tau2 executions and AgentDojo/tau2 controls still cannot be promoted until the gate reexecutes the pinned runner or verifies a precommitted trusted-runner attestation over the exact inputs and execution hash."
   ],
   "mainTrialAllowed": false,
   "submissionAllowed": false,
   "inputs": {
     "designHash": "305b3a356cd63f8757ca2013141b9ec74f108999e452123ac51c26956e6984fe",
-    "mainTrialInputDigest": "b50fc47620b8d6ed7b5b00637cf99400da8fb7232a5596f1f0315cd974179e8b",
+    "mainTrialInputDigest": "3913f153f1a229571381bc6422973fdfed7b913ee26367bc9ea78d646a231cfd",
     "executableMethodFiles": {
       ".node-version": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc",
       "apps/signer/package.json": "f1b6f7f51f4913edec192cfb8db0b652f1cd43cbcdfea9244197ea4c9d2e6e2e",
@@ -2475,11 +2475,11 @@
       "packages/planner/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
       "packages/research/package.json": "9bbbdb4fd9af061c44399d9d6f59ae89c2f89c0035cbd7a529060306d4c58dbb",
       "packages/research/src/analysis.ts": "b6b33b9aa1cb6381e25269fb4fe9dfd572a1d00ffa72ab6b63ddeba635f5e4a1",
-      "packages/research/src/audit-target-bindings.ts": "0ae14c933d27fcde0669e552c2166169f6ba8ac6d5a2f2cb44d78dca95e5455a",
+      "packages/research/src/audit-target-bindings.ts": "048fedb0818cd9f91bbcb2802a7514d3921490925c806dd8f85366824cc5dff4",
       "packages/research/src/calibrate-judge.ts": "1198de03a54a035db4536a24b912f5419db085620d10b196158c75f04149cf25",
       "packages/research/src/control-execution-contracts.ts": "77d95fd26a8599e5d816a0502a546e39849e1e6bcb8d2bafcacf337f50d968bd",
       "packages/research/src/controlled-agents.ts": "a476957922afd932aa254910fcd1c944d7bc9549be5ec7ce7b6a97be3c03729e",
-      "packages/research/src/design-validity.ts": "5d68ef3035be118128b627016cd9e019f49c0df19ec8e4a02bdccc99b0f3e5ea",
+      "packages/research/src/design-validity.ts": "2ed8f93678cfe67d3b905a8ef7c1a6f357fe138832c1f99db82868efd95dd13b",
       "packages/research/src/freeze.ts": "9b331318b55e130e0d674b9eeee21de440a727c9ed03d13d9ee95c9d64b69f37",
       "packages/research/src/gate-main-trial.ts": "ccd28e9cdbf1076b3b568edc46554b01b80200ffd65a6ee0c2b02fabffeda92f",
       "packages/research/src/index.ts": "cb96d6ccb544c0a1d34c0a5167a472d1d0feca8c09676d881c61309b4af464a8",
@@ -2487,7 +2487,7 @@
       "packages/research/src/pilot.ts": "3c6a78026855dbd157e5a5cdad83c54313d4f5289ac87b5ef91e15bfa58b20e6",
       "packages/research/src/power.ts": "bb0897a0757a11db0ef0cff424c8f1d6b48d3c815f286bf2b5729a787ac642a9",
       "packages/research/src/projection-audit.ts": "f176f497e7cbd3faaa4d32365a5f178d5b46f1f30c6447e412ead27d92bce280",
-      "packages/research/src/source-execution-derivation.ts": "4900e59b6055299529f1c7c5011e4ff846df8d6abb3cf6ad01e58584c409b142",
+      "packages/research/src/source-execution-derivation.ts": "f0085f2598ddf59f2e9f63f845591b4f0818e2dd688598ab081dbaa3cac68cae",
       "packages/research/src/tamper.ts": "eef093a5d5fa3c3a625b532519a6099159f21062c8c6ab23c895558d5780280f",
       "packages/research/src/target-adapter.ts": "6b2fbb10fabd8b7ffcbc71e4c517ac4ef59e05c14fa144d1834bc2be46941366",
       "packages/research/src/target-binding.ts": "a97b52f055905a14ce26a9a7b859cdf45d55b45d4268e378bc09dbc40dde928b",
@@ -2505,7 +2505,7 @@
       "tsconfig.base.json": "a272d2f77a8524fdfead851db5e19821628fa2513c524f84e2e6488bdd1f3aae"
     },
     "nodeRuntime": "v24.19.0",
-    "executableMethodDigest": "d0cdc6fc79689ac250ff517f1a65246e6c24f17fcc0b0081cec15c69007baab8",
+    "executableMethodDigest": "0b54c49affd13f554ff9c51b23e75ff6de1d266b2cff25b594316e6dfa286c2b",
     "designFreezeSha256": "e6b1f92da09a2aacf31e6169d6594b67f8aaba33d2914870b4a1962f2e44bc54",
     "independentTargetsSha256": "d2fbad38025b790d057b962d955edd4750baa97fedf7aec887f63d1eb33292ca",
     "sourceAvailabilityAuditSha256": "0fa16da0b6b037352b009e579811d81bc10c03bd88512183089af8691b6c9921",
@@ -2516,7 +2516,7 @@
     "controlExecutionContractsSha256": "1e133a61f98f44a9ccd24c355ec771ab81a9d7cc3c5df5f185eb0171b3579144",
     "repeatExecutionInventorySha256": "7de41ea46186ea96d0dd1a74feb3561ab9cda3580bc0f49abc7ededcd0d14f23",
     "constructReviewPacketSha256": "ccffc86dc49167c086984d8925272667b352af58a2cda5be7cf2b75793dd2929",
-    "designValidityAuditSha256": "c310c1b24685a6a3520821d3bee38c98c98469684e027f2178b6f7e9192af1a6",
+    "designValidityAuditSha256": "a2add4ff168b184ab1ff34d4bcf6f670ed9f2e603461ef14f8d44dd9b14b8c64",
     "projectionAuditSha256": {
       "agentchaosbench": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
       "agentdojo": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",

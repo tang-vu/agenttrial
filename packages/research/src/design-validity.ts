@@ -675,7 +675,7 @@ export function buildDesignValidityAudit(inputs: DesignValidityInputs): DesignVa
     blockers.push({
       code: "unverified-source-execution-derivation",
       message:
-        "Source-lock metadata and embedded hashes do not prove that claimed task, output, and trace bytes derive from the pinned upstream blob or controlled runner. The gate must fetch/read and adapt exact source bytes, reexecute the pinned runner, or verify a precommitted trusted-runner attestation before readiness evidence can be promoted.",
+        "The gate now fetches exact fixed upstream bytes, verifies their Git blob SHA, and reruns the deterministic source adapter. Controlled BFCL and tau2 executions and AgentDojo/tau2 controls still cannot be promoted until the gate reexecutes the pinned runner or verifies a precommitted trusted-runner attestation over the exact inputs and execution hash.",
     });
 
   const designChecksPassed = 5 - blockers.length;

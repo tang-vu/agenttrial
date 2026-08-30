@@ -21,7 +21,7 @@ The current gate also remains blocked because:
 - AgentDojo and tau2 control task and acceptance contracts are pinned, but none is a completed execution artifact;
 - scenario variants are not operationally distinct, so the current family-order mappings cannot be approved;
 - fixed upstream executions cannot satisfy the current 20-execution repetition model through evaluator replay;
-- source-lock metadata is pinned, but the gate does not yet derive execution payload bytes from upstream blobs or reexecute/attest controlled runs;
+- fixed upstream executions have a Git-blob-verified deterministic derivation path, but the gate does not yet reexecute or attest controlled runs;
 - independent method-freeze approval is still pending.
 
 Run `pnpm research:audit-target-bindings` to regenerate `research/design-validity-audit.json`, `research/targets/control-execution-contracts.json`, and the target-binding machine audit. It never overwrites a human record. Run `pnpm research:gate-main-trial` as the main-trial execution gate; a nonzero exit is the correct result while any blocker remains.
