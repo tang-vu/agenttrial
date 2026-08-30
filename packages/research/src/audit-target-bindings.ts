@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { gunzipSync } from "node:zlib";
 import {
   CONTROL_MATRIX,
   INDEPENDENT_TARGET_FREEZE,
@@ -25,6 +26,7 @@ import {
   type JsonValue,
 } from "./target-adapter";
 import {
+  canonicalSourceExecutionReference,
   createGithubPinnedSourceBlobReader,
   verifyGateObservedSourceExecutionDerivation,
   type ClaimedSourceExecution,
@@ -71,7 +73,7 @@ function sha256(bytes: Uint8Array) {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
-async function executableMethodFileHashes() {
+export async function executableMethodFileHashes() {
   const files: string[] = [];
   async function walk(directory: string) {
     for (const entry of await readdir(resolve(repositoryRoot, directory), {
@@ -352,24 +354,6 @@ function validateExecutionProvenance(
   };
 }
 
-function canonicalExecutionReference(
-  sourceProvenance: LockedSourceProvenance,
-  executionProvenance: ExecutionProvenance,
-  controlExecutionContractSha256?: string,
-) {
-  const digest = sha256(
-    Buffer.from(
-      JSON.stringify({
-        sourceProvenance,
-        executionProvenance,
-        ...(controlExecutionContractSha256 ? { controlExecutionContractSha256 } : {}),
-      }),
-      "utf8",
-    ),
-  );
-  return `p26-002-execution:${digest}`;
-}
-
 function parseSourceExecution(
   record: {
     targetId: string;
@@ -441,7 +425,7 @@ function parseSourceExecution(
         execution.controlConfigurationId !== controlContract.controlConfigurationId
       : "controlExecutionContractSha256" in execution) ||
     typeof execution.finalOutput !== "string" ||
-    execution.finalOutput.trim() === "" ||
+    (sourceProvenance.unitKind === "benchmark-task" && execution.finalOutput.trim() === "") ||
     typeof execution.task !== "string" ||
     execution.task.trim() === "" ||
     ("trustedRunnerAttestation" in execution &&
@@ -457,7 +441,7 @@ function parseSourceExecution(
     record.targetId,
     expectedRunnerMethodDigest,
   );
-  const expectedReference = canonicalExecutionReference(
+  const expectedReference = canonicalSourceExecutionReference(
     sourceProvenance,
     executionProvenance,
     controlContract?.contractSha256,
@@ -580,9 +564,17 @@ export function parseEvidenceProjection(
 }
 
 export function parseReadinessEvidenceArtifact(bytes: Uint8Array, path: string) {
+  let decodedBytes = bytes;
+  if (path.endsWith(".json.gz")) {
+    try {
+      decodedBytes = gunzipSync(bytes, { maxOutputLength: 128 * 1024 * 1024 });
+    } catch {
+      throw new Error(`Readiness evidence is not valid bounded gzip: ${path}`);
+    }
+  }
   let parsed: unknown;
   try {
-    parsed = JSON.parse(Buffer.from(bytes).toString("utf8"));
+    parsed = JSON.parse(Buffer.from(decodedBytes).toString("utf8"));
   } catch {
     throw new Error(`Readiness evidence is not valid JSON: ${path}`);
   }
@@ -627,13 +619,19 @@ export function parseReadinessEvidenceArtifact(bytes: Uint8Array, path: string) 
     artifact.schemaVersion !== "p26-002-readiness-evidence-0.1.0" ||
     artifact.status !== "passed" ||
     !hasExactKeys(artifact.checks, expectedCheckKeys) ||
-    !Object.values(artifact.checks).every((value) => value === true) ||
+    ![
+      artifact.checks.artifactHashesRecomputed,
+      artifact.checks.labelBlind,
+      artifact.checks.projectionHashesRecomputed,
+      artifact.checks.sourceBound,
+    ].every((value) => value === true) ||
     !Array.isArray(artifact.faultProjections) ||
     !Array.isArray(artifact.controlProjections) ||
     !Array.isArray(artifact.controlSources) ||
     artifact.faultProjections.some((record) => !hasExactKeys(record, faultProjectionKeys)) ||
     artifact.controlProjections.some((record) => !hasExactKeys(record, controlProjectionKeys)) ||
     artifact.controlSources.some((record) => !hasExactKeys(record, controlSourceKeys)) ||
+    artifact.checks.targetControlPairBound !== artifact.controlProjections.length > 0 ||
     !hasExactKeys(artifact.releaseBoundary, ["rawSourcePayloadsRetained"]) ||
     artifact.releaseBoundary.rawSourcePayloadsRetained !== false ||
     artifact.submissionAllowed !== false
@@ -650,6 +648,24 @@ function sortedJson<T extends { targetId: string }>(records: T[]) {
       ),
     ),
   );
+}
+
+async function mapWithConcurrency<T, R>(
+  values: T[],
+  concurrency: number,
+  project: (value: T) => Promise<R>,
+) {
+  const results = new Array<R>(values.length);
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, values.length) }, async () => {
+      while (next < values.length) {
+        const index = next++;
+        results[index] = await project(values[index]!);
+      }
+    }),
+  );
+  return results;
 }
 
 async function verifyRemainingEvidenceContents(
@@ -774,24 +790,24 @@ async function verifyRemainingEvidenceContents(
     }
   }
 
-  const verifiedDerivations = await Promise.all(
-    [...pendingDerivations.entries()].map(
-      async ([sourceExecutionSha256, { target, execution, projectionHashes }]) => {
-        const result = await verifyGateObservedSourceExecutionDerivation({
-          target,
-          execution,
-          readPinnedBlob,
-          trustedRunner: {
-            policy: trustedRunnerPolicy,
-            expectedDesignHash,
-            expectedRunnerMethodDigest,
-          },
-        });
-        if ([...projectionHashes].some((hash) => hash !== result.projectionHash))
-          throw new Error(`Gate-derived projection hash does not match ${target.targetId}`);
-        return { sourceExecutionSha256, executionKind: execution.executionProvenance.kind };
-      },
-    ),
+  const verifiedDerivations = await mapWithConcurrency(
+    [...pendingDerivations.entries()],
+    6,
+    async ([sourceExecutionSha256, { target, execution, projectionHashes }]) => {
+      const result = await verifyGateObservedSourceExecutionDerivation({
+        target,
+        execution,
+        readPinnedBlob,
+        trustedRunner: {
+          policy: trustedRunnerPolicy,
+          expectedDesignHash,
+          expectedRunnerMethodDigest,
+        },
+      });
+      if ([...projectionHashes].some((hash) => hash !== result.projectionHash))
+        throw new Error(`Gate-derived projection hash does not match ${target.targetId}`);
+      return { sourceExecutionSha256, executionKind: execution.executionProvenance.kind };
+    },
   );
 
   const verifiedFaults = projectionAudit.evidenceArtifacts.flatMap((evidence) =>

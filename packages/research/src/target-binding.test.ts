@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CONTROL_MATRIX, SCENARIO_MATRIX } from "./index";
 import type { DesignValidityAudit } from "./design-validity";
+import type { RemainingProjectionAudit } from "./projection-audit";
 import {
   buildTargetBindingAudit,
   type ConstructReviewPacket,
@@ -30,6 +31,9 @@ const agentChaos = readJson<{ projections: ProjectionRecord[] }>(
 const agentDojo = readJson<{ projections: ProjectionRecord[] }>(
   "../../../research/targets/agentdojo-projection-audit.json",
 );
+const remaining = readJson<RemainingProjectionAudit>(
+  "../../../research/targets/remaining-projection-audit.json",
+);
 const constructReview = readJson<ConstructReviewPacket>(
   "../../../research/governance/construct-review-packet.json",
 );
@@ -50,14 +54,19 @@ const reviewPacketPath = new URL(
 );
 
 function buildAudit() {
+  const reconstructedTargetIds = new Set(
+    remaining.faultProjections.map((record) => record.targetId),
+  );
   return buildTargetBindingAudit({
     faultConfigurations: SCENARIO_MATRIX,
     controlConfigurations: CONTROL_MATRIX,
     targets: targetFreeze.entries,
     availability,
-    faultProjections: [],
-    excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections],
-    controlProjections: [],
+    faultProjections: remaining.faultProjections,
+    excludedLegacyFaultProjections: [...agentChaos.projections, ...agentDojo.projections].filter(
+      (record) => !reconstructedTargetIds.has(record.targetId),
+    ),
+    controlProjections: remaining.controlProjections,
     designValidity,
     constructReview,
     governance,
@@ -81,7 +90,7 @@ describe("independent-target binding and G3 gate", () => {
     ).toBe(true);
   });
 
-  it("reports exactly what is and is not ready without promoting fixtures to evidence", () => {
+  it("keeps unpublished local reconstruction outside readiness evidence", () => {
     const audit = buildAudit();
     expect(audit.summary).toEqual({
       bindings: 80,
@@ -115,6 +124,9 @@ describe("independent-target binding and G3 gate", () => {
     ).toEqual(
       Array.from({ length: 60 }, (_, index) => `ext-${String(index + 1).padStart(3, "0")}`),
     );
+    expect(
+      audit.bindings.filter((item) => item.sourceEvidence.faultProjection.state === "ready"),
+    ).toHaveLength(0);
     expect(audit.status).toBe("blocked");
     expect(audit.mainTrialAllowed).toBe(false);
     expect(audit.submissionAllowed).toBe(false);

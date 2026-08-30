@@ -14,11 +14,11 @@ Any non-pending decision requires `decidedBy`, a valid `decidedOn` date, and evi
 
 Each row includes full target, fault, and control descriptors plus canonical hashes. Projection readiness is excluded from the construct decision. Reviewers must follow `construct-mapping-protocol.md`; the operational contracts require independent construct review and cannot be approved from their variant names alone.
 
-`oracle-adjudication-template.json` freezes a separate evaluator-blind two-reviewer and third-adjudicator workflow for execution-level oracle decisions. It remains empty until source-bound execution evidence exists. Evaluator verdicts, evaluator identity, and treatment implementation fields are forbidden from the packet.
+`oracle-adjudication-template.json` freezes a separate evaluator-blind two-reviewer and third-adjudicator workflow for execution-level oracle decisions. No materialized execution evidence or human oracle review exists, so the packet remains empty. Evaluator verdicts, evaluator identity, and treatment implementation fields are forbidden from the packet.
 
 The current gate also remains blocked because:
 
-- 60 historical fault projection hashes are not currently reconstructed by the gate and are excluded, leaving 0 of 80 readiness-eligible fault projections;
+- 0 of 80 fault projections have materialized gate evidence; a local receipt verifies 50 reproducible candidates but is unpublished and readiness-ineligible, while 10 clean artifact-tampering sources still lack their preregistered mutation;
 - 0 of 80 matched-control projections are available;
 - only 60 of 80 control bindings have pinned inputs, and those 60 represent only 20 unique input references;
 - BFCL and tau2 controlled candidate executions do not yet exist;

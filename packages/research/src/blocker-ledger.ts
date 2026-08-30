@@ -76,7 +76,7 @@ export function buildBlockerLedger(input: {
     ],
     blockers,
     nextSafeMachineAction:
-      "Reconstruct fixed-upstream evidence in the private evidence boundary and prepare controlled-run jobs; do not promote either without exact source verification or a human-registered trusted-runner key.",
+      "Materialize fixed-upstream evidence through an authorized evidence boundary, specify the artifact-tampering mutation operator, and prepare controlled-run jobs; do not promote unpublished local receipts or unattested controlled evidence.",
     mainTrialAllowed: false,
     releaseAllowed: false,
     submissionAllowed: false,

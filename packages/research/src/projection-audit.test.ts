@@ -123,9 +123,10 @@ describe("projection audit provenance gates", () => {
       controlProjections: [],
       evidenceArtifacts: [],
     });
+    expect(remaining.labelBlindChecks.targetControlPairBound).toBe(false);
     const invalid = structuredClone(remaining);
     invalid.evidenceArtifacts.push({
-      path: "research/targets/evidence/not-real.json",
+      path: "research/targets/evidence/not-materialized.json",
       sha256: "a".repeat(64),
     });
     expect(() => validateRemainingProjectionAudit(invalid, targets)).toThrow(

@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { gzipSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 import { parseEvidenceProjection, parseReadinessEvidenceArtifact } from "./audit-target-bindings";
 import type { ControlExecutionContractArtifact } from "./control-execution-contracts";
@@ -323,6 +324,30 @@ describe("structured readiness evidence", () => {
     ).toThrow(/Controlled-run identity is invalid/);
   });
 
+  it("rejects an empty output for a controlled run", () => {
+    const invalid = projectionFixture();
+    const execution = JSON.parse(invalid.sourceExecutionJson) as Record<string, unknown>;
+    const projection = JSON.parse(invalid.projectionJson) as Record<string, unknown>;
+    execution.finalOutput = "";
+    projection.finalOutput = "";
+    invalid.sourceExecutionJson = JSON.stringify(execution);
+    invalid.sourceExecutionSha256 = createHash("sha256")
+      .update(invalid.sourceExecutionJson)
+      .digest("hex");
+    invalid.projectionJson = JSON.stringify(projection);
+    invalid.projectionHash = createHash("sha256").update(invalid.projectionJson).digest("hex");
+    expect(() =>
+      parseEvidenceProjection(
+        invalid,
+        target,
+        "a".repeat(64),
+        "fault",
+        availability,
+        runnerMethodDigest,
+      ),
+    ).toThrow(/Source execution payload is invalid/);
+  });
+
   it("binds a future AgentDojo clean run to its exact no-injection contract", () => {
     const fixture = agentDojoControlFixture();
     expect(
@@ -370,7 +395,7 @@ describe("structured readiness evidence", () => {
       labelBlind: true,
       projectionHashesRecomputed: true,
       sourceBound: true,
-      targetControlPairBound: true,
+      targetControlPairBound: false,
     };
     expect(parseReadinessEvidenceArtifact(evidenceEnvelope(checks), "evidence.json").status).toBe(
       "passed",
@@ -378,6 +403,15 @@ describe("structured readiness evidence", () => {
     expect(() => parseReadinessEvidenceArtifact(evidenceEnvelope({}), "evidence.json")).toThrow(
       /envelope is invalid/,
     );
+    expect(() =>
+      parseReadinessEvidenceArtifact(
+        evidenceEnvelope({ ...checks, targetControlPairBound: true }),
+        "evidence.json",
+      ),
+    ).toThrow(/envelope is invalid/);
+    expect(
+      parseReadinessEvidenceArtifact(gzipSync(evidenceEnvelope(checks)), "evidence.json.gz").status,
+    ).toBe("passed");
   });
 
   it("rejects undeclared payload fields at every readiness envelope boundary", () => {
@@ -386,7 +420,7 @@ describe("structured readiness evidence", () => {
       labelBlind: true,
       projectionHashesRecomputed: true,
       sourceBound: true,
-      targetControlPairBound: true,
+      targetControlPairBound: false,
     };
     const envelope = JSON.parse(evidenceEnvelope(checks).toString("utf8")) as Record<
       string,

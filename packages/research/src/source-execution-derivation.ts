@@ -105,8 +105,77 @@ function parseJsonObject(bytes: Uint8Array, targetId: string) {
   return value;
 }
 
-function fixedRunIdentity(source: LockedSourceProvenance) {
+export function fixedRunIdentity(source: LockedSourceProvenance) {
   return `${source.repository}@${source.revision}:${source.unitId}@${source.blobShas.join("+")}`;
+}
+
+export function canonicalSourceExecutionReference(
+  sourceProvenance: LockedSourceProvenance,
+  executionProvenance: ExecutionProvenance,
+  controlExecutionContractSha256?: string,
+) {
+  const digest = createHash("sha256")
+    .update(
+      JSON.stringify({
+        sourceProvenance,
+        executionProvenance,
+        ...(controlExecutionContractSha256 ? { controlExecutionContractSha256 } : {}),
+      }),
+    )
+    .digest("hex");
+  return `p26-002-execution:${digest}`;
+}
+
+export function buildFixedUpstreamSourceExecution(input: {
+  target: IndependentTargetEntry;
+  condition: "fault" | "control";
+  controlConfigurationId?: string;
+  sourceProvenance: LockedSourceProvenance;
+  runnerMethodDigest: string;
+  task: string;
+  finalOutput: string;
+  rawTrace: JsonValue;
+}) {
+  const {
+    target,
+    condition,
+    controlConfigurationId,
+    sourceProvenance,
+    runnerMethodDigest,
+    task,
+    finalOutput,
+    rawTrace,
+  } = input;
+  if (
+    sourceProvenance.unitKind !== "upstream-fixed-execution" ||
+    !/^[0-9a-f]{64}$/.test(runnerMethodDigest) ||
+    task.trim() === "" ||
+    typeof finalOutput !== "string" ||
+    (condition === "control"
+      ? typeof controlConfigurationId !== "string" || controlConfigurationId.trim() === ""
+      : controlConfigurationId !== undefined)
+  )
+    fail(`cannot build a fixed upstream execution for ${target.targetId}`);
+  const executionProvenance: ExecutionProvenance = {
+    kind: "fixed-upstream",
+    runnerMethodDigest,
+    fixedRunIdentity: fixedRunIdentity(sourceProvenance),
+    runId: null,
+    seed: null,
+  };
+  return {
+    schemaVersion: "p26-002-candidate-execution-0.3.0" as const,
+    targetId: target.targetId,
+    source: target.source,
+    condition,
+    ...(condition === "control" ? { controlConfigurationId: controlConfigurationId! } : {}),
+    sourceProvenance,
+    executionProvenance,
+    sourceReference: canonicalSourceExecutionReference(sourceProvenance, executionProvenance),
+    task,
+    finalOutput,
+    rawTrace,
+  };
 }
 
 function expectedAgentChaosCaseUid(path: string) {
