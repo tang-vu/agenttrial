@@ -1,8 +1,8 @@
-# P26-002 contribution freeze
+# P26-002 candidate contribution scope
 
 Version: 0.1.0
 
-Verified against primary sources on 2026-08-28. Status: **conditional go with a narrowed empirical contribution**.
+Verified against primary sources on 2026-08-28 and amended on 2026-08-29. Status: **redesign required before any empirical contribution is frozen**.
 
 ## Decision
 
@@ -12,16 +12,18 @@ An August 2026 audit added AgentChaosBench, which already provides controlled op
 
 P26-002 will therefore study evaluator error. The signed evidence bundle is an experimental treatment and reproducibility mechanism, not a new cryptographic primitive or a proof of semantic correctness.
 
-## Locked paper question
+## Candidate paper question
 
 > Do precommitted, claim-specific evidence contracts with deterministic assertions and portable integrity verification reduce false acceptance of unreliable AI-agent runs relative to final-output, trace-presence, and frozen LLM-judge evaluators, without materially increasing false rejection on matched fault-free controls?
 
-## Locked primary contributions
+## Conditional contribution targets
 
-1. A paired benchmark design covering eight fault families, with one matched grounded control for every injected-fault configuration and repeated runs nested within configurations.
-2. A meta-evaluation of evaluator false acceptance and false rejection across identical artifacts, with uncertainty, paired tests, hierarchical resampling, and error analysis by fault family.
+These remain targets, not completed or frozen contributions:
+
+1. A redesigned paired evaluator study covering operationally defined fault constructs, with matched grounded controls and an execution plan aligned to the unit of analysis.
+2. A meta-evaluation of evaluator false acceptance and false rejection across identical artifacts, with uncertainty, paired tests, resampling at the approved clustering level, and error analysis by fault construct.
 3. An ablation study separating precommitted plans, deterministic assertions, coverage accounting, hash-chain integrity, evidence-root integrity, signatures, and optional anchoring.
-4. A portable, credential-free replication path and explicit release boundaries. This is an engineering and reproducibility contribution, not a claim that the underlying cryptographic components are novel.
+4. A portable, credential-free replication path and explicit release boundaries. This would be an engineering and reproducibility contribution, not a claim that the underlying cryptographic components are novel.
 
 ## Claims explicitly prohibited
 
@@ -50,21 +52,22 @@ The full 12-work, feature-level audit is in `nearest-work-matrix.json`.
 
 ## Main-study gates
 
-The paper cannot move from conditional go to empirical claims until all items pass:
+The project cannot move from candidate scope to empirical claims until all items pass:
 
 Completed: a zero-cost local Qwen3-4B Q4_K_M judge, prompt, llama.cpp runtime, EBNF output constraint, and strict parser are frozen by model and runtime hash after a held-out calibration gate. Calibration is baseline selection only and is excluded from paper results.
 
-Completed: a prospective simulation power analysis selected 80 independent fault configurations, 80 matched controls, and 20 nested repetitions. The binding nine-point, ICC 0.30 scenario has estimated power 0.887 with a 95% Monte Carlo interval of 0.876 to 0.898. No engineering-pilot effect was used.
+Invalidated candidate: a prospective simulation evaluated 80 nominal fault slots, 80 matched-control slots, and 20 nested executions under an independent-configuration model. Its binding sensitivity estimate was 0.887 with a 95% Monte Carlo interval of 0.876 to 0.898, and no engineering-pilot effect was used. The current variants collapse to eight operational profiles and the source inventory cannot support the assumed repetitions, so this simulation is historical sensitivity evidence only and does not select the main design.
 
 Completed: 80 public source units are locked across AgentChaosBench, AgentDojo, BFCL V4, and tau2-bench, with ten units per fault family. Revisions, licenses, upstream label authority, controls, construct limits, and the no-vendoring release boundary are pinned. Adapters and independent construct review remain pending.
 
 Remaining gates:
 
-1. Implement and verify read-only adapters for all 80 locked source units.
-2. Obtain independent review of construct mappings and assertion authorship without exposing evaluator outcomes.
-3. Run 20 repetitions for each of the 80 fault configurations and 80 controls, and report configuration-clustered uncertainty.
-4. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
-5. Reproduce from a clean environment and audit the public allowlist before release.
+1. Obtain independent review of the ten executable operational variant contracts, redesign the unit of analysis, and recompute power against the actual fault and control execution inventory.
+2. Implement and verify read-only adapters for all locked source units under the approved redesign.
+3. Obtain independent review of construct mappings and assertion authorship without exposing evaluator outcomes.
+4. Acquire the approved number of distinct fault and control executions and report uncertainty at the precommitted clustering level.
+5. Execute the full ablation and report utility costs, false rejection, untested claims, and Unknown coverage.
+6. Reproduce from a clean environment and audit the public allowlist before release.
 
 ## Stop or pivot rules
 

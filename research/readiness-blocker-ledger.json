@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "p26-002-readiness-blocker-ledger-0.1.0",
+  "status": "blocked",
+  "scope": "new-paper-machine-and-human-handoff-not-main-trial-evidence",
+  "counts": {
+    "total": 13,
+    "machineOnly": 0,
+    "humanOnly": 6,
+    "executionOrSourceEvidence": 7
+  },
+  "completedMachineGates": [
+    {
+      "id": "P26-002-M01",
+      "gate": "operational-variant-contracts",
+      "evidence": "80/80 operational profiles"
+    },
+    {
+      "id": "P26-002-M02",
+      "gate": "source-execution-derivation-verifier",
+      "evidence": "ed25519-precommitted-policy-and-content-hash-binding"
+    },
+    {
+      "id": "P26-002-M03",
+      "gate": "prospective-artifact-tampering-operator-plan",
+      "evidence": "10/10 source-locked entries; applicationAllowed=false; evidenceMaterialized=false"
+    },
+    {
+      "id": "P26-002-M04",
+      "gate": "fail-closed-controlled-run-job-inventory",
+      "evidence": "50/50 source-locked envelopes; runnableJobs=0; executionAllowed=false"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "P26-002-B01",
+      "class": "execution-or-source-evidence",
+      "message": "Only 60/80 matched-control bindings have pinned inputs; 20 remain condition-only.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B02",
+      "class": "execution-or-source-evidence",
+      "message": "Only 20/60 pinned control bindings use unique source inputs; 40 reuse an upstream execution.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B03",
+      "class": "execution-or-source-evidence",
+      "message": "Only 0/80 fault projections are reconstructed by the gate from source-bound evidence; 60 legacy hashes are excluded.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B04",
+      "class": "execution-or-source-evidence",
+      "message": "Only 0/80 control projections are ready.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B05",
+      "class": "human-only",
+      "message": "80/80 provisional bindings still require two independent human reviews.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B06",
+      "class": "human-only",
+      "message": "Human G3 gate constructMappingReview is not approved.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B07",
+      "class": "human-only",
+      "message": "Human G3 gate targetAuthorization is not approved.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B08",
+      "class": "human-only",
+      "message": "Human G3 gate dataGovernance is not approved.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B09",
+      "class": "human-only",
+      "message": "Human G3 gate releaseBoundary is not approved.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B10",
+      "class": "human-only",
+      "message": "Independent human method-freeze approval is not complete.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B11",
+      "class": "execution-or-source-evidence",
+      "message": "Method validity: static-target-repeat-mismatch: The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count without an exact source-execution hash already accepted by the gate.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B12",
+      "class": "execution-or-source-evidence",
+      "message": "Method validity: reused-matched-control-inputs: 60 locked matched-control bindings resolve to 20 unique references for 80 required controls.",
+      "cleared": false
+    },
+    {
+      "id": "P26-002-B13",
+      "class": "execution-or-source-evidence",
+      "message": "Method validity: ineligible-legacy-projections: Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes.",
+      "cleared": false
+    }
+  ],
+  "nextSafeMachineAction": "Materialize fixed-upstream evidence through an authorized evidence boundary and draft the redesigned estimand, clustering, and repetition amendment; keep all 50 controlled-run envelopes unscheduled and the artifact-tampering operator unapplied until their human and authorization prerequisites are satisfied.",
+  "mainTrialAllowed": false,
+  "releaseAllowed": false,
+  "submissionAllowed": false
+}

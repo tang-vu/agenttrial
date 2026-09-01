@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "p26-002-remaining-projection-audit-0.3.0",
+  "status": "pending",
+  "scope": "future-gate-reconstructed-source-bound-label-blind-projections-for-all-80-frozen-targets-not-main-study-outcomes",
+  "expected": {
+    "fault": 80,
+    "control": 80
+  },
+  "verified": {
+    "fault": 0,
+    "control": 0
+  },
+  "labelBlindChecks": {
+    "fault": false,
+    "control": false,
+    "sourceBound": false,
+    "targetControlPairBound": false
+  },
+  "faultProjections": [],
+  "controlProjections": [],
+  "evidenceArtifacts": [],
+  "releaseBoundary": {
+    "rawSourcesRetained": false
+  },
+  "submissionAllowed": false
+}

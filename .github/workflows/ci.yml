@@ -37,13 +37,14 @@ jobs:
         with: { version: 11.20.0 }
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm research:check-audits
       - run: pnpm test:durable
         env:
           DATABASE_URL: postgres://agenttrial:agenttrial-ci@127.0.0.1:5432/agenttrial

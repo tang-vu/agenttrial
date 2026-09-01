@@ -1,9 +1,11 @@
 {
-  "schemaVersion": "p26-002-power-analysis-0.1.0",
+  "schemaVersion": "p26-002-power-analysis-0.2.0",
+  "status": "superseded-redesign-required",
   "generatedBy": "@agenttrial/research power simulation",
-  "claimUse": "prospective-design-only",
+  "claimUse": "historical-sensitivity-analysis-only",
   "sourceBoundary": "Assumptions are sensitivity values, not effects estimated from the synthetic engineering pilot.",
-  "planHash": "63db0a99cdbfdcce5f1b4ad433c4cbfccbd4313cd75e01330604ca611890f305",
+  "validityBoundary": "The simulation assumes operationally distinct independent configuration clusters and independent executions within them. The current P26-002 source binding does not meet those assumptions, so this artifact cannot select or freeze the main-study design.",
+  "planHash": "451318e5f6a4e3f8df269590a65911c818fc640983ab6693c053dd5ec66b610d",
   "simulation": {
     "replicates": 3000,
     "seed": 2600201,
@@ -750,15 +752,16 @@
       }
     ]
   },
-  "selection": {
-    "uniqueFaultConfigurations": 80,
-    "matchedControlConfigurations": 80,
-    "repetitionsPerConfiguration": 20,
-    "totalRunArtifacts": 3200,
-    "variantsPerFaultFamily": 10,
-    "rule": "Meet protocol floors and require the 95% Monte Carlo lower bound to be at least 0.80 for all superiority scenarios and the safe-plausible noninferiority scenario.",
-    "passed": true,
-    "selectedSuperiority": [
+  "candidateSensitivity": {
+    "nominalFaultSlots": 80,
+    "matchedControlSlots": 80,
+    "requiredExecutionsPerSlot": 20,
+    "totalSharedExecutionArtifacts": 3200,
+    "nominalVariantsPerFaultFamily": 10,
+    "thresholdRule": "Under the superseded model, require the 95% Monte Carlo lower bound to be at least 0.80 for all superiority scenarios and the safe-plausible noninferiority scenario.",
+    "sensitivityThresholdPassed": true,
+    "designEligible": false,
+    "candidateSuperiority": [
       {
         "scenario": "pessimistic",
         "configurations": 80,
@@ -802,7 +805,7 @@
         }
       }
     ],
-    "selectedNoninferiority": [
+    "candidateNoninferiority": [
       {
         "scenario": "safe-plausible",
         "selectionGate": true,
@@ -820,7 +823,7 @@
         }
       }
     ],
-    "rationale": "Independent configurations buy more power under clustering than extra repeats. The 80-by-20 design is lower workload than 64-by-30 and protects the pessimistic nine-point scenario."
+    "rationale": "Under the simulated independent-cluster assumptions, 80 by 20 clears the sensitivity threshold. Those assumptions do not hold for the current source binding, so this result does not select a design."
   },
-  "interpretationBoundary": "Power is conditional on prospective sensitivity assumptions. It does not validate an effect, replace independent targets, or convert synthetic pilot outputs into paper evidence."
+  "interpretationBoundary": "This is a superseded sensitivity artifact. It does not validate an effect, establish statistical independence, select the current design, or convert synthetic pilot outputs into paper evidence."
 }

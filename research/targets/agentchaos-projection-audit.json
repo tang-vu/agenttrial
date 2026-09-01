@@ -1,6 +1,8 @@
 {
   "schemaVersion": "p26-002-agentchaos-projection-audit-0.1.0",
   "status": "passed",
+  "readinessEligible": false,
+  "exclusionReason": "Canonical projection and source-execution bytes are not retained or recomputed by the main-trial gate.",
   "executedOn": "2026-08-28",
   "scope": "label-blinded-projection-integrity-not-evaluator-outcomes",
   "source": {
