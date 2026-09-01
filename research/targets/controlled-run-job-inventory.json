@@ -27,6 +27,7 @@
         ]
       },
       "controlExecutionContractSha256": "85812d197f15b23abf082fe54d9351f20139207f958f1616bb89e11279eff5c9",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -35,7 +36,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "0f29c1c400fe87dda85a6f5dabbb53f8c4c2331e2f70dd4bb83261ec746edf76"
+      "planHash": "a016b8575eb893e7d2eccbb6d62b0c766435724b35da42a0e60bca6d2d967dd2"
     },
     {
       "jobId": "p26-002-ext-052-control",
@@ -60,6 +61,7 @@
         ]
       },
       "controlExecutionContractSha256": "66e0ce92d4fe83a8beb1e0647e9c2c32a3682801a59ec075852afa3da75a65a4",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -68,7 +70,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "d5cf396554ae4e886230f09a6b90a69e861e83e7406019e79bd29424f42590e9"
+      "planHash": "26f023f366499d41eca86e77110dab3b469e173d147031477d7cab00c65a52cc"
     },
     {
       "jobId": "p26-002-ext-053-control",
@@ -93,6 +95,7 @@
         ]
       },
       "controlExecutionContractSha256": "f376250af1627c3814ec58d391aeda0386cca4fea8709582b2a466aaf92c106c",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -101,7 +104,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "9114a9a11744e7e716ce3c5f40cd01efd63b5978bf5e4b5e063205676b45e00f"
+      "planHash": "08f5195b87ecec32727ae5c1e1460085d4c034598425932371e293a679537ea7"
     },
     {
       "jobId": "p26-002-ext-054-control",
@@ -126,6 +129,7 @@
         ]
       },
       "controlExecutionContractSha256": "fa4c2f52d14153a77a7388daa1b13254145e7a0ec4ad17c36bd2ac16114f5739",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -134,7 +138,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "4792679bf726dcbb647ec5a3b359187175dc1845a72e1751914dd26e280fa711"
+      "planHash": "924594ccfac6dce782494b8aa23208a9d1464ca84ff028f9eb45323c9ef28ce5"
     },
     {
       "jobId": "p26-002-ext-055-control",
@@ -159,6 +163,7 @@
         ]
       },
       "controlExecutionContractSha256": "1cfa430844f3aee6ceb7da02294a33ec3ffb722e7aa01ebb28fb5caa7afd0137",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -167,7 +172,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "8fc5908a5f22879daecf79fb271fb92e8fa9913068900e9cb61ca8818159d349"
+      "planHash": "44cdf61a301b22b96e5edae77eb89bf5fd79a103e6aeba417ce02e0ee971f7ae"
     },
     {
       "jobId": "p26-002-ext-056-control",
@@ -192,6 +197,7 @@
         ]
       },
       "controlExecutionContractSha256": "9ffa64935ce3accbf066757570aa30c5e02b2cdbdd916302e8115e7b842940ea",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -200,7 +206,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "1c9f56850075629dc7b305118d301ddaeddccd412845e975310b0b0ad485095e"
+      "planHash": "87988ea951f8f86e38d4ca3386985675c6a821b27510ba2df84c4f49fbd2dd54"
     },
     {
       "jobId": "p26-002-ext-057-control",
@@ -225,6 +231,7 @@
         ]
       },
       "controlExecutionContractSha256": "8a46830e39f6b867a4277eb58bf94090a3af45b5da032a81be3e7c93977ac5b0",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -233,7 +240,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "37007cc03e35bce3251f48c7d5d3322bc1112969acc0c31494ff452388f98a92"
+      "planHash": "23439b16bf6e78391af951261d0b7e05add851c8ba97ea916e5fddb1869a01f0"
     },
     {
       "jobId": "p26-002-ext-058-control",
@@ -258,6 +265,7 @@
         ]
       },
       "controlExecutionContractSha256": "597e46de9504c317f4533dcbc12ed14da40a02a91667c28a4be322fd5836de32",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -266,7 +274,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "cba6fe4bab134961b9539c5f8a7400260b85db4a33423907a1b8ed81ad773e3a"
+      "planHash": "d2cbd82eebb31a376048fb13a1a9fdfba397f9f96176b955e6e2cf25a284e561"
     },
     {
       "jobId": "p26-002-ext-059-control",
@@ -291,6 +299,7 @@
         ]
       },
       "controlExecutionContractSha256": "44d5fd8273763a722f974a43e4d7475f60a82d7ca57438bcf07e402e6c549696",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -299,7 +308,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "41f4d4e490545819ccfe9abdc529066e3ae7f667e048067efdd1b9bc4aac6025"
+      "planHash": "6b588a537d003676d3b0d7551cb5e457e5aa28bc6f67fd3453ac5fe19c946109"
     },
     {
       "jobId": "p26-002-ext-060-control",
@@ -324,6 +333,7 @@
         ]
       },
       "controlExecutionContractSha256": "25249770611cd9fa2cd4afd54fade2633f8b26788cbe44d9754b219ed0a4e016",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -332,7 +342,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "be622c752778c7f0a1f934ba9f348750fab03838493215b11087c37e70a14312"
+      "planHash": "28e2a871ea347206770666b7b37933de21b6b3eca38b89142280a56db3a3bbfc"
     },
     {
       "jobId": "p26-002-ext-061-fault",
@@ -352,7 +362,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "782509a7df0dcfce6f6a68d05ffe1c2d3cc0873924036230c470b7386c73d533",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -360,7 +371,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "f9ac1e37cd88acdd2c679f138bb026520daf1bcc21bedcd4dcdc5cb729ce3e6e"
+      "planHash": "65cc6bc787242d40cae627be60972eddf982db891256d0916443b788b728c82b"
     },
     {
       "jobId": "p26-002-ext-061-control",
@@ -380,7 +391,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "efe75f99ecfe479542ec8404aa8dca91a1c1f405fa4828d8966b471f42b033b0",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -388,7 +400,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "f7d0ff3480cc67dcbbb708dc52d4449c3101e3e4c527d75f877850a2b563f079"
+      "planHash": "1ccaa8080a1c9c59a27a57590554719f64f2139ded67cfd464a807ab2c3a38af"
     },
     {
       "jobId": "p26-002-ext-062-fault",
@@ -408,7 +420,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "9d778a61004365674be93028926009cc8145aa7b9ca073f16f53efd393aa4fdf",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -416,7 +429,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "a13c7dc83d95e89a670b0a20105274370f930112a8f48c76b490b098475e2678"
+      "planHash": "268ace87bd09994156f62a7b761341b3ee3bd958591232bda9246dc8f2580596"
     },
     {
       "jobId": "p26-002-ext-062-control",
@@ -436,7 +449,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "7e3488527803d468f18d8956f45bf75caabc343f78a274b49e11ed38313e1708",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -444,7 +458,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "cd6f773f64fc463dbbafdcc84c5bc135f0ad7a18cbbec12dba7efec259d620cf"
+      "planHash": "c841d83f7eec31b8f21f5eb30af336ec072caabff6aa3c688e4bbe5e27e9ebae"
     },
     {
       "jobId": "p26-002-ext-063-fault",
@@ -464,7 +478,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "9f88a07f5e2f11fc0302bdfa86b7d36d31ffb2ac3f28ef816d35f8b4b596694a",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -472,7 +487,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "d50edb6ae77d9daf18c082a476a0fdae450cd9087c2d8f0efe7a0030694cd6e3"
+      "planHash": "2b7db4bd26ab75c5ac0ff08e9b7b207bab89e36adc7662908d870df23812a148"
     },
     {
       "jobId": "p26-002-ext-063-control",
@@ -492,7 +507,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "9c8ac3196681bbb659c1bd47967c46fc3a7c21896eb64f95315dad8dea6d053c",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -500,7 +516,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "b249438a7f63943da47b294de8e707e01ac864f4d0acf034f098a632d91a7499"
+      "planHash": "70cd8dced7951855b7850a087138ae00c6544d2da4f6723f20b3109dab4e65f4"
     },
     {
       "jobId": "p26-002-ext-064-fault",
@@ -520,7 +536,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "0e3f6df17129bebe21b86cf4b44bf75178fcac221b70e6e227a50332e08d1e70",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -528,7 +545,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "a59eae37e4fb86e50c91125a6e347e24d8e94acc823c5ba9b7bb780b38301cf8"
+      "planHash": "7cb07a7d01c7f5d3e14265e81a0ee476ada391ba96a01d2a10a94a2fa2007587"
     },
     {
       "jobId": "p26-002-ext-064-control",
@@ -548,7 +565,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "61c961cbd6729a4fb7ce6e804dd4a144f02dca3aab4a971756e0187ea3cf1bb7",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -556,7 +574,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "64f4b1635c21d241ee1d8ae66515f4b9651fee540707b91f4030a1cd8607a151"
+      "planHash": "411031a22f0cea7c39aebe8949b80383f0e8fca2c54f4cfeac0712cca97f25b2"
     },
     {
       "jobId": "p26-002-ext-065-fault",
@@ -576,7 +594,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "695f5ea7d7030ffca2cf4393e98324bc37d80e3900bedd739db59b900a64f767",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -584,7 +603,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "aaf1560ceb6de79f3dabd0797ebc6b4c1a01a1eabc927553fa64ae84cf75ceed"
+      "planHash": "c155a216991b74601a6ecda5c59eae875200ac1914ddbc917c84afd874869aaf"
     },
     {
       "jobId": "p26-002-ext-065-control",
@@ -604,7 +623,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "941f54b6f3da7e07bc214d1c9d223fbc3dd9a41ebd590a59c4e8e5b52e0f02d8",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -612,7 +632,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "8ab3f1e186180c244b40aa0867e2c960f3b6d3bc22d6558addf2bfe57448de5f"
+      "planHash": "1b387045a4bc11d0e6a86f27eb2f21469d395afe1bba3ae88dbec53e3f5c56f3"
     },
     {
       "jobId": "p26-002-ext-066-fault",
@@ -632,7 +652,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "562e038ebd8aa6b1dd15559e0031922165b229c325d0f6f3dc99bb1de75ac55a",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -640,7 +661,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "1cdb24d45f95e14f1eef1fdaa0afd796c75dd1435181ead49be0b827025611bb"
+      "planHash": "20da1b2eba13dd94b8b6610bf8829cbbe9d28156e6016f6838e0a33200dfbeb8"
     },
     {
       "jobId": "p26-002-ext-066-control",
@@ -660,7 +681,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "6da45137c56c5bb80b850b50c221503b1a4a4c7918ce197b23ed9abdb98cf1e7",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -668,7 +690,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "913373b0696c5531a2dfedb33a9e501a7f5d42b62ddb4b9a1d4243fa282f4681"
+      "planHash": "ab79e1f715f5259202be42730ea5ed2d4b866adc590939360370e999594d629e"
     },
     {
       "jobId": "p26-002-ext-067-fault",
@@ -688,7 +710,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "bb55141db14bfd72f542afeca56b3e9f507ab5e9e3acb26252e8b9a09e6b0f95",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -696,7 +719,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "bce335ed546a0c5a54552f1d26ed43ca69657f55ce658e29c9490ca925e217e3"
+      "planHash": "07e41c667c803846c1fff99a8429392fd03a8cf677fa8ee08e15b33deb5a2ec0"
     },
     {
       "jobId": "p26-002-ext-067-control",
@@ -716,7 +739,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "13857617d356d00864461f46309d54675f3b28d8f8e314532bf15dd01d14b3e2",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -724,7 +748,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "02cd3d80cc80f863ff74eea1b4bcf562fe0127fb8e9cb37e236b24a4683b5f47"
+      "planHash": "190799db18f11f10da74eaf395eebdf483d8bd8425fdb6ddfc2adda65b47ba24"
     },
     {
       "jobId": "p26-002-ext-068-fault",
@@ -744,7 +768,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "93f49bb4838f5c5b444f164aa7581f9ee2e2b26179e8455fe3bdc730312cad5e",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -752,7 +777,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "1764d79d2ddd9c1fa78d97a8ccc7c03088c414de361a1907949911503b6311bd"
+      "planHash": "1d7cdf81c22f45bef387e4c251f250700f1ffa7738bc2399c40de5abb7a19830"
     },
     {
       "jobId": "p26-002-ext-068-control",
@@ -772,7 +797,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "04b6140ae7a2ddb0cb76256a10e41bacb59dde4e6307fd27129f9579616dacad",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -780,7 +806,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "351116ee6ffb201f57c6aaa6608f62ec64f7747a04a430c61a22e9d5c2d5a9b6"
+      "planHash": "c430cc117dcbae5caa7c32cf37c6f4fc93ba24a2275403a9a0863034bce001ff"
     },
     {
       "jobId": "p26-002-ext-069-fault",
@@ -800,7 +826,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "c3e8969c1198b8ba566830f234bb685fb7df709bb89946fcc79678f6e4bc9f22",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -808,7 +835,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "d3825bd2bc625a65a5a23c545c271545ee07fcabd9ac7b82a52fdcf67cee37e7"
+      "planHash": "81d716443c26cecc378a0be6c0d46bdb3aa4f9aa4b2abeb931b5f806f4d4b893"
     },
     {
       "jobId": "p26-002-ext-069-control",
@@ -828,7 +855,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "19482d0637ef54a9ea680addaa6bf86be844178242be6f6f67da77be74cb8985",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -836,7 +864,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "98df3fa31c7eedb8e30a469173e721b233c9a627de58d3c1d1cdfa9b84f1374a"
+      "planHash": "8da00aad05c3b7400f3128881453791b45050b48bb8f4cee753c782e48488647"
     },
     {
       "jobId": "p26-002-ext-070-fault",
@@ -856,7 +884,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "ef8e5c231a9a9e01f3f873727e688db264b5f2e53c7a24b5596e523431720171",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -864,7 +893,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "5e967eafcb4a7dd81948d48debbcb1441dc2f1d88a80a959ae3df75a7a85f830"
+      "planHash": "4b389468f4014c8e11743867fd92e40793ea806a9e1eca4600625972b0ba2473"
     },
     {
       "jobId": "p26-002-ext-070-control",
@@ -884,7 +913,8 @@
         ]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "ab65e352a09ba1078196fc9fd282a2b9a12359a6eb50fe0e0ee0f65a1c45248a",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -892,7 +922,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "86db8b5c731fedb5fe0c6b345050f733e03c9a2c157c9712384e734ad79542b2"
+      "planHash": "a64611550e94005fcd82ff25f255f90e2df5ec4fdf8306a59847ad80216072f8"
     },
     {
       "jobId": "p26-002-ext-071-fault",
@@ -909,7 +939,8 @@
         "blobShas": ["ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "289c99963d1c40952ff6abb772fffc43d9544eee44a258667079a9bb164f929c",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -917,7 +948,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "180446e1c6199a75031ada37d216733937d50dc3a98785e052e22914e1538656"
+      "planHash": "96afa644fc8ab3696c488d8a51e913d0c8c4926079727c8c8ec0f31b4291dec7"
     },
     {
       "jobId": "p26-002-ext-071-control",
@@ -943,6 +974,7 @@
         ]
       },
       "controlExecutionContractSha256": "46a66b7ab14553c3b3dba614b7d0b3109b9ea70e726a2b1b13494864ef281238",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -951,7 +983,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "4a401ca9a86a11969449555ddaefcf95f7ab3c0e77aeb72e0eb19aac5d6794a8"
+      "planHash": "24460116d293b4ff16289e7a6b3b38c5a27f0fe845427294c56ff5c93d79e655"
     },
     {
       "jobId": "p26-002-ext-072-fault",
@@ -968,7 +1000,8 @@
         "blobShas": ["ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "18ddb48865ea0bad82699bdaeb17eebff94a794747fbd63c8afc1b874d14dd2c",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -976,7 +1009,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "bc56eead19ba42017141cba9cb4020c6554d74726eda6fc9e2f74130cfd0f794"
+      "planHash": "841d4629e945ca0d66d38a5912ebe55f87a14c2a21c09aa2d39b3a70d3e58dc6"
     },
     {
       "jobId": "p26-002-ext-072-control",
@@ -1002,6 +1035,7 @@
         ]
       },
       "controlExecutionContractSha256": "d5c4b5c01fad2c7579c10416352b8995dcfe3c6275a5e7549f482635628580e9",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1010,7 +1044,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "aea7a8b8da007384317fa33b62c93f440266bafc1c97715cde8611062b039379"
+      "planHash": "82e5078aee751b489e1d8d9117c9f34f59f15e73544a350bd53089de1a0e8e19"
     },
     {
       "jobId": "p26-002-ext-073-fault",
@@ -1027,7 +1061,8 @@
         "blobShas": ["ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "53a7e1c7d9b5639d95dda7f37fa5eed5528d0ebd50696c05ecdb56981f8911e0",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1035,7 +1070,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "de671b3b6a359df02ae964171a4b31f7197b92813019eac119e5d28afc19efa5"
+      "planHash": "8aa92a254240a01de3db7e21c77a71870946952d20c0178187f60017f876784d"
     },
     {
       "jobId": "p26-002-ext-073-control",
@@ -1061,6 +1096,7 @@
         ]
       },
       "controlExecutionContractSha256": "16b7728a6564b97dd22e4f0ef98cdf6ca0e9cbb7a73c11d2099856bc5f894ea7",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1069,7 +1105,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "aff03d469e2318e13b6b87837029a3109a4e648638ade0da50e0d9edbd1c976c"
+      "planHash": "a51dcd5ab600501b507135c4d383a264258041fdc9c74ffbb6f80b79ed339a36"
     },
     {
       "jobId": "p26-002-ext-074-fault",
@@ -1086,7 +1122,8 @@
         "blobShas": ["ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "f6910c5427071b44b8a09ca06e9d8330902a0e9f041381f0509b614f1c857392",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1094,7 +1131,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "71bae465970d91270708b328b2c247aef6acef1248e3146b9618d6ec13a249b9"
+      "planHash": "4fe57c8305e49a7df44d402ed689c8204996e437e129f1457af6c0ea51524df1"
     },
     {
       "jobId": "p26-002-ext-074-control",
@@ -1120,6 +1157,7 @@
         ]
       },
       "controlExecutionContractSha256": "87e95e10eb101a0e91c47ccc30581a924829f6a3cb47a7a6a72e342712807c38",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1128,7 +1166,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "301b22ec71d0e805f64034f978dfbd39f78b9f4f354dfe6300cdc4a34d3dd8c0"
+      "planHash": "e92d4accc70de085379f2fa571bc4e5a42e9d1153908a86ec9bb300843308d75"
     },
     {
       "jobId": "p26-002-ext-075-fault",
@@ -1145,7 +1183,8 @@
         "blobShas": ["ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "8a99925f7f908dff289aabac980b182f21e86a05e7b1d0f276c941b2b46cdf20",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1153,7 +1192,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "4f9510f1f4d4a7486547e3e1bbc441ed8863575789b8cea066e057c3ec8c2dbe"
+      "planHash": "8549a64695f88626b473bed50599a13bdecc790cdf7453ef1241a8d78f28b9f4"
     },
     {
       "jobId": "p26-002-ext-075-control",
@@ -1179,6 +1218,7 @@
         ]
       },
       "controlExecutionContractSha256": "af8211adff1ecaf49efe26ba607cb7924dced9426e5b0444b1a57f7e5c880fc2",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1187,7 +1227,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "2060295abbc951286b8246416ae26d06d7ac7f10fcb1b016fa4781e7df77d040"
+      "planHash": "0a222a444c555c9c4bf0faaca4a26d09194f2f86d6c85d110d29922ed7a218e5"
     },
     {
       "jobId": "p26-002-ext-076-fault",
@@ -1204,7 +1244,8 @@
         "blobShas": ["e95a9f898b2d1f6568ea8faec78edc3767ce747d"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "693dfdcc4598e7a52be43a07303f70768cafe7384fbec332dcee3adf9743bf95",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1212,7 +1253,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "dffa4fc53d7229be7aa21f27495581e24a9e051cf84d81c32fd73c7f18d38e67"
+      "planHash": "63f3bf13d1b15ed9b2d78612873d7277ed94133e3cd50143bbbf500e5c1ac9f8"
     },
     {
       "jobId": "p26-002-ext-076-control",
@@ -1238,6 +1279,7 @@
         ]
       },
       "controlExecutionContractSha256": "cae5dee5c528a2c2486c4593c50fab34e1e263a4b0324b7ae6aa5d26f7d70dd8",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1246,7 +1288,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "3ae692c13f895d0de638548270439cfec02177f27f3b454720c12b106c12e345"
+      "planHash": "c8450b5e7fa5166680897f5f9f59dc371658b329af72dfacfa20536d3fe7bed3"
     },
     {
       "jobId": "p26-002-ext-077-fault",
@@ -1263,7 +1305,8 @@
         "blobShas": ["e95a9f898b2d1f6568ea8faec78edc3767ce747d"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "29042c61763bac7d65c585e4d5b0e8f417a0506f680677f680ee20bbc8f0df01",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1271,7 +1314,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "79d539bd6ee7f1fd5eaa883375003f52ca2a3ac8b1d7b6098549571486908b8a"
+      "planHash": "cb2b8912a4edd60989d24625b4a28df479465715277476ebaa3c0b4f30d1890b"
     },
     {
       "jobId": "p26-002-ext-077-control",
@@ -1297,6 +1340,7 @@
         ]
       },
       "controlExecutionContractSha256": "c4c1d98e130f982157899ef4b279198a5bce496c9ae4baa8ae97022bc5f5745d",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1305,7 +1349,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "58e6af0834d176ffafa8026fa4d0d2689e85bcd9daed7208d8f1ce72295fde30"
+      "planHash": "dbf5cc772f5ccc80539621b9d3d549f6a4892e3e056f3279494e019652ab0437"
     },
     {
       "jobId": "p26-002-ext-078-fault",
@@ -1322,7 +1366,8 @@
         "blobShas": ["e95a9f898b2d1f6568ea8faec78edc3767ce747d"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "1918778ff57df1adfd047b9cb0ed5e727f26b39fab9ab3aa51c84447c108ad9d",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1330,7 +1375,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "ab289758954c17407799760aecd949cfae0e8a6bb58992a60def2c4f7e3a8ca1"
+      "planHash": "1038c5ef569984c0b3b027961029d6f75a6aa0516ff19a1f1978bdd1bb6a239f"
     },
     {
       "jobId": "p26-002-ext-078-control",
@@ -1356,6 +1401,7 @@
         ]
       },
       "controlExecutionContractSha256": "e973b007fe46e940805b985daa236cba194566518fc21633b68f6b90d1bcf8df",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1364,7 +1410,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "09f10ea37b79039592e7b5806b25d01427090bd324b8d9bac698dc8218355132"
+      "planHash": "16fed9676ed71bf4b80c4f75502b59a40e3d2105ce66fb9de663263d0695517d"
     },
     {
       "jobId": "p26-002-ext-079-fault",
@@ -1381,7 +1427,8 @@
         "blobShas": ["e95a9f898b2d1f6568ea8faec78edc3767ce747d"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "add6045e354b1eb1b03b01a851651e139fa004be413087158001bffae1c4c447",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1389,7 +1436,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "42b189f3b3badbd92198a2c61ea1d57a142e135cd70535810816622bb67446df"
+      "planHash": "0fc5faade04ba7fa7c35cf62ca1ab7cc0abf10d07b6daf4902e42c31b9e06d8b"
     },
     {
       "jobId": "p26-002-ext-079-control",
@@ -1415,6 +1462,7 @@
         ]
       },
       "controlExecutionContractSha256": "b9dec324ce0e72f4e8d73c66f650fb61a4073c5327a2aaa5bfabc3742a695b64",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1423,7 +1471,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "79090f3e4928cbf770654864912bfdf68e6e5b4399c2c5633852c0f9d273db91"
+      "planHash": "05f9e9bb070b9846ddc6484b994c5b5ecdfb43a5e44ddd1f18220075b8514f2d"
     },
     {
       "jobId": "p26-002-ext-080-fault",
@@ -1440,7 +1488,8 @@
         "blobShas": ["e95a9f898b2d1f6568ea8faec78edc3767ce747d"]
       },
       "controlExecutionContractSha256": null,
-      "runnerContractStatus": "missing-exact-runner-contract",
+      "runnerExecutionContractSha256": "0fefa618c27516c3f57d9819e9f372fc22b4ed2e41a224368c83b9250d967e82",
+      "runnerContractStatus": "candidate-runner-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
       "runId": null,
@@ -1448,7 +1497,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "9d98c077ea240337f613c60ec040d4e6924341430eb943818a1cb40dcb4fa24e"
+      "planHash": "5fb001eb10709a5b87a9f6550549a40435a0643dd20e4d4cc0d8f6ef0ad4f1d2"
     },
     {
       "jobId": "p26-002-ext-080-control",
@@ -1474,6 +1523,7 @@
         ]
       },
       "controlExecutionContractSha256": "f1b03141d72c8df0c158ee723eefe9421771bf5e2c3168aeae2cd98381cc226a",
+      "runnerExecutionContractSha256": null,
       "runnerContractStatus": "candidate-control-contract-review-required",
       "scheduleState": "not-scheduled",
       "modelAndPipeline": null,
@@ -1482,7 +1532,7 @@
       "trustedRunnerKeyId": null,
       "executionAllowed": false,
       "evidenceEligible": false,
-      "planHash": "c95817c3b21f38c2aeefd2cd7fb9452a666e24106eee48fb4b301a41ca63c185"
+      "planHash": "3c52068107ba21f28879570f5ef474e9929276b9a943191c174d01145a75dddf"
     }
   ],
   "summary": {
@@ -1491,7 +1541,9 @@
     "faultJobs": 20,
     "controlJobs": 30,
     "controlContractDefined": 20,
-    "runnerContractMissing": 30,
+    "supplementalRunnerContractDefined": 30,
+    "runnerContractDefined": 50,
+    "runnerContractMissing": 0,
     "runnableJobs": 0,
     "scheduledJobs": 0,
     "executedJobs": 0

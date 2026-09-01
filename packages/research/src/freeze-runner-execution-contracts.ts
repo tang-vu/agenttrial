@@ -1,12 +1,10 @@
 import { readFile, rename, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { ControlExecutionContractArtifact } from "./control-execution-contracts";
-import type { RunnerExecutionContractArtifact } from "./runner-execution-contracts";
 import {
-  buildControlledRunJobInventory,
-  CONTROLLED_RUN_JOB_INVENTORY_PATH,
-} from "./controlled-run-job-inventory";
+  buildRunnerExecutionContractArtifact,
+  RUNNER_EXECUTION_CONTRACTS_PATH,
+} from "./runner-execution-contracts";
 import type { IndependentTargetEntry, SourceAvailabilityAudit } from "./target-binding";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
@@ -14,19 +12,15 @@ async function readJson<T>(path: string) {
   return JSON.parse(await readFile(resolve(repositoryRoot, path), "utf8")) as T;
 }
 
-const [targets, availability, controlContracts, runnerContracts] = await Promise.all([
+const [targets, availability] = await Promise.all([
   readJson<{ entries: IndependentTargetEntry[] }>("research/independent-targets.json"),
   readJson<SourceAvailabilityAudit>("research/targets/source-availability-audit.json"),
-  readJson<ControlExecutionContractArtifact>("research/targets/control-execution-contracts.json"),
-  readJson<RunnerExecutionContractArtifact>("research/targets/runner-execution-contracts.json"),
 ]);
-const artifact = buildControlledRunJobInventory({
+const artifact = buildRunnerExecutionContractArtifact({
   targets: targets.entries,
   availability,
-  controlContracts,
-  runnerContracts,
 });
-const destination = resolve(repositoryRoot, CONTROLLED_RUN_JOB_INVENTORY_PATH);
+const destination = resolve(repositoryRoot, RUNNER_EXECUTION_CONTRACTS_PATH);
 const temporary = `${destination}.${process.pid}.tmp`;
 await writeFile(temporary, `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
 await rename(temporary, destination);

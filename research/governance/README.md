@@ -19,7 +19,7 @@ Each row includes full target, fault, and control descriptors plus canonical has
 The current gate also remains blocked because:
 
 - 0 of 80 fault projections have materialized gate evidence; a local receipt verifies 50 reproducible candidates but is unpublished and readiness-ineligible, while the 10 clean artifact-tampering sources have a source-locked prospective operator plan whose application remains prohibited pending construct review and authorized evidence materialization;
-- all 50 controlled-run conditions are inventoried as source-locked, unscheduled job envelopes; 20 reference candidate control contracts, 30 still lack an exact runner contract, and none is runnable or evidence-eligible;
+- all 50 controlled-run conditions are inventoried as source-locked, unscheduled job envelopes; 20 reference candidate control contracts, 30 reference hash-bound candidate BFCL/tau2 runner contracts, and none is runnable or evidence-eligible;
 - 0 of 80 matched-control projections are available;
 - only 60 of 80 control bindings have pinned inputs, and those 60 represent only 20 unique input references;
 - BFCL and tau2 controlled candidate executions do not yet exist;

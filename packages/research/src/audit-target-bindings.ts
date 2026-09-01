@@ -68,6 +68,10 @@ import {
   validateControlledRunJobInventory,
   type ControlledRunJobInventory,
 } from "./controlled-run-job-inventory";
+import {
+  validateRunnerExecutionContractArtifact,
+  type RunnerExecutionContractArtifact,
+} from "./runner-execution-contracts";
 
 const modulePath = fileURLToPath(import.meta.url);
 const repositoryRoot = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
@@ -955,6 +959,7 @@ export async function generateTargetBindingAudit() {
     trustedRunnerPolicy,
     oracleAdjudicationTemplate,
     artifactTamperingPlan,
+    runnerExecutionContracts,
     controlledRunJobInventory,
   ] = await Promise.all([
     readJson<{ entries: IndependentTargetEntry[] }>("research/independent-targets.json"),
@@ -973,12 +978,12 @@ export async function generateTargetBindingAudit() {
     readJson<ArtifactTamperingMutationPlan>(
       "research/targets/artifact-tampering-mutation-plan.json",
     ),
+    readJson<RunnerExecutionContractArtifact>("research/targets/runner-execution-contracts.json"),
     readJson<ControlledRunJobInventory>("research/targets/controlled-run-job-inventory.json"),
   ]);
   validateTrustedRunnerPolicy(trustedRunnerPolicy.value);
   validateOraclePacket(oracleAdjudicationTemplate.value);
   validateArtifactTamperingMutationPlan(artifactTamperingPlan.value);
-  validateControlledRunJobInventory(controlledRunJobInventory.value);
 
   const excludedAgentChaosProjectionHashes = validateAgentChaosProjectionAudit(
     agentChaos.value,
@@ -1012,6 +1017,16 @@ export async function generateTargetBindingAudit() {
     "research/targets/control-execution-contracts.json",
     controlExecutionContractBytes.toString("utf8"),
   );
+  validateRunnerExecutionContractArtifact(runnerExecutionContracts.value, {
+    targets: targets.value.entries,
+    availability: availability.value,
+  });
+  validateControlledRunJobInventory(controlledRunJobInventory.value, {
+    targets: targets.value.entries,
+    availability: availability.value,
+    controlContracts: controlExecutionContracts,
+    runnerContracts: runnerExecutionContracts.value,
+  });
   const remainingControlSources = validateRemainingControlSourceAudit(
     remainingControls.value,
     targets.value.entries,
@@ -1084,6 +1099,7 @@ export async function generateTargetBindingAudit() {
     remainingProjectionAuditSha256: sha256(remaining.bytes),
     remainingControlSourceAuditSha256: sha256(remainingControls.bytes),
     controlExecutionContractsSha256: sha256(controlExecutionContractBytes),
+    runnerExecutionContractsSha256: sha256(runnerExecutionContracts.bytes),
     repeatExecutionInventorySha256: sha256(repeatExecutionInventory.bytes),
     trustedRunnerPolicySha256: sha256(trustedRunnerPolicy.bytes),
     oracleAdjudicationTemplateSha256: sha256(oracleAdjudicationTemplate.bytes),

@@ -1,6 +1,10 @@
 import { createHash } from "node:crypto";
 import { CONTROL_MATRIX, SCENARIO_MATRIX } from "./index";
 import type { ControlExecutionContractArtifact } from "./control-execution-contracts";
+import {
+  runnerExecutionContractForJob,
+  type RunnerExecutionContractArtifact,
+} from "./runner-execution-contracts";
 import type {
   BfclTargetEntry,
   IndependentTargetEntry,
@@ -20,7 +24,7 @@ interface JobSourceLock {
 }
 type RunnerContractStatus =
   | "candidate-control-contract-review-required"
-  | "missing-exact-runner-contract";
+  | "candidate-runner-contract-review-required";
 
 interface ControlledRunJobBody {
   jobId: string;
@@ -31,6 +35,7 @@ interface ControlledRunJobBody {
   bindingStatus: "provisional-family-order-review-required";
   sourceLock: JobSourceLock;
   controlExecutionContractSha256: string | null;
+  runnerExecutionContractSha256: string | null;
   runnerContractStatus: RunnerContractStatus;
   scheduleState: "not-scheduled";
   modelAndPipeline: null;
@@ -55,6 +60,8 @@ export interface ControlledRunJobInventory {
     faultJobs: number;
     controlJobs: number;
     controlContractDefined: number;
+    supplementalRunnerContractDefined: number;
+    runnerContractDefined: number;
     runnerContractMissing: number;
     runnableJobs: number;
     scheduledJobs: number;
@@ -102,6 +109,22 @@ function exactControlContract(artifact: ControlExecutionContractArtifact, target
   return matches[0]!;
 }
 
+function verifyRunnerContractBinding(
+  contract: ReturnType<typeof runnerExecutionContractForJob>,
+  sourceLock: JobSourceLock,
+  configurationId: string,
+) {
+  const contractBlobShas = new Set(contract.sourceLock.sourceBlobs.map((blob) => blob.blobSha));
+  if (
+    contract.configurationId !== configurationId ||
+    contract.sourceLock.repository !== sourceLock.repository ||
+    contract.sourceLock.revision !== sourceLock.revision ||
+    contract.sourceLock.unitId !== sourceLock.unitId ||
+    sourceLock.blobShas.some((blobSha) => !contractBlobShas.has(blobSha))
+  )
+    fail(`runner contract binding drift for ${contract.targetId}/${contract.condition}`);
+}
+
 function bfclSourceLock(
   target: BfclTargetEntry,
   condition: "fault" | "control",
@@ -136,6 +159,7 @@ export function buildControlledRunJobInventory(input: {
   targets: IndependentTargetEntry[];
   availability: SourceAvailabilityAudit;
   controlContracts: ControlExecutionContractArtifact;
+  runnerContracts: RunnerExecutionContractArtifact;
 }): ControlledRunJobInventory {
   const targetsByFamily = new Map<string, IndependentTargetEntry[]>();
   for (const target of input.targets)
@@ -155,6 +179,9 @@ export function buildControlledRunJobInventory(input: {
         condition === "control" && (target.source === "agentdojo" || target.source === "tau2-bench")
           ? exactControlContract(input.controlContracts, target.targetId)
           : null;
+      const runnerContract = controlContract
+        ? null
+        : runnerExecutionContractForJob(input.runnerContracts, target.targetId, condition);
       const sourceLock = controlContract
         ? {
             repository: controlContract.sourceLock.repository,
@@ -168,6 +195,8 @@ export function buildControlledRunJobInventory(input: {
           : target.source === "tau2-bench" && condition === "fault"
             ? tau2FaultSourceLock(target, input.availability)
             : fail(`source lock missing for ${target.targetId}/${condition}`);
+      if (runnerContract)
+        verifyRunnerContractBinding(runnerContract, sourceLock, configurations[condition]);
       bodies.push({
         jobId: `p26-002-${target.targetId}-${condition}`,
         targetId: target.targetId,
@@ -177,9 +206,10 @@ export function buildControlledRunJobInventory(input: {
         bindingStatus: "provisional-family-order-review-required",
         sourceLock,
         controlExecutionContractSha256: controlContract?.contractSha256 ?? null,
+        runnerExecutionContractSha256: runnerContract?.contractSha256 ?? null,
         runnerContractStatus: controlContract
           ? "candidate-control-contract-review-required"
-          : "missing-exact-runner-contract",
+          : "candidate-runner-contract-review-required",
         scheduleState: "not-scheduled",
         modelAndPipeline: null,
         runId: null,
@@ -205,9 +235,15 @@ export function buildControlledRunJobInventory(input: {
       controlContractDefined: jobs.filter(
         (job) => job.runnerContractStatus === "candidate-control-contract-review-required",
       ).length,
-      runnerContractMissing: jobs.filter(
-        (job) => job.runnerContractStatus === "missing-exact-runner-contract",
+      supplementalRunnerContractDefined: jobs.filter(
+        (job) => job.runnerContractStatus === "candidate-runner-contract-review-required",
       ).length,
+      runnerContractDefined: jobs.filter(
+        (job) =>
+          job.runnerContractStatus === "candidate-control-contract-review-required" ||
+          job.runnerContractStatus === "candidate-runner-contract-review-required",
+      ).length,
+      runnerContractMissing: 0,
       runnableJobs: 0,
       scheduledJobs: 0,
       executedJobs: 0,
@@ -231,7 +267,15 @@ export function buildControlledRunJobInventory(input: {
   return artifact;
 }
 
-export function validateControlledRunJobInventory(artifact: ControlledRunJobInventory) {
+export function validateControlledRunJobInventory(
+  artifact: ControlledRunJobInventory,
+  input?: {
+    targets: IndependentTargetEntry[];
+    availability: SourceAvailabilityAudit;
+    controlContracts: ControlExecutionContractArtifact;
+    runnerContracts: RunnerExecutionContractArtifact;
+  },
+) {
   if (
     artifact.schemaVersion !== "p26-002-controlled-run-job-inventory-0.1.0" ||
     artifact.status !== "blocked-before-scheduling" ||
@@ -242,7 +286,9 @@ export function validateControlledRunJobInventory(artifact: ControlledRunJobInve
     artifact.summary.faultJobs !== 20 ||
     artifact.summary.controlJobs !== 30 ||
     artifact.summary.controlContractDefined !== 20 ||
-    artifact.summary.runnerContractMissing !== 30 ||
+    artifact.summary.supplementalRunnerContractDefined !== 30 ||
+    artifact.summary.runnerContractDefined !== 50 ||
+    artifact.summary.runnerContractMissing !== 0 ||
     artifact.summary.runnableJobs !== 0 ||
     artifact.summary.scheduledJobs !== 0 ||
     artifact.summary.executedJobs !== 0 ||
@@ -268,6 +314,12 @@ export function validateControlledRunJobInventory(artifact: ControlledRunJobInve
       job.runId !== null ||
       job.seed !== null ||
       job.trustedRunnerKeyId !== null ||
+      (job.controlExecutionContractSha256 === null) ===
+        (job.runnerExecutionContractSha256 === null) ||
+      (job.controlExecutionContractSha256 !== null &&
+        !/^[0-9a-f]{64}$/.test(job.controlExecutionContractSha256)) ||
+      (job.runnerExecutionContractSha256 !== null &&
+        !/^[0-9a-f]{64}$/.test(job.runnerExecutionContractSha256)) ||
       job.executionAllowed ||
       job.evidenceEligible ||
       !/^[0-9a-f]{40}$/.test(job.sourceLock.revision) ||
@@ -276,4 +328,6 @@ export function validateControlledRunJobInventory(artifact: ControlledRunJobInve
     )
       fail(`job contract failed for ${job.jobId}`);
   }
+  if (input && JSON.stringify(artifact) !== JSON.stringify(buildControlledRunJobInventory(input)))
+    fail("inventory does not match the current source-bound candidate contracts");
 }

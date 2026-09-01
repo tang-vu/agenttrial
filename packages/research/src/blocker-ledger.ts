@@ -104,7 +104,7 @@ export function buildBlockerLedger(input: {
     ],
     blockers,
     nextSafeMachineAction:
-      "Materialize fixed-upstream evidence through an authorized evidence boundary and define the 30 missing exact runner contracts; keep all 50 controlled-run envelopes unscheduled and the artifact-tampering operator unapplied until their human and authorization prerequisites are satisfied.",
+      "Materialize fixed-upstream evidence through an authorized evidence boundary and draft the redesigned estimand, clustering, and repetition amendment; keep all 50 controlled-run envelopes unscheduled and the artifact-tampering operator unapplied until their human and authorization prerequisites are satisfied.",
     mainTrialAllowed: false,
     releaseAllowed: false,
     submissionAllowed: false,

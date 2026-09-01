@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import type { ControlExecutionContractArtifact } from "./control-execution-contracts";
+import type { RunnerExecutionContractArtifact } from "./runner-execution-contracts";
 import {
   buildControlledRunJobInventory,
   validateControlledRunJobInventory,
@@ -23,6 +24,9 @@ describe("P26-002 controlled-run job inventory", () => {
     controlContracts: readJson<ControlExecutionContractArtifact>(
       "../../../research/targets/control-execution-contracts.json",
     ),
+    runnerContracts: readJson<RunnerExecutionContractArtifact>(
+      "../../../research/targets/runner-execution-contracts.json",
+    ),
   };
 
   it("matches the committed fail-closed inventory", () => {
@@ -31,14 +35,16 @@ describe("P26-002 controlled-run job inventory", () => {
       "../../../research/targets/controlled-run-job-inventory.json",
     );
     expect(generated).toEqual(committed);
-    expect(() => validateControlledRunJobInventory(committed)).not.toThrow();
+    expect(() => validateControlledRunJobInventory(committed, input)).not.toThrow();
     expect(committed.summary).toEqual({
       expectedJobs: 50,
       inventoriedJobs: 50,
       faultJobs: 20,
       controlJobs: 30,
       controlContractDefined: 20,
-      runnerContractMissing: 30,
+      supplementalRunnerContractDefined: 30,
+      runnerContractDefined: 50,
+      runnerContractMissing: 0,
       runnableJobs: 0,
       scheduledJobs: 0,
       executedJobs: 0,
