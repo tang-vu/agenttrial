@@ -24,10 +24,7 @@
       "terminalOutputOnlyInjectionDependencies": ["model_output"],
       "mistakenlyAttributedTask": "travel/injection_task_0",
       "mistakenlyAttributedClass": "InjectionTask0",
-      "mistakenlyAttributedDependencies": [
-        "pre_environment",
-        "post_environment"
-      ],
+      "mistakenlyAttributedDependencies": ["pre_environment", "post_environment"],
       "travelInjectionTasksAudited": 7,
       "travelOutputOnlyInjectionTasks": 1,
       "travelUserTasksAudited": 20,
@@ -137,13 +134,7 @@
       "faultUserTaskSourceBlob": "aee38de74e05a61fc7467afb1c63079cac185fe7",
       "faultInjectionTaskSourcePath": "src/agentdojo/default_suites/v1/travel/injection_tasks.py",
       "faultInjectionTaskSourceBlob": "051a46cc5942bb74bb807f089831d9a71fc77aaa",
-      "userTaskTerminalAtomsAtBothCommits": [
-        "Good Night",
-        "240",
-        "London Luxury",
-        "80",
-        "720"
-      ],
+      "userTaskTerminalAtomsAtBothCommits": ["Good Night", "240", "London Luxury", "80", "720"],
       "injectionTaskTerminalAtom": "Riverside View Hotel",
       "sameTerminalPredicateSemantics": true,
       "versionBindingRecovered": true
