@@ -219,12 +219,12 @@ def render(data: dict) -> str:
         "",
         "## Exact operating characteristics",
         "",
-        "| Scenario | Benefit power at n=80 | First n with benefit power >=0.80 |",
-        "|---|---:|---:|",
+        "| Scenario    | Benefit power at n=80 | First n with benefit power >=0.80 |",
+        "| ----------- | --------------------: | --------------------------------: |",
     ]
     for name, result in oc["benefit"].items():
         lines.append(
-            f"| {name} | {result['power_at_80']:.6f} | {result['first_n_with_power_at_least_0_80']} |"
+            f"| {name:<11} | {result['power_at_80']:>21.6f} | {result['first_n_with_power_at_least_0_80']:>33} |"
         )
     lines += [
         "",
@@ -310,9 +310,12 @@ def main() -> None:
     }
     markdown = render(data)
     validation = validate(data, markdown)
-    (args.output_dir / "estimand_design_amendment.json").write_text(
-        json.dumps(data, indent=2) + "\n", encoding="utf-8"
+    json_text = json.dumps(data, indent=2) + "\n"
+    json_text = json_text.replace(
+        '  "secondary_comparators": [\n    "trace-presence",\n    "frozen-local-llm-judge"\n  ],',
+        '  "secondary_comparators": ["trace-presence", "frozen-local-llm-judge"],',
     )
+    (args.output_dir / "estimand_design_amendment.json").write_text(json_text, encoding="utf-8")
     (args.output_dir / "estimand_design_amendment.md").write_text(markdown, encoding="utf-8")
     (args.output_dir / "validation.json").write_text(
         json.dumps(validation, indent=2) + "\n", encoding="utf-8"
