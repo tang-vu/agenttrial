@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="310" viewBox="0 0 900 310" role="img" aria-labelledby="title desc">
+<title id="title">P26-002 corrected AgentDojo endpoint lineage</title>
+<desc id="desc">The 112-cluster inventory narrows to one output-only user task and one output-only injection task. Across five pipelines, one physical pair qualifies, yielding one source-bound content cluster and a shortfall of 180.</desc>
+<rect width="900" height="310" fill="#ffffff"/>
+<text x="28" y="38" font-size="22" font-weight="700" fill="#172b4d">Correct task identity changes the candidate, not the gate</text>
+<g font-family="Arial, sans-serif" font-size="15" fill="#172b4d">
+<rect x="28" y="86" width="150" height="64" rx="8" fill="#e2e8f0"/><text x="50" y="113">112-cluster</text><text x="50" y="134">inventory</text>
+<path d="M178 118 H228" stroke="#64748b" stroke-width="3" marker-end="url(#a)"/>
+<rect x="228" y="76" width="180" height="84" rx="8" fill="#fef3c7"/><text x="249" y="105">1 output-only user</text><text x="249" y="128">× 1 output-only</text><text x="249" y="149">injection task</text>
+<path d="M408 118 H458" stroke="#64748b" stroke-width="3" marker-end="url(#a)"/>
+<rect x="458" y="86" width="150" height="64" rx="8" fill="#dbeafe"/><text x="481" y="113">5 pipelines</text><text x="481" y="134">audited</text>
+<path d="M608 118 H658" stroke="#64748b" stroke-width="3" marker-end="url(#a)"/>
+<rect x="658" y="76" width="210" height="84" rx="8" fill="#dcfce7"/><text x="682" y="105">1 physical pair</text><text x="682" y="128">= 1 source-bound</text><text x="682" y="149">content cluster</text>
+<text x="28" y="220" font-size="18" font-weight="700">Remaining planning shortfall: 180 of 181</text>
+<text x="28" y="250" fill="#475569">Retrospective source candidate only; no construct approval, trial outcome, or submission permission.</text>
+</g>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748b"/></marker></defs>
+</svg>

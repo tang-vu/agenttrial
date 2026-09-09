@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "output-only injection task is task 6",
+    "prior task 0 attribution is named",
+    "task 0 is state-dependent",
+    "one of seven travel injection tasks is output-only",
+    "one of twenty travel user tasks is output-only",
+    "three earlier task 0 instances are corrected",
+    "no corrected task 0 fault uses a terminal-only oracle",
+    "five model pipelines are audited for the correct task 6 pair",
+    "exactly one physical task 6 pair meets the published result pattern",
+    "the qualifying physical pair is GPT-4o",
+    "the qualifying physical pair represents one content cluster",
+    "control predates suite versioning",
+    "fault commit exposes only v1 and defaults to v1",
+    "terminal predicate lineage is recovered",
+    "one source- and endpoint-bound candidate cluster remains",
+    "shortfall is 180",
+    "all governance gates remain closed"
+  ],
+  "checksPassed": 17,
+  "outputSha256": {
+    "agentdojo_task_lineage_correction.json": "7c3d9e7a4ad85a574568d83f91c94c456f9518fd1661125fd6ec34082a97d323",
+    "agentdojo_task_lineage_correction.md": "efffadf1d6cf0e07e6c36bf3be91ac6e45bf01dd248e0d81778d303d40013b42",
+    "agentdojo_task_lineage_correction.svg": "d3735b3df84cdcd7ae71cb1ab480fa0bec473ca9bebe4c993c6bbcdd54dd1f48"
+  },
+  "schemaVersion": "p26-002-agentdojo-task-lineage-correction-validation-0.1.0",
+  "status": "PASS"
+}

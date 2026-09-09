@@ -1,0 +1,15 @@
+{
+  "correctOutputOnlyInjectionTask": "travel/injection_task_6",
+  "createdOn": "2026-09-09",
+  "machineDisposition": "WITHDRAW_TASK0_PROVISIONAL; RETAIN_ONE_TASK6_SOURCE_CANDIDATE; KEEP_TRIAL_GATES_CLOSED",
+  "mainTrialAllowed": false,
+  "qualifyingPhysicalInstances": 1,
+  "registered80FrameChanged": false,
+  "releaseAllowed": false,
+  "schemaVersion": "p26-002-agentdojo-task-lineage-correction-result-0.1.0",
+  "sourceAndEndpointBoundCandidateClusters": 1,
+  "sourceObservationSha256": "e8545b21867eb389beee338d750721f3c8108f2c5970f4a578fc4e37785598ed",
+  "strictShortfallTo181": 180,
+  "submissionAllowed": false,
+  "withdrawnProvisionalTask": "travel/injection_task_0"
+}
