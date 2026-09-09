@@ -132,7 +132,7 @@ def main() -> None:
     def compact_string_array(match: re.Match[str]) -> str:
         values = re.findall(r'"([^"]+)"', match.group("body"))
         line = f'{match.group("indent")}"topLevelKinds": {json.dumps(values)}'
-        return line if len(values) <= 4 and len(line) <= 100 else match.group(0)
+        return line if len(line) <= 100 else match.group(0)
 
     serialized = pattern.sub(compact_string_array, serialized)
     args.output.write_text(serialized + "\n", encoding="utf-8")

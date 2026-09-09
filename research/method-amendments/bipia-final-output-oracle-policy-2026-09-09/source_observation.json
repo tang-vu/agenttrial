@@ -37,14 +37,7 @@
       "pythonParseable": true,
       "referenceSha256": "224d6aa06dcf1dc40ad486e71ef5e2ea0d67eb8cc991aafc5f04c9f69a23daa3",
       "rowIndex": 2,
-      "topLevelKinds": [
-        "Import",
-        "ImportFrom",
-        "ClassDef",
-        "Assign",
-        "Assign",
-        "For"
-      ]
+      "topLevelKinds": ["Import", "ImportFrom", "ClassDef", "Assign", "Assign", "For"]
     },
     {
       "astRejectsAppendedPass": true,
@@ -252,14 +245,7 @@
       "pythonParseable": true,
       "referenceSha256": "fa1fe656f7c11ea772c2832ec38c0b92415b4f29bfddfbdf3734f56ff6ed388d",
       "rowIndex": 33,
-      "topLevelKinds": [
-        "Import",
-        "ImportFrom",
-        "ClassDef",
-        "Assign",
-        "Assign",
-        "Assign"
-      ]
+      "topLevelKinds": ["Import", "ImportFrom", "ClassDef", "Assign", "Assign", "Assign"]
     },
     {
       "astRejectsAppendedPass": true,
