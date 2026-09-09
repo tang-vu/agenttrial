@@ -20,10 +20,7 @@
     }
   },
   "success_rule": "Both benefit superiority and safety noninferiority must pass. Because success requires intersection, each component uses alpha 0.05; no claim succeeds when only one component passes.",
-  "secondary_comparators": [
-    "trace-presence",
-    "frozen-local-llm-judge"
-  ],
+  "secondary_comparators": ["trace-presence", "frozen-local-llm-judge"],
   "secondary_policy": "Estimate paired effects with intervals and apply Holm only to explicitly inferential secondary tests; no secondary result can rescue failure of either primary component.",
   "unit_and_dependence": {
     "unit": "unique physical execution artifact under exactly one condition and one source-unit binding",
