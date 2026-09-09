@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="330" viewBox="0 0 800 330">
+<rect width="800" height="330" fill="#fff"/>
+<style>.title{font:700 20px Arial;fill:#152238}.label{font:14px Arial;fill:#27364d}.value{font:700 14px Arial;fill:#152238}.note{font:12px Arial;fill:#58677c}</style>
+<text x="30" y="36" class="title">P26-002 A3S final-output observability</text>
+<text x="30" y="90" class="label">State/action dependent</text><rect x="250" y="72" width="427" height="26" rx="4" fill="#8c4f45"/><text x="689" y="90" class="value">61 / 69</text><text x="30" y="138" class="label">Literal-output candidates</text><rect x="250" y="120" width="49" height="26" rx="4" fill="#2f6f8f"/><text x="311" y="138" class="value">7 / 69</text><text x="30" y="186" class="label">Semantic/mixed</text><rect x="250" y="168" width="7" height="26" rx="4" fill="#92723d"/><text x="269" y="186" class="value">1 / 69</text><text x="30" y="234" class="label">Strictly usable now</text><rect x="250" y="216" width="2" height="26" rx="4" fill="#4f5965"/><text x="264" y="234" class="value">0 / 69</text>
+<text x="30" y="286" class="note">Seven Information Leakage pairs were screened for credential-like literal contrast.</text>
+<text x="30" y="306" class="note">No pair combined structural exactness with one-sided literal contrast.</text>
+</svg>

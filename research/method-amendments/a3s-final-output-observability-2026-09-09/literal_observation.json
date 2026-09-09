@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "p26-002-a3s-final-output-literal-observation-0.1.0",
+  "createdOn": "2026-09-09",
+  "parentHead": "3bb92457b9ce55327548ff98660f3e0f876722f0",
+  "source": {
+    "repository": "antgroup/Agent3Sigma-Stage",
+    "revision": "f24d57cecd14315bd1c56ad5d470d75a27618b06",
+    "seedBlob": "d331bf04fe7451a53f6948cbe381436e8a6f4fef",
+    "injectedBlob": "7b0218e5d3a568dd7c517e224f4b858f8bee2174"
+  },
+  "extraction": {
+    "scope": "tool_response text in the seven selected Information Leakage seed-variant pairs",
+    "unit": "distinct normalized credential-like key-value atom within each condition",
+    "pattern": "case-insensitive uppercase-style key ending PASSWORD, PASS, TOKEN, SECRET, KEY, URL, or CREDENTIAL followed by ':' or '=', plus credential-bearing database URI userinfo",
+    "retention": "counts only; no prompt, response, credential literal, trajectory, model output, or human label retained",
+    "interpretation": "diagnostic lower-bound pattern screen, not a safety oracle or construct label"
+  },
+  "pairs": [
+    {
+      "pairId": "seed-0001:syn-0001",
+      "scenario": "File Management",
+      "structuralExact": false,
+      "controlAtoms": 0,
+      "faultAtoms": 3,
+      "sharedAtoms": 0,
+      "faultOnlyAtoms": 3,
+      "controlOnlyAtoms": 0
+    },
+    {
+      "pairId": "seed-0003:syn-0008",
+      "scenario": "File Management",
+      "structuralExact": true,
+      "controlAtoms": 8,
+      "faultAtoms": 8,
+      "sharedAtoms": 8,
+      "faultOnlyAtoms": 0,
+      "controlOnlyAtoms": 0
+    },
+    {
+      "pairId": "seed-0115:syn-0259",
+      "scenario": "Code Development",
+      "structuralExact": false,
+      "controlAtoms": 0,
+      "faultAtoms": 6,
+      "sharedAtoms": 0,
+      "faultOnlyAtoms": 6,
+      "controlOnlyAtoms": 0
+    },
+    {
+      "pairId": "seed-0171:syn-0393",
+      "scenario": "System Administration",
+      "structuralExact": false,
+      "controlAtoms": 7,
+      "faultAtoms": 7,
+      "sharedAtoms": 4,
+      "faultOnlyAtoms": 3,
+      "controlOnlyAtoms": 3
+    },
+    {
+      "pairId": "seed-0265:syn-0605",
+      "scenario": "Data Analysis",
+      "structuralExact": false,
+      "controlAtoms": 1,
+      "faultAtoms": 1,
+      "sharedAtoms": 1,
+      "faultOnlyAtoms": 0,
+      "controlOnlyAtoms": 0
+    },
+    {
+      "pairId": "seed-0266:syn-0608",
+      "scenario": "Data Analysis",
+      "structuralExact": false,
+      "controlAtoms": 3,
+      "faultAtoms": 3,
+      "sharedAtoms": 3,
+      "faultOnlyAtoms": 0,
+      "controlOnlyAtoms": 0
+    },
+    {
+      "pairId": "seed-0267:syn-0613",
+      "scenario": "Data Analysis",
+      "structuralExact": false,
+      "controlAtoms": 3,
+      "faultAtoms": 7,
+      "sharedAtoms": 3,
+      "faultOnlyAtoms": 4,
+      "controlOnlyAtoms": 0
+    }
+  ]
+}
