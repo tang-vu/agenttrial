@@ -1,0 +1,173 @@
+{
+  "schema_version": "p26-002-estimand-design-amendment-0.1.0",
+  "date": "2026-09-09",
+  "status": "machine_selected_reversible_design_pending_independent_review_and_execution_gates",
+  "scope": "method_design_and_feasibility_only_no_trial_outcomes",
+  "primary_question": "Within a prospectively frozen set of unique fault and matched-control executions, does AgentTrial reduce false acceptance relative to final-output-only evaluation while keeping AgentTrial-only false rejection below a five-percentage-point margin?",
+  "primary_estimands": {
+    "benefit": {
+      "name": "paired false-acceptance risk difference",
+      "definition": "Pr(final-output-only accepts and AgentTrial rejects) minus Pr(AgentTrial accepts and final-output-only rejects) over unique fault execution pairs",
+      "direction": "positive favors AgentTrial",
+      "primary_comparator": "final-output-only",
+      "test": "one-sided exact conditional McNemar test at alpha 0.05"
+    },
+    "safety": {
+      "name": "AgentTrial-only false-rejection probability",
+      "definition": "probability that AgentTrial rejects while final-output-only accepts on a unique matched-control execution",
+      "margin": 0.05,
+      "test": "one-sided exact Clopper-Pearson upper bound at alpha 0.05"
+    }
+  },
+  "success_rule": "Both benefit superiority and safety noninferiority must pass. Because success requires intersection, each component uses alpha 0.05; no claim succeeds when only one component passes.",
+  "secondary_comparators": [
+    "trace-presence",
+    "frozen-local-llm-judge"
+  ],
+  "secondary_policy": "Estimate paired effects with intervals and apply Holm only to explicitly inferential secondary tests; no secondary result can rescue failure of either primary component.",
+  "unit_and_dependence": {
+    "unit": "unique physical execution artifact under exactly one condition and one source-unit binding",
+    "prohibited": [
+      "reusing one execution identity as multiple observations",
+      "counting repeated evaluator replay as repeated agent execution",
+      "treating family-order bindings as validated construct mappings"
+    ],
+    "source_stratification": "Report each pinned benchmark source separately before any fixed-frame aggregate."
+  },
+  "planning_assumptions": {
+    "alpha_each_co_primary": 0.05,
+    "target_marginal_power": 0.8,
+    "target_joint_power_lower_bound": 0.8,
+    "benefit_scenarios": {
+      "pessimistic": {
+        "baseline_only": 0.14,
+        "agenttrial_only": 0.05
+      },
+      "planning": {
+        "baseline_only": 0.2,
+        "agenttrial_only": 0.04
+      },
+      "optimistic": {
+        "baseline_only": 0.28,
+        "agenttrial_only": 0.03
+      }
+    },
+    "safety_true_agenttrial_only_rate": 0.01,
+    "safety_margin": 0.05,
+    "joint_power_method": "correlation-agnostic Bonferroni lower bound P(A and B) >= P(A) + P(B) - 1"
+  },
+  "operating_characteristics": {
+    "benefit": {
+      "pessimistic": {
+        "baseline_only": 0.14,
+        "agenttrial_only": 0.05,
+        "power_at_80": 0.5003899936600774,
+        "first_n_with_power_at_least_0_80": 156,
+        "power_at_first_n": 0.800211968635291
+      },
+      "planning": {
+        "baseline_only": 0.2,
+        "agenttrial_only": 0.04,
+        "power_at_80": 0.8993933823808725,
+        "first_n_with_power_at_least_0_80": 62,
+        "power_at_first_n": 0.8008840846471844
+      },
+      "optimistic": {
+        "baseline_only": 0.28,
+        "agenttrial_only": 0.03,
+        "power_at_80": 0.9971486464748754,
+        "first_n_with_power_at_least_0_80": 33,
+        "power_at_first_n": 0.805133541910128
+      }
+    },
+    "safety_first_n_with_power_at_least_0_80": 124,
+    "combined_pessimistic_first_n_with_lower_bound_at_least_0_80": 181,
+    "checkpoints": {
+      "80": {
+        "pessimistic_benefit_power": 0.5003899936600774,
+        "safety": {
+          "n": 80,
+          "max_passing_events": 0,
+          "upper_at_max": 0.0367541977799823,
+          "upper_at_next": 0.057928682117781724,
+          "power_if_true_rate_0_01": 0.4475232137638109
+        },
+        "correlation_agnostic_joint_power_lower_bound": 0.0
+      },
+      "124": {
+        "pessimistic_benefit_power": 0.7003278796380156,
+        "safety": {
+          "n": 124,
+          "max_passing_events": 2,
+          "upper_at_max": 0.04990017122831202,
+          "upper_at_next": 0.06133993235554627,
+          "power_if_true_rate_0_01": 0.8715535097463498
+        },
+        "correlation_agnostic_joint_power_lower_bound": 0.5718813893843655
+      },
+      "181": {
+        "pessimistic_benefit_power": 0.8568544337575296,
+        "safety": {
+          "n": 181,
+          "max_passing_events": 4,
+          "upper_at_max": 0.04985531794888486,
+          "upper_at_next": 0.057202066288701864,
+          "power_if_true_rate_0_01": 0.9636701361685371
+        },
+        "correlation_agnostic_joint_power_lower_bound": 0.8205245699260666
+      },
+      "243": {
+        "pessimistic_benefit_power": 0.9381762892014195,
+        "safety": {
+          "n": 243,
+          "max_passing_events": 6,
+          "upper_at_max": 0.04814975793955778,
+          "upper_at_next": 0.0534243281833662,
+          "power_if_true_rate_0_01": 0.9881150669992109
+        },
+        "correlation_agnostic_joint_power_lower_bound": 0.9262913562006303
+      },
+      "180": {
+        "pessimistic_benefit_power": 0.8549230262606776,
+        "safety": {
+          "n": 180,
+          "max_passing_events": 3,
+          "upper_at_max": 0.042510022399352164,
+          "upper_at_next": 0.05012830728666798,
+          "power_if_true_rate_0_01": 0.8922637578028076
+        },
+        "correlation_agnostic_joint_power_lower_bound": 0.7471867840634854
+      }
+    }
+  },
+  "frame_feasibility": {
+    "registered_fault_slots": 80,
+    "registered_control_slots": 80,
+    "observed_fixed_fault_executions": 60,
+    "unique_pinned_control_inputs": 20,
+    "confirmatory_n": 181,
+    "additional_unique_fault_executions_needed_vs_registered_frame": 101,
+    "additional_unique_control_executions_needed_vs_registered_frame": 101,
+    "additional_observed_fault_executions_needed_vs_current_evidence": 121,
+    "additional_unique_control_inputs_needed_vs_current_evidence": 161,
+    "current_eighty_pair_frame_is_confirmatory": false,
+    "permitted_use_of_eighty_pair_frame": "finite-frame descriptive census and pilot estimation only, with no confirmatory or population-general claim"
+  },
+  "retrospective_change_log": [
+    "Replaces the six-component three-comparator co-primary frontier with one primary comparator and two co-primary endpoints.",
+    "Does not change historical design files or reinterpret 243 as a monotone minimum.",
+    "Selects an exact confirmatory n only for the stated one-comparator estimand and planning assumptions.",
+    "Keeps all source, construct-review, independent-review, private-visibility, execution, release, and submission gates closed."
+  ],
+  "gates": {
+    "independent_method_review_complete": false,
+    "construct_mappings_approved": 0,
+    "construct_mappings_required": 80,
+    "runnable_jobs": 0,
+    "scheduled_jobs": 0,
+    "executed_jobs": 0,
+    "main_trial_allowed": false,
+    "release_allowed": false,
+    "submission_allowed": false
+  }
+}
