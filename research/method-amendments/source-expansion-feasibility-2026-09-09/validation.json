@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "archivalPairCeiling": true,
+    "chaosControlCount": true,
+    "chaosFaultCount": true,
+    "chaosRegisteredCount": true,
+    "chaosTraceCount": true,
+    "chaosUniqueBlobCount": true,
+    "dojoAttacksAssessed": true,
+    "dojoControlsAssessed": true,
+    "dojoEligibleControls": true,
+    "dojoEligibleFaults": true,
+    "dojoPairableControls": true,
+    "noReadinessPromotion": true,
+    "noSubmissionPromotion": true,
+    "remainingGap": true,
+    "snapshotSchema": true
+  },
+  "inputSha256": "641715c6027923b384d23720c931acd3aeaa1a4cb4b53f7b7c72dcf03a929fd8",
+  "outputSha256": {
+    "source_expansion_feasibility.json": "efadf61caa908250c677b66489c2009212188058ab1b9c135d2ef725e916bf8a",
+    "source_expansion_feasibility.md": "81090a0b275b2a6f3e53417423dae1cef5c3fb990d59ad47d060ca457266e724"
+  },
+  "schemaVersion": "p26-002-source-expansion-validation-0.1.0",
+  "status": "passed"
+}

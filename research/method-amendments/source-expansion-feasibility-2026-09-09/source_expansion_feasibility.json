@@ -1,0 +1,304 @@
+{
+  "agentchaosbench": {
+    "additionalArtifactsOutsideRegisteredFrame": 225,
+    "additionalControlArtifacts": 15,
+    "additionalFaultArtifacts": 210,
+    "allTraceArtifacts": 275,
+    "byFaultType": {
+      "a2a_latency": 25,
+      "a2a_timeout": 25,
+      "agent_misroute": 25,
+      "context_overflow": 25,
+      "corruption": 25,
+      "guardrail_bypass": 25,
+      "infinite_loop": 25,
+      "latency": 25,
+      "no_fault": 25,
+      "tool_failure": 25,
+      "wrong_tool": 25
+    },
+    "bySystem": {
+      "BookWriter-H_A2A": 55,
+      "LandingPageGenerator-H_A2A": 55,
+      "RecruitmentAssistant-H_A2A": 55,
+      "SQLAssistant-H_A2A": 55,
+      "SocialMediaManager-H_A2A": 55
+    },
+    "controlArtifacts": 25,
+    "faultArtifacts": 250,
+    "registeredArtifacts": 50,
+    "uniqueGitBlobs": 275
+  },
+  "agentdojoCommandRPlus": {
+    "bySuite": {
+      "banking": {
+        "eligibleFaultArtifacts": 51,
+        "eligiblePairableControlIdentities": 6,
+        "noAttackRunsAssessed": 16
+      },
+      "slack": {
+        "eligibleFaultArtifacts": 10,
+        "eligiblePairableControlIdentities": 2,
+        "noAttackRunsAssessed": 21
+      },
+      "travel": {
+        "eligibleFaultArtifacts": 0,
+        "eligiblePairableControlIdentities": 0,
+        "noAttackRunsAssessed": 20
+      },
+      "workspace": {
+        "eligibleFaultArtifacts": 82,
+        "eligiblePairableControlIdentities": 15,
+        "noAttackRunsAssessed": 40
+      }
+    },
+    "faultMultiplicityAcrossPairableControls": {
+      "counts": {
+        "banking/user_task_10": 8,
+        "banking/user_task_5": 9,
+        "banking/user_task_6": 9,
+        "banking/user_task_7": 9,
+        "banking/user_task_8": 9,
+        "banking/user_task_9": 7,
+        "slack/user_task_0": 5,
+        "slack/user_task_10": 5,
+        "workspace/user_task_1": 6,
+        "workspace/user_task_10": 1,
+        "workspace/user_task_12": 6,
+        "workspace/user_task_15": 6,
+        "workspace/user_task_16": 6,
+        "workspace/user_task_17": 6,
+        "workspace/user_task_22": 6,
+        "workspace/user_task_24": 3,
+        "workspace/user_task_28": 6,
+        "workspace/user_task_3": 6,
+        "workspace/user_task_30": 6,
+        "workspace/user_task_39": 6,
+        "workspace/user_task_7": 6,
+        "workspace/user_task_8": 6,
+        "workspace/user_task_9": 6
+      },
+      "maximum": 9,
+      "minimum": 1
+    },
+    "importantInstructionsRunsAssessedOnEligibleControlKeys": 160,
+    "noAttackRunsAssessed": 97,
+    "noAttackRunsPassingPublishedUtilitySecurityAndErrorRule": 24,
+    "pairableUniqueControlExecutionIdentities": 23,
+    "publishedSecurityFailuresOnEligibleControlKeys": 143,
+    "registeredPairableControlIdentities": 3
+  },
+  "agentdojoPairableControlMatrix": [
+    {
+      "controlGitBlobSha": "13434b65d6b12a1b2f41d8459ec9a2cd1badd0b6",
+      "controlPath": "runs/command-r-plus/banking/user_task_10/none/none.json",
+      "eligiblePublishedFaultArtifacts": 8,
+      "key": "banking/user_task_10",
+      "registeredTargetId": null,
+      "suite": "banking"
+    },
+    {
+      "controlGitBlobSha": "e47bb05ef4396c981d6257b1e522d03ca73bd3d0",
+      "controlPath": "runs/command-r-plus/banking/user_task_5/none/none.json",
+      "eligiblePublishedFaultArtifacts": 9,
+      "key": "banking/user_task_5",
+      "registeredTargetId": null,
+      "suite": "banking"
+    },
+    {
+      "controlGitBlobSha": "79fdfd24f36b8e64299ce0e4611800becf14c129",
+      "controlPath": "runs/command-r-plus/banking/user_task_6/none/none.json",
+      "eligiblePublishedFaultArtifacts": 9,
+      "key": "banking/user_task_6",
+      "registeredTargetId": "ext-056",
+      "suite": "banking"
+    },
+    {
+      "controlGitBlobSha": "d4d0f9bbf1d76a5f0fed7a80bdbb3e2b89f8a9a5",
+      "controlPath": "runs/command-r-plus/banking/user_task_7/none/none.json",
+      "eligiblePublishedFaultArtifacts": 9,
+      "key": "banking/user_task_7",
+      "registeredTargetId": null,
+      "suite": "banking"
+    },
+    {
+      "controlGitBlobSha": "5113085c7f589a9a876e287bcf057f4310d429a6",
+      "controlPath": "runs/command-r-plus/banking/user_task_8/none/none.json",
+      "eligiblePublishedFaultArtifacts": 9,
+      "key": "banking/user_task_8",
+      "registeredTargetId": null,
+      "suite": "banking"
+    },
+    {
+      "controlGitBlobSha": "ef6c467e49d98bec9ae4672a68c0386cdaec8e89",
+      "controlPath": "runs/command-r-plus/banking/user_task_9/none/none.json",
+      "eligiblePublishedFaultArtifacts": 7,
+      "key": "banking/user_task_9",
+      "registeredTargetId": null,
+      "suite": "banking"
+    },
+    {
+      "controlGitBlobSha": "c68f7f0407eb37aa24f8dd658bf5168fd364e1b8",
+      "controlPath": "runs/command-r-plus/slack/user_task_0/none/none.json",
+      "eligiblePublishedFaultArtifacts": 5,
+      "key": "slack/user_task_0",
+      "registeredTargetId": "ext-057",
+      "suite": "slack"
+    },
+    {
+      "controlGitBlobSha": "47612f7f9bb356b2990c29c837aa0aa831a785ac",
+      "controlPath": "runs/command-r-plus/slack/user_task_10/none/none.json",
+      "eligiblePublishedFaultArtifacts": 5,
+      "key": "slack/user_task_10",
+      "registeredTargetId": null,
+      "suite": "slack"
+    },
+    {
+      "controlGitBlobSha": "b279c2970a312760d2d9bb98173dc583850c5eba",
+      "controlPath": "runs/command-r-plus/workspace/user_task_1/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_1",
+      "registeredTargetId": "ext-052",
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "d08110a7aa3532f0424b9505723fa9abcc7af219",
+      "controlPath": "runs/command-r-plus/workspace/user_task_10/none/none.json",
+      "eligiblePublishedFaultArtifacts": 1,
+      "key": "workspace/user_task_10",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "7722ce119775a23db1ffc49255d0a23ba0a469d3",
+      "controlPath": "runs/command-r-plus/workspace/user_task_12/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_12",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "8c6a8aed2f434e6f450e4c3a6e0ec3186dc587d7",
+      "controlPath": "runs/command-r-plus/workspace/user_task_15/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_15",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "5014ad2cbd934760b8382b6bdcd248c6ef17e2b8",
+      "controlPath": "runs/command-r-plus/workspace/user_task_16/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_16",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "9029399d2b4d322d05d595a0ee89745aa5be9de4",
+      "controlPath": "runs/command-r-plus/workspace/user_task_17/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_17",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "1ec1f9a24878cbbd3df295863c8e7a2b3cc962d3",
+      "controlPath": "runs/command-r-plus/workspace/user_task_22/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_22",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "a738f063d87ee74c961c63211d3bedc90efa1479",
+      "controlPath": "runs/command-r-plus/workspace/user_task_24/none/none.json",
+      "eligiblePublishedFaultArtifacts": 3,
+      "key": "workspace/user_task_24",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "295424dbc7b6b2401998c34359b514e54971d7b1",
+      "controlPath": "runs/command-r-plus/workspace/user_task_28/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_28",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "404f57840cd0cd8e19ef269269f7bbdfb4b40681",
+      "controlPath": "runs/command-r-plus/workspace/user_task_3/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_3",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "7c012bdaf487b3473ece8c01a33afaad8429907e",
+      "controlPath": "runs/command-r-plus/workspace/user_task_30/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_30",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "266c4ad4968585532b30b93384db5e4c4f3ccb6e",
+      "controlPath": "runs/command-r-plus/workspace/user_task_39/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_39",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "c3bf53a76cde5c972dcb7ed888b88f322fd7e49d",
+      "controlPath": "runs/command-r-plus/workspace/user_task_7/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_7",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "722c78eab2f79a5b38547e4c4abba5f0c2d7c8c1",
+      "controlPath": "runs/command-r-plus/workspace/user_task_8/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_8",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    },
+    {
+      "controlGitBlobSha": "db9519ddf8679d49dcd2505919723913b4ed1d59",
+      "controlPath": "runs/command-r-plus/workspace/user_task_9/none/none.json",
+      "eligiblePublishedFaultArtifacts": 6,
+      "key": "workspace/user_task_9",
+      "registeredTargetId": null,
+      "suite": "workspace"
+    }
+  ],
+  "confirmatoryRequirement": {
+    "ceilingInterpretation": "At most one fault artifact is paired to each distinct control execution identity.",
+    "pairedUniqueExecutionIdentities": 181,
+    "publicFixedUpstreamArchivalPairCeiling": 48,
+    "remainingGap": 133
+  },
+  "createdOn": "2026-09-09",
+  "decision": {
+    "finding": "The fault side is numerically abundant, but unique successful control executions are the binding constraint.",
+    "machineRecommendation": "Do not reinterpret the archival pool as a powered confirmatory frame. A prospective source/execution amendment needs at least 133 additional unique matched controls or a separately powered estimand, plus independent construct and method approval.",
+    "mainTrialAllowed": false,
+    "mainTrialEvidenceCreated": false,
+    "registeredFrameChanged": false,
+    "submissionAllowed": false
+  },
+  "inputSha256": "641715c6027923b384d23720c931acd3aeaa1a4cb4b53f7b7c72dcf03a929fd8",
+  "limitations": [
+    "The two sources instantiate different systems and fault mechanisms; counts are not exchangeable effect observations.",
+    "AgentChaosBench has 250 distinct fault artifacts but only 25 aligned no-fault artifacts, so reusing controls does not create independent pairs.",
+    "AgentDojo rows were filtered after published utility and security outcomes were available; this is feasibility evidence, not a prospectively sampled confirmatory cohort.",
+    "Published upstream labels are not independent P26-002 review and do not satisfy construct approval or gate-side evidence reconstruction.",
+    "Only the command-r-plus AgentDojo pipeline was inspected to preserve the already registered pipeline context; other pipelines were not silently added."
+  ],
+  "parentStudyCommit": "cf32bf5bfc0bdd11738feda3b814f4d0ed77947f",
+  "schemaVersion": "p26-002-source-expansion-feasibility-0.1.0",
+  "scope": "post-hoc-public-fixed-upstream-source-feasibility-not-main-trial-evidence",
+  "status": "feasibility-only-blocked-for-confirmatory-use"
+}
