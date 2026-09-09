@@ -37,10 +37,7 @@
     "faultOnlyAtoms": 16,
     "interpretation": "Counts are a deterministic pattern screen over scripted tool_response text, not observed agent outcomes or validated safety labels.",
     "oneSidedContrastStructuralExactPairs": 0,
-    "oneSidedLiteralContrastPairIds": [
-      "seed-0001:syn-0001",
-      "seed-0115:syn-0259"
-    ],
+    "oneSidedLiteralContrastPairIds": ["seed-0001:syn-0001", "seed-0115:syn-0259"],
     "oneSidedLiteralContrastPairs": 2,
     "pairsScreened": 7,
     "sharedAtoms": 19
