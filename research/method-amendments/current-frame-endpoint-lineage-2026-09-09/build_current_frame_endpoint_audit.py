@@ -75,12 +75,12 @@ Consequently, the 25 no-fault items are valid controls for the source benchmark'
 
 ## Quantitative consequence
 
-| Quantity | Independent clusters |
-|---|---:|
-| Earlier inventory count | {p['independentContentClusters']} |
-| Provisional v1 output-only candidate | {q['provisionalV1EndpointCandidateClusters']} |
-| Strict source- and endpoint-bound count | {q['strictEndpointReadyClustersAcrossAuditedExpansionSources']} |
-| Confirmatory planning target | {o['confirmatoryTargetIndependentPairs']} |
+| Quantity                                | Independent clusters |
+| --------------------------------------- | -------------------: |
+| Earlier inventory count                 |                  {p['independentContentClusters']} |
+| Provisional v1 output-only candidate    |                    {q['provisionalV1EndpointCandidateClusters']} |
+| Strict source- and endpoint-bound count |                    {q['strictEndpointReadyClustersAcrossAuditedExpansionSources']} |
+| Confirmatory planning target            |                  {o['confirmatoryTargetIndependentPairs']} |
 
 For these audited expansion sources, the strict shortfall is {q['strictShortfallTo181']} clusters. Even if the AgentDojo version lineage for the provisional candidate is later recovered, the shortfall would still be {q['provisionalShortfallTo181']}. No power claim should be transported from the 112-cluster inventory.
 

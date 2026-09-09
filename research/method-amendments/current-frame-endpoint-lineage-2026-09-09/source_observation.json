@@ -132,13 +132,7 @@
       "spans_total"
     ],
     "labelHasExpectedTaskAnswer": false,
-    "caseSchema": [
-      "schema",
-      "case_uid",
-      "agent",
-      "question",
-      "trace"
-    ],
+    "caseSchema": ["schema", "case_uid", "agent", "question", "trace"],
     "strictEndpointReadyControlClusters": 0,
     "strictFailureReason": "The corpus is a trace-level fault-detection benchmark. Its held-out labels encode fault type and location, not a deterministic assertion for correctness of the terminal task answer."
   },
