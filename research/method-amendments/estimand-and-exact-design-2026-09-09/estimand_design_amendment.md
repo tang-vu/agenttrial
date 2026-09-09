@@ -13,11 +13,11 @@ The unit is one unique physical execution artifact under one condition and one s
 
 ## Exact operating characteristics
 
-| Scenario | Benefit power at n=80 | First n with benefit power >=0.80 |
-|---|---:|---:|
-| pessimistic | 0.500390 | 156 |
-| planning | 0.899393 | 62 |
-| optimistic | 0.997149 | 33 |
+| Scenario    | Benefit power at n=80 | First n with benefit power >=0.80 |
+| ----------- | --------------------: | --------------------------------: |
+| pessimistic |              0.500390 |                               156 |
+| planning    |              0.899393 |                                62 |
+| optimistic  |              0.997149 |                                33 |
 
 Safety alone first reaches 0.80 power at n=124 under a true AgentTrial-only control error rate of 0.01. Requiring both pessimistic benefit and safety to succeed gives the first correlation-agnostic joint-power lower-bound crossing at n=181.
 
