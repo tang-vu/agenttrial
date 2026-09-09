@@ -1,0 +1,29 @@
+{
+  "checks": {
+    "agentchaosSingletonClusters": true,
+    "agentdojoPhysicalCandidates": true,
+    "agentdojoTaskClusters": true,
+    "clusterGap": true,
+    "clusterJointPowerBelowTarget": true,
+    "combinedPhysicalCandidates": true,
+    "combinedTaskClusters": true,
+    "n181JointPowerMeetsTarget": true,
+    "noReadinessPromotion": true,
+    "noSubmissionPromotion": true,
+    "priorityDependentClusters": true,
+    "priorityInvariantClusters": true,
+    "priorityOrders": true,
+    "sumMtimesMminus1": true
+  },
+  "inputSha256": {
+    "research/method-amendments/multi-pipeline-fixed-corpus-feasibility-2026-09-09/multi_pipeline_feasibility.json": "c88617271c565981605ee2a9113c0907cf0a28262210d9315405fd08d5633ebf",
+    "research/method-amendments/source-expansion-feasibility-2026-09-09/source_expansion_snapshot.json": "ef4016733c089750320efa5ba55b4f268de609352d637bb03dfafb0d6590e800"
+  },
+  "outputSha256": {
+    "cluster_unit_power.svg": "0ca4b6f20c29840b8c6d1c666dd313d5d9bceb82bf2849dde2a2a09ee4e6df66",
+    "cluster_unit_sensitivity.json": "c81bdc3824c14271cc952aa5111bedb63a9f9d9f4a20b8a2548a698922c3f9ea",
+    "cluster_unit_sensitivity.md": "6e467b2414423cca7f286c0f8e03216989f83f5ecdc55570c72696bfef622261"
+  },
+  "schemaVersion": "p26-002-cluster-unit-sensitivity-validation-0.1.0",
+  "status": "passed"
+}

@@ -1,0 +1,225 @@
+{
+  "createdOn": "2026-09-09",
+  "decision": {
+    "machineDisposition": "FREE_FIXED_CORPUS_NOT_CONFIRMATORY_AT_CONTENT_CLUSTER_LEVEL",
+    "mainTrialAllowed": false,
+    "mainTrialEvidenceCreated": false,
+    "methodFrozen": false,
+    "registeredFrameChanged": false,
+    "releaseAllowed": false,
+    "submissionAllowed": false
+  },
+  "independentClusterSensitivity": {
+    "assumption": "One independent Bernoulli fault/control pair per source-task cluster, with the physical-unit planning probabilities transported unchanged.",
+    "checkpoints": {
+      "112": {
+        "benefitPower": 0.6547817634360036,
+        "jointLowerBound": 0.3462767816297698,
+        "n": 112,
+        "safetyMaxPassingEvents": 1,
+        "safetyPower": 0.6914950181937664
+      },
+      "181": {
+        "benefitPower": 0.8568544337575296,
+        "jointLowerBound": 0.8205245699260666,
+        "n": 181,
+        "safetyMaxPassingEvents": 4,
+        "safetyPower": 0.9636701361685371
+      },
+      "281": {
+        "benefitPower": 0.964155950663954,
+        "jointLowerBound": 0.95620531789118,
+        "n": 281,
+        "safetyMaxPassingEvents": 7,
+        "safetyPower": 0.992049367227226
+      },
+      "87": {
+        "benefitPower": 0.5394368828416892,
+        "jointLowerBound": 0.0,
+        "n": 87,
+        "safetyMaxPassingEvents": 0,
+        "safetyPower": 0.4171208799332206
+      }
+    },
+    "result": "At 112 clusters the co-primary joint-power lower bound is below 0.80; 69 additional independent clusters are required to reach the previously derived n=181 boundary under the transported assumptions."
+  },
+  "inputs": {
+    "research/method-amendments/multi-pipeline-fixed-corpus-feasibility-2026-09-09/multi_pipeline_feasibility.json": "c88617271c565981605ee2a9113c0907cf0a28262210d9315405fd08d5633ebf",
+    "research/method-amendments/source-expansion-feasibility-2026-09-09/source_expansion_snapshot.json": "ef4016733c089750320efa5ba55b4f268de609352d637bb03dfafb0d6590e800"
+  },
+  "limitations": [
+    "The 112-cluster power calculation transports physical-unit discordance probabilities to a different estimand and is therefore a sensitivity analysis, not evidence that those probabilities hold by task cluster.",
+    "AgentChaosBench no-fault artifact identities and AgentDojo suite/user-task keys are structurally different cluster definitions.",
+    "Pipeline availability is not uniform across AgentDojo tasks, and 72 of 87 representative choices change with pipeline priority.",
+    "No AgentTrial outcome or within-task intraclass correlation was observed, so a mixed-effects or generalized estimating equation power model cannot yet be identified from study data."
+  ],
+  "observedStructure": {
+    "additionalIndependentClustersNeededForN181": 69,
+    "agentchaosbenchSingletonControlClusters": 25,
+    "agentdojoPhysicalPairCandidates": 256,
+    "agentdojoSourceTaskClusters": 87,
+    "clusterSizeDistribution": {
+      "1": 40,
+      "2": 19,
+      "3": 22,
+      "4": 18,
+      "5": 13
+    },
+    "nominalPhysicalPairCandidates": 281,
+    "sourceTaskClusters": 112,
+    "sumMtimesMminus1": 646
+  },
+  "parentHead": "07a5ec2580fb2b35857e1611de01d457f52465a2",
+  "physicalWeightIccSensitivity": {
+    "formula": "N_eff = (sum m)^2 / sum[m + rho*m*(m-1)] for an equally weighted physical-execution mean under exchangeable within-cluster correlation",
+    "iccAtWhichEffectiveNEquals181": 0.24032293929493867,
+    "rows": [
+      {
+        "effectiveN": 281.0,
+        "floorEffectiveN": 281,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.964155950663954,
+          "jointLowerBound": 0.95620531789118,
+          "n": 281,
+          "safetyMaxPassingEvents": 7,
+          "safetyPower": 0.992049367227226
+        },
+        "icc": 0.0
+      },
+      {
+        "effectiveN": 252.0300031918289,
+        "floorEffectiveN": 252,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.9455168146735808,
+          "jointLowerBound": 0.931261817348803,
+          "n": 252,
+          "safetyMaxPassingEvents": 6,
+          "safetyPower": 0.9857450026752222
+        },
+        "icc": 0.05
+      },
+      {
+        "effectiveN": 228.47511574074073,
+        "floorEffectiveN": 228,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.9239721642709312,
+          "jointLowerBound": 0.8957748175124343,
+          "n": 228,
+          "safetyMaxPassingEvents": 5,
+          "safetyPower": 0.9718026532415031
+        },
+        "icc": 0.1
+      },
+      {
+        "effectiveN": 192.49390541199412,
+        "floorEffectiveN": 192,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.8764832605465757,
+          "jointLowerBound": 0.8316267356398872,
+          "n": 192,
+          "safetyMaxPassingEvents": 4,
+          "safetyPower": 0.9551434750933114
+        },
+        "icc": 0.2
+      },
+      {
+        "effectiveN": 181.0865975598569,
+        "floorEffectiveN": 181,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.8568544337575296,
+          "jointLowerBound": 0.8205245699260666,
+          "n": 181,
+          "safetyMaxPassingEvents": 4,
+          "safetyPower": 0.9636701361685371
+        },
+        "icc": 0.24
+      },
+      {
+        "effectiveN": 178.44293785310734,
+        "floorEffectiveN": 178,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.8509824945807565,
+          "jointLowerBound": 0.7464409816742972,
+          "n": 178,
+          "safetyMaxPassingEvents": 3,
+          "safetyPower": 0.8954584870935406
+        },
+        "icc": 0.25
+      },
+      {
+        "effectiveN": 166.3037068239259,
+        "floorEffectiveN": 166,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.8250439958431994,
+          "jointLowerBound": 0.7387245990684046,
+          "n": 166,
+          "safetyMaxPassingEvents": 3,
+          "safetyPower": 0.9136806032252052
+        },
+        "icc": 0.3
+      },
+      {
+        "effectiveN": 130.73013245033113,
+        "floorEffectiveN": 130,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.7213760934549059,
+          "jointLowerBound": 0.5793032726615681,
+          "n": 130,
+          "safetyMaxPassingEvents": 2,
+          "safetyPower": 0.8579271792066622
+        },
+        "icc": 0.5
+      },
+      {
+        "effectiveN": 85.17907227615966,
+        "floorEffectiveN": 85,
+        "heuristicPowerAtFloorEffectiveN": {
+          "benefitPower": 0.5286274855489491,
+          "jointLowerBound": 0.0,
+          "n": 85,
+          "safetyMaxPassingEvents": 0,
+          "safetyPower": 0.4255901233886549
+        },
+        "icc": 1.0
+      }
+    ],
+    "warning": "Effective-N plug-in power is diagnostic only. It is not a valid clustered binary test, does not repair the non-monotone exact safety boundary, and cannot select an ICC before outcomes exist."
+  },
+  "pipelinePrioritySensitivity": {
+    "agentdojoMultiplicityDistribution": {
+      "1": 15,
+      "2": 19,
+      "3": 22,
+      "4": 18,
+      "5": 13
+    },
+    "interpretation": "All priority orders retain 87 AgentDojo task clusters, but 72 cluster representatives depend on the pipeline order. No order is selected here.",
+    "ordersEnumerated": 120,
+    "priorityDependentMultiPipelineClusters": 72,
+    "priorityInvariantSinglePipelineClusters": 15,
+    "representativeCountRangeAcrossOrders": {
+      "claude-3-5-sonnet-20240620": {
+        "maximum": 73,
+        "minimum": 9
+      },
+      "command-r-plus": {
+        "maximum": 23,
+        "minimum": 1
+      },
+      "gpt-4-0125-preview": {
+        "maximum": 52,
+        "minimum": 2
+      },
+      "gpt-4-turbo-2024-04-09": {
+        "maximum": 54,
+        "minimum": 3
+      },
+      "gpt-4o-2024-05-13": {
+        "maximum": 54,
+        "minimum": 0
+      }
+    }
+  },
+  "schemaVersion": "p26-002-cluster-unit-sensitivity-0.1.0",
+  "status": "sensitivity-only-no-outcomes-no-method-freeze"
+}
