@@ -289,7 +289,7 @@
     "registeredFrameChanged": false,
     "submissionAllowed": false
   },
-  "inputSha256": "641715c6027923b384d23720c931acd3aeaa1a4cb4b53f7b7c72dcf03a929fd8",
+  "inputSha256": "ef4016733c089750320efa5ba55b4f268de609352d637bb03dfafb0d6590e800",
   "limitations": [
     "The two sources instantiate different systems and fault mechanisms; counts are not exchangeable effect observations.",
     "AgentChaosBench has 250 distinct fault artifacts but only 25 aligned no-fault artifacts, so reusing controls does not create independent pairs.",

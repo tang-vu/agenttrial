@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -20,6 +21,15 @@ def canonical_json(value: object) -> str:
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def format_markdown(path: Path) -> None:
+    """Apply the repository-pinned formatter before recording artifact hashes."""
+    subprocess.run(
+        ["npx", "--no-install", "prettier@3.6.2", "--write", str(path)],
+        check=True,
+        cwd=ROOT.parents[2],
+    )
 
 
 def main() -> None:
@@ -180,6 +190,7 @@ Do not run or report the current trial as confirmatory from these archives. The 
 """
     OUT_JSON.write_text(canonical_json(result), encoding="utf-8")
     OUT_MD.write_text(md, encoding="utf-8")
+    format_markdown(OUT_MD)
 
     checks = {
         "snapshotSchema": snap["schemaVersion"] == "p26-002-source-expansion-snapshot-0.1.0",
@@ -215,4 +226,3 @@ Do not run or report the current trial as confirmatory from these archives. The 
 
 if __name__ == "__main__":
     main()
-

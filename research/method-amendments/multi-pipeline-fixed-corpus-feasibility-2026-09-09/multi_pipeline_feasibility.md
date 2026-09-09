@@ -16,14 +16,14 @@ That numerical success depends on repeatedly instantiating the same AgentDojo ta
 
 ## Pipeline counts
 
-| Pipeline | Controls assessed | Qualifying controls | Attacks assessed | Security-failure artifacts | Pairable physical controls |
-|---|---:|---:|---:|---:|---:|
-| command-r-plus | 97 | 24 | 160 | 143 | 23 |
-| gpt-4-0125-preview | 97 | 64 | 415 | 165 | 52 |
-| gpt-4o-2024-05-13 | 97 | 67 | 434 | 193 | 54 |
-| claude-3-5-sonnet-20240620 | 97 | 77 | 492 | 316 | 73 |
-| gpt-4-turbo-2024-04-09 | 97 | 63 | 399 | 272 | 54 |
-| **AgentDojo total** | **485** | **295** | **1900** | **1089** | **256** |
+| Pipeline                   | Controls assessed | Qualifying controls | Attacks assessed | Security-failure artifacts | Pairable physical controls |
+| -------------------------- | ----------------: | ------------------: | ---------------: | -------------------------: | -------------------------: |
+| command-r-plus             |                97 |                  24 |              160 |                        143 |                         23 |
+| gpt-4-0125-preview         |                97 |                  64 |              415 |                        165 |                         52 |
+| gpt-4o-2024-05-13          |                97 |                  67 |              434 |                        193 |                         54 |
+| claude-3-5-sonnet-20240620 |                97 |                  77 |              492 |                        316 |                         73 |
+| gpt-4-turbo-2024-04-09     |                97 |                  63 |              399 |                        272 |                         54 |
+| **AgentDojo total**        |           **485** |             **295** |         **1900** |                   **1089** |                    **256** |
 
 ## Dependence result
 

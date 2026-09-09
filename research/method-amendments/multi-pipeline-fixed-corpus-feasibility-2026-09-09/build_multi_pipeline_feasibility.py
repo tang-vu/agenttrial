@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from collections import Counter
 from pathlib import Path
 
@@ -28,6 +29,15 @@ def canonical_json(value: object) -> str:
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def format_markdown(path: Path) -> None:
+    """Apply the repository-pinned formatter before recording artifact hashes."""
+    subprocess.run(
+        ["npx", "--no-install", "prettier@3.6.2", "--write", str(path)],
+        check=True,
+        cwd=ROOT.parents[2],
+    )
 
 
 def command_r_plus_from_prior() -> dict:
@@ -232,6 +242,7 @@ Until one route is independently approved, these {physical_combined} candidates 
 """
     OUT_JSON.write_text(canonical_json(result), encoding="utf-8")
     OUT_MD.write_text(md, encoding="utf-8")
+    format_markdown(OUT_MD)
 
     checks = {
         "pipelineCount": len(pipelines) == 5,
@@ -263,4 +274,3 @@ Until one route is independently approved, these {physical_combined} candidates 
 
 if __name__ == "__main__":
     main()
-

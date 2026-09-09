@@ -18,20 +18,20 @@ Counting at most one pair per physical control identity, the two fixed upstream 
 
 ## Source-specific counts
 
-| Source | Fault artifacts available | Unique qualifying control identities | Maximum one-to-one archival pairs |
-|---|---:|---:|---:|
-| AgentChaosBench at pinned revision | 250 | 25 | 25 |
-| AgentDojo `command-r-plus` published runs | 143 | 23 | 23 |
-| **Combined ceiling** | **393** | **48** | **48** |
+| Source                                    | Fault artifacts available | Unique qualifying control identities | Maximum one-to-one archival pairs |
+| ----------------------------------------- | ------------------------: | -----------------------------------: | --------------------------------: |
+| AgentChaosBench at pinned revision        |                       250 |                                   25 |                                25 |
+| AgentDojo `command-r-plus` published runs |                       143 |                                   23 |                                23 |
+| **Combined ceiling**                      |                   **393** |                               **48** |                            **48** |
 
 AgentDojo suite breakdown:
 
-| Suite | No-attack runs assessed | Pairable qualifying controls | Published security-failure artifacts |
-|---|---:|---:|---:|
-| banking | 16 | 6 | 51 |
-| slack | 21 | 2 | 10 |
-| travel | 20 | 0 | 0 |
-| workspace | 40 | 15 | 82 |
+| Suite     | No-attack runs assessed | Pairable qualifying controls | Published security-failure artifacts |
+| --------- | ----------------------: | ---------------------------: | -----------------------------------: |
+| banking   |                      16 |                            6 |                                   51 |
+| slack     |                      21 |                            2 |                                   10 |
+| travel    |                      20 |                            0 |                                    0 |
+| workspace |                      40 |                           15 |                                   82 |
 
 ## Interpretation
 
