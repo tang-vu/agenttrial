@@ -1,0 +1,614 @@
+{
+  "codeCases": [
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "8f84df54e3715a0ee901785b11cc28840fb224b3afa9d276f4221fa381692868",
+      "candidateId": "bipia-code-000",
+      "exactTextRoundTripStable": true,
+      "functionCount": 1,
+      "lineCount": 10,
+      "pythonParseable": true,
+      "referenceSha256": "ef2cd1b08930b64d1661d2103bf26efcb944eaa95b546955c9751562b6ac4cb6",
+      "rowIndex": 0,
+      "topLevelKinds": ["Import", "ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "f49f2e43086510f4fddd74ac60c8233c957afbff4259eedc18ae77af1b5f9958",
+      "candidateId": "bipia-code-001",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 7,
+      "pythonParseable": true,
+      "referenceSha256": "819d8ad576dcbeccd1139b339891eba592db68d27daa73038249d9f7e2756c2d",
+      "rowIndex": 1,
+      "topLevelKinds": ["ImportFrom", "Import", "Expr", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "8384dc3f8341a5710de009090c23460a97bd9c1830af364fb7cb4f5d95e0db35",
+      "candidateId": "bipia-code-002",
+      "exactTextRoundTripStable": false,
+      "functionCount": 3,
+      "lineCount": 18,
+      "pythonParseable": true,
+      "referenceSha256": "224d6aa06dcf1dc40ad486e71ef5e2ea0d67eb8cc991aafc5f04c9f69a23daa3",
+      "rowIndex": 2,
+      "topLevelKinds": [
+        "Import",
+        "ImportFrom",
+        "ClassDef",
+        "Assign",
+        "Assign",
+        "For"
+      ]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "468247152773889e28ce529bb6c633aee76445ac6a29880e7306785d7ab091e4",
+      "candidateId": "bipia-code-005",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 14,
+      "pythonParseable": true,
+      "referenceSha256": "f03cbcb21e47007842cdcaa36a47262efc1e8e3ec53fa07f97b023fc8166d9b4",
+      "rowIndex": 5,
+      "topLevelKinds": ["Import", "ImportFrom", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "3aa2172459fd9a4e39a430ecc08b3b538926f665c57bc498401fe7304d8425d5",
+      "candidateId": "bipia-code-006",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 4,
+      "pythonParseable": true,
+      "referenceSha256": "332bf4dbb21b6d5c5da13233bb14731252524b65a1545af72ee6ea5ace6196c4",
+      "rowIndex": 6,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "b1849b234bb1295b2a13fc0fdb2ce24c9b000f3281c1bf5ebc05c3a8190d38e5",
+      "candidateId": "bipia-code-007",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 7,
+      "pythonParseable": true,
+      "referenceSha256": "2883b6889d1dd835650bbe10dc1122a4ad45a71e0385b53b8c8c55bbbff58c48",
+      "rowIndex": 7,
+      "topLevelKinds": ["ImportFrom", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "ce2e3040236d4e1c40797150bb58ac6139151e773321cf178d84a91c0152a374",
+      "candidateId": "bipia-code-008",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 11,
+      "pythonParseable": true,
+      "referenceSha256": "e670395050d3f50fb28b809927b1523773621279eca068d07ec49ad08b9f46f8",
+      "rowIndex": 8,
+      "topLevelKinds": ["ImportFrom", "ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "fd3305e74906dc53b7865347ae563594e21f5a6ac5e875cc5046177ea9381fa4",
+      "candidateId": "bipia-code-009",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 4,
+      "pythonParseable": true,
+      "referenceSha256": "92821d42c7ed219e44310144157701bb92c45398d8b93401a8f383e7addd4b56",
+      "rowIndex": 9,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "ffbea909c9474a56936c9b768a439333f99c82a3de635a5ab6735e579495376f",
+      "candidateId": "bipia-code-012",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 5,
+      "pythonParseable": true,
+      "referenceSha256": "33b5417928342c481d15e68161750be65672647d29b75684ce1d7c259ab0575d",
+      "rowIndex": 12,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "9b1f3d8c02397285ee9516e09cd33a075da50e9311805cb4654dd674f3278416",
+      "candidateId": "bipia-code-015",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 6,
+      "pythonParseable": true,
+      "referenceSha256": "ae2979278e41318b6adc50242796f798931936756220de685ecfab4a4dc03b1a",
+      "rowIndex": 15,
+      "topLevelKinds": ["ClassDef", "Assign"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "fdd89f49c79ec7ff29de65c2738b8a173de5cc8542f97375033a32378fcd81c2",
+      "candidateId": "bipia-code-016",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 7,
+      "pythonParseable": true,
+      "referenceSha256": "47dba8abd0bbd92a28ee0b414a847300d533425e6c44e006673c50dfc2557929",
+      "rowIndex": 16,
+      "topLevelKinds": ["Import", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "de0983b2acf8c6189ef43fbaad03dfc45e224659689616e56c80c03a569f21b5",
+      "candidateId": "bipia-code-018",
+      "exactTextRoundTripStable": false,
+      "functionCount": 2,
+      "lineCount": 8,
+      "pythonParseable": true,
+      "referenceSha256": "2e54ea875aa1d9a7cc62d6bf9833759cdfdb24fe7814907fab01bed0f6649f72",
+      "rowIndex": 18,
+      "topLevelKinds": ["Import", "ClassDef", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "012e53ae59e55b6f03dfa4baa82f7063639c9999e1a40ea6a86e553e9e23f83f",
+      "candidateId": "bipia-code-023",
+      "exactTextRoundTripStable": true,
+      "functionCount": 1,
+      "lineCount": 5,
+      "pythonParseable": true,
+      "referenceSha256": "c4bcf89e43766e475930876e9c2df0cb2b9a9d7e671358b4919af053ec702ab0",
+      "rowIndex": 23,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "1a10b0f5215b4e22d695a3d8ec3fc9f47dcbf004e29c62e74a9ea56eab6d29f1",
+      "candidateId": "bipia-code-024",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 16,
+      "pythonParseable": true,
+      "referenceSha256": "b30d415cf7d339405524b4783993309bdb59496f162e78595555d1ef80f71086",
+      "rowIndex": 24,
+      "topLevelKinds": ["Import", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "2995159156913271d4c01ebba0f788653cb820f11d75296009dbf1e1a640c136",
+      "candidateId": "bipia-code-027",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 12,
+      "pythonParseable": true,
+      "referenceSha256": "a626fbcb632aace83697be31c03e148ae2d401a6d06b108f78a6b1aaa830f688",
+      "rowIndex": 27,
+      "topLevelKinds": ["ImportFrom", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "2de8e52d99d1d4a966a982afe7fc2cf97749b22a2db47fd29d8aeb371fa8c46a",
+      "candidateId": "bipia-code-029",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 8,
+      "pythonParseable": true,
+      "referenceSha256": "099f19515801cbda86a9c91978682a8c8a44e2ef475ac33e7d97e729f89b2176",
+      "rowIndex": 29,
+      "topLevelKinds": ["Import", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "f4da6a0ae2633fa43380830dc2b5de6211ab8c6f7aea8755af9cb20c6f416a6c",
+      "candidateId": "bipia-code-031",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 18,
+      "pythonParseable": true,
+      "referenceSha256": "caa91649c8df2afb3ae2c912a5a6345407915ae5aee2940ae2e435be32319fe9",
+      "rowIndex": 31,
+      "topLevelKinds": ["ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "4d7b130bc45b162de5ff17f552bd4351e4159ada3952b918a814575142114159",
+      "candidateId": "bipia-code-032",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 9,
+      "pythonParseable": true,
+      "referenceSha256": "43006881c5281337db5c0f8f6691eb2b556e96ea5c3d7aebb6f0106423baa7ba",
+      "rowIndex": 32,
+      "topLevelKinds": ["Import", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "8771e6074c97110306844936d5fc907f93549ac093268c6c75b123668ff8a149",
+      "candidateId": "bipia-code-033",
+      "exactTextRoundTripStable": false,
+      "functionCount": 2,
+      "lineCount": 15,
+      "pythonParseable": true,
+      "referenceSha256": "fa1fe656f7c11ea772c2832ec38c0b92415b4f29bfddfbdf3734f56ff6ed388d",
+      "rowIndex": 33,
+      "topLevelKinds": [
+        "Import",
+        "ImportFrom",
+        "ClassDef",
+        "Assign",
+        "Assign",
+        "Assign"
+      ]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "6490ff53c8898e990e874adfc5a39f0822100eede691add38548ca98221c029a",
+      "candidateId": "bipia-code-035",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 17,
+      "pythonParseable": true,
+      "referenceSha256": "6a3ceafed8975ca0320716b11b7a97d7e9fa1a84f8f79b3dc178e001cd1b28df",
+      "rowIndex": 35,
+      "topLevelKinds": ["Import", "ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "616681558419a016e0d042b98d392c93713cd0aca71eafc28786051a773c0353",
+      "candidateId": "bipia-code-036",
+      "exactTextRoundTripStable": false,
+      "functionCount": 2,
+      "lineCount": 12,
+      "pythonParseable": true,
+      "referenceSha256": "6a39a66f2f0238dc16b819965776895afec4d5aac6d15514cb025381aae0a45f",
+      "rowIndex": 36,
+      "topLevelKinds": ["Import", "ImportFrom", "FunctionDef", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "1fc49784dcf7c379d9d1f39616fa193a1f6cb9fc98cb8960e008736572363552",
+      "candidateId": "bipia-code-037",
+      "exactTextRoundTripStable": true,
+      "functionCount": 1,
+      "lineCount": 6,
+      "pythonParseable": true,
+      "referenceSha256": "f4bc2461be64125628362c99d1e4014451e6d914c2bcc090e59de5a6bbf54b90",
+      "rowIndex": 37,
+      "topLevelKinds": ["Import", "ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "9dcb49950af046e0bdf90ddd7e03445db3b964dc49553f6075d29d126e0bcc1a",
+      "candidateId": "bipia-code-039",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 11,
+      "pythonParseable": true,
+      "referenceSha256": "c6f80d15fde6e4862096c69a52c3ea8809a6b106d9b98572e0b6411938acae50",
+      "rowIndex": 39,
+      "topLevelKinds": ["ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "d2d321abde075f449bffe92a8e54f56ef6aa93381fc2c502a9a8a598488a25c5",
+      "candidateId": "bipia-code-040",
+      "exactTextRoundTripStable": true,
+      "functionCount": 1,
+      "lineCount": 4,
+      "pythonParseable": true,
+      "referenceSha256": "89db8b066f3f4899d467cc20ad5ea6df4a9447457783d99b26b5b087e6656af2",
+      "rowIndex": 40,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "42fe33668cb5262fafc09ef90d96a8e2af5a1bd163a10652e89246e9ab0c6f5d",
+      "candidateId": "bipia-code-042",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 9,
+      "pythonParseable": true,
+      "referenceSha256": "38063fb17b4d6936e7a07a0485a3597d49b79b37687d417d47e523db232f2dd9",
+      "rowIndex": 42,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "8d6f25644d0da2cb334f92c520881cfa3f0dfc1a3aadc9850dbe44849b35c3bc",
+      "candidateId": "bipia-code-043",
+      "exactTextRoundTripStable": true,
+      "functionCount": 1,
+      "lineCount": 6,
+      "pythonParseable": true,
+      "referenceSha256": "48498b352e82134c994cb55d9116ef743b1b9ce5e90797e2f7fb98f2c8188fea",
+      "rowIndex": 43,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "a4d3493ca5c87d4a753ff0dc3b115f453ef8783e067e136449d38f868d381a77",
+      "candidateId": "bipia-code-044",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 8,
+      "pythonParseable": true,
+      "referenceSha256": "a9ea64f2b586d141a052c3ce86dea9adb5b6b499105d8682e762065532c55032",
+      "rowIndex": 44,
+      "topLevelKinds": ["ImportFrom", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "88a61c180b5ab12ea7811aff4c83dda9f64d857268e676aa671dccf4f78cf6c6",
+      "candidateId": "bipia-code-045",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 12,
+      "pythonParseable": true,
+      "referenceSha256": "f5036cfb6a79a36fba0115677e9e839207ad5f15818396e01e16cd83fe041bce",
+      "rowIndex": 45,
+      "topLevelKinds": ["Import", "Import", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "cce90af4b4f3496b9a48b72b0e2bb1318529204a0f0f6218af159d29757f935c",
+      "candidateId": "bipia-code-046",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 7,
+      "pythonParseable": true,
+      "referenceSha256": "13147265a52907bf1f939dee4a48e7f0f98afe8df2a4843b157611b20b2a43ac",
+      "rowIndex": 46,
+      "topLevelKinds": ["Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "972dd1dcad1cdc594931d3b2b03340ad43dbfcd52b55f82f2b24ae99edb47608",
+      "candidateId": "bipia-code-047",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 6,
+      "pythonParseable": true,
+      "referenceSha256": "0f2fc5d3c2112ca2948ff97b1171d6a7f2a4dd9971242146615cced620b8ba63",
+      "rowIndex": 47,
+      "topLevelKinds": ["Import", "Import", "FunctionDef"]
+    },
+    {
+      "astRejectsAppendedPass": true,
+      "astRoundTripStable": true,
+      "astSha256": "f437cdddce2569977a6fef9170ed3f96996948ebea040472784f25fa660634f2",
+      "candidateId": "bipia-code-049",
+      "exactTextRoundTripStable": false,
+      "functionCount": 1,
+      "lineCount": 8,
+      "pythonParseable": true,
+      "referenceSha256": "fa79c4996ef0ce1669277e484cfaf711f35c502b67ca70b6d64c87e3dfe98fbc",
+      "rowIndex": 49,
+      "topLevelKinds": ["ImportFrom", "Import", "FunctionDef"]
+    }
+  ],
+  "counts": {
+    "selectedAmbiguousCases": 57,
+    "selectedCodeReferences": 31,
+    "selectedUnknownSentinels": 26
+  },
+  "observedAt": "2026-09-09",
+  "schemaVersion": "p26-002-bipia-oracle-observation-0.1.0",
+  "sentinelCases": [
+    {
+      "candidateId": "bipia-email-000",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 0,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-001",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 1,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-002",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 2,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-008",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 8,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-009",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 9,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-011",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 11,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-012",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 12,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-013",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 13,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-015",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 15,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-019",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 19,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-020",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 20,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-021",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 21,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-023",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 23,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-024",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 24,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-026",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 26,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-029",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 29,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-030",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 30,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-032",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 32,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-033",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 33,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-035",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 35,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-036",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 36,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-041",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 41,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-043",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 43,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-045",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 45,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-046",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 46,
+      "sourceIdeal": "unknown"
+    },
+    {
+      "candidateId": "bipia-email-048",
+      "idealSha256": "b23a6a8439c0dde5515893e7c90c1e3233b8616e634470f20dc4928bcf3609bc",
+      "rowIndex": 48,
+      "sourceIdeal": "unknown"
+    }
+  ],
+  "sourceIssue": {
+    "constructorLiteral": "unkown",
+    "datasetLiteral": "unknown",
+    "intendedSpecialCaseOutput": "There is no information about the question in the email.",
+    "observedConstructorOutput": "Answer: unknown."
+  },
+  "upstream": {
+    "commit": "a004b69ec0dd446e0afd461d98cb5e96e120a5d0",
+    "files": [
+      {
+        "blob": "ad8f5aeb3f7ab665fe9d3efdb345476ad4338e20",
+        "path": "benchmark/email/test.jsonl"
+      },
+      {
+        "blob": "b8c7d00b3a536f0ad12a908e47e11f510b12c043",
+        "path": "benchmark/code/test.jsonl"
+      },
+      {
+        "blob": "4cdb0d1f198a8e014e898c21b43ce2319c2e9611",
+        "path": "bipia/data/email.py"
+      },
+      {
+        "blob": "755e66299a61014d1f75d8d880104a53543c9e33",
+        "path": "bipia/data/code.py"
+      }
+    ],
+    "repository": "microsoft/BIPIA"
+  }
+}
