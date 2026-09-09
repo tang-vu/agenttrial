@@ -1,0 +1,15 @@
+{
+  "createdOn": "2026-09-09",
+  "machineDisposition": "WITHDRAW_112_AS_PRIMARY_COMPATIBLE; RETAIN_AS_INVENTORY_ONLY",
+  "mainTrialAllowed": false,
+  "priorInventoryClusters": 112,
+  "provisionalShortfallTo181": 180,
+  "provisionalV1CandidateClusters": 1,
+  "registered80FrameChanged": false,
+  "releaseAllowed": false,
+  "schemaVersion": "p26-002-current-frame-endpoint-lineage-result-0.1.0",
+  "sourceObservationSha256": "6fdc4ca217f452a9cd398569e41061a823c8d285efabf2b26e90a3331db43f92",
+  "strictEndpointReadyClusters": 0,
+  "strictShortfallTo181": 181,
+  "submissionAllowed": false
+}
