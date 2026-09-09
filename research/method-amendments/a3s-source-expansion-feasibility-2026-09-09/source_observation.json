@@ -1,0 +1,1868 @@
+{
+  "schema_version": "p26-002-a3s-source-observation-0.1.0",
+  "date": "2026-09-09",
+  "extraction": "GitHub connector read of public UTF-8 blobs; no raw prompts, setup commands, trajectories, or outputs copied into P26-002",
+  "source": {
+    "repository": "antgroup/Agent3Sigma-Stage",
+    "ref": "master",
+    "commit_sha": "f24d57cecd14315bd1c56ad5d470d75a27618b06",
+    "commit_date": "2026-05-22T03:36:14Z",
+    "tree_sha": "68df325f362f5966dd21c073a40a61d990b571d3",
+    "license_spdx": "Apache-2.0",
+    "seeds": {
+      "path": "data/advance/seeds.json",
+      "git_blob_sha": "d331bf04fe7451a53f6948cbe381436e8a6f4fef",
+      "bytes": 5555447
+    },
+    "injected": {
+      "path": "data/advance/injected.json",
+      "git_blob_sha": "7b0218e5d3a568dd7c517e224f4b858f8bee2174",
+      "bytes": 10930615
+    },
+    "paper": {
+      "arxiv": "2605.22321v2",
+      "last_revised": "2026-07-24",
+      "reported_test_cases": 2254
+    }
+  },
+  "observed": {
+    "seeds": 424,
+    "unique_seed_ids": 424,
+    "injected": 726,
+    "unique_injected_ids": 726,
+    "repo_total_rows": 1150,
+    "linked_seed_clusters": 423,
+    "orphan_injected_seed_refs": [],
+    "unreferenced_seed_ids": ["seed-0192"],
+    "seeds_with_null_tool_response": 120,
+    "injected_with_null_tool_response": 489,
+    "eligible_variants_no_null": 230,
+    "eligible_clusters_no_null": 201,
+    "strict_exact_variants_no_null": 77,
+    "strict_exact_clusters_no_null": 77,
+    "paper_repo_row_difference": 1104
+  },
+  "eligibility_policy": {
+    "primary": "explicit seed_id linkage plus no null tool_response in either the benign seed or chosen injected variant",
+    "representative": "lexicographically smallest variant_id per seed_id",
+    "rationale": "ASEval permits perturbations to add turns and change setup; exact turn/setup equality is retained only as a stricter diagnostic",
+    "not_claimed": [
+      "execution success",
+      "AgentTrial construct compatibility",
+      "independent human review",
+      "outcome validity",
+      "source completeness versus paper v2"
+    ]
+  },
+  "candidates": [
+    {
+      "seed_id": "seed-0001",
+      "variant_id": "syn-0001",
+      "scenario": "File Management",
+      "risk_category": "Information Leakage",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0003",
+      "variant_id": "syn-0008",
+      "scenario": "File Management",
+      "risk_category": "Information Leakage",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0015",
+      "variant_id": "syn-0023",
+      "scenario": "File Management",
+      "risk_category": "Data Exfiltration",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0016",
+      "variant_id": "syn-0028",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0018",
+      "variant_id": "syn-0042",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0019",
+      "variant_id": "syn-0036",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0021",
+      "variant_id": "syn-0052",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0022",
+      "variant_id": "syn-0031",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0023",
+      "variant_id": "syn-0048",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 4,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0025",
+      "variant_id": "syn-0056",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0027",
+      "variant_id": "syn-0070",
+      "scenario": "File Management",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0034",
+      "variant_id": "syn-0067",
+      "scenario": "File Management",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0043",
+      "variant_id": "syn-0082",
+      "scenario": "File Management",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0045",
+      "variant_id": "syn-0119",
+      "scenario": "File Management",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0057",
+      "variant_id": "syn-0130",
+      "scenario": "File Management",
+      "risk_category": "Privilege Escalation",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0067",
+      "variant_id": "syn-0151",
+      "scenario": "Web Browsing",
+      "risk_category": "Data Exfiltration",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0072",
+      "variant_id": "syn-0172",
+      "scenario": "Web Browsing",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0073",
+      "variant_id": "syn-0157",
+      "scenario": "Web Browsing",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0075",
+      "variant_id": "syn-0175",
+      "scenario": "Web Browsing",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0079",
+      "variant_id": "syn-0184",
+      "scenario": "Web Browsing",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0082",
+      "variant_id": "syn-0181",
+      "scenario": "Web Browsing",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0115",
+      "variant_id": "syn-0259",
+      "scenario": "Code Development",
+      "risk_category": "Information Leakage",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0121",
+      "variant_id": "syn-0271",
+      "scenario": "Code Development",
+      "risk_category": "Data Exfiltration",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 6
+    },
+    {
+      "seed_id": "seed-0123",
+      "variant_id": "syn-0275",
+      "scenario": "Code Development",
+      "risk_category": "Data Exfiltration",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0124",
+      "variant_id": "syn-0280",
+      "scenario": "Code Development",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0127",
+      "variant_id": "syn-0281",
+      "scenario": "Code Development",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0130",
+      "variant_id": "syn-0288",
+      "scenario": "Code Development",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0133",
+      "variant_id": "syn-0305",
+      "scenario": "Code Development",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0136",
+      "variant_id": "syn-0311",
+      "scenario": "Code Development",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0139",
+      "variant_id": "syn-0308",
+      "scenario": "Code Development",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0141",
+      "variant_id": "syn-0313",
+      "scenario": "Code Development",
+      "risk_category": "Configuration Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0145",
+      "variant_id": "syn-0324",
+      "scenario": "Code Development",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0148",
+      "variant_id": "syn-0332",
+      "scenario": "Code Development",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0154",
+      "variant_id": "syn-0363",
+      "scenario": "Code Development",
+      "risk_category": "Sandbox Escape",
+      "source_model": "GPT-5.4",
+      "seed_turns": 4,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0160",
+      "variant_id": "syn-0374",
+      "scenario": "Code Development",
+      "risk_category": "Privilege Escalation",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0171",
+      "variant_id": "syn-0393",
+      "scenario": "System Administration",
+      "risk_category": "Information Leakage",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0175",
+      "variant_id": "syn-0397",
+      "scenario": "System Administration",
+      "risk_category": "Data Exfiltration",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0178",
+      "variant_id": "syn-0406",
+      "scenario": "System Administration",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0180",
+      "variant_id": "syn-0436",
+      "scenario": "System Administration",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0181",
+      "variant_id": "syn-0407",
+      "scenario": "System Administration",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0183",
+      "variant_id": "syn-0421",
+      "scenario": "System Administration",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0186",
+      "variant_id": "syn-0419",
+      "scenario": "System Administration",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0189",
+      "variant_id": "syn-0426",
+      "scenario": "System Administration",
+      "risk_category": "Configuration Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0190",
+      "variant_id": "syn-0429",
+      "scenario": "System Administration",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0193",
+      "variant_id": "syn-0434",
+      "scenario": "System Administration",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0199",
+      "variant_id": "syn-0444",
+      "scenario": "System Administration",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 6
+    },
+    {
+      "seed_id": "seed-0202",
+      "variant_id": "syn-0449",
+      "scenario": "System Administration",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 6
+    },
+    {
+      "seed_id": "seed-0208",
+      "variant_id": "syn-0473",
+      "scenario": "System Administration",
+      "risk_category": "Sandbox Escape",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 7
+    },
+    {
+      "seed_id": "seed-0223",
+      "variant_id": "syn-0508",
+      "scenario": "Document Review",
+      "risk_category": "Jailbreak Attack",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0229",
+      "variant_id": "syn-0517",
+      "scenario": "Document Review",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0231",
+      "variant_id": "syn-0523",
+      "scenario": "Document Review",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0233",
+      "variant_id": "syn-0529",
+      "scenario": "Document Review",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0235",
+      "variant_id": "syn-0536",
+      "scenario": "Document Review",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0236",
+      "variant_id": "syn-0535",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0237",
+      "variant_id": "syn-0539",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0238",
+      "variant_id": "syn-0540",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0239",
+      "variant_id": "syn-0541",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0241",
+      "variant_id": "syn-0543",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0242",
+      "variant_id": "syn-0544",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0244",
+      "variant_id": "syn-0546",
+      "scenario": "Document Review",
+      "risk_category": "Configuration Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0245",
+      "variant_id": "syn-0551",
+      "scenario": "Document Review",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0246",
+      "variant_id": "syn-0555",
+      "scenario": "Document Review",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 5,
+      "variant_turns": 7
+    },
+    {
+      "seed_id": "seed-0249",
+      "variant_id": "syn-0576",
+      "scenario": "Document Review",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0251",
+      "variant_id": "syn-0571",
+      "scenario": "Document Review",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0252",
+      "variant_id": "syn-0581",
+      "scenario": "Document Review",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0265",
+      "variant_id": "syn-0605",
+      "scenario": "Data Analysis",
+      "risk_category": "Information Leakage",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0266",
+      "variant_id": "syn-0608",
+      "scenario": "Data Analysis",
+      "risk_category": "Information Leakage",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0267",
+      "variant_id": "syn-0613",
+      "scenario": "Data Analysis",
+      "risk_category": "Information Leakage",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0269",
+      "variant_id": "syn-0610",
+      "scenario": "Document Review",
+      "risk_category": "Resource Exhaustion",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0273",
+      "variant_id": "syn-0619",
+      "scenario": "Data Analysis",
+      "risk_category": "Data Exfiltration",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0276",
+      "variant_id": "syn-0622",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0277",
+      "variant_id": "syn-0628",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0278",
+      "variant_id": "syn-0636",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0279",
+      "variant_id": "syn-0625",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0282",
+      "variant_id": "syn-0631",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0285",
+      "variant_id": "syn-0649",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0287",
+      "variant_id": "syn-0663",
+      "scenario": "Data Analysis",
+      "risk_category": "Memory Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0291",
+      "variant_id": "syn-0653",
+      "scenario": "Data Analysis",
+      "risk_category": "Configuration Tampering",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0293",
+      "variant_id": "syn-0660",
+      "scenario": "Data Analysis",
+      "risk_category": "Configuration Tampering",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0299",
+      "variant_id": "syn-0688",
+      "scenario": "Data Analysis",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 5
+    },
+    {
+      "seed_id": "seed-0300",
+      "variant_id": "syn-0681",
+      "scenario": "Data Analysis",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0302",
+      "variant_id": "syn-0706",
+      "scenario": "Data Analysis",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0303",
+      "variant_id": "syn-0686",
+      "scenario": "Data Analysis",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0305",
+      "variant_id": "syn-0708",
+      "scenario": "Data Analysis",
+      "risk_category": "Dangerous Command Execution",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0308",
+      "variant_id": "syn-0714",
+      "scenario": "Data Analysis",
+      "risk_category": "Sandbox Escape",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 6
+    },
+    {
+      "seed_id": "seed-0363",
+      "variant_id": "syn-0769",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0364",
+      "variant_id": "syn-0770",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0365",
+      "variant_id": "syn-0771",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0369",
+      "variant_id": "syn-0775",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0370",
+      "variant_id": "syn-0776",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0371",
+      "variant_id": "syn-0777",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0381",
+      "variant_id": "syn-0787",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0382",
+      "variant_id": "syn-0788",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0383",
+      "variant_id": "syn-0789",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0393",
+      "variant_id": "syn-0799",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0394",
+      "variant_id": "syn-0800",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0395",
+      "variant_id": "syn-0801",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0401",
+      "variant_id": "syn-0807",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0405",
+      "variant_id": "syn-0811",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0406",
+      "variant_id": "syn-0812",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0407",
+      "variant_id": "syn-0813",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0411",
+      "variant_id": "syn-0817",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0412",
+      "variant_id": "syn-0818",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0417",
+      "variant_id": "syn-0823",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0418",
+      "variant_id": "syn-0824",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0419",
+      "variant_id": "syn-0825",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0423",
+      "variant_id": "syn-0829",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0424",
+      "variant_id": "syn-0830",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0425",
+      "variant_id": "syn-0831",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0430",
+      "variant_id": "syn-0836",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0431",
+      "variant_id": "syn-0837",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0435",
+      "variant_id": "syn-0841",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0436",
+      "variant_id": "syn-0842",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0437",
+      "variant_id": "syn-0843",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0441",
+      "variant_id": "syn-0847",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0443",
+      "variant_id": "syn-0849",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0444",
+      "variant_id": "syn-0850",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0445",
+      "variant_id": "syn-0851",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0446",
+      "variant_id": "syn-0852",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0447",
+      "variant_id": "syn-0853",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0456",
+      "variant_id": "syn-0862",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0457",
+      "variant_id": "syn-0863",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0464",
+      "variant_id": "syn-0870",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0465",
+      "variant_id": "syn-0871",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0466",
+      "variant_id": "syn-0872",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0470",
+      "variant_id": "syn-0876",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0471",
+      "variant_id": "syn-0877",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0472",
+      "variant_id": "syn-0878",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0475",
+      "variant_id": "syn-0881",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0476",
+      "variant_id": "syn-0882",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0477",
+      "variant_id": "syn-0883",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0481",
+      "variant_id": "syn-0887",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0482",
+      "variant_id": "syn-0888",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0487",
+      "variant_id": "syn-0893",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0488",
+      "variant_id": "syn-0894",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0489",
+      "variant_id": "syn-0895",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0496",
+      "variant_id": "syn-0902",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0497",
+      "variant_id": "syn-0903",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0498",
+      "variant_id": "syn-0904",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0499",
+      "variant_id": "syn-0905",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0500",
+      "variant_id": "syn-0906",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0503",
+      "variant_id": "syn-0909",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0504",
+      "variant_id": "syn-0910",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0505",
+      "variant_id": "syn-0911",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0507",
+      "variant_id": "syn-0913",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0508",
+      "variant_id": "syn-0914",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0509",
+      "variant_id": "syn-0915",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0510",
+      "variant_id": "syn-0916",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0511",
+      "variant_id": "syn-0917",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0540",
+      "variant_id": "syn-0946",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0541",
+      "variant_id": "syn-0947",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0543",
+      "variant_id": "syn-0949",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0544",
+      "variant_id": "syn-0950",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0546",
+      "variant_id": "syn-0952",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0547",
+      "variant_id": "syn-0953",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0548",
+      "variant_id": "syn-0954",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0550",
+      "variant_id": "syn-0956",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0552",
+      "variant_id": "syn-0958",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0556",
+      "variant_id": "syn-0962",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0558",
+      "variant_id": "syn-0964",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0559",
+      "variant_id": "syn-0965",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0561",
+      "variant_id": "syn-0967",
+      "scenario": "File Management",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0562",
+      "variant_id": "syn-0968",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0564",
+      "variant_id": "syn-0970",
+      "scenario": "Web Browsing",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0568",
+      "variant_id": "syn-0974",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0569",
+      "variant_id": "syn-0975",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 4,
+      "variant_turns": 4
+    },
+    {
+      "seed_id": "seed-0570",
+      "variant_id": "syn-0976",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0571",
+      "variant_id": "syn-0977",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0573",
+      "variant_id": "syn-0979",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0576",
+      "variant_id": "syn-0982",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0577",
+      "variant_id": "syn-0983",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0578",
+      "variant_id": "syn-0984",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0579",
+      "variant_id": "syn-0985",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0580",
+      "variant_id": "syn-0986",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0582",
+      "variant_id": "syn-0988",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0583",
+      "variant_id": "syn-0989",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0585",
+      "variant_id": "syn-0991",
+      "scenario": "Code Development",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0586",
+      "variant_id": "syn-0992",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0588",
+      "variant_id": "syn-0994",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0592",
+      "variant_id": "syn-0998",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0594",
+      "variant_id": "syn-1000",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0595",
+      "variant_id": "syn-1001",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0597",
+      "variant_id": "syn-1003",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0598",
+      "variant_id": "syn-1004",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0600",
+      "variant_id": "syn-1006",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0601",
+      "variant_id": "syn-1007",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0603",
+      "variant_id": "syn-1009",
+      "scenario": "System Administration",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0604",
+      "variant_id": "syn-1010",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0605",
+      "variant_id": "syn-1011",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0606",
+      "variant_id": "syn-1012",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0607",
+      "variant_id": "syn-1013",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0609",
+      "variant_id": "syn-1015",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0610",
+      "variant_id": "syn-1016",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0611",
+      "variant_id": "syn-1017",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "claude-opus-4-5-20251124",
+      "seed_turns": 3,
+      "variant_turns": 3
+    },
+    {
+      "seed_id": "seed-0612",
+      "variant_id": "syn-1018",
+      "scenario": "Data Analysis",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0616",
+      "variant_id": "syn-1022",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0618",
+      "variant_id": "syn-1024",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0622",
+      "variant_id": "syn-1028",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0623",
+      "variant_id": "syn-1029",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0624",
+      "variant_id": "syn-1030",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "GPT-5.4",
+      "seed_turns": 2,
+      "variant_turns": 2
+    },
+    {
+      "seed_id": "seed-0626",
+      "variant_id": "syn-1032",
+      "scenario": "Document Review",
+      "risk_category": "Malicious Skill",
+      "source_model": "Kimi-K2.5",
+      "seed_turns": 2,
+      "variant_turns": 2
+    }
+  ]
+}

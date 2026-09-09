@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="330" viewBox="0 0 820 330">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033}.title{font-size:20px;font-weight:700}.label{font-size:14px}.small{font-size:12px;fill:#4b5563}.value{font-size:14px;font-weight:700}</style>
+<text x="28" y="34" class="title">P26-002 candidate source-task expansion</text>
+<text x="28" y="57" class="small">Counts are task clusters, not executed observations</text>
+<text x="28" y="105" class="label">Design frame</text>
+<rect x="150" y="84" width="252.0" height="34" rx="4" fill="#5276c3"/>
+<rect x="402.0" y="84" width="155.2" height="34" rx="4" fill="#d07a41"/>
+<text x="276.0" y="106" text-anchor="middle" fill="#fff" class="value">112 existing</text>
+<text x="479.6" y="106" text-anchor="middle" fill="#fff" class="value">69 candidate</text>
+<text x="567.2" y="106" class="value">= 181</text>
+<text x="28" y="175" class="label">A3S eligible</text>
+<rect x="150" y="154" width="452.2" height="34" rx="4" fill="#4f9c78"/>
+<text x="376.1" y="176" text-anchor="middle" fill="#fff" class="value">201 linked, non-null clusters</text>
+<line x1="305.2" y1="146" x2="305.2" y2="202" stroke="#111827" stroke-dasharray="5 4"/>
+<text x="305.2" y="220" text-anchor="middle" class="small">69 frozen candidates</text>
+<text x="28" y="266" class="small">Frame sufficiency does not imply construct validity, successful execution, outcome evidence, or power.</text>
+<text x="28" y="288" class="small">A3S source rows: 1,150; arXiv v2 reports 2,254 test cases. The version discrepancy remains unresolved.</text>
+</svg>
