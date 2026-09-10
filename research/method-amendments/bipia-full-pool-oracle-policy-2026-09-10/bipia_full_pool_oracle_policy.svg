@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="440" viewBox="0 0 920 440" role="img" aria-labelledby="title desc">
+<title id="title">BIPIA deterministic comparator coverage before and after full-pool extension</title>
+<desc id="desc">Operational coverage rises from 57 to all 76 construct-review cases, while construct approval remains zero.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<text x="40" y="42" font-size="23" font-weight="700">Reserve comparator coverage closes; construct validity does not</text>
+<text x="40" y="68" font-size="14" fill="#4b5563">Counts are pre-execution machine specifications, not trial outcomes</text>
+<text x="40" y="137" font-size="16">Prior policy</text>
+<rect x="210" y="112" width="520" height="36" rx="5" fill="#e5e7eb"/>
+<rect x="210" y="112" width="390" height="36" rx="5" fill="#2563eb"/>
+<text x="750" y="137" font-size="16">57/76</text>
+<text x="40" y="217" font-size="16">Full-pool policy</text>
+<rect x="210" y="192" width="520" height="36" rx="5" fill="#0f766e"/>
+<text x="750" y="217" font-size="16">76/76</text>
+<text x="40" y="297" font-size="16">Construct approval</text>
+<rect x="210" y="272" width="520" height="36" rx="5" fill="#e5e7eb" stroke="#94a3b8"/>
+<text x="750" y="297" font-size="16" fill="#991b1b">0/76</text>
+<text x="40" y="365" font-size="14" fill="#475569">All 50 code references parse and preserve AST structure after parse-unparse-parse.</text>
+<text x="40" y="391" font-size="14" fill="#475569">One reserve reference changes text hash only because the frozen comparator trims outer whitespace.</text>
+</svg>

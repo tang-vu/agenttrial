@@ -1,0 +1,4 @@
+group,cases,python_parseable,ast_round_trip_stable,exact_text_round_trip_stable,ast_rejects_appended_pass,distinct_normalized_references,distinct_ast_structures,line_count_min,line_count_median,line_count_mean,line_count_max,ast_node_count_min,ast_node_count_median,ast_node_count_mean,ast_node_count_max
+current_selected_code,31,31,31,5,31,31,31,4,8,9.355,18,16,47,51.774,102
+reserve_code,19,19,19,2,19,19,19,2,8,8.737,28,11,45,56.526,265
+all_code,50,50,50,7,50,50,50,2,8.0,9.12,28,11,47.0,53.58,265
