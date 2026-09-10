@@ -1,0 +1,32 @@
+{
+  "all_passed": true,
+  "artifacts": {
+    "claim_evidence_crosswalk.csv": "7c7fbf4d667d508981e2a748907c29d70b44c69c29a0d5799f1dc01466166091",
+    "main_manuscript.md": "2b84d95ddebd48c650641e6cc4bd4ce1eafd7e09bf641fa246ca7bf8243922cc",
+    "manuscript_state.json": "999e724899a310d5c4defd198d2fd597125b60655f474b81c62b04e48c9e1a26",
+    "references.json": "bfafd0ac6b20b33d0e35b8433a3ccc5aca2df42c2c707aa9b9515b42312875b7",
+    "retrospective_amendment_20260910.md": "c30c88fdb717e1fa481f418732fbfaf4d5316e9afdeb1de7c7f1c50e3e4a2549"
+  },
+  "checks": {
+    "all_gates_closed": true,
+    "author_confirmation_retained": true,
+    "construct_approval_zero": true,
+    "eight_references": true,
+    "independent_review_not_claimed": true,
+    "input_blobs_exact": true,
+    "manuscript_over_3500_words": true,
+    "no_em_dash": true,
+    "no_model_outcomes": true,
+    "no_novel_method_claim": true,
+    "oracle_coverage_76": true,
+    "power_values_match": true,
+    "reserve_values_match": true,
+    "selection_values_match": true,
+    "six_claims_traced": true,
+    "tool_use_disclosed": true,
+    "transport_values_match": true
+  },
+  "checks_passed": 17,
+  "checks_total": 17,
+  "schema_version": "p26-002-main-manuscript-validation/v1"
+}

@@ -1,0 +1,24 @@
+{
+  "article_type": "empirical_methods_case_study",
+  "author_confirmation_required": true,
+  "claim_count": 6,
+  "construct_approved": 0,
+  "date": "2026-09-10",
+  "input_git_blobs": {
+    "oracle": "b17126c6c503c99dff4d5effe5fc976afdc341bc",
+    "power": "18a1136ee0fda5772e6508e38e2c68f6fc31d98c",
+    "reserve": "0f7fa1dd56695abc46a7b66542339367c1badd99",
+    "selection": "d807a205830a542bb87e666b72642697d3366bb7",
+    "transport": "488ce45560dc6e60b2e65691edf87ffaf740eab7"
+  },
+  "main_trial_allowed": false,
+  "model_outcomes_reported": 0,
+  "novel_method_claimed": false,
+  "reference_count": 8,
+  "release_allowed": false,
+  "schema_version": "p26-002-main-manuscript-state/v1",
+  "source_head": "8c4fe61d2afa74b8dad5fb1a289356585e5a46c0",
+  "submission_allowed": false,
+  "title": "Auditing an Agent Evaluation Before Execution: Frame Fragility, Source Transport, and Partial Identification in a 200-Case Indirect Prompt-Injection Corpus",
+  "word_count": 4387
+}
