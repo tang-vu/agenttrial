@@ -1,0 +1,31 @@
+{
+  "all_passed": true,
+  "artifacts": {
+    "frame_oracle_power_sensitivity.csv": "4acdf83a8a714cae70ab5386ace82a92530e5321bef5c037fa2dac4544ac7fe9",
+    "frame_oracle_power_sensitivity.json": "e4d08fee40098200c6f62da02b527d4da87888eb29a9149441bcee0a27716792",
+    "frame_oracle_power_sensitivity.md": "ecb4dce84687b09ac6633ffdbc8fe3b6c1c776d92479b2002a10bf3e87ed6510",
+    "frame_oracle_power_sensitivity.svg": "d26e451348cbe519229334658e53c6398ec90a7b936b426c743d8a2930841812",
+    "retrospective_amendment_20260910.md": "f745626158d18d4f7418b7baa522f94681511522047830e6aa895169950b55de"
+  },
+  "checks": {
+    "all_gates_closed": true,
+    "curve_has_58_sizes": true,
+    "direct_124": true,
+    "frame_181": true,
+    "input_blobs_exact": true,
+    "n124_joint_matches": true,
+    "n180_joint_matches": true,
+    "n181_joint_matches": true,
+    "no_em_dash": true,
+    "no_outcomes": true,
+    "only_181_passes": true,
+    "oracle_review_still_open": true,
+    "review_classes_26_plus_31": true,
+    "review_dependent_57": true,
+    "safety_event_cutoff_jumps": true,
+    "zero_attrition_tolerance": true
+  },
+  "checks_passed": 16,
+  "checks_total": 16,
+  "schema_version": "p26-002-bipia-frame-oracle-power-sensitivity-validation/v1"
+}

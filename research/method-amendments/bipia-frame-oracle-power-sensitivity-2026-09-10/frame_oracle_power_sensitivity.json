@@ -1,0 +1,70 @@
+{
+  "assumptions": {
+    "alpha_each_co_primary": 0.05,
+    "joint_rule": "max(0, benefit_power + safety_power - 1)",
+    "pessimistic_agenttrial_only": 0.05,
+    "pessimistic_baseline_only": 0.14,
+    "safety_margin": 0.05,
+    "safety_true_rate": 0.01
+  },
+  "attrition_tolerance_cases": 0,
+  "checkpoints": {
+    "all_181": {
+      "excluded_construct_review_cases": 0,
+      "joint_power_lower_bound": 0.82052457,
+      "joint_target_met": true,
+      "pessimistic_benefit_power": 0.856854434,
+      "retained_construct_review_cases": 57,
+      "retained_total_cases": 181,
+      "safety_max_passing_events": 4,
+      "safety_power": 0.963670136
+    },
+    "direct_only_124": {
+      "excluded_construct_review_cases": 57,
+      "joint_power_lower_bound": 0.571881389,
+      "joint_target_met": false,
+      "pessimistic_benefit_power": 0.70032788,
+      "retained_construct_review_cases": 0,
+      "retained_total_cases": 124,
+      "safety_max_passing_events": 2,
+      "safety_power": 0.87155351
+    },
+    "exclude_one": {
+      "excluded_construct_review_cases": 1,
+      "joint_power_lower_bound": 0.747186784,
+      "joint_target_met": false,
+      "pessimistic_benefit_power": 0.854923026,
+      "retained_construct_review_cases": 56,
+      "retained_total_cases": 180,
+      "safety_max_passing_events": 3,
+      "safety_power": 0.892263758
+    }
+  },
+  "construct_review_complete": false,
+  "date": "2026-09-10",
+  "frame": {
+    "code_reference_rows": 31,
+    "confirmatory_n": 181,
+    "construct_review_dependent_rows": 57,
+    "direct_short_answer_rows": 124,
+    "selected_rows": 181,
+    "unknown_sentinel_rows": 26
+  },
+  "inputs": {
+    "git_blobs": {
+      "design": "6b668735a10aeb92786a9f808c35ea9eb6c792af",
+      "frame": "942f08b724528984c704681791868df5d05c63d5",
+      "oracle": "427cffac17dbc8a69c2195d641ad56749cc28288"
+    },
+    "source_head": "70e5eb4e88b146f4785fcf14a2c6fb83ec3a0c5c"
+  },
+  "main_trial_allowed": false,
+  "minimum_construct_review_cases_required": 57,
+  "operating_characteristic_only": true,
+  "outcomes_created": 0,
+  "passing_retained_sizes": [181],
+  "release_allowed": false,
+  "schema_version": "p26-002-bipia-frame-oracle-power-sensitivity/v1",
+  "scope": "retrospective_design_operating_characteristic_no_outcomes",
+  "submission_allowed": false
+}
