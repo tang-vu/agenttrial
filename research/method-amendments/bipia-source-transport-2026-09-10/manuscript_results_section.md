@@ -1,0 +1,7 @@
+## Source composition, estimand, and transport
+
+The pinned BIPIA pool is source-heterogeneous: 100 TableQA, 50 EmailQA, and 50 CodeQA cases. The 181-case planning frame is not a proportional sample of this pool. It retains all 100 TableQA cases and 57 of 76 construct-dependent cases, so its EmailQA and CodeQA counts can each range from 31 to 50. The current frame weights the three sources at 55.25%, 27.62%, and 17.13%, respectively.
+
+We therefore distinguish source-specific paired outcomes from a mixture-average endpoint. Relative to the full-pool 50/25/25 weights, the current composition has total-variation distance 0.079. Consequently, even without selection differences within sources, a bounded outcome mean can differ by as much as 0.079, and a paired contrast bounded in [-1, 1] can differ by as much as 0.157, solely because the source weights changed. Across all feasible 181-case frames, the smallest such bounded-mean gap is 0.052; retaining all 100 TableQA cases makes an exact full-pool weighting impossible.
+
+The pooled planning power must also not be interpreted source by source. With one-sided alpha 0.05 for the safety gate, at least 59 independent cases are needed for a zero-event exact upper bound below the 5% false-rejection margin. EmailQA and CodeQA contain at most 50 cases each, for which the zero-event upper bound is 0.058. Thus the 181-case joint-power lower bound of 0.821 applies only to a frozen mixture-average estimand; it does not establish adequate source-level safety or a common effect across sources.

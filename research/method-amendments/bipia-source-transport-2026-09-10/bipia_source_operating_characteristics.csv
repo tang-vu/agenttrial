@@ -1,0 +1,6 @@
+source,n,pessimistic_benefit_power,safety_max_passing_events,safety_power,joint_power_lower_bound,zero_event_upper
+TableQA,100,0.603549302,1,0.735761979,0.339311281,0.02951305
+EmailQA maximum,50,0.295896453,-1,0.0,0.0,0.058155079
+CodeQA current,31,0.153156441,-1,0.0,0.0,0.09211406
+CodeQA maximum,50,0.295896453,-1,0.0,0.0,0.058155079
+Pooled current frame,181,0.856854434,4,0.963670136,0.82052457,0.016414792

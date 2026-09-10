@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="500" viewBox="0 0 920 500" role="img" aria-labelledby="title desc">
+<title id="title">Composition-only transport gap for feasible 181-case BIPIA frames</title>
+<desc id="desc">The sharp bounded-mean gap from the full 200-row pool ranges from 5.25 to 7.87 percentage points as accepted code cases range from 31 to 50.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<text x="35" y="36" font-size="22" font-weight="700">A pooled 181-case effect depends on which source enters</text>
+<text x="35" y="62" font-size="14" fill="#4b5563">Sharp composition-only gap versus the full 200-row source pool</text>
+<line x1="95" y1="385" x2="825" y2="385" stroke="#475569"/>
+<line x1="95" y1="85" x2="95" y2="385" stroke="#475569"/>
+<polyline points="95.00,152.62 133.42,185.77 171.84,218.92 210.26,252.07 248.68,285.22 287.11,310.08 325.53,310.08 363.95,310.08 402.37,310.08 440.79,310.08 479.21,310.08 517.63,310.08 556.05,310.08 594.47,310.08 632.89,310.08 671.32,285.22 709.74,252.07 748.16,218.92 786.58,185.77 825.00,152.62" fill="none" stroke="#2563eb" stroke-width="4"/>
+<circle cx="287.11" cy="310.08" r="6" fill="#16a34a"/>
+<text x="299.11" y="300.08" font-size="13" fill="#166534">minimum 5.25%</text>
+<text x="95.00" y="414" text-anchor="middle" font-size="13">31</text><text x="248.68" y="414" text-anchor="middle" font-size="13">35</text><text x="440.79" y="414" text-anchor="middle" font-size="13">40</text><text x="632.89" y="414" text-anchor="middle" font-size="13">45</text><text x="825.00" y="414" text-anchor="middle" font-size="13">50</text><text x="82" y="330.00" text-anchor="end" font-size="13">5%</text><text x="82" y="270.00" text-anchor="end" font-size="13">6%</text><text x="82" y="210.00" text-anchor="end" font-size="13">7%</text><text x="82" y="150.00" text-anchor="end" font-size="13">8%</text>
+<text x="460.00" y="453" text-anchor="middle" font-size="15">Accepted CodeQA construct cases (EmailQA sentinel cases = 57 - x)</text>
+<text x="25" y="245" transform="rotate(-90 25 245)" text-anchor="middle" font-size="15">Bounded-mean gap</text>
+<text x="95" y="482" font-size="13" fill="#4b5563">For a paired contrast bounded in [-1, 1], the corresponding sharp gap is twice the plotted value.</text>
+</svg>
