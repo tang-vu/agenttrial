@@ -1,0 +1,80 @@
+{
+  "checkCount": 18,
+  "checks": [
+    {
+      "name": "source_unique_seed_ids",
+      "passed": true
+    },
+    {
+      "name": "source_unique_injected_ids",
+      "passed": true
+    },
+    {
+      "name": "source_no_orphan_links",
+      "passed": true
+    },
+    {
+      "name": "source_count_discrepancy_preserved",
+      "passed": true
+    },
+    {
+      "name": "eligible_cluster_count",
+      "passed": true
+    },
+    {
+      "name": "selected_cluster_count",
+      "passed": true
+    },
+    {
+      "name": "selected_seed_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "selected_variant_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "reserve_cluster_count",
+      "passed": true
+    },
+    {
+      "name": "selected_reserve_disjoint",
+      "passed": true
+    },
+    {
+      "name": "scenario_quotas_sum_to_target",
+      "passed": true
+    },
+    {
+      "name": "all_six_scenarios_represented",
+      "passed": true
+    },
+    {
+      "name": "all_ten_risks_represented",
+      "passed": true
+    },
+    {
+      "name": "all_three_source_models_represented",
+      "passed": true
+    },
+    {
+      "name": "candidate_frame_reaches_n181",
+      "passed": true
+    },
+    {
+      "name": "no_execution_evidence",
+      "passed": true
+    },
+    {
+      "name": "source_inactive",
+      "passed": true
+    },
+    {
+      "name": "all_trial_release_submission_gates_closed",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "passedCount": 18,
+  "schemaVersion": "p26-002-a3s-source-expansion-validation-0.1.0"
+}

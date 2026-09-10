@@ -1,0 +1,118 @@
+{
+  "createdOn": "2026-09-09",
+  "designConsequence": {
+    "a3sConfirmatoryPrimaryUse": false,
+    "a3sExploratoryLiteralCandidates": 2,
+    "a3sTraceAwareSecondaryUseRequiresSeparateEstimand": true,
+    "candidateCombinedClustersForPrimaryEndpoint": 112,
+    "confirmatoryTarget": 181,
+    "previous181CountFrameSuperseded": true,
+    "primaryEndpointClusterShortfall": 69
+  },
+  "gates": {
+    "candidateSourceActivated": false,
+    "constructMappingsApproved": 0,
+    "executedPairs": 0,
+    "mainTrialAllowed": false,
+    "releaseAllowed": false,
+    "submissionAllowed": false
+  },
+  "identifiabilityArgument": {
+    "literalBoundary": "Literal matching is mechanically possible only after defining forbidden values. It is not construct-faithful when the matched control exposes the same credential-like atoms, and nonexact source pairs do not isolate the injected condition.",
+    "projection": "pi(execution) = final assistant text only",
+    "semanticCounterexample": "A jailbreak verdict requires semantic interpretation absent a deterministic source assertion; a text-only projection does not supply a source-locked binary oracle.",
+    "stateActionCounterexample": "The source schema permits two executions with the same final text and different tool actions or resulting environment state. Therefore state/action harm is not identified by pi without an additional source invariant or trace/state evidence."
+  },
+  "literalScreen": {
+    "controlAtoms": 22,
+    "controlCredentialExposurePairIds": [
+      "seed-0003:syn-0008",
+      "seed-0171:syn-0393",
+      "seed-0265:syn-0605",
+      "seed-0266:syn-0608",
+      "seed-0267:syn-0613"
+    ],
+    "controlCredentialExposurePairs": 5,
+    "faultAtoms": 35,
+    "faultOnlyAtoms": 16,
+    "interpretation": "Counts are a deterministic pattern screen over scripted tool_response text, not observed agent outcomes or validated safety labels.",
+    "oneSidedContrastStructuralExactPairs": 0,
+    "oneSidedLiteralContrastPairIds": ["seed-0001:syn-0001", "seed-0115:syn-0259"],
+    "oneSidedLiteralContrastPairs": 2,
+    "pairsScreened": 7,
+    "sharedAtoms": 19
+  },
+  "locusRule": {
+    "output_literal_candidate": ["Information Leakage"],
+    "scope": "design-level mapping from the upstream risk-category construct to what the registered final-output projection can observe; not an outcome label",
+    "semantic_mixed": ["Jailbreak Attack"],
+    "state_or_action": [
+      "Configuration Tampering",
+      "Dangerous Command Execution",
+      "Data Exfiltration",
+      "Malicious Skill",
+      "Memory Tampering",
+      "Privilege Escalation",
+      "Resource Exhaustion",
+      "Sandbox Escape"
+    ]
+  },
+  "observability": {
+    "output_literal_candidate": {
+      "byRisk": {
+        "Information Leakage": 7
+      },
+      "pairs": 7,
+      "structuralExact": 1,
+      "structuralNonExact": 6
+    },
+    "semantic_mixed": {
+      "byRisk": {
+        "Jailbreak Attack": 1
+      },
+      "pairs": 1,
+      "structuralExact": 0,
+      "structuralNonExact": 1
+    },
+    "state_or_action": {
+      "byRisk": {
+        "Configuration Tampering": 12,
+        "Dangerous Command Execution": 12,
+        "Data Exfiltration": 6,
+        "Malicious Skill": 13,
+        "Memory Tampering": 12,
+        "Privilege Escalation": 2,
+        "Resource Exhaustion": 1,
+        "Sandbox Escape": 3
+      },
+      "pairs": 61,
+      "structuralExact": 23,
+      "structuralNonExact": 38
+    }
+  },
+  "parentHead": "3bb92457b9ce55327548ff98660f3e0f876722f0",
+  "retrospectiveChangeLog": [
+    "The prior amendment correctly set endpointReadyPairs to zero but left open whether source-locked oracle construction might recover all 69 pairs.",
+    "This audit narrows that possibility: 61 pairs are state/action-dependent, one is semantic/mixed, and the seven literal-output candidates yield zero pairs satisfying structural exactness plus one-sided literal contrast.",
+    "Accordingly, the 112 + 69 = 181 frame is withdrawn for the registered primary endpoint while remaining available as an inactive source inventory for separately specified secondary work."
+  ],
+  "schemaVersion": "p26-002-a3s-final-output-observability-0.1.0",
+  "source": {
+    "injectedBlob": "7b0218e5d3a568dd7c517e224f4b858f8bee2174",
+    "repository": "antgroup/Agent3Sigma-Stage",
+    "revision": "f24d57cecd14315bd1c56ad5d470d75a27618b06",
+    "seedBlob": "d331bf04fe7451a53f6948cbe381436e8a6f4fef"
+  },
+  "status": "a3s_not_compatible_with_confirmatory_final_output_primary_endpoint",
+  "strictEligibility": {
+    "endpointReadyPairs": 0,
+    "machineScreenPassBeforeHumanReview": 0,
+    "requirements": [
+      "risk construct observable from final text",
+      "source-derivable one-sided forbidden-literal contrast",
+      "structural exactness between seed and injected scripts",
+      "independent construct approval",
+      "unique paired executions"
+    ]
+  }
+}

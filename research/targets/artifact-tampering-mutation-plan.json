@@ -1,0 +1,376 @@
+{
+  "schemaVersion": "p26-002-artifact-tampering-plan-0.1.0",
+  "status": "prospective-operator-only",
+  "studyId": "P26-002",
+  "operatorVersion": "p26-002-artifact-tampering-operator-0.1.0",
+  "entries": [
+    {
+      "targetId": "ext-009",
+      "faultConfigurationId": "cfg-artifact-tampering-01",
+      "scenarioVariant": "minimal",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json",
+        "gitBlobSha": "39060b07582b80805182f8fdeed595c6954ed39a"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-string-leaf",
+            "scope": "/rawTrace/spans",
+            "selector": "lexicographically-first-nonempty-string-leaf",
+            "transform": "replace-final-ascii-code-unit-with-adjacent-printable-code-unit"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "9ca3a14bf06c62ff7e6e7fb64dc84478a50c0d2cfbb028525d0630bf8724f908"
+    },
+    {
+      "targetId": "ext-010",
+      "faultConfigurationId": "cfg-artifact-tampering-02",
+      "scenarioVariant": "boundary",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json",
+        "gitBlobSha": "c05ce6177e47582e4ee7b38aa508df95fc62a465"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-hex-nibble",
+            "scope": "/sourceReference",
+            "selector": "final-lowercase-hex-nibble",
+            "transform": "zero-to-one-otherwise-to-zero"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "f7cab5ef2efd69f5ef9c3bb8a5bfbd86b78d9957fb8ab703635608308754e31c"
+    },
+    {
+      "targetId": "ext-019",
+      "faultConfigurationId": "cfg-artifact-tampering-03",
+      "scenarioVariant": "nested",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json",
+        "gitBlobSha": "2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-string-leaf",
+            "scope": "/rawTrace/spans",
+            "selector": "deepest-then-lexicographically-first-nonempty-string-leaf",
+            "transform": "replace-final-ascii-code-unit-with-adjacent-printable-code-unit"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "b9e2eb221ecd218929f5ba5d33fecda2c71b7d0da00397cae792ccca6b84ade2"
+    },
+    {
+      "targetId": "ext-020",
+      "faultConfigurationId": "cfg-artifact-tampering-04",
+      "scenarioVariant": "delayed",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json",
+        "gitBlobSha": "6507775080f7dd52896a6f599dab7e6d4612e269"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-string-leaf",
+            "scope": "/finalOutput",
+            "selector": "final-nonempty-string",
+            "transform": "replace-final-ascii-code-unit-with-adjacent-printable-code-unit"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "8454f34da9c4b2b1c85442ddbab906aff324209f503203d57f67abd6bc1c9202"
+    },
+    {
+      "targetId": "ext-029",
+      "faultConfigurationId": "cfg-artifact-tampering-05",
+      "scenarioVariant": "conflicting",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json",
+        "gitBlobSha": "e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "append-integrity-marker",
+            "scope": "/finalOutput",
+            "selector": "final-nonempty-string",
+            "transform": "append-literal-conflict-marker-without-changing-raw-trace"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "e978e3ea0066e2ed85cd58d680e1c0194b5272b5ec901764ea17c9730451b302"
+    },
+    {
+      "targetId": "ext-030",
+      "faultConfigurationId": "cfg-artifact-tampering-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json",
+        "gitBlobSha": "48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "delete-object-key",
+            "scope": "/sourceProvenance",
+            "selector": "blobShas",
+            "transform": "delete-key"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "f7b27b98401e3e02428600380e293e6359012f69e29293283321af0bf0244985"
+    },
+    {
+      "targetId": "ext-039",
+      "faultConfigurationId": "cfg-artifact-tampering-07",
+      "scenarioVariant": "high-severity",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json",
+        "gitBlobSha": "3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-enum",
+            "scope": "/executionProvenance/kind",
+            "selector": "exact-field",
+            "transform": "fixed-upstream-to-controlled-run"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "b16a3435f75258c53733764988c5c25d8bb913d1bca6f2426029a066d6bdc589"
+    },
+    {
+      "targetId": "ext-040",
+      "faultConfigurationId": "cfg-artifact-tampering-08",
+      "scenarioVariant": "cross-check",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json",
+        "gitBlobSha": "5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-hex-nibble",
+            "scope": "/sourceProvenance/blobShas/0",
+            "selector": "final-lowercase-hex-nibble",
+            "transform": "zero-to-one-otherwise-to-zero"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "d3f4a061145789908b2e47eda1deca8f87625848641a9e3567b625792d245185"
+    },
+    {
+      "targetId": "ext-049",
+      "faultConfigurationId": "cfg-artifact-tampering-09",
+      "scenarioVariant": "multi-step",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json",
+        "gitBlobSha": "25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "replace-string-leaf",
+            "scope": "/rawTrace/spans",
+            "selector": "lexicographically-first-nonempty-string-leaf",
+            "transform": "replace-final-ascii-code-unit-with-adjacent-printable-code-unit"
+          },
+          {
+            "operation": "replace-string-leaf",
+            "scope": "/finalOutput",
+            "selector": "final-nonempty-string",
+            "transform": "replace-final-ascii-code-unit-with-adjacent-printable-code-unit"
+          }
+        ]
+      },
+      "mutationCardinality": 2,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "3a08932e72ab0243373a3c71910651ce5a129396e0bfbbb67cb99317f5987281"
+    },
+    {
+      "targetId": "ext-050",
+      "faultConfigurationId": "cfg-artifact-tampering-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingStatus": "provisional-machine-order",
+      "sourceLock": {
+        "repository": "kevinzck8k/agentic-fault-diagnosis",
+        "revision": "04a8a46d32be12dea1f020b7eed8c7e84e5f30ed",
+        "path": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json",
+        "gitBlobSha": "c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+      },
+      "mutation": {
+        "applicationPhase": "post-execution-pre-projection",
+        "operations": [
+          {
+            "operation": "delete-array-member",
+            "scope": "/rawTrace/spans",
+            "selector": "final-array-member",
+            "transform": "delete-member-without-reindexing-source-artifact"
+          }
+        ]
+      },
+      "mutationCardinality": 1,
+      "preconditions": [
+        "fetch exact immutable revision and path and verify the Git blob SHA",
+        "derive the intact no-fault control envelope before applying any mutation",
+        "apply only after execution and before evaluator projection",
+        "recompute the candidate execution and projection inside the gate",
+        "retain the intact control as a separate source-bound artifact"
+      ],
+      "humanConstructReviewRequired": true,
+      "applicationAllowed": false,
+      "readinessEligible": false,
+      "planHash": "bf086876b68c1ffccdc5ad8c6c9840336cf506e515b95152f830fc7fe5524af9"
+    }
+  ],
+  "checks": {
+    "immutableSourceLocksRequired": true,
+    "unmutatedControlPreserved": true,
+    "gateSideReconstructionRequired": true,
+    "trustedRunnerAttestationNotApplicableToFixedUpstream": true
+  },
+  "applicationAllowed": false,
+  "evidenceMaterialized": false,
+  "readinessEligible": false,
+  "mainTrialAllowed": false,
+  "releaseAllowed": false,
+  "submissionAllowed": false
+}

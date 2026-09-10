@@ -1,0 +1,2247 @@
+{
+  "schemaVersion": "p26-002-runner-execution-contracts-0.1.0",
+  "status": "candidate-method-contracts-review-required",
+  "scope": "predeclared-missing-runner-methods-not-execution-evidence",
+  "preparedOn": "2026-09-01",
+  "contracts": [
+    {
+      "targetId": "ext-061",
+      "configurationId": "cfg-tool-parameter-error-01",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_0",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_0",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_0"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "782509a7df0dcfce6f6a68d05ffe1c2d3cc0873924036230c470b7386c73d533"
+    },
+    {
+      "targetId": "ext-061",
+      "configurationId": "ctl-tool-parameter-error-01",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_0",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_0",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_0"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "efe75f99ecfe479542ec8404aa8dca91a1c1f405fa4828d8966b471f42b033b0"
+    },
+    {
+      "targetId": "ext-062",
+      "configurationId": "cfg-tool-parameter-error-02",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_1",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_1",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_1"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "9d778a61004365674be93028926009cc8145aa7b9ca073f16f53efd393aa4fdf"
+    },
+    {
+      "targetId": "ext-062",
+      "configurationId": "ctl-tool-parameter-error-02",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_1",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_1",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_1"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "7e3488527803d468f18d8956f45bf75caabc343f78a274b49e11ed38313e1708"
+    },
+    {
+      "targetId": "ext-063",
+      "configurationId": "cfg-tool-parameter-error-03",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_2",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_2",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_2"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "9f88a07f5e2f11fc0302bdfa86b7d36d31ffb2ac3f28ef816d35f8b4b596694a"
+    },
+    {
+      "targetId": "ext-063",
+      "configurationId": "ctl-tool-parameter-error-03",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_2",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_2",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_2"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "9c8ac3196681bbb659c1bd47967c46fc3a7c21896eb64f95315dad8dea6d053c"
+    },
+    {
+      "targetId": "ext-064",
+      "configurationId": "cfg-tool-parameter-error-04",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_3",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_3",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_3"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "0e3f6df17129bebe21b86cf4b44bf75178fcac221b70e6e227a50332e08d1e70"
+    },
+    {
+      "targetId": "ext-064",
+      "configurationId": "ctl-tool-parameter-error-04",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_3",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_3",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_3"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "61c961cbd6729a4fb7ce6e804dd4a144f02dca3aab4a971756e0187ea3cf1bb7"
+    },
+    {
+      "targetId": "ext-065",
+      "configurationId": "cfg-tool-parameter-error-05",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_4",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_4",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_4"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "695f5ea7d7030ffca2cf4393e98324bc37d80e3900bedd739db59b900a64f767"
+    },
+    {
+      "targetId": "ext-065",
+      "configurationId": "ctl-tool-parameter-error-05",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_4",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_4",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_4"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "941f54b6f3da7e07bc214d1c9d223fbc3dd9a41ebd590a59c4e8e5b52e0f02d8"
+    },
+    {
+      "targetId": "ext-066",
+      "configurationId": "cfg-tool-parameter-error-06",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_5",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_5",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_5"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "562e038ebd8aa6b1dd15559e0031922165b229c325d0f6f3dc99bb1de75ac55a"
+    },
+    {
+      "targetId": "ext-066",
+      "configurationId": "ctl-tool-parameter-error-06",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_5",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_5",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_5"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "6da45137c56c5bb80b850b50c221503b1a4a4c7918ce197b23ed9abdb98cf1e7"
+    },
+    {
+      "targetId": "ext-067",
+      "configurationId": "cfg-tool-parameter-error-07",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_6",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_6",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_6"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "bb55141db14bfd72f542afeca56b3e9f507ab5e9e3acb26252e8b9a09e6b0f95"
+    },
+    {
+      "targetId": "ext-067",
+      "configurationId": "ctl-tool-parameter-error-07",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_6",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_6",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_6"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "13857617d356d00864461f46309d54675f3b28d8f8e314532bf15dd01d14b3e2"
+    },
+    {
+      "targetId": "ext-068",
+      "configurationId": "cfg-tool-parameter-error-08",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_7",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_7",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_7"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "93f49bb4838f5c5b444f164aa7581f9ee2e2b26179e8455fe3bdc730312cad5e"
+    },
+    {
+      "targetId": "ext-068",
+      "configurationId": "ctl-tool-parameter-error-08",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_7",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_7",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_7"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "04b6140ae7a2ddb0cb76256a10e41bacb59dde4e6307fd27129f9579616dacad"
+    },
+    {
+      "targetId": "ext-069",
+      "configurationId": "cfg-tool-parameter-error-09",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_8",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_8",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_8"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "c3e8969c1198b8ba566830f234bb685fb7df709bb89946fcc79678f6e4bc9f22"
+    },
+    {
+      "targetId": "ext-069",
+      "configurationId": "ctl-tool-parameter-error-09",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_8",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_8",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_8"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "19482d0637ef54a9ea680addaa6bf86be844178242be6f6f67da77be74cb8985"
+    },
+    {
+      "targetId": "ext-070",
+      "configurationId": "cfg-tool-parameter-error-10",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "fault",
+      "category": "multi_turn_miss_param",
+      "caseId": "multi_turn_miss_param_9",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_miss_param_9",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "2e87caf87fb48f7807a18610311bdfa1138d0599"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_miss_param.json",
+            "blobSha": "94edb50ede0de76f35e937d4b96128857357d95b"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_miss_param": ["multi_turn_miss_param_9"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "ef8e5c231a9a9e01f3f873727e688db264b5f2e53c7a24b5596e523431720171"
+    },
+    {
+      "targetId": "ext-070",
+      "configurationId": "ctl-tool-parameter-error-10",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "bfcl-v4",
+      "condition": "control",
+      "category": "multi_turn_base",
+      "caseId": "multi_turn_base_9",
+      "sourceLock": {
+        "repository": "ShishirPatil/gorilla",
+        "revision": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+        "unitKind": "benchmark-task",
+        "unitId": "multi_turn_base_9",
+        "sourceBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/BFCL_v4_multi_turn_base.json",
+            "blobSha": "656fbd5e56969373353cd58b880234a6cc4edc99"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/data/possible_answer/BFCL_v4_multi_turn_base.json",
+            "blobSha": "3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/__main__.py",
+            "blobSha": "42f6aaf3fc0844fbc1423849516dfe6e1d16a360"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/_llm_response_generation.py",
+            "blobSha": "8997958de58c896d6cb3c6e03a513fe6b5094b7d"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/constants/eval_config.py",
+            "blobSha": "813d6de70333b6137f5fb62e116956b13bb339d3"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/eval_runner.py",
+            "blobSha": "2d5c41aac41cd2f1caedf741fb01dfdfd57b1990"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_checker.py",
+            "blobSha": "34b36715cdfaa4464ba1be137af4d30e85da8efb"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/eval_checker/multi_turn_eval/multi_turn_utils.py",
+            "blobSha": "dfcf6512a2eeb592820f3a0fa0fb564a117facc4"
+          },
+          {
+            "path": "berkeley-function-call-leaderboard/bfcl_eval/utils.py",
+            "blobSha": "552a10f36ec10840773f75e50fed01ca19b4bfc6"
+          }
+        ]
+      },
+      "selectionManifest": {
+        "path": "test_case_ids_to_generate.json",
+        "exactContents": {
+          "multi_turn_base": ["multi_turn_base_9"]
+        }
+      },
+      "runner": {
+        "generationEntrypoint": "bfcl_eval._llm_response_generation.main",
+        "evaluationEntrypoint": "bfcl_eval.eval_checker.eval_runner.main",
+        "runIds": true,
+        "allowOverwrite": false,
+        "numThreads": 1,
+        "requireIsolatedProjectRoot": true,
+        "partialEval": true
+      },
+      "observation": {
+        "requireExactCaseOnce": true,
+        "requireNoOtherCaseIds": true,
+        "requireNonemptyModelResult": true,
+        "requireNonemptyInferenceLog": true,
+        "requireEvaluatedCaseCountOne": true,
+        "requireUpstreamValidityRecorded": true,
+        "upstreamValidityIsEligibilityThreshold": false
+      },
+      "contractSha256": "ab65e352a09ba1078196fc9fd282a2b9a12359a6eb50fe0e0ee0f65a1c45248a"
+    },
+    {
+      "targetId": "ext-071",
+      "configurationId": "cfg-evidence-omission-01",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "airline",
+      "taskId": "0",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "airline/tasks.json#0",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/airline/db.json",
+            "blobSha": "c6a1e817aa9102c5822e83affb3595acbc312701"
+          },
+          {
+            "path": "data/tau2/domains/airline/policy.md",
+            "blobSha": "8098be7db3f47de943fad39d1e057ede6cc6cd04"
+          },
+          {
+            "path": "data/tau2/domains/airline/tasks.json",
+            "blobSha": "ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "289c99963d1c40952ff6abb772fffc43d9544eee44a258667079a9bb164f929c"
+    },
+    {
+      "targetId": "ext-072",
+      "configurationId": "cfg-evidence-omission-02",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "airline",
+      "taskId": "1",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "airline/tasks.json#1",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/airline/db.json",
+            "blobSha": "c6a1e817aa9102c5822e83affb3595acbc312701"
+          },
+          {
+            "path": "data/tau2/domains/airline/policy.md",
+            "blobSha": "8098be7db3f47de943fad39d1e057ede6cc6cd04"
+          },
+          {
+            "path": "data/tau2/domains/airline/tasks.json",
+            "blobSha": "ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "18ddb48865ea0bad82699bdaeb17eebff94a794747fbd63c8afc1b874d14dd2c"
+    },
+    {
+      "targetId": "ext-073",
+      "configurationId": "cfg-evidence-omission-03",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "airline",
+      "taskId": "2",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "airline/tasks.json#2",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/airline/db.json",
+            "blobSha": "c6a1e817aa9102c5822e83affb3595acbc312701"
+          },
+          {
+            "path": "data/tau2/domains/airline/policy.md",
+            "blobSha": "8098be7db3f47de943fad39d1e057ede6cc6cd04"
+          },
+          {
+            "path": "data/tau2/domains/airline/tasks.json",
+            "blobSha": "ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "53a7e1c7d9b5639d95dda7f37fa5eed5528d0ebd50696c05ecdb56981f8911e0"
+    },
+    {
+      "targetId": "ext-074",
+      "configurationId": "cfg-evidence-omission-04",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "airline",
+      "taskId": "4",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "airline/tasks.json#4",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/airline/db.json",
+            "blobSha": "c6a1e817aa9102c5822e83affb3595acbc312701"
+          },
+          {
+            "path": "data/tau2/domains/airline/policy.md",
+            "blobSha": "8098be7db3f47de943fad39d1e057ede6cc6cd04"
+          },
+          {
+            "path": "data/tau2/domains/airline/tasks.json",
+            "blobSha": "ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "f6910c5427071b44b8a09ca06e9d8330902a0e9f041381f0509b614f1c857392"
+    },
+    {
+      "targetId": "ext-075",
+      "configurationId": "cfg-evidence-omission-05",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "airline",
+      "taskId": "5",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "airline/tasks.json#5",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/airline/db.json",
+            "blobSha": "c6a1e817aa9102c5822e83affb3595acbc312701"
+          },
+          {
+            "path": "data/tau2/domains/airline/policy.md",
+            "blobSha": "8098be7db3f47de943fad39d1e057ede6cc6cd04"
+          },
+          {
+            "path": "data/tau2/domains/airline/tasks.json",
+            "blobSha": "ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "8a99925f7f908dff289aabac980b182f21e86a05e7b1d0f276c941b2b46cdf20"
+    },
+    {
+      "targetId": "ext-076",
+      "configurationId": "cfg-evidence-omission-06",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "retail",
+      "taskId": "10",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "retail/tasks.json#10",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/retail/db.json",
+            "blobSha": "4d67b03b2d39ade5a7ab6facb2edd7ab3e013d48"
+          },
+          {
+            "path": "data/tau2/domains/retail/policy.md",
+            "blobSha": "d127e6b074654926f337d0d98b0e669ebe90d19e"
+          },
+          {
+            "path": "data/tau2/domains/retail/tasks.json",
+            "blobSha": "e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "693dfdcc4598e7a52be43a07303f70768cafe7384fbec332dcee3adf9743bf95"
+    },
+    {
+      "targetId": "ext-077",
+      "configurationId": "cfg-evidence-omission-07",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "retail",
+      "taskId": "12",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "retail/tasks.json#12",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/retail/db.json",
+            "blobSha": "4d67b03b2d39ade5a7ab6facb2edd7ab3e013d48"
+          },
+          {
+            "path": "data/tau2/domains/retail/policy.md",
+            "blobSha": "d127e6b074654926f337d0d98b0e669ebe90d19e"
+          },
+          {
+            "path": "data/tau2/domains/retail/tasks.json",
+            "blobSha": "e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "29042c61763bac7d65c585e4d5b0e8f417a0506f680677f680ee20bbc8f0df01"
+    },
+    {
+      "targetId": "ext-078",
+      "configurationId": "cfg-evidence-omission-08",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "retail",
+      "taskId": "25",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "retail/tasks.json#25",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/retail/db.json",
+            "blobSha": "4d67b03b2d39ade5a7ab6facb2edd7ab3e013d48"
+          },
+          {
+            "path": "data/tau2/domains/retail/policy.md",
+            "blobSha": "d127e6b074654926f337d0d98b0e669ebe90d19e"
+          },
+          {
+            "path": "data/tau2/domains/retail/tasks.json",
+            "blobSha": "e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "1918778ff57df1adfd047b9cb0ed5e727f26b39fab9ab3aa51c84447c108ad9d"
+    },
+    {
+      "targetId": "ext-079",
+      "configurationId": "cfg-evidence-omission-09",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "retail",
+      "taskId": "50",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "retail/tasks.json#50",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/retail/db.json",
+            "blobSha": "4d67b03b2d39ade5a7ab6facb2edd7ab3e013d48"
+          },
+          {
+            "path": "data/tau2/domains/retail/policy.md",
+            "blobSha": "d127e6b074654926f337d0d98b0e669ebe90d19e"
+          },
+          {
+            "path": "data/tau2/domains/retail/tasks.json",
+            "blobSha": "e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "add6045e354b1eb1b03b01a851651e139fa004be413087158001bffae1c4c447"
+    },
+    {
+      "targetId": "ext-080",
+      "configurationId": "cfg-evidence-omission-10",
+      "bindingMethod": "provisional-family-order-review-required",
+      "executionState": "not-executed",
+      "source": "tau2-bench",
+      "condition": "fault",
+      "domain": "retail",
+      "taskId": "57",
+      "auditIssue": "https://github.com/sierra-research/tau2-bench/issues/384",
+      "sourceLock": {
+        "repository": "sierra-research/tau2-bench",
+        "revision": "a2c024725189473d2d7cea3a5cfdbcc67478e41f",
+        "unitKind": "benchmark-task",
+        "unitId": "retail/tasks.json#57",
+        "sourceBlobs": [
+          {
+            "path": "data/tau2/domains/retail/db.json",
+            "blobSha": "4d67b03b2d39ade5a7ab6facb2edd7ab3e013d48"
+          },
+          {
+            "path": "data/tau2/domains/retail/policy.md",
+            "blobSha": "d127e6b074654926f337d0d98b0e669ebe90d19e"
+          },
+          {
+            "path": "data/tau2/domains/retail/tasks.json",
+            "blobSha": "e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+          }
+        ],
+        "runnerBlobs": [
+          {
+            "path": "src/tau2/evaluator/evaluator.py",
+            "blobSha": "76c95a83e9049d70a5570b93989797c0626974b6"
+          },
+          {
+            "path": "src/tau2/run.py",
+            "blobSha": "7a15803220eb9e44a598cc9aa330ce51c83d52eb"
+          },
+          {
+            "path": "src/tau2/runner/simulation.py",
+            "blobSha": "25330c9d831f548b72edfd959757faefb901da9a"
+          }
+        ]
+      },
+      "runner": {
+        "entrypoint": "tau2.run.run_single_task",
+        "evaluationType": "ALL",
+        "requireFreshRun": true,
+        "supplementalControlChecks": "not-applied"
+      },
+      "observation": {
+        "requireExactDomainAndTask": true,
+        "requireNonemptyTrace": true,
+        "requireUpstreamRewardRecorded": true,
+        "requireUpstreamRewardBreakdownRecorded": true,
+        "upstreamRewardIsEligibilityThreshold": false,
+        "preserveFrozenRewardBasis": true
+      },
+      "contractSha256": "0fefa618c27516c3f57d9819e9f372fc22b4ed2e41a224368c83b9250d967e82"
+    }
+  ],
+  "summary": {
+    "expected": 30,
+    "defined": 30,
+    "bfclFault": 10,
+    "bfclControl": 10,
+    "tau2Fault": 10,
+    "executionsProvided": 0
+  },
+  "unresolvedBeforeExecution": [
+    "redesigned estimand and repetition plan",
+    "exact model and pipeline freeze",
+    "deterministic seed schedule",
+    "active trusted-runner policy with a human-registered key",
+    "independent method-freeze and G3 approval"
+  ],
+  "humanReviewRequired": true,
+  "executionAllowed": false,
+  "releaseAllowed": false,
+  "submissionAllowed": false
+}

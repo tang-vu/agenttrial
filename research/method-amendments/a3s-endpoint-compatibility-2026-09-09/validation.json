@@ -1,0 +1,108 @@
+{
+  "checkCount": 25,
+  "checks": [
+    {
+      "name": "candidate_count_201",
+      "passed": true
+    },
+    {
+      "name": "candidate_pair_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "previous_count_69",
+      "passed": true
+    },
+    {
+      "name": "previous_pair_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "previous_malicious_skill_44",
+      "passed": true
+    },
+    {
+      "name": "risk_quotas_sum_69",
+      "passed": true
+    },
+    {
+      "name": "scenario_quotas_sum_69",
+      "passed": true
+    },
+    {
+      "name": "revised_count_69",
+      "passed": true
+    },
+    {
+      "name": "revised_pair_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "risk_quotas_exact",
+      "passed": true
+    },
+    {
+      "name": "scenario_quotas_exact",
+      "passed": true
+    },
+    {
+      "name": "all_ten_risks_retained",
+      "passed": true
+    },
+    {
+      "name": "all_six_scenarios_retained",
+      "passed": true
+    },
+    {
+      "name": "largest_risk_cell_reduced",
+      "passed": true
+    },
+    {
+      "name": "reserve_count_132",
+      "passed": true
+    },
+    {
+      "name": "selected_reserve_disjoint",
+      "passed": true
+    },
+    {
+      "name": "source_oracle_fields_absent",
+      "passed": true
+    },
+    {
+      "name": "endpoint_ready_zero",
+      "passed": true
+    },
+    {
+      "name": "count_frame_181",
+      "passed": true
+    },
+    {
+      "name": "sample_not_achieved",
+      "passed": true
+    },
+    {
+      "name": "power_not_achieved",
+      "passed": true
+    },
+    {
+      "name": "candidate_source_inactive",
+      "passed": true
+    },
+    {
+      "name": "no_construct_approvals",
+      "passed": true
+    },
+    {
+      "name": "no_executions",
+      "passed": true
+    },
+    {
+      "name": "all_release_trial_submission_gates_closed",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "passedCount": 25,
+  "schemaVersion": "p26-002-a3s-endpoint-compatibility-validation-0.1.0"
+}

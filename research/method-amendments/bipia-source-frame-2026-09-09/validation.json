@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "all_hashes_well_formed": true,
+    "all_text_selected": true,
+    "candidate_ids_unique": true,
+    "code_attack_fixed": true,
+    "code_count_50": true,
+    "code_hash_rank_rule": true,
+    "code_reference_available_50": true,
+    "email_count_50": true,
+    "gates_fail_closed": true,
+    "no_execution_claim": true,
+    "no_human_approval_claim": true,
+    "pinned_commit": true,
+    "position_rule": true,
+    "row_hashes_unique": true,
+    "schema_version": true,
+    "selected_code_31": true,
+    "selected_rows_181": true,
+    "short_answer_available_124": true,
+    "source_blobs_bound": true,
+    "source_rows_200": true,
+    "table_count_100": true,
+    "text_attack_fixed": true,
+    "unknown_available_26": true,
+    "unselected_have_no_condition": true
+  },
+  "checksPassed": 24,
+  "checksTotal": 24,
+  "outputSha256": {
+    "bipia_candidate_ledger.csv": "2b1c1229f7b4ccaddce1e52d73d3f89dbb1c23d1ac6278274b8a87daa37d9abb",
+    "bipia_source_frame.json": "6208c76063762b93f66a3024abb6f5cfcd46bf726fa4c114d74cac200ca2cc21",
+    "bipia_source_frame.md": "e8d22cf2c9da1eabee6970ac1e27170359792c04c8f77fdbb95b959a0b9b1864",
+    "bipia_source_frame.svg": "7cf144b4ba0407e5acf339170dec9ed14596841dcbbc856768c171afdb92f5ef"
+  },
+  "schemaVersion": "p26-002-bipia-source-frame-validation-0.1.0",
+  "sourceObservationSha256": "3bd237820b42765f1b96685e7d84a2e8e6bc46e349fa6c186844bacc6af80ece"
+}

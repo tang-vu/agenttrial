@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
+import { gunzipSync } from "node:zlib";
 
 const patterns = [
   { name: "OpenAI key", regex: /sk-(?:proj-)?[A-Za-z0-9_-]{20,}/ },
@@ -30,8 +31,13 @@ const findings = [];
 for (const file of [...new Set(listed)]) {
   let content;
   try {
-    if (statSync(file).size > 2_000_000) continue;
-    content = withoutReviewedFixtures(readFileSync(file, "utf8"));
+    const size = statSync(file).size;
+    if (file.endsWith(".json.gz"))
+      content = withoutReviewedFixtures(gunzipSync(readFileSync(file)).toString("utf8"));
+    else {
+      if (size > 2_000_000) continue;
+      content = withoutReviewedFixtures(readFileSync(file, "utf8"));
+    }
   } catch {
     continue;
   }

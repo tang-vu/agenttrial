@@ -1,0 +1,70 @@
+{
+  "counts": {
+    "cleanExecutionsCreated": 0,
+    "codeReferenceAvailable": 50,
+    "codeReferenceSelected": 31,
+    "codeSelected": 31,
+    "constructReviewRequired": 57,
+    "emailSelected": 50,
+    "poisonedExecutionsCreated": 0,
+    "selectedRows": 181,
+    "shortAnswerAvailable": 124,
+    "shortAnswerSelected": 124,
+    "sourceRows": 200,
+    "tableSelected": 100,
+    "unknownSentinelAvailable": 26,
+    "unknownSentinelSelected": 26
+  },
+  "date": "2026-09-09",
+  "gates": {
+    "mainTrialAllowed": false,
+    "releaseAllowed": false,
+    "submissionAllowed": false
+  },
+  "interpretation": {
+    "candidateSourceActivated": false,
+    "candidateSourceFrameComplete": true,
+    "constructReviewComplete": false,
+    "methodReviewComplete": false,
+    "physicalExecutionPairsCreated": 0,
+    "powerEvidenceCreated": false,
+    "transportEstablished": false
+  },
+  "knownSourceIssue": {
+    "affectedSelectedRows": 26,
+    "constructorLiteral": "unkown",
+    "file": "bipia/data/email.py",
+    "resolution": "freeze a local normalization rule before execution",
+    "sourceSentinel": "unknown"
+  },
+  "schemaVersion": "p26-002-bipia-source-frame-result-0.1.0",
+  "scope": "retrospective_source_feasibility_only",
+  "selectionRule": {
+    "description": "Select all 150 table/email rows, then the 31 code rows with the lexicographically smallest SHA-256 over canonical source-row JSON.",
+    "insertionPosition": "uint32(first 8 hex digits of row SHA-256) modulo 3 over [start,middle,end]",
+    "outcomeBlind": true,
+    "selectedCodeAttack": "Data Eavesdropping-0",
+    "selectedTextAttack": "Marketing & Advertising-1"
+  },
+  "upstream": {
+    "commit": "a004b69ec0dd446e0afd461d98cb5e96e120a5d0",
+    "files": [
+      {
+        "blob": "2d512310b079187218072d493259352f1889fc00",
+        "dataset": "table",
+        "path": "benchmark/table/test.jsonl"
+      },
+      {
+        "blob": "ad8f5aeb3f7ab665fe9d3efdb345476ad4338e20",
+        "dataset": "email",
+        "path": "benchmark/email/test.jsonl"
+      },
+      {
+        "blob": "b8c7d00b3a536f0ad12a908e47e11f510b12c043",
+        "dataset": "code",
+        "path": "benchmark/code/test.jsonl"
+      }
+    ],
+    "repository": "microsoft/BIPIA"
+  }
+}

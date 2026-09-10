@@ -25,10 +25,13 @@ interface JointOutcomeAssumption {
 }
 
 export const POWER_ANALYSIS_PLAN = {
-  schemaVersion: "p26-002-power-plan-0.1.0",
-  claimUse: "prospective-design-only",
+  schemaVersion: "p26-002-power-plan-0.2.0",
+  status: "superseded-redesign-required",
+  claimUse: "historical-sensitivity-analysis-only",
   sourceBoundary:
     "Assumptions are sensitivity values, not effects estimated from the synthetic engineering pilot.",
+  validityBoundary:
+    "The simulation assumes operationally distinct independent configuration clusters and independent executions within them. The current P26-002 source binding does not meet those assumptions, so this artifact cannot select or freeze the main-study design.",
   faultFamilies: 8,
   candidateConfigurationCounts: CONFIGURATION_COUNTS,
   candidateRepetitionsPerConfiguration: REPETITION_COUNTS,
@@ -114,12 +117,12 @@ export const POWER_ANALYSIS_PLAN = {
       },
     ] satisfies JointOutcomeAssumption[],
   },
-  selectedDesign: {
-    uniqueFaultConfigurations: 80,
-    matchedControlConfigurations: 80,
-    repetitionsPerConfiguration: 20,
-    totalRunArtifacts: 3200,
-    variantsPerFaultFamily: 10,
+  candidateDesign: {
+    nominalFaultSlots: 80,
+    matchedControlSlots: 80,
+    requiredExecutionsPerSlot: 20,
+    totalSharedExecutionArtifacts: 3200,
+    nominalVariantsPerFaultFamily: 10,
   },
 } as const;
 
@@ -239,18 +242,18 @@ function scenarioSeed(base: number, configurations: number, repetitions: number,
 }
 
 export interface PowerAnalysisOptions {
-  selectedDesignOnly?: boolean;
+  candidateDesignOnly?: boolean;
 }
 
 export function runPowerAnalysis(options: PowerAnalysisOptions = {}) {
   const superiority = [];
   const noninferiority = [];
-  const selected = POWER_ANALYSIS_PLAN.selectedDesign;
-  const configurationCounts = options.selectedDesignOnly
-    ? ([selected.uniqueFaultConfigurations] as const)
+  const candidate = POWER_ANALYSIS_PLAN.candidateDesign;
+  const configurationCounts = options.candidateDesignOnly
+    ? ([candidate.nominalFaultSlots] as const)
     : CONFIGURATION_COUNTS;
-  const repetitionCounts = options.selectedDesignOnly
-    ? ([selected.repetitionsPerConfiguration] as const)
+  const repetitionCounts = options.candidateDesignOnly
+    ? ([candidate.requiredExecutionsPerSlot] as const)
     : REPETITION_COUNTS;
 
   for (const configurations of configurationCounts) {
@@ -347,30 +350,32 @@ export function runPowerAnalysis(options: PowerAnalysisOptions = {}) {
     }
   }
 
-  const selectedSuperiority = superiority.filter(
+  const candidateSuperiority = superiority.filter(
     (item) =>
-      item.configurations === selected.uniqueFaultConfigurations &&
-      item.repetitions === selected.repetitionsPerConfiguration,
+      item.configurations === candidate.nominalFaultSlots &&
+      item.repetitions === candidate.requiredExecutionsPerSlot,
   );
-  const selectedNoninferiority = noninferiority.filter(
+  const candidateNoninferiority = noninferiority.filter(
     (item) =>
-      item.configurations === selected.uniqueFaultConfigurations &&
-      item.repetitions === selected.repetitionsPerConfiguration &&
+      item.configurations === candidate.nominalFaultSlots &&
+      item.repetitions === candidate.requiredExecutionsPerSlot &&
       item.selectionGate,
   );
-  const selectionPassed =
-    selectedSuperiority.every((item) => item.power.lower >= POWER_ANALYSIS_PLAN.minimumPower) &&
-    selectedNoninferiority.every(
+  const sensitivityThresholdPassed =
+    candidateSuperiority.every((item) => item.power.lower >= POWER_ANALYSIS_PLAN.minimumPower) &&
+    candidateNoninferiority.every(
       (item) =>
         item.probabilityOfEstablishingNoninferiority.lower >= POWER_ANALYSIS_PLAN.minimumPower,
     );
 
   const planHash = createHash("sha256").update(JSON.stringify(POWER_ANALYSIS_PLAN)).digest("hex");
   return {
-    schemaVersion: "p26-002-power-analysis-0.1.0",
+    schemaVersion: "p26-002-power-analysis-0.2.0",
+    status: POWER_ANALYSIS_PLAN.status,
     generatedBy: "@agenttrial/research power simulation",
     claimUse: POWER_ANALYSIS_PLAN.claimUse,
     sourceBoundary: POWER_ANALYSIS_PLAN.sourceBoundary,
+    validityBoundary: POWER_ANALYSIS_PLAN.validityBoundary,
     planHash,
     simulation: {
       replicates: POWER_ANALYSIS_PLAN.simulationReplicates,
@@ -388,23 +393,26 @@ export function runPowerAnalysis(options: PowerAnalysisOptions = {}) {
       falseRejectionNoninferiority: POWER_ANALYSIS_PLAN.falseRejectionNoninferiority,
     },
     results: { superiority, noninferiority },
-    selection: {
-      ...selected,
-      rule: "Meet protocol floors and require the 95% Monte Carlo lower bound to be at least 0.80 for all superiority scenarios and the safe-plausible noninferiority scenario.",
-      passed: selectionPassed,
-      selectedSuperiority,
-      selectedNoninferiority,
+    candidateSensitivity: {
+      ...candidate,
+      thresholdRule:
+        "Under the superseded model, require the 95% Monte Carlo lower bound to be at least 0.80 for all superiority scenarios and the safe-plausible noninferiority scenario.",
+      sensitivityThresholdPassed,
+      designEligible: false,
+      candidateSuperiority,
+      candidateNoninferiority,
       rationale:
-        "Independent configurations buy more power under clustering than extra repeats. The 80-by-20 design is lower workload than 64-by-30 and protects the pessimistic nine-point scenario.",
+        "Under the simulated independent-cluster assumptions, 80 by 20 clears the sensitivity threshold. Those assumptions do not hold for the current source binding, so this result does not select a design.",
     },
     interpretationBoundary:
-      "Power is conditional on prospective sensitivity assumptions. It does not validate an effect, replace independent targets, or convert synthetic pilot outputs into paper evidence.",
+      "This is a superseded sensitivity artifact. It does not validate an effect, establish statistical independence, select the current design, or convert synthetic pilot outputs into paper evidence.",
   };
 }
 
 async function writePowerArtifact() {
   const artifact = runPowerAnalysis();
-  if (!artifact.selection.passed) throw new Error("Frozen power-selection gate did not pass.");
+  if (!artifact.candidateSensitivity.sensitivityThresholdPassed)
+    throw new Error("Historical sensitivity threshold did not pass.");
   const repositoryRoot = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
   const outputDirectory = resolve(repositoryRoot, "research/power");
   const output = resolve(outputDirectory, "power-analysis.json");
@@ -414,7 +422,7 @@ async function writePowerArtifact() {
     JSON.stringify({
       output,
       planHash: artifact.planHash,
-      selected: artifact.selection,
+      candidateSensitivity: artifact.candidateSensitivity,
     }),
   );
 }

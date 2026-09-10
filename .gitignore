@@ -11,3 +11,4 @@ test-results
 data/*.json
 !.env.example
 /telegram-post.txt
+/research/targets/evidence/fixed-upstream-fault-projections.json.gz

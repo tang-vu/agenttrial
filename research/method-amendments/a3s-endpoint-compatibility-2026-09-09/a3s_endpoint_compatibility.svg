@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="280" viewBox="0 0 760 280">
+<rect width="760" height="280" fill="#fff"/>
+<style>.title{font:700 20px Arial;fill:#152238}.label{font:14px Arial;fill:#27364d}.value{font:700 14px Arial;fill:#152238}.note{font:12px Arial;fill:#58677c}</style>
+<text x="30" y="36" class="title">P26-002 A3S candidate-frame correction</text>
+<text x="30" y="78" class="label">Largest risk cell, previous frame</text>
+<rect x="300" y="60" width="352" height="28" rx="4" fill="#b94a48"/>
+<text x="662" y="80" class="value">44 / 69</text>
+<text x="30" y="132" class="label">Largest risk cell, revised frame</text>
+<rect x="300" y="114" width="104" height="28" rx="4" fill="#2f6f8f"/>
+<text x="414" y="134" class="value">13 / 69</text>
+<text x="30" y="184" class="label">Endpoint-ready pairs</text>
+<rect x="300" y="166" width="2" height="28" fill="#666"/>
+<text x="312" y="186" class="value">0 / 69</text>
+<text x="30" y="232" class="note">Dual margins preserve all six scenarios and ten risk categories.</text>
+<text x="30" y="252" class="note">No source row contains a deterministic final-output oracle; the frame remains inactive.</text>
+</svg>

@@ -1,0 +1,872 @@
+{
+  "schemaVersion": "p26-002-repeat-execution-inventory-0.2.0",
+  "status": "observed",
+  "scope": "pre-run-repeat-execution-identity-inventory-not-outcome-evidence",
+  "requiredIndependentExecutionsPerTarget": 20,
+  "executions": [
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/corruption/case_01.json@git-sha1:93f658b8f2a4534af9156cea01493be5523510b5",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-001"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/corruption/case_02.json@git-sha1:93cdd08ca730c12707d8f3be637fbaf9496ccbac",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-002"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/guardrail_bypass/case_01.json@git-sha1:044a1bb3cf507ffd11a5426ff5cffe76637f3115",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-003"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/guardrail_bypass/case_02.json@git-sha1:b90e39ece91ad50ad3875dfb4691fb4063acf3e3",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-004"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/tool_failure/case_01.json@git-sha1:7b80f8bc227d20a77a2449b3bb8fe4304c0a6fe5",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-005"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/a2a_timeout/case_02.json@git-sha1:826c41592998f5770df3a83a74df9ebadd07f13c",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-006"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/agent_misroute/case_01.json@git-sha1:a58b7e6545e431b0faa5164c87c9da0f5d2af4cd",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-007"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/infinite_loop/case_02.json@git-sha1:ebd23b4566d3ed2f4ccef9cef95de9b2b1c4197f",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-008"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/no_fault/case_01.json@git-sha1:39060b07582b80805182f8fdeed595c6954ed39a",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-009"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-001"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-003"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-005"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-007"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-009"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset/SQLAssistant-H_A2A/no_fault/case_02.json@git-sha1:c05ce6177e47582e4ee7b38aa508df95fc62a465",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-010"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-002"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-004"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-006"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-008"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-010"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/corruption/case_01.json@git-sha1:365af08da9de55dcbf850bc58f1d510bbdfab8bb",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-011"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/corruption/case_02.json@git-sha1:a26c49d27426a968c7067ad7bff9f459eec659d6",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-012"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/guardrail_bypass/case_01.json@git-sha1:b07a6573a1686dd0edb02fea95e8aa59508802be",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-013"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/guardrail_bypass/case_02.json@git-sha1:b79c133401774bd1315d3bdbd22c29e1c250fd6b",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-014"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/tool_failure/case_01.json@git-sha1:fc4abe41ba13b0c5b4512565ef313561452a7ce3",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-015"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/a2a_timeout/case_02.json@git-sha1:74e1baad3416cf00423a06201b65d5f9a2d0512b",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-016"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/agent_misroute/case_01.json@git-sha1:9eb94bff8a88043b313da5c4cf73bc6e0852bcf9",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-017"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/infinite_loop/case_02.json@git-sha1:f9d66da9c6c0759943f0820cbec217a41106acc2",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-018"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@git-sha1:2ab47fa256e79a8e6786f91f047b06c4225e65b0",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-019"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-011"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-013"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-015"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-017"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-019"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@git-sha1:6507775080f7dd52896a6f599dab7e6d4612e269",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-020"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-012"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-014"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-016"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-018"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-020"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/corruption/case_01.json@git-sha1:851b0c4543cc8f5d07d85005f9aad6840445370a",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-021"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/corruption/case_02.json@git-sha1:699170f15e26fd1eec9569f6e9410f7645ff3af3",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-022"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/guardrail_bypass/case_01.json@git-sha1:b048012db970f6bdf86b6e8e29df8e7ab9d5baa3",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-023"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/guardrail_bypass/case_02.json@git-sha1:2af912245c885e8a093f0429c19f8328ee3c68ed",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-024"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/tool_failure/case_01.json@git-sha1:09192906257bbbc34a296e5542d50ef85a041121",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-025"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/a2a_timeout/case_02.json@git-sha1:57e40d8ce73b19b2cff7c967cc00518eadec0e7b",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-026"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/agent_misroute/case_01.json@git-sha1:f4f577e159a1945bb32ec8fe63ea8ecc950217f5",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-027"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/infinite_loop/case_02.json@git-sha1:801bec887c9edd9149396b84cb3d39cfa769c209",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-028"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@git-sha1:e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-029"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-021"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-023"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-025"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-027"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-029"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@git-sha1:48880b6f93e91b380fb8738c6fc225cc89d68a1c",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-030"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-022"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-024"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-026"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-028"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-030"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/corruption/case_01.json@git-sha1:14ca3350a6d56bad7c543a058105ae9c07af8bee",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-031"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/corruption/case_02.json@git-sha1:afb0cc141169bbcdbf6436a4c08f6dc4083d7336",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-032"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/guardrail_bypass/case_01.json@git-sha1:32a9953651c8b3757347ea34c1862060044f2f00",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-033"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/guardrail_bypass/case_02.json@git-sha1:0546ec7759f48be8ce1205fe1aeab6097755c98c",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-034"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/tool_failure/case_01.json@git-sha1:54dc2a984606e3e0ff5a8b2341229b14fcc3032f",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-035"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/a2a_timeout/case_02.json@git-sha1:82c63a534a5d308309d29c874fca927770ef8276",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-036"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/agent_misroute/case_01.json@git-sha1:23110538026992e22943c784360ecd0c0f0cd678",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-037"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/infinite_loop/case_02.json@git-sha1:cfb2eaac2584c3de5d6b51bd9ddfabd0f7539658",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-038"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@git-sha1:3f45b80c6bab4f624e2ca7a14974e23b27c39498",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-039"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-031"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-033"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-035"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-037"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-039"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@git-sha1:5d6d041c775fb790044b3a44ad0b733bc5c4e61b",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-040"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-032"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-034"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-036"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-038"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-040"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/corruption/case_01.json@git-sha1:7e9b1b5249c996e4ad49df9fa4f7b740e7d9487f",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-041"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/corruption/case_02.json@git-sha1:080232e7a66d9af1cabc9bd2538fa862f9575ff3",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-042"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/guardrail_bypass/case_01.json@git-sha1:6d19537a0b5451bc7cf22486f5e98e941874af55",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-043"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/guardrail_bypass/case_02.json@git-sha1:67c898d59e125e0f8229a40f4e327b8b0065a849",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-044"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/tool_failure/case_01.json@git-sha1:0b306efb194d0ba8a91e0e145b6620bf95d722a0",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-045"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/a2a_timeout/case_02.json@git-sha1:b28c930199e1ce2c2d10e994a26d70b389d7993d",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-046"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/agent_misroute/case_01.json@git-sha1:9b50cea922f77507368984a8d58fb1a95ab5c593",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-047"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/infinite_loop/case_02.json@git-sha1:c999db46ec0b11ea58a40aca848459c6f943940a",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-048"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@git-sha1:25e3d4ba22e7275d079773d2b9b7084d5f327c5e",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-049"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-041"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-043"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-045"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-047"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-049"
+        }
+      ]
+    },
+    {
+      "source": "agentchaosbench",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentchaosbench@04a8a46d32be12dea1f020b7eed8c7e84e5f30ed:dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@git-sha1:c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-050"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-042"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-044"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-046"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-048"
+        },
+        {
+          "condition": "control",
+          "targetId": "ext-050"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/workspace/user_task_0/important_instructions/injection_task_0.json@git-sha1:a367df68ebfcb95d04d7cfe8f7d0c3739a11254c",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-051"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/workspace/user_task_1/important_instructions/injection_task_1.json@git-sha1:5724bd8d53e822e79ceb2030589698a2092bdc54",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-052"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/workspace/user_task_2/important_instructions/injection_task_2.json@git-sha1:8cb9bc97df3a909666c500ba9dd9ecd880f9d881",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-053"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/banking/user_task_0/important_instructions/injection_task_0.json@git-sha1:da0ebfe2d411ccf40aa42f0e679bcf2da2c98316",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-054"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/banking/user_task_2/important_instructions/injection_task_1.json@git-sha1:60e3500511cb4256d9a82def6c2a564764deeb23",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-055"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/banking/user_task_6/important_instructions/injection_task_2.json@git-sha1:170b21e55d35b8a574e89e7ce95509954ea98cf2",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-056"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/slack/user_task_0/important_instructions/injection_task_1.json@git-sha1:8b5ee6b2121116665f1a12144235084d877a1c4d",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-057"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/slack/user_task_1/important_instructions/injection_task_2.json@git-sha1:e8d8d2c1428d6af1fd74e66a0f17017942a3fecd",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-058"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/travel/user_task_0/important_instructions/injection_task_0.json@git-sha1:479014a6a2c873b6b02438fbbd365c79661a6cdf",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-059"
+        }
+      ]
+    },
+    {
+      "source": "agentdojo",
+      "evidenceKind": "fixed-upstream-artifact",
+      "executionIdentity": "agentdojo@089ed468cf3ed0322acc66b0211f26d9d90dbf60:runs/command-r-plus/travel/user_task_1/important_instructions/injection_task_1.json@git-sha1:d643c907b6f4d3f97c8ae98f3c239d2700298a11",
+      "bindings": [
+        {
+          "condition": "fault",
+          "targetId": "ext-060"
+        }
+      ]
+    }
+  ],
+  "releaseBoundary": {
+    "rawExecutionsRetained": false
+  },
+  "submissionAllowed": false
+}

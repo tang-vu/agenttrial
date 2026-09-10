@@ -1,0 +1,36 @@
+{
+  "artifactSha256": {
+    "a3s_final_output_observability.json": "dec1b2a5e0963415a81ce6390a06c697afb1c9ed7178099d5b85bf237aac876d",
+    "a3s_final_output_observability.md": "be09ecc7a852b7fee46d8a9ba2106577e1ec0e5ad0d9e4ddb939acf1b401ffdb",
+    "a3s_final_output_observability.svg": "627bf428d4f08509044e5fd78e301229f50de52a37af123b2788e26854cc69b8",
+    "literal_observation.json": "39faeaf61f9a38b7c550be6c8ffa3c206d98b68d7f561477fc1aa57438cda754"
+  },
+  "checks": {
+    "a3s_inactive": true,
+    "control_exposure_5": true,
+    "credential_literals_not_retained": true,
+    "endpoint_ready_zero": true,
+    "literal_ids_match_selected_information_leakage": true,
+    "literal_rows_7": true,
+    "locus_partition_69": true,
+    "main_trial_closed": true,
+    "no_construct_approvals": true,
+    "no_executions": true,
+    "one_sided_contrast_2": true,
+    "output_candidate_7": true,
+    "primary_frame_reverts_to_112": true,
+    "release_closed": true,
+    "selected_count_69": true,
+    "semantic_mixed_1": true,
+    "shortfall_69": true,
+    "state_action_61": true,
+    "strict_machine_screen_0": true,
+    "structural_exact_total_24": true,
+    "submission_closed": true
+  },
+  "createdOn": "2026-09-09",
+  "passed": true,
+  "passedChecks": 21,
+  "schemaVersion": "p26-002-a3s-final-output-observability-validation-0.1.0",
+  "totalChecks": 21
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="330" viewBox="0 0 760 330" role="img" aria-labelledby="title desc">
+<title id="title">P26-002 endpoint-lineage audit</title>
+<desc id="desc">The earlier inventory has 112 clusters, one is a provisional v1 candidate, zero are strictly endpoint-ready, and the confirmatory target is 181.</desc>
+<rect width="760" height="330" fill="#ffffff"/>
+<text x="18" y="32" font-size="20" font-weight="700" fill="#1a202c">Inventory is not endpoint readiness</text>
+<text x="18" y="89" font-size="15" fill="#1a202c">Inventory</text><rect x="145" y="70" width="321.77" height="26" rx="4" fill="#718096"/><text x="474.77" y="89" font-size="15" fill="#1a202c">112</text>
+<text x="18" y="147" font-size="15" fill="#1a202c">Provisional v1</text><rect x="145" y="128" width="2.87" height="26" rx="4" fill="#d69e2e"/><text x="155.87" y="147" font-size="15" fill="#1a202c">1</text>
+<text x="18" y="205" font-size="15" fill="#1a202c">Strict ready</text><rect x="145" y="186" width="2.00" height="26" rx="4" fill="#c53030"/><text x="155.00" y="205" font-size="15" fill="#1a202c">0</text>
+<text x="18" y="263" font-size="15" fill="#1a202c">Target</text><rect x="145" y="244" width="520.00" height="26" rx="4" fill="#2b6cb0"/><text x="673.00" y="263" font-size="15" fill="#1a202c">181</text>
+<text x="145" y="306" font-size="12" fill="#4a5568">Counts apply only to the two audited expansion sources; the registered 80-pair history is unchanged.</text>
+</svg>

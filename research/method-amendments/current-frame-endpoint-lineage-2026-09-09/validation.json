@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "87 + 25 equals 112",
+    "AgentDojo suite counts sum to 87",
+    "seven suite versions are registered",
+    "published run schema omits benchmark_version",
+    "v1 injection implementation categories sum to 27",
+    "AgentDojo witness partition sums to 87",
+    "one provisional content cluster has three physical instances",
+    "all provisional instances match published utility/security pattern",
+    "five AgentChaosBench label files contain 275 rows",
+    "25 no-fault control labels audited",
+    "AgentChaosBench label schema has no expected task answer",
+    "strict endpoint-ready total is internally consistent",
+    "strict shortfall is 181",
+    "provisional shortfall is 180",
+    "all governance gates remain closed"
+  ],
+  "checksPassed": 15,
+  "outputSha256": {
+    "current_frame_endpoint_audit.json": "f2c843a1d70dcbbb03223015efc7e4c431c35e4be4f358668092b28127a039a2",
+    "current_frame_endpoint_audit.md": "300cc957ca54e167b5eee0bcf37988b07820fce758dc6b3d9f1529d0120674eb",
+    "current_frame_endpoint_audit.svg": "b5b30558f946d178d2e27a93f2e76cd88c2204d841e954746c8dccc2fc9af36e"
+  },
+  "schemaVersion": "p26-002-current-frame-endpoint-lineage-validation-0.1.0",
+  "status": "PASS"
+}

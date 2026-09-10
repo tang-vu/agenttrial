@@ -1,0 +1,42 @@
+{
+  "all_passed": true,
+  "artifacts": {
+    "bipia_source_composition_grid.csv": "23f76fad47b45042bedffe21e6007941ffc9ab12e627fb892914630d404c3676",
+    "bipia_source_operating_characteristics.csv": "d08b2797716d9346498cc7eb8514a7bd414dff14e53b1339a5a643d217c91fdb",
+    "bipia_source_transport.json": "6c004e72b701f673ff7c20afcadd7c4a133a0ed02abdae5f863123e0a7db7234",
+    "bipia_source_transport.md": "1f20b00359a116003369ce78b0c9fdeafae8e37757846bd1ddd2382fe584420c",
+    "bipia_source_transport.svg": "94faa3408e56e31eb5c3ce2c45861416646dd80113d9189b8a88dade67ff2e8e",
+    "manuscript_results_section.md": "030d1aaa5babc47a12ad51bb74be0527c9f06dc237d55e2bfe18331945426a03",
+    "retrospective_amendment_20260910.md": "764126e7bcecd219c6d447ac337f657301085045137e693ec853e38a67c8cec7"
+  },
+  "checks": {
+    "all_gates_closed": true,
+    "code_range_31_50": true,
+    "composition_rows_20": true,
+    "construct_rows_76": true,
+    "current_counts_100_50_31": true,
+    "current_rows_181": true,
+    "current_tv_14_over_181": true,
+    "direct_rows_124": true,
+    "email_code_max_50_cannot_pass_safety": true,
+    "email_range_31_50": true,
+    "every_frame_n_181": true,
+    "input_blobs_exact": true,
+    "minimum_acceptances_57": true,
+    "minimum_gap_plateau_code_36_to_45": true,
+    "minimum_tv_9_5_over_181": true,
+    "n58_fails_safety": true,
+    "n59_passes_safety": true,
+    "no_construct_approval": true,
+    "no_em_dash": true,
+    "no_outcomes": true,
+    "oracle_coverage_76": true,
+    "pooled_181_matches_design": true,
+    "source_rows_200": true,
+    "table_fixed_100": true,
+    "zero_event_minimum_n_59": true
+  },
+  "checks_passed": 25,
+  "checks_total": 25,
+  "schema_version": "p26-002-bipia-source-transport-validation/v1"
+}

@@ -1,6 +1,8 @@
 {
   "schemaVersion": "p26-002-agentdojo-projection-audit-0.1.0",
   "status": "passed",
+  "readinessEligible": false,
+  "exclusionReason": "Canonical projection and source-execution bytes are not retained or recomputed by the main-trial gate.",
   "executedOn": "2026-08-28",
   "scope": "upstream-published-fault-execution-projection-integrity-not-evaluator-outcomes",
   "selectionRule": "Use the command-r-plus run at each frozen suite, user-task, important_instructions attack, and injection-task path. Paths and blob hashes were pinned in the availability audit before outcome inspection.",

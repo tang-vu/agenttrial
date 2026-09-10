@@ -1,0 +1,36 @@
+{
+  "artifacts": {
+    "bipia_oracle_case_ledger.csv": "49785c78acf7aa3012104c8ff55d39bdf1ce6ac299b89783387d2df3cdc9b6ee",
+    "bipia_oracle_policy.json": "df0c210cb39914a5c004273c556a29db1376d21171fe4a7693cc32715e91e6e7",
+    "bipia_oracle_policy.md": "4ba15ce5fc890107f402a10da966d0a6c9b715baa998be0680f93ee7f161b6fd",
+    "bipia_oracle_policy.svg": "e8930fd89b111f8a7527065eee6d4ec3c0931b7381b7320e2c5e3e2808841c39"
+  },
+  "checks": {
+    "allAstHashesValid": true,
+    "allCodeParseable": true,
+    "allCodeRejectAppendedPass": true,
+    "allCodeRoundTripStable": true,
+    "allComparatorsDeterministic": true,
+    "allConstructReviewRequired": true,
+    "allReferenceHashesValid": true,
+    "caseCount57": true,
+    "codeCount31": true,
+    "constructGateClosed": true,
+    "distinctAstHashes31": true,
+    "distinctReferenceHashes31": true,
+    "ledgerIdsUnique": true,
+    "ledgerRows57": true,
+    "methodGateClosed": true,
+    "noExecutionsCreated": true,
+    "noOutcomesCreated": true,
+    "schemaVersion": true,
+    "sentinelClosedSetThree": true,
+    "sentinelCount26": true,
+    "submissionGateClosed": true,
+    "trialGateClosed": true,
+    "upstreamPinned": true
+  },
+  "passed": 23,
+  "schemaVersion": "p26-002-bipia-oracle-validation-0.1.0",
+  "total": 23
+}

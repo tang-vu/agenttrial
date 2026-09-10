@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "p26-002-design-validity-audit-0.3.0",
+  "status": "blocked",
+  "scope": "design-validity-only-no-human-approval-or-main-trial-evidence",
+  "checks": {
+    "variantOperationalization": {
+      "passed": true,
+      "nominalVariants": 80,
+      "operationalProfiles": 80,
+      "families": [
+        {
+          "family": "artifact-tampering",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "evidence-omission",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "non-repeatable-behavior",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "permission-violation",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "prompt-injection",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "timeout-recovery",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "tool-parameter-error",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        },
+        {
+          "family": "unsupported-provenance",
+          "nominalVariants": 10,
+          "operationalProfiles": 10,
+          "appendedLabelOnly": false
+        }
+      ]
+    },
+    "executionRepetitionSupport": {
+      "passed": false,
+      "targetCount": 80,
+      "requiredExecutionsPerTarget": 20,
+      "requiredSharedExecutionArtifacts": 3200,
+      "observedUniqueExecutionIdentities": 60,
+      "crossConditionExecutionIdentities": 10,
+      "fault": {
+        "uniqueExecutionIdentities": 60,
+        "executionBindings": 60,
+        "fixedUpstreamExecutionIdentities": 60,
+        "declaredCandidateExecutionIdentities": 0,
+        "gateVerifiedCandidateExecutionIdentities": 0,
+        "reusedExecutionBindings": 0,
+        "targetsMeetingRequiredExecutions": 0,
+        "fixedUpstreamSingleExecutionTargets": 60,
+        "otherPartiallyPopulatedTargets": 0,
+        "targetsWithoutAnyExecution": 20
+      },
+      "control": {
+        "uniqueExecutionIdentities": 10,
+        "executionBindings": 50,
+        "fixedUpstreamExecutionIdentities": 10,
+        "declaredCandidateExecutionIdentities": 0,
+        "gateVerifiedCandidateExecutionIdentities": 0,
+        "reusedExecutionBindings": 40,
+        "targetsMeetingRequiredExecutions": 0,
+        "fixedUpstreamSingleExecutionTargets": 50,
+        "otherPartiallyPopulatedTargets": 0,
+        "targetsWithoutAnyExecution": 30
+      }
+    },
+    "matchedControlIndependence": {
+      "passed": false,
+      "requiredBindings": 80,
+      "lockedBindings": 60,
+      "uniqueReferences": 20,
+      "reusedBindings": 40
+    },
+    "legacyProjectionEligibility": {
+      "passed": false,
+      "required": {
+        "fault": 80,
+        "control": 80
+      },
+      "observed": {
+        "fault": 60,
+        "control": 0
+      },
+      "mainTrialEligible": {
+        "fault": 0,
+        "control": 0
+      },
+      "legacy": {
+        "fault": 60,
+        "control": 0
+      },
+      "excludedLegacy": {
+        "fault": 60,
+        "control": 0
+      },
+      "gateReconstructedLegacy": {
+        "fault": 0,
+        "control": 0
+      },
+      "notGateReconstructedLegacy": {
+        "fault": 60,
+        "control": 0
+      },
+      "notGateReconstructedIncludedLegacy": {
+        "fault": 0,
+        "control": 0
+      }
+    },
+    "sourceExecutionDerivation": {
+      "passed": true,
+      "capabilityStatus": "fixed-upstream-and-trusted-runner-attestation-supported",
+      "fixedUpstreamVerification": "git-blob-sha-and-deterministic-adapter",
+      "controlledRunVerification": "ed25519-precommitted-policy-and-content-hash-binding",
+      "readinessEvidenceAllowed": true
+    }
+  },
+  "summary": {
+    "scenarios": 80,
+    "sourceUnits": 80,
+    "designChecksPassed": 2,
+    "designChecksBlocked": 3
+  },
+  "blockers": [
+    {
+      "code": "static-target-repeat-mismatch",
+      "message": "The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count without an exact source-execution hash already accepted by the gate."
+    },
+    {
+      "code": "reused-matched-control-inputs",
+      "message": "60 locked matched-control bindings resolve to 20 unique references for 80 required controls."
+    },
+    {
+      "code": "ineligible-legacy-projections",
+      "message": "Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes."
+    }
+  ],
+  "designValidityPassed": false,
+  "humanApprovalEvaluated": false,
+  "mainTrialAllowed": false,
+  "submissionAllowed": false
+}

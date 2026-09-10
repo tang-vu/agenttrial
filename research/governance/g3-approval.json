@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "p26-002-g3-human-approval-0.1.0",
+  "status": "pending-human-review",
+  "humanOnly": true,
+  "gates": {
+    "constructMappingReview": {
+      "status": "pending-human-review",
+      "decidedBy": null,
+      "decidedOn": null,
+      "evidence": null
+    },
+    "targetAuthorization": {
+      "status": "pending-human-review",
+      "decidedBy": null,
+      "decidedOn": null,
+      "evidence": null
+    },
+    "dataGovernance": {
+      "status": "pending-human-review",
+      "decidedBy": null,
+      "decidedOn": null,
+      "evidence": null
+    },
+    "releaseBoundary": {
+      "status": "pending-human-review",
+      "decidedBy": null,
+      "decidedOn": null,
+      "evidence": null
+    }
+  },
+  "releaseAllowed": false,
+  "submissionAllowed": false
+}

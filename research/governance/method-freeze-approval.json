@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "p26-002-method-freeze-human-approval-0.1.0",
+  "status": "pending-human-review",
+  "humanOnly": true,
+  "decision": {
+    "status": "pending-human-review",
+    "decidedBy": null,
+    "decidedOn": null,
+    "evidence": null
+  },
+  "releaseAllowed": false,
+  "submissionAllowed": false
+}

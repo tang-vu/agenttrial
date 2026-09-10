@@ -1,0 +1,39 @@
+{
+  "all_passed": true,
+  "artifacts": {
+    "bipia_full_pool_oracle_comparison.csv": "7725a4861d22633113384803240d039fc40d957e4d9234e0c4d0ff83cfc10e1d",
+    "bipia_full_pool_oracle_ledger.csv": "992c47605db0a33ff3867ef1f108618081509c71079c14a5e740c7d28e14d131",
+    "bipia_full_pool_oracle_policy.json": "8ba6667c5dd38afa429e29a9a4ec61019abdeb66482888921633fd609d37a62c",
+    "bipia_full_pool_oracle_policy.md": "267a4ca15e2844d80707bd1c8c2060781b578d5752ba86d1b8e34c4c40104a14",
+    "bipia_full_pool_oracle_policy.svg": "d58b31fb95d30bb5fcd3c0b50e96dc767b3104fd0244286a7e9eefcc36299f85",
+    "retrospective_amendment_20260910.md": "2275e0dee9767090dd7c82a8fa8af4bf3822062049878e1b793ae3fd1bf53501"
+  },
+  "checks": {
+    "all_code_parseable": true,
+    "all_code_reject_appended_pass": true,
+    "all_code_round_trip_stable": true,
+    "all_comparators_deterministic": true,
+    "all_construct_flags_false": true,
+    "all_construct_review_required": true,
+    "all_gates_closed": true,
+    "all_hashes_well_formed": true,
+    "all_raw_reference_hashes_match": true,
+    "code_50": true,
+    "construct_pool_76": true,
+    "current_code_31": true,
+    "distinct_ast_hashes_50": true,
+    "distinct_reference_hashes_50": true,
+    "exact_text_round_trip_7": true,
+    "input_blobs_exact": true,
+    "no_em_dash": true,
+    "no_outcomes": true,
+    "normalization_change_only_code_041": true,
+    "reserve_code_19": true,
+    "reserve_invariants_19": true,
+    "runtime_python_3_12": true,
+    "sentinel_26": true
+  },
+  "checks_passed": 23,
+  "checks_total": 23,
+  "schema_version": "p26-002-bipia-full-pool-oracle-validation/v1"
+}

@@ -1,0 +1,2544 @@
+{
+  "schemaVersion": "p26-002-target-binding-audit-0.3.0",
+  "status": "blocked",
+  "scope": "pre-run-binding-and-readiness-audit-not-main-study-evidence",
+  "bindings": [
+    {
+      "targetId": "ext-001",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "88c7e873098d4ad65ec9274ddd2dbcd234283d8683475d06e72ca4f7ce9a3d9d",
+      "scenarioDescriptorSha256": "df2c2d1177604a5b817c89f0c12dc70d85bcc18e7a024da35fbc89b217587773",
+      "faultConfigurationId": "cfg-unsupported-provenance-01",
+      "controlConfigurationId": "ctl-unsupported-provenance-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/corruption/case_01.json@93f658b8f2a4534af9156cea01493be5523510b5"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "aac2a4b71486e15a113b029e6b20fd1b203472c97845eb36088d5ace1ed6abce"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-002",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "e75ba9030ffb20f1196ce0d87d0bae680c63169bc42e2d41f43df72ad3935caa",
+      "scenarioDescriptorSha256": "f54cddf9fca298d3236f914df797268937254b626840416101f6201945015924",
+      "faultConfigurationId": "cfg-unsupported-provenance-02",
+      "controlConfigurationId": "ctl-unsupported-provenance-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/corruption/case_02.json@93cdd08ca730c12707d8f3be637fbaf9496ccbac"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "1d8a56cedc1e6da90524aca623e6385156adda1540ddf35b3c8b544d63db7868"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-003",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "379c87404cbc9eaf52b431606b49d667bbbfabddcae297c04880a6a1f30862f4",
+      "scenarioDescriptorSha256": "299099d0e27b5b2801c799d069ab33bb59d2ee44e10a172b13a0b1e3638e0259",
+      "faultConfigurationId": "cfg-permission-violation-01",
+      "controlConfigurationId": "ctl-permission-violation-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/guardrail_bypass/case_01.json@044a1bb3cf507ffd11a5426ff5cffe76637f3115"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "9e295ada4f651d4c64cbcd6116cdd040073c3deba67240b453583a71f86ae783"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-004",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "8853e5a1895c70b4ef15812ccae7ee01da377ed2ba4080c02909359aa2666332",
+      "scenarioDescriptorSha256": "22e9e62bd9f3b51daf7faf5569ab47315cfd17c005c3d5b3530674d0d3fb978f",
+      "faultConfigurationId": "cfg-permission-violation-02",
+      "controlConfigurationId": "ctl-permission-violation-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/guardrail_bypass/case_02.json@b90e39ece91ad50ad3875dfb4691fb4063acf3e3"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "499651b5d43876fd81df8a05f425a5c7b181b75e61b24df908d14d3d8e6f8776"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-005",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "f6e8857976c6c45621a3d909f50f73b68e913af43afc37b19f62868113dcbbbb",
+      "scenarioDescriptorSha256": "fac200802c05f5846732a75973fde43db726c0c6d688ceb177e75b6c103733f9",
+      "faultConfigurationId": "cfg-timeout-recovery-01",
+      "controlConfigurationId": "ctl-timeout-recovery-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/tool_failure/case_01.json@7b80f8bc227d20a77a2449b3bb8fe4304c0a6fe5"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "faa0b061d42cb9b3c3386ba59c5e07ba67091825fad6baeb46ec5b35db5d7236"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-006",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "49e41e9c6b6d4f0495b51447fbdf9673dab0515157f667e256d03e12916adf52",
+      "scenarioDescriptorSha256": "ed722140dc2fb6064d909ce4129147627d9107bc6d99e19c6a7478dcc5074007",
+      "faultConfigurationId": "cfg-timeout-recovery-02",
+      "controlConfigurationId": "ctl-timeout-recovery-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/a2a_timeout/case_02.json@826c41592998f5770df3a83a74df9ebadd07f13c"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "ccd51dadb12b51965379b2fe96da92b45b2058ea15fae4c3810c09bee5c6f5b2"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-007",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "92db6b013ba7ba94c90f3813761ad94d33f393845b98763a8ca3278bb7bc120c",
+      "scenarioDescriptorSha256": "9defba7944c1ba7e7ee5306b14b97e46aa6567c3ec308e779754b0fb97cb9049",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-01",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/agent_misroute/case_01.json@a58b7e6545e431b0faa5164c87c9da0f5d2af4cd"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "6a668d3c61645c6cde59433ad8328d117a53f4409953c43b61dad85c18ee4092"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-008",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "21ea6ecc9b94330859650c60d26193c28a1f1de7167ed3440a92ddc93b9d8761",
+      "scenarioDescriptorSha256": "e8928366e2dd30f54cbd095e44e9f86cd025aa35cc3173dabc3d1fb42dabffca",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-02",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/infinite_loop/case_02.json@ebd23b4566d3ed2f4ccef9cef95de9b2b1c4197f"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "8b314145cdc6b198d488e21a99651a9ddd4cd8e7cbadcac7b899b8aaccc4bde7"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-009",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "31d2fba60b542c0f0c373b6ac04bb0ed3a36c06da3ee8d3e0309beb5ddc85c01",
+      "scenarioDescriptorSha256": "5fa58bc3c6a1cf5cd838988ee6d894e501b9605bce322e1c2ab839c8f2ce704e",
+      "faultConfigurationId": "cfg-artifact-tampering-01",
+      "controlConfigurationId": "ctl-artifact-tampering-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_01.json@39060b07582b80805182f8fdeed595c6954ed39a"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "e80db453b8f5b75a3e7253fcbc82d578b2505c9566145150ee3d9342a7fff613"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-010",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "f0114a0a657ab8164a83799808dee4782f84820f989222b09bcc9624c2ca287d",
+      "scenarioDescriptorSha256": "bf8ebaa1a2f5f69d3bdd2a3404523a7bd600b5d401be9373dad3aee5eefa2263",
+      "faultConfigurationId": "cfg-artifact-tampering-02",
+      "controlConfigurationId": "ctl-artifact-tampering-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset/SQLAssistant-H_A2A/no_fault/case_02.json@c05ce6177e47582e4ee7b38aa508df95fc62a465"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "dce8c7c71e25a7de2c0dc62378d7bd937b744c2ad15ab4214bb8d6d2130aa833"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-011",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "237e32278ed9d11a664da921bc1c3deab4f45803ce5a5c975d7fbf69b1b45ee0",
+      "scenarioDescriptorSha256": "e1eadc947ff7dcddb814c8e0b1c2c3cb8d87dd096d84d09254032681574d93e4",
+      "faultConfigurationId": "cfg-unsupported-provenance-03",
+      "controlConfigurationId": "ctl-unsupported-provenance-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/corruption/case_01.json@365af08da9de55dcbf850bc58f1d510bbdfab8bb"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "37c94422ab40b469bed94f262930c6dd309103d9cc8c7d37d6c59f35a8fc7303"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-012",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "4b6b6fa759113b10800657d548fa722bffa1c18d91a315e624e6a6c0a90bbe98",
+      "scenarioDescriptorSha256": "9d792e607ef27c94f665f726f20e7b72f6b6b86fe65f6406134330f3a440d4c9",
+      "faultConfigurationId": "cfg-unsupported-provenance-04",
+      "controlConfigurationId": "ctl-unsupported-provenance-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/corruption/case_02.json@a26c49d27426a968c7067ad7bff9f459eec659d6"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "4a81f28b3a2f2e778ac5969691cf99e14b3284b58ff656c73b63a3530812e368"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-013",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "947e2f9e177ce7d517afb94324121c5b8ba144af8af1eca4cba1b42d8aa7b126",
+      "scenarioDescriptorSha256": "76730f1346e4d616d280da3ac8bce955746ac883fbba667edf57ce6a88ff36f7",
+      "faultConfigurationId": "cfg-permission-violation-03",
+      "controlConfigurationId": "ctl-permission-violation-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/guardrail_bypass/case_01.json@b07a6573a1686dd0edb02fea95e8aa59508802be"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "703974535e5f24aa667160b3bb10d9062bba0764df77c7df550cc87deadf159d"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-014",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "77d97265babff3592461601a0207dec16472e8c6dd66b4dc4b869f73234ec861",
+      "scenarioDescriptorSha256": "13b276895fd08dd8191a2b60c8a03b8bda64358cc7a90dfececa5804306cd700",
+      "faultConfigurationId": "cfg-permission-violation-04",
+      "controlConfigurationId": "ctl-permission-violation-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/guardrail_bypass/case_02.json@b79c133401774bd1315d3bdbd22c29e1c250fd6b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "e5916f4a81bf2045609c31c611ed822c5835f5e7a648f01d1ba44c480121cbe3"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-015",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "1460664d9cbb3198d710303cb457f6323cd94e9b695f832477beb456cae8ab28",
+      "scenarioDescriptorSha256": "c000f35ce134e0072ab92dfcd490cd5e3d529bfbe5a0b4d795c5eb4c27fcac74",
+      "faultConfigurationId": "cfg-timeout-recovery-03",
+      "controlConfigurationId": "ctl-timeout-recovery-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/tool_failure/case_01.json@fc4abe41ba13b0c5b4512565ef313561452a7ce3"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "8764f0718a6728b8b114148406a4ede3999473c2cdaf34eeda4272c3f4a64d2f"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-016",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "b254414dc7b50b8077eed7ad2ad1c7071117ad5540405bcd122df07a69b281ba",
+      "scenarioDescriptorSha256": "a8b24b8e4a625d5b70d52727560d402a8f8f44deca752a6742d61df9a337dd40",
+      "faultConfigurationId": "cfg-timeout-recovery-04",
+      "controlConfigurationId": "ctl-timeout-recovery-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/a2a_timeout/case_02.json@74e1baad3416cf00423a06201b65d5f9a2d0512b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "aa6432bda634b5848f4b948ec9a296901d8837565b85b51c6b7b9f58c0a53aca"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-017",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "1efeddff510045fef0f8bde829c4cc18fb7411a3d9c18c8e1d875ee2c2903dea",
+      "scenarioDescriptorSha256": "8060b0a27a99b55e58355b490cff6856924b9c15cffc2f6cb210f6f4d47c51af",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-03",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/agent_misroute/case_01.json@9eb94bff8a88043b313da5c4cf73bc6e0852bcf9"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "f99d8272501d20850a0f32680de325579192008a453fbc3a28cd20ce398f0090"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-018",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "bc957249ceb60e711a7b458e04df491b039666e39cd09217d1f32746ddb84fda",
+      "scenarioDescriptorSha256": "969665e5507a1794de9d0aff58e46d117c7db94f8273fb66e6e7f627d86869c9",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-04",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/infinite_loop/case_02.json@f9d66da9c6c0759943f0820cbec217a41106acc2"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "a262a169e571e30ffc509291f86592477419c51b3c3087483c8b547183f1937d"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-019",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "31bb48f54b5c4bd6958000931ef7fa8530e3e65855faa5ce3e93e9ef389b12ef",
+      "scenarioDescriptorSha256": "e8b5f5d9c21425ecde36bd19fe1771f7e84e0a5d89ef9c2e44004d4ddd2d2897",
+      "faultConfigurationId": "cfg-artifact-tampering-03",
+      "controlConfigurationId": "ctl-artifact-tampering-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_01.json@2ab47fa256e79a8e6786f91f047b06c4225e65b0"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "4ba07feea46d7d48cc4f0f3c55b63ecf344c67ebf6c057329d37c44e10efb8a1"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-020",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "541d2ead9a352d4c4674b583c02e4775d3e02f41144b152970d7466a814bb438",
+      "scenarioDescriptorSha256": "666ce216979a9552969472fb9232575b94dd1cd3cdd0abf06abfebbf1d45fde9",
+      "faultConfigurationId": "cfg-artifact-tampering-04",
+      "controlConfigurationId": "ctl-artifact-tampering-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_bookwriter/BookWriter-H_A2A/no_fault/case_02.json@6507775080f7dd52896a6f599dab7e6d4612e269"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "23578ec20486d3c75576317a66b8e93719abe86ce4f657870f5d728b4244f750"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-021",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "9640e5a3514b21c00ce3ecaf9d30e33a67dced2f34d954f73ece4df3614b513e",
+      "scenarioDescriptorSha256": "872ae49aa9b610ade0a84eb910553f55776001da2fb5b5eb9bb9adfec7ceabf2",
+      "faultConfigurationId": "cfg-unsupported-provenance-05",
+      "controlConfigurationId": "ctl-unsupported-provenance-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/corruption/case_01.json@851b0c4543cc8f5d07d85005f9aad6840445370a"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "3565f67510dc371479d1b6097d7b04e71ad840bc32797df37c153facb556515a"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-022",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "e4667ead957dbff422d003aa8f0d26891a05e651f3c804bc3b0e1766dab9f622",
+      "scenarioDescriptorSha256": "b1d3a80cb91e9b1f93323365e94c93a3ac205c48d0555b18ec179708c8b74a8e",
+      "faultConfigurationId": "cfg-unsupported-provenance-06",
+      "controlConfigurationId": "ctl-unsupported-provenance-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/corruption/case_02.json@699170f15e26fd1eec9569f6e9410f7645ff3af3"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "897adc6dcb6eebe6c03186800185cae80a28a594c97eb5d63a028829b6a6b16f"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-023",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "d84f826d1b0b74168f9048fd1673914fe96a33816018c7862cab7a8f66f16bb7",
+      "scenarioDescriptorSha256": "625379468bf93b7c08e31348cf5e44bdad7d33a416748b1b1b603a46c7d939e2",
+      "faultConfigurationId": "cfg-permission-violation-05",
+      "controlConfigurationId": "ctl-permission-violation-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/guardrail_bypass/case_01.json@b048012db970f6bdf86b6e8e29df8e7ab9d5baa3"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "ee88cda3faf90f35831e086b4f43cb6d736d0519f328681552647b38240bd014"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-024",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "e7af76088ec482469d4ac9347cd833fe9a24736c402ad9a3508de042af959611",
+      "scenarioDescriptorSha256": "77d774cd2a3232ca7c93e511f3eff32c07bda9988f5cdc5c40315cac8b803893",
+      "faultConfigurationId": "cfg-permission-violation-06",
+      "controlConfigurationId": "ctl-permission-violation-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/guardrail_bypass/case_02.json@2af912245c885e8a093f0429c19f8328ee3c68ed"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "e4c0f072ff475ba5199b07da94d384daa4129acc3a0fbdbb37a81e7755e95b6a"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-025",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "69d934b39035177214a7d42690d47658e6bf9a979dd4985cb4216704aaa56fbe",
+      "scenarioDescriptorSha256": "d039db4453c3f199397af74348cdbf680994ac1618de1f9fba30cd093db2ff34",
+      "faultConfigurationId": "cfg-timeout-recovery-05",
+      "controlConfigurationId": "ctl-timeout-recovery-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/tool_failure/case_01.json@09192906257bbbc34a296e5542d50ef85a041121"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "732c38b6fe9a2f82130fa0007b49acf892b73e06761a11c4f8e7a1a765e4dba2"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-026",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "d4eff7d36c0d0267c6dbd0830d9bfa135137ba82a7eb073cdc9f192ab8846621",
+      "scenarioDescriptorSha256": "f3172ac25ee4da31ecc615d86aabbe37bbef2a0452212a0f658184ce16756ae7",
+      "faultConfigurationId": "cfg-timeout-recovery-06",
+      "controlConfigurationId": "ctl-timeout-recovery-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/a2a_timeout/case_02.json@57e40d8ce73b19b2cff7c967cc00518eadec0e7b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "34ec09734ca91d5ebeea6282ad756e249d4e56a12ada21fadc9f347fe155f64c"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-027",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "81eab1b6fc670435367d087f58696c21b84d0b61447dfc21750e181dc805e41f",
+      "scenarioDescriptorSha256": "08a1cca44c13b2ed71de0c5c35ef28e8a47071619a3d8373c49454fc12b40931",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-05",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/agent_misroute/case_01.json@f4f577e159a1945bb32ec8fe63ea8ecc950217f5"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "bf51690596d7a450a3566525c50d92f49021ef9963c0867ae17c691c250465ec"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-028",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "daad6f0348340681a04f19aa751b567bdf62330da7844dfe4ab57a7e17e43f92",
+      "scenarioDescriptorSha256": "55e7d1be7e62abc0e67ee4a9677e3a2a0e889635414caed485976f0cc059a144",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-06",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/infinite_loop/case_02.json@801bec887c9edd9149396b84cb3d39cfa769c209"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "7e22339e9ce4eff9d6a188d9e803481ecc50ae5d1d6810d056bc3fc8effbdc60"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-029",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "09444e2128d8f09ddecbb28df80f2a0669f630d5f910b82abbc373c18ce25ea0",
+      "scenarioDescriptorSha256": "2ee9685b7e27a7ca2af38c615520fefee2858e0e8c5763386ef7a8c917c2ef2d",
+      "faultConfigurationId": "cfg-artifact-tampering-05",
+      "controlConfigurationId": "ctl-artifact-tampering-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_01.json@e5f5713fe4ef8bf7c3a5b6cc45ba5e3f026995fa"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "c2204f210c8ce1020fc6e8ce8319651553b78775c0b95d1b6824b5108a7f3c47"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-030",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "42aa459e518c79a8ab9432a7b44908d33eaf86416269858fdd8601cbd92dfbca",
+      "scenarioDescriptorSha256": "c24ce1de348d34f865f2d50e07344626926b7e710a09f532da5a4fd78963a142",
+      "faultConfigurationId": "cfg-artifact-tampering-06",
+      "controlConfigurationId": "ctl-artifact-tampering-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_landingpage/LandingPageGenerator-H_A2A/no_fault/case_02.json@48880b6f93e91b380fb8738c6fc225cc89d68a1c"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "4bb32f3da1a445dce0408db1fa396806a2dd0a9ea58c926b52a3ccbb5a36ae19"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-031",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "1abf3e22e2cb8d38682830f37c0cb317aebae7df57134169a886ca57b4dd68ce",
+      "scenarioDescriptorSha256": "cb4fb0c16b675d6696b7835369fe2257bd9a21970fbb1a1072785acc21438af3",
+      "faultConfigurationId": "cfg-unsupported-provenance-07",
+      "controlConfigurationId": "ctl-unsupported-provenance-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/corruption/case_01.json@14ca3350a6d56bad7c543a058105ae9c07af8bee"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "d98647c7438bdc50f74b80b0d420dda23d5090b74855a32c7560856086727a0f"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-032",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "46be21922dfa338bb736109a0bd025ca232740606e436acde074fcbb68b196e4",
+      "scenarioDescriptorSha256": "80fe1dfb89bff3f2ae33d203a3b3eccac9f2333d99fc1bf7af56d3688151fa33",
+      "faultConfigurationId": "cfg-unsupported-provenance-08",
+      "controlConfigurationId": "ctl-unsupported-provenance-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/corruption/case_02.json@afb0cc141169bbcdbf6436a4c08f6dc4083d7336"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "9c4f52fdc334a04f8738a17500a956458180b859efb5c780083dedae107db247"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-033",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "1b842c24025805d717f95cae9fa180397876cc99a1a58e37a360a51fcc3e00a0",
+      "scenarioDescriptorSha256": "728928fcc743fc570fbb0affb6e1fcfa75dec2c05c21972e347f9b353b5f8678",
+      "faultConfigurationId": "cfg-permission-violation-07",
+      "controlConfigurationId": "ctl-permission-violation-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/guardrail_bypass/case_01.json@32a9953651c8b3757347ea34c1862060044f2f00"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "f9842963350ca3a120a9a5ae1f02233b000121e39dbf960d223e95d3eced299b"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-034",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "7c59e56827b88862562211f5f8d61cdb9a7dab84ffec57b68797f73d8c74ad14",
+      "scenarioDescriptorSha256": "9f0674c019ffcfd976cc94b895bd926a5a320a42adcf5f8abb504eb91d54cb8b",
+      "faultConfigurationId": "cfg-permission-violation-08",
+      "controlConfigurationId": "ctl-permission-violation-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/guardrail_bypass/case_02.json@0546ec7759f48be8ce1205fe1aeab6097755c98c"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "884e5267a591bcec2b083bf913353bc8a8d5d236623361ea16abbd861df1e947"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-035",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "cd9d09f11a80c776d56eaabe4058bff60efceb0ba2bbdd4d18c9b584f237c502",
+      "scenarioDescriptorSha256": "e5b3b0152a11de9e18652ed38379f8cb2e8f829405ad9595de9a0dab504b54fa",
+      "faultConfigurationId": "cfg-timeout-recovery-07",
+      "controlConfigurationId": "ctl-timeout-recovery-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/tool_failure/case_01.json@54dc2a984606e3e0ff5a8b2341229b14fcc3032f"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "6498d44fd0fb0c24f02bde23d9bf55562b0778675ba09bfe6ec042753a64265e"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-036",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "f3c67a4c49bbf6ced32017a498aad6484904c4c3ce4748e9750bc91170599867",
+      "scenarioDescriptorSha256": "5be884e689806eae0615acf3595fae4ae615dd6e9a48faa2db93264e294ea724",
+      "faultConfigurationId": "cfg-timeout-recovery-08",
+      "controlConfigurationId": "ctl-timeout-recovery-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/a2a_timeout/case_02.json@82c63a534a5d308309d29c874fca927770ef8276"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "265f96c4508212556f047f2d780950895ecdd8d215aa7044db7ab2be1c24cea5"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-037",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "846500d40265ef3faa1a37a63bdd20177e8e3dc03627585a89c15e114ede0739",
+      "scenarioDescriptorSha256": "0ba98180709e4dd4692e4d818a9050ce3a045dc70e53e8c355e1cce9b26bf208",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-07",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/agent_misroute/case_01.json@23110538026992e22943c784360ecd0c0f0cd678"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "3501c8a975144a8d8d904046e358a1702df797860b95f5ca393b1f1054c87207"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-038",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "ea75061d546ef2d88fc838177b2e2d09ebe3fd41b3c58e65deeaab36378b555f",
+      "scenarioDescriptorSha256": "52013b9cbcec92b504a5ed0db02e50ebbda29072d852489472bf04d441b745d9",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-08",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/infinite_loop/case_02.json@cfb2eaac2584c3de5d6b51bd9ddfabd0f7539658"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "2504e1b32fe17bad7e031238ad87badade3053f3624a9fd4dd81c32177ac2f3c"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-039",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "f2d3c9de7d1c098bf059176c24739009cb50bef0b0e8de69321265a5b1e1e02f",
+      "scenarioDescriptorSha256": "c61b3287401dcae1deba9aa0fc5d6ed72c1ad5e197102953c78ec7965c83620c",
+      "faultConfigurationId": "cfg-artifact-tampering-07",
+      "controlConfigurationId": "ctl-artifact-tampering-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_01.json@3f45b80c6bab4f624e2ca7a14974e23b27c39498"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "3ca6463eeb5110b7aa5751f3794c8212e04c502554683d055985ad46e91098da"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-040",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "83b573258974324cb85ec38ac272618c63d170628d8c12e05d91cfa9a7c6f763",
+      "scenarioDescriptorSha256": "5c78c0666dc6fa70df6838a4b85bf9c0324accbf1314ccb31975993e3e587f4e",
+      "faultConfigurationId": "cfg-artifact-tampering-08",
+      "controlConfigurationId": "ctl-artifact-tampering-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_recruitment/RecruitmentAssistant-H_A2A/no_fault/case_02.json@5d6d041c775fb790044b3a44ad0b733bc5c4e61b"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "7f883907d56197f88aaea24e1214a14a6bf417f55313dd9ce8057387f732ad3b"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-041",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "76ee4ca18a9420a51768733ec54d84497c5c98927faf045c58b1cb03594c1292",
+      "scenarioDescriptorSha256": "c87d10f19bea39c1e9dbf342bb9cd6c12ea50abffff2aec750a532fa6a48e466",
+      "faultConfigurationId": "cfg-unsupported-provenance-09",
+      "controlConfigurationId": "ctl-unsupported-provenance-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/corruption/case_01.json@7e9b1b5249c996e4ad49df9fa4f7b740e7d9487f"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "97d8ba46739ec756bbdd1cea9db1cfaa9cc0fe475101576ce486c76f94f2105f"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-042",
+      "family": "unsupported-provenance",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "89cc4cef37b9ded5106392bebbbaaa90daa7618faabdc5da490d602903df739a",
+      "scenarioDescriptorSha256": "b1ced488946b3aa0afa05e8dc0518376b01bbeba02864ce6f7a967dd16a95549",
+      "faultConfigurationId": "cfg-unsupported-provenance-10",
+      "controlConfigurationId": "ctl-unsupported-provenance-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/corruption/case_02.json@080232e7a66d9af1cabc9bd2538fa862f9575ff3"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "f199535f9ab5f2b497658dfe8919bc7b3d006379cb2e46dc5c74ee313b1bfe91"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-043",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "36687b67c9b837f78c8134616c78f83820004e404cd303ac91c67dbed1315572",
+      "scenarioDescriptorSha256": "ccd4224dff1af3e92365b0526c6308cc713a94432abe3ec7edab7278fe735e1c",
+      "faultConfigurationId": "cfg-permission-violation-09",
+      "controlConfigurationId": "ctl-permission-violation-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/guardrail_bypass/case_01.json@6d19537a0b5451bc7cf22486f5e98e941874af55"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "9bc2e44b26f22077adf0ea480abf8e2f39dbcad5a2980faabf6ef8f5302a8271"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-044",
+      "family": "permission-violation",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "caa76abe3128c78855205cb282403820c035609c9c719b1e0513f4f398f456fe",
+      "scenarioDescriptorSha256": "d4da9b59a0cd96a1191811e59af7ed17a7c4dd002843b5a1e0444a60106064d1",
+      "faultConfigurationId": "cfg-permission-violation-10",
+      "controlConfigurationId": "ctl-permission-violation-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/guardrail_bypass/case_02.json@67c898d59e125e0f8229a40f4e327b8b0065a849"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "639fd0eb92c432afaeabb001d185e93ed1e412d51cf2ed0fea8b23cfa44b17d7"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-045",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "4fff3b488fc44a2371b0d17bdbef6a1b38abe82bec097569a021196cdd5c0961",
+      "scenarioDescriptorSha256": "929a09b6ea67918ff451149740244f45f1f8b64dabb62146116e41fd73cb05ee",
+      "faultConfigurationId": "cfg-timeout-recovery-09",
+      "controlConfigurationId": "ctl-timeout-recovery-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/tool_failure/case_01.json@0b306efb194d0ba8a91e0e145b6620bf95d722a0"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "a5d672299dfe942e1a0159a4fa41209f1dc53d866d0701a8a75ab84180b58fd9"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-046",
+      "family": "timeout-recovery",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "57210a66aa92ca79eb093b5092c2e7d5d7e384c8f790bca16deb8b53ff554c9d",
+      "scenarioDescriptorSha256": "2dd5ee44cb8c2990b1d577a2e4f816eb0047761086f3dcfc06fa4a726e417b9d",
+      "faultConfigurationId": "cfg-timeout-recovery-10",
+      "controlConfigurationId": "ctl-timeout-recovery-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/a2a_timeout/case_02.json@b28c930199e1ce2c2d10e994a26d70b389d7993d"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "ec6b8a5958420068f732c2b071c69fb67e2e5e0defc61cf5ace4a7532bb1ed10"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-047",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "9b9c704457e18f49ec1fe9c015ba9e1c40093a7a6f426be01cabbee3ebe999ca",
+      "scenarioDescriptorSha256": "96d94474c1ff0d9365483c514be335a5642662379059e737cd2e3d53bac3c598",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-09",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/agent_misroute/case_01.json@9b50cea922f77507368984a8d58fb1a95ab5c593"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "9ef85d67706e465a7eaabf7a051f217173f4fd443a949da3355ab09d9cff31ed"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-048",
+      "family": "non-repeatable-behavior",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "08a7db35f036d3ff754d56efdaae17383dc86e6faa7b675275ef1939749b8205",
+      "scenarioDescriptorSha256": "815788b8851b52339d7bc30a5002ce58111e4164fec1c70528cd96fa98deda87",
+      "faultConfigurationId": "cfg-non-repeatable-behavior-10",
+      "controlConfigurationId": "ctl-non-repeatable-behavior-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/infinite_loop/case_02.json@c999db46ec0b11ea58a40aca848459c6f943940a"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "4e95ce4c65250affffe29f42393a9655c88afaad2635b76e1d5d9eef99215e17"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-049",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "dcf4c23fe00120ddfb8a9b08b432963f6e451a5221f46725fac42f36fec6e8ee",
+      "scenarioDescriptorSha256": "acc29d80e9a4046f3fdea81d2e340393da9746a79448043ab161e44d080e4eed",
+      "faultConfigurationId": "cfg-artifact-tampering-09",
+      "controlConfigurationId": "ctl-artifact-tampering-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_01.json@25e3d4ba22e7275d079773d2b9b7084d5f327c5e"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "e0f097c8ea298aca718424b70ee362f95637739835d62959e094df726417aacb"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-050",
+      "family": "artifact-tampering",
+      "source": "agentchaosbench",
+      "targetDescriptorSha256": "3924804538a5888ef33211a81597e71e074189c0c1d51125b76dccbeef190729",
+      "scenarioDescriptorSha256": "d3a6d6ac7b1c7f82708ca1d54a651382c2d790b54f4a6b7dedc8f7bbaae13c42",
+      "faultConfigurationId": "cfg-artifact-tampering-10",
+      "controlConfigurationId": "ctl-artifact-tampering-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "dataset_socialmedia/SocialMediaManager-H_A2A/no_fault/case_02.json@c7f70c7c663fa375a84eff6fc2c4c2ccf6eecdcd"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "06f81b898a96131b482a6cbeb8f27584c49cc3f10ed4ee25cf966ffe922ed9b5"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-051",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "ac57fb76a7b7ed8385ecab5cb1c59594b31f87d1e3b34983b127f112e08d2ed3",
+      "scenarioDescriptorSha256": "b974d95908b3ce932361458990e4f67f972b27c9ff8ea4928bcdf5e8f7c7967f",
+      "faultConfigurationId": "cfg-prompt-injection-01",
+      "controlConfigurationId": "ctl-prompt-injection-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/workspace/user_task_0/important_instructions/injection_task_0.json@a367df68ebfcb95d04d7cfe8f7d0c3739a11254c"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "d15f15f3c973bc74c91bc1b349542abdde028910a13fad03b77011905bfd8520"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-052",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "d2d235b5e8d8c467ceec9c48e05749bbaada99fa457e082e33f0e0fcc79a308c",
+      "scenarioDescriptorSha256": "d6bf284d63d7c36370d71a312a1811a9d9333a933f63d962056e8de723554785",
+      "faultConfigurationId": "cfg-prompt-injection-02",
+      "controlConfigurationId": "ctl-prompt-injection-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/workspace/user_task_1/important_instructions/injection_task_1.json@5724bd8d53e822e79ceb2030589698a2092bdc54"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "b716b5fdaf7c2e81322937e562550fca6a7b5e59761c0b04ebbc591702865301"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-053",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "c6ebe336eb4eae4281a2b42c4bd6985490a7e37268da8c6e57a8017be5ef616d",
+      "scenarioDescriptorSha256": "de7b59b4d6d1e4268117223135c1a56982687eec444da6f5c1185b0a42d47a6a",
+      "faultConfigurationId": "cfg-prompt-injection-03",
+      "controlConfigurationId": "ctl-prompt-injection-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/workspace/user_task_2/important_instructions/injection_task_2.json@8cb9bc97df3a909666c500ba9dd9ecd880f9d881"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "e4820a4781551edf19d0e8453e8816b183f2cd21897cebc0a73a6a9aec4b3826"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-054",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "904786456cf1b6c885e6901773cff3d9a3d4d4e5444f65d5dc1c786746121a36",
+      "scenarioDescriptorSha256": "b90a473da9c0f31fd63c23e6159218313ca6fed361358fcdc3d6ccf48c068e9e",
+      "faultConfigurationId": "cfg-prompt-injection-04",
+      "controlConfigurationId": "ctl-prompt-injection-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/banking/user_task_0/important_instructions/injection_task_0.json@da0ebfe2d411ccf40aa42f0e679bcf2da2c98316"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "1a49cc3bf7842efc1b2a7fde244bfbf77174bf95d40d266eaa14df080cdb6b92"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-055",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "2f0e7c365f5586df22ccfd715bc759c472d2d0b4cac53081c3060914100097aa",
+      "scenarioDescriptorSha256": "55eb737a15888156e6968368aa84febc8d3df466377d0f5566e29bf0132f5463",
+      "faultConfigurationId": "cfg-prompt-injection-05",
+      "controlConfigurationId": "ctl-prompt-injection-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/banking/user_task_2/important_instructions/injection_task_1.json@60e3500511cb4256d9a82def6c2a564764deeb23"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "1dbc4da83fa35be15a7df6825a2bab76756b339a80826054998d42b2fadf8c74"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-056",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "29ea8944e3158d47c645075d5e3e5fef06c498428147bae94d3b7097caaf4633",
+      "scenarioDescriptorSha256": "87c6d6142a784074f4e0c641d841b59a5569d8e81b09b221a5089cc00b58a4ad",
+      "faultConfigurationId": "cfg-prompt-injection-06",
+      "controlConfigurationId": "ctl-prompt-injection-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/banking/user_task_6/important_instructions/injection_task_2.json@170b21e55d35b8a574e89e7ce95509954ea98cf2"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "e6d1d43f9419eda728a003124e26735851512efb6c07030954f61bfc2bbcc4e0"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-057",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "de3457ffa3b034f12aae12a24056f25d295785038eed854966b4cd744ec0d135",
+      "scenarioDescriptorSha256": "86e60b9d2d1c893da84172d9d77dfaff3fda739a902359801291339fe92b6e6a",
+      "faultConfigurationId": "cfg-prompt-injection-07",
+      "controlConfigurationId": "ctl-prompt-injection-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/slack/user_task_0/important_instructions/injection_task_1.json@8b5ee6b2121116665f1a12144235084d877a1c4d"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "59c9be0668d01897ec23b581be4e309147c728ffda7aa936bd8d2a5864afaa2a"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-058",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "7d4c3c29ef72505abb1f5e21143d9b77c124fb064e4259e31efdcd0c2615ea08",
+      "scenarioDescriptorSha256": "de625cfe98ea67b07a2944e4f8583585b4f9f4a761c75494bbec485c51d70f0b",
+      "faultConfigurationId": "cfg-prompt-injection-08",
+      "controlConfigurationId": "ctl-prompt-injection-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/slack/user_task_1/important_instructions/injection_task_2.json@e8d8d2c1428d6af1fd74e66a0f17017942a3fecd"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "db10ffe130a3a1a70334174d44621b71e6e682b06dee70ec61adc4fd9fd6a1fc"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-059",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "72e57a9d1414fe83cbed49bb15b53c6caa41dfa232be41f74efdcbdac2ff449b",
+      "scenarioDescriptorSha256": "f066e3b56b8ed07312174b2358a92a7dbe5d0727ac5aa1edf469a2bd53332cc0",
+      "faultConfigurationId": "cfg-prompt-injection-09",
+      "controlConfigurationId": "ctl-prompt-injection-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/travel/user_task_0/important_instructions/injection_task_0.json@479014a6a2c873b6b02438fbbd365c79661a6cdf"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "44058269c36e85d228ad1a13b5cb850d508735be8073ef2068d9276924136bdc"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-060",
+      "family": "prompt-injection",
+      "source": "agentdojo",
+      "targetDescriptorSha256": "5ca7a4289a7b9e0fceb9d21eb00fde6b7e0bbbf121f3cef2960b3234cf449afe",
+      "scenarioDescriptorSha256": "a943da0ad3151578269cc3e47c1fe9f58025cea5e36099db9984d5f19ac9ff8f",
+      "faultConfigurationId": "cfg-prompt-injection-10",
+      "controlConfigurationId": "ctl-prompt-injection-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "runs/command-r-plus/travel/user_task_1/important_instructions/injection_task_1.json@d643c907b6f4d3f97c8ae98f3c239d2700298a11"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "same user task with attack=none"
+        },
+        "faultProjection": {
+          "state": "excluded-not-gate-reconstructed",
+          "sha256": "d0e9be7a902633919042eed46eed593c382cebb5bc3b08107d744db3ebbfd33b"
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-061",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "9eb80013b35d57a18d687ab83af3572e214f7fc58fc6dbc07a4f29f8451304b9",
+      "scenarioDescriptorSha256": "c831a4bca0c34f8f53f336436f123eaf5518843b92a23d205d026a67c1bab173",
+      "faultConfigurationId": "cfg-tool-parameter-error-01",
+      "controlConfigurationId": "ctl-tool-parameter-error-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_0@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_0@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-062",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "38634d05467cec592830f47d6b38a438dd1ae0814f267deb4775ce657db3133e",
+      "scenarioDescriptorSha256": "0f687c0e9ac71df4f1d0e6af7a9564b5db9c661d0fc8fd2dd0fc1d1f6aa9070c",
+      "faultConfigurationId": "cfg-tool-parameter-error-02",
+      "controlConfigurationId": "ctl-tool-parameter-error-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_1@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_1@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-063",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "212bca5817877fd1d6de6184b90605ea44c0af6ed38af8fcc7b982328ba5309b",
+      "scenarioDescriptorSha256": "92679d6cb106354e9508027637887744af9dc66fb8aea428f4c8582b9dcd336f",
+      "faultConfigurationId": "cfg-tool-parameter-error-03",
+      "controlConfigurationId": "ctl-tool-parameter-error-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_2@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_2@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-064",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "7b02ca12e4e9d9e8e54d9d4ed8f559b480a44d4ddd678e8593207a4adca1dee9",
+      "scenarioDescriptorSha256": "a08d0336ede206e0c383398e34d16b9ba05dc528b82f5a83a32b5ed0e0dc4a83",
+      "faultConfigurationId": "cfg-tool-parameter-error-04",
+      "controlConfigurationId": "ctl-tool-parameter-error-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_3@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_3@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-065",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "55272f57b7ff2c0f152b858fe42fed53f1194ae69d0484daf4963580c00dcf3c",
+      "scenarioDescriptorSha256": "8e41ba308c9059ebd0e53a4f57781f78ed015b8b74189b6fe2fd45c393c4558f",
+      "faultConfigurationId": "cfg-tool-parameter-error-05",
+      "controlConfigurationId": "ctl-tool-parameter-error-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_4@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_4@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-066",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "3feb3c6da4b3ee0e5034e4aac18ff2d2dc279f093057074743b4a6f497c323f8",
+      "scenarioDescriptorSha256": "b452773b98b3c5c48368e44d4d17c54569faed2a4be50835af4e53434ae0e58c",
+      "faultConfigurationId": "cfg-tool-parameter-error-06",
+      "controlConfigurationId": "ctl-tool-parameter-error-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_5@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_5@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-067",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "4484ba7f1028326706ca8ba20c791cf3b1668d287c108726005a753bec6a5486",
+      "scenarioDescriptorSha256": "80c354593d14a59146b731b73be408c4eb3038a068020838bc6124dbc408598e",
+      "faultConfigurationId": "cfg-tool-parameter-error-07",
+      "controlConfigurationId": "ctl-tool-parameter-error-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_6@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_6@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-068",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "80c75052e199c931bc9888240423d9d8c9deee0d665f422307e67b6eb68999c6",
+      "scenarioDescriptorSha256": "e6bc717316e1943e93307781803a6a87bbc4bf8766d73ff6c6913d9ad6a2a659",
+      "faultConfigurationId": "cfg-tool-parameter-error-08",
+      "controlConfigurationId": "ctl-tool-parameter-error-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_7@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_7@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-069",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "9299d846af945cdca0777d30cc5ece82c0e5c635211f2c34f95b7ba3d80a0af3",
+      "scenarioDescriptorSha256": "86ac7181db342b6870cca067cbf93c53ddf0d8ea8de66db2fb10497302b74986",
+      "faultConfigurationId": "cfg-tool-parameter-error-09",
+      "controlConfigurationId": "ctl-tool-parameter-error-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_8@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_8@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-070",
+      "family": "tool-parameter-error",
+      "source": "bfcl-v4",
+      "targetDescriptorSha256": "6272e45f036093e94b78f4a77b30f3ca6a8233678c69e046959a0868c58ad156",
+      "scenarioDescriptorSha256": "b9eeee4e15af94f333da52793bf63ff4e0f687fdaaca0ccfd3e1bf1ac384984a",
+      "faultConfigurationId": "cfg-tool-parameter-error-10",
+      "controlConfigurationId": "ctl-tool-parameter-error-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "multi_turn_miss_param_9@2e87caf87fb48f7807a18610311bdfa1138d0599+94edb50ede0de76f35e937d4b96128857357d95b"
+        },
+        "controlInput": {
+          "state": "locked",
+          "reference": "multi_turn_base_9@656fbd5e56969373353cd58b880234a6cc4edc99+3ee85fcd5e8cccca24e2347e464b58fd1b9f02a1"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-071",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "5e97d5ab19d2af3c0f84c957d8673146fef03c680fccb6d80c9e89471bf122ff",
+      "scenarioDescriptorSha256": "edd9bda5009895c4aafd2c223e41bdd6b1a36b21659e71f2c40596a22d0b364d",
+      "faultConfigurationId": "cfg-evidence-omission-01",
+      "controlConfigurationId": "ctl-evidence-omission-01",
+      "scenarioVariant": "minimal",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "airline/tasks.json#0@ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-072",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "e162c09cb2fe488d86b746fea849342b80e2c96b19463bcbb461cdc7e44779d8",
+      "scenarioDescriptorSha256": "c6a7acc6b486cb4c9c60ceecd5c676ea3b7729e2c0c75a4da64d29c3c33787b6",
+      "faultConfigurationId": "cfg-evidence-omission-02",
+      "controlConfigurationId": "ctl-evidence-omission-02",
+      "scenarioVariant": "boundary",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "airline/tasks.json#1@ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-073",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "a481f43e48130558e9b07e3abc7e4fa3360d8cc0e3290cf01e8eb9288d03444b",
+      "scenarioDescriptorSha256": "15766be280d2682f7e4e47491a6dfb52404e9fa49a2c59dffbb08fedb199eaa1",
+      "faultConfigurationId": "cfg-evidence-omission-03",
+      "controlConfigurationId": "ctl-evidence-omission-03",
+      "scenarioVariant": "nested",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "airline/tasks.json#2@ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-074",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "e22191c9b392b26c6435ce064a89c2298ebdc82767a08644d102a0a733390895",
+      "scenarioDescriptorSha256": "2fc2841b0996d29745592fd1ad957de4d855a547b05283e0e07ccf4c586f6455",
+      "faultConfigurationId": "cfg-evidence-omission-04",
+      "controlConfigurationId": "ctl-evidence-omission-04",
+      "scenarioVariant": "delayed",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "airline/tasks.json#4@ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-075",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "1bb179415d24180b8a12ca03211a787a9a488d8b14216a7c8719704417ee185c",
+      "scenarioDescriptorSha256": "c1ada7f4943319724ec214ac956bd22a402b1a9890fc9eb678657ec8835705b9",
+      "faultConfigurationId": "cfg-evidence-omission-05",
+      "controlConfigurationId": "ctl-evidence-omission-05",
+      "scenarioVariant": "conflicting",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "airline/tasks.json#5@ea4ff5e3f5e3d97ca391846a6e8dd9eb3437dc80"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-076",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "103eda49ac7184745542a47d4dbe79fd19340234efc76118dfd2c3938b605cc7",
+      "scenarioDescriptorSha256": "823584631bc8ae62921fc44b448971dfb1d12ecaca9e32fbff97e446c7b787a9",
+      "faultConfigurationId": "cfg-evidence-omission-06",
+      "controlConfigurationId": "ctl-evidence-omission-06",
+      "scenarioVariant": "missing-metadata",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "retail/tasks.json#10@e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-077",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "1ef9010ce0a1174e1083ce8324f0e868701d4d25c6e713260c7f2fab7a57a6a8",
+      "scenarioDescriptorSha256": "25886730cf6e00dd4fb2e611ff5e93b8ee39f06606191da7f7829cc41ca77259",
+      "faultConfigurationId": "cfg-evidence-omission-07",
+      "controlConfigurationId": "ctl-evidence-omission-07",
+      "scenarioVariant": "high-severity",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "retail/tasks.json#12@e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-078",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "7558a1b56c7a3b4fcb8659b4567fe57d54a37f98b0c3442e9406f3284c9f03a0",
+      "scenarioDescriptorSha256": "019c2f20c821af83368837870bf363d2cf365522701831cc264b7209901e73b9",
+      "faultConfigurationId": "cfg-evidence-omission-08",
+      "controlConfigurationId": "ctl-evidence-omission-08",
+      "scenarioVariant": "cross-check",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "retail/tasks.json#25@e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-079",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "4b1991d5503a73569ea45a2da86db430ffd4bd5ce1722ba8ae6f28acafa4c0d8",
+      "scenarioDescriptorSha256": "b6d0c679812ed9e755edb0ee7f1b3c01f2c66a65903b8486c238ea82739955a6",
+      "faultConfigurationId": "cfg-evidence-omission-09",
+      "controlConfigurationId": "ctl-evidence-omission-09",
+      "scenarioVariant": "multi-step",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "retail/tasks.json#50@e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    },
+    {
+      "targetId": "ext-080",
+      "family": "evidence-omission",
+      "source": "tau2-bench",
+      "targetDescriptorSha256": "4b41323472fa2aaac3b30d4a2d7f7422da2baf0d4acd5679116ff0f034411968",
+      "scenarioDescriptorSha256": "f2ce187df1ad378e6c1421e8540ad8eea6c6b0c11f97c4ae27cfc7756de29ba2",
+      "faultConfigurationId": "cfg-evidence-omission-10",
+      "controlConfigurationId": "ctl-evidence-omission-10",
+      "scenarioVariant": "partial-evidence",
+      "bindingMethod": "provisional-family-order-review-required",
+      "sourceEvidence": {
+        "faultInput": {
+          "state": "locked",
+          "reference": "retail/tasks.json#57@e95a9f898b2d1f6568ea8faec78edc3767ce747d"
+        },
+        "controlInput": {
+          "state": "condition-only",
+          "reference": "compliant trajectory satisfying the upstream task description and all populated criteria"
+        },
+        "faultProjection": {
+          "state": "missing",
+          "sha256": null
+        },
+        "controlProjection": {
+          "state": "missing",
+          "sha256": null
+        }
+      },
+      "constructReviewStatus": "pending-human-review"
+    }
+  ],
+  "summary": {
+    "bindings": 80,
+    "uniqueTargets": 80,
+    "faultBindingsWithPinnedInput": 80,
+    "uniqueFaultInputsPinned": 80,
+    "controlBindingsWithPinnedInput": 60,
+    "uniqueControlInputsPinned": 20,
+    "reusedControlBindings": 40,
+    "controlConditionsOnly": 20,
+    "legacyFaultProjectionHashesExcluded": 60,
+    "faultProjectionsReady": 0,
+    "controlProjectionsReady": 0,
+    "constructMappingsApproved": 0,
+    "constructMappingsPending": 80,
+    "constructMappingsRejected": 0
+  },
+  "blockers": [
+    "Only 60/80 matched-control bindings have pinned inputs; 20 remain condition-only.",
+    "Only 20/60 pinned control bindings use unique source inputs; 40 reuse an upstream execution.",
+    "Only 0/80 fault projections are reconstructed by the gate from source-bound evidence; 60 legacy hashes are excluded.",
+    "Only 0/80 control projections are ready.",
+    "80/80 provisional bindings still require two independent human reviews.",
+    "Human G3 gate constructMappingReview is not approved.",
+    "Human G3 gate targetAuthorization is not approved.",
+    "Human G3 gate dataGovernance is not approved.",
+    "Human G3 gate releaseBoundary is not approved.",
+    "Independent human method-freeze approval is not complete.",
+    "Method validity: static-target-repeat-mismatch: The design requires 20 independent fault and matched-control executions per target (3200 shared execution artifacts across evaluator modes). Fault inventory: 0/80 targets complete, 60 have exactly one fixed upstream execution, and 20 have none. Control inventory: 0/80 targets complete, 50 bind one fixed upstream execution, 30 have none, and 40 bindings reuse an execution identity. 10 physical identities are bound in both fault and control conditions. Candidate declarations (0 fault, 0 control) do not count without an exact source-execution hash already accepted by the gate.",
+    "Method validity: reused-matched-control-inputs: 60 locked matched-control bindings resolve to 20 unique references for 80 required controls.",
+    "Method validity: ineligible-legacy-projections: Main-trial-eligible projection coverage is 0/80 fault and 0/80 control; 60 legacy projections are excluded, and 60 legacy projections were not reconstructed by the gate from pinned source-execution and canonical projection bytes."
+  ],
+  "mainTrialAllowed": false,
+  "submissionAllowed": false,
+  "inputs": {
+    "designHash": "bfb64d0f34fa05eef8c1dc75e10d68941ddc2fbc6cbcf0d8f68d5551c7a13248",
+    "mainTrialInputDigest": "0c3d21e35367ee9ec9919cb519aad3f79af0269ff7877406187b12beb5fd1395",
+    "executableMethodFiles": {
+      ".node-version": "7e8a2fa94951112b894a3dbe3d05efef5e9263741fa49125f0a70f40fedab4cc",
+      "apps/signer/package.json": "f1b6f7f51f4913edec192cfb8db0b652f1cd43cbcdfea9244197ea4c9d2e6e2e",
+      "apps/signer/src/index.ts": "bacf8fe6ebb93163ecddab8a48de0dd478d15139e871fcf36ad7564f6570591e",
+      "apps/signer/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "apps/worker/package.json": "9a9eddd86ab95b59fc62252b49906b95c0bc710b880152daa0e60b8f719d5b54",
+      "apps/worker/src/index.ts": "94a7019d5042a8eff7c35677f6a50256c9d6554a3097a00c45ab872050acf125",
+      "apps/worker/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "package.json": "1406ad78d9ef32d63acbeb13293e62e14d3be9bee46c87b34c42f55d4549b31e",
+      "packages/adapters/package.json": "7d4bfbce6dfccef36d9c4b9d63a2371c62a58c5b09bd937a738523227aa86e24",
+      "packages/adapters/src/index.ts": "5904b21f04728c169249c04d5964453ac1db0208ff884dc84d3c55b14c34270a",
+      "packages/adapters/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/core/package.json": "a264803197276e3d1ca311c3d75d606027cfb0fc022cfd79b1106373d54d1a21",
+      "packages/core/src/assertions.ts": "95b48163ead853aa6e913db5dbe55aa1ded8f808b3edb79e55629662a7fc2297",
+      "packages/core/src/index.ts": "5af18e93f0df5fec4d475999170fddbf954de6fb5c384ea7cf348bee1e9cbf8b",
+      "packages/core/src/scoring.ts": "5d0b60c4933aef577588ac76b8e771d07e082d58f18418d92ffe3ee99fed07b4",
+      "packages/core/src/state-machine.ts": "0363d3505b02a0ad55d217a035ea6b722385a6e6b03fe6b94427f804914c2c7c",
+      "packages/core/src/types.ts": "06871df5c6994dd4521940fa51c43ca2f7884c9e124f5d7432cf5d87c61bb323",
+      "packages/core/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/eas/package.json": "be57787f6de6881a658052af01a3173b566f433104101233e55990008114eefa",
+      "packages/eas/src/index.ts": "8811be084af9b17b15903b0f3bb98fc1d8394aa5a44789c911f7f5b16e67d374",
+      "packages/eas/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/evidence/package.json": "36eec93943e90f7a664cb4bccf39c03aa9edbbc373daf5bcc876cc86b00bc348",
+      "packages/evidence/src/index.ts": "05f2024c904cb2b3f69484d7cf4137ffd3ab5dc25e04622b55bece6092103d95",
+      "packages/evidence/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/fixtures/package.json": "11118fd35e81d4fa7d45e061ec6f97042da4ce713b0ed4910e26ea8de1233d08",
+      "packages/fixtures/src/index.ts": "5368cfea48f4ace271da325fdaa9915a1f044985850c46f8cdaf5119de0c3c8d",
+      "packages/fixtures/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/planner/package.json": "7ff114f7168b9589f3eecd456540f64ecd6253254ce42c87260b3451349342f1",
+      "packages/planner/src/index.ts": "63c78fb6d1dd8fa8781d8ce9102685ae03601646c4839a3665138d8f52155ecd",
+      "packages/planner/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/research/package.json": "9ae20d0b2dee3ca4a3fdab2bde91f544bb111eeea317be419c1db4e2bc01af5d",
+      "packages/research/src/analysis.ts": "6d96be7e84e33cacb9d41747f978423c0bcdb5a4446eb192e18feeb316ca9085",
+      "packages/research/src/artifact-tampering-plan.ts": "f993761bb871e61636336775d8534d4c787b4cc26a2dceb94e20da2a7e942b13",
+      "packages/research/src/audit-target-bindings.ts": "59d8d8595d7e78011863a089164875d649948bf1d3fd43ead001f59ec76e3b91",
+      "packages/research/src/blocker-ledger.ts": "6a991db0c5784a5d5b57d64dace2f27e6bf23ca7313fcbb8d5264689cffd676d",
+      "packages/research/src/calibrate-judge.ts": "1198de03a54a035db4536a24b912f5419db085620d10b196158c75f04149cf25",
+      "packages/research/src/control-execution-contracts.ts": "77d95fd26a8599e5d816a0502a546e39849e1e6bcb8d2bafcacf337f50d968bd",
+      "packages/research/src/controlled-agents.ts": "a476957922afd932aa254910fcd1c944d7bc9549be5ec7ce7b6a97be3c03729e",
+      "packages/research/src/controlled-run-job-inventory.ts": "bd18963e8310a4fca42eb9a37ed499089b06805bafbf906603c6d77c9cfba8bd",
+      "packages/research/src/design-validity.ts": "eda4667998baf5c12d207ef1c43da6211e12e4fb350539fda45905b955849948",
+      "packages/research/src/fixed-upstream-projection-evidence.ts": "12b4b3e6be25c6a5c21294f5afcb0d39634104f7cbfab5a8cb2e7f9b92d6c802",
+      "packages/research/src/freeze-artifact-tampering-plan.ts": "3f9d78da3ae1f20134ef9c2a056b98093a110a9a23d7cb6b58fbaf3ff03a99b7",
+      "packages/research/src/freeze-controlled-run-job-inventory.ts": "aec7849580b9fdb3f0a2dba94f069d10b6a8627fbc6d2110027f9ecd49deca4f",
+      "packages/research/src/freeze-runner-execution-contracts.ts": "caf794ddc29160e72495b886501d747a8a4de4062ff9c2962e0545d9d997c4e2",
+      "packages/research/src/freeze.ts": "505d30e1deac8f63a89952f25e48924e4f266639e58a323584b3238543a58bce",
+      "packages/research/src/gate-main-trial.ts": "ccd28e9cdbf1076b3b568edc46554b01b80200ffd65a6ee0c2b02fabffeda92f",
+      "packages/research/src/index.ts": "2ae4727fb9148c597e28df77f00a525da8834b8be7242dadb08a84097c4586ee",
+      "packages/research/src/local-judge.ts": "8fb50dc5e98ca0dbbe4a6e883045a94420d7234d4c67bd957b02e2484593f7a0",
+      "packages/research/src/oracle-adjudication.ts": "7a577f291f9da0afc6c1c2bbb78d2713d059ada988e39a2ad50ce66ad1bd4168",
+      "packages/research/src/pilot.ts": "3c6a78026855dbd157e5a5cdad83c54313d4f5289ac87b5ef91e15bfa58b20e6",
+      "packages/research/src/power.ts": "bb0897a0757a11db0ef0cff424c8f1d6b48d3c815f286bf2b5729a787ac642a9",
+      "packages/research/src/projection-audit.ts": "7e4bf4fbf65a96f16a88b9c7c83fd7dbdc135f02a95bd4740c037c45797db9dc",
+      "packages/research/src/reconstruct-fixed-upstream-faults.ts": "2e322a43eee3c1b35df1e3743d6942e9db48a2aef77b4211f4b4fc5a03c779d1",
+      "packages/research/src/refresh-construct-review.ts": "0ecb3838a4a77cb174c075d0feb0bc45b4838ba3f2745db6e58baa419309da69",
+      "packages/research/src/runner-execution-contracts.ts": "14c4a6fe3885e52427ff4f3552c9b3673d97c7f6d6c442834b15db446c450d65",
+      "packages/research/src/source-execution-derivation.ts": "3c5a6c76aee71a85f3634210663ead51e5c26deda4e6a165973397d5189bdac3",
+      "packages/research/src/tamper.ts": "eef093a5d5fa3c3a625b532519a6099159f21062c8c6ab23c895558d5780280f",
+      "packages/research/src/target-adapter.ts": "6b2fbb10fabd8b7ffcbc71e4c517ac4ef59e05c14fa144d1834bc2be46941366",
+      "packages/research/src/target-binding.ts": "5c116353a30239bf3e8eda4576f6478b1ebed9c1f7f7bfbb81fedfa041ac3a35",
+      "packages/research/src/trusted-runner.ts": "1b0da8e51c6431c24ec699b58acc1b7241c59137b796c98de371676bfd4d94bf",
+      "packages/research/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/runtime/package.json": "d0ad761247f876f4859900554d500d282525f96d7eed70231b4f9c823780d7e0",
+      "packages/runtime/src/authorizations.ts": "cc770276beb1e402373b9c60958bd95a4423e415275b0acd2a4a9ca7cde0042e",
+      "packages/runtime/src/index.ts": "0847514b0d2218f2d9ec88ae454c5165fa9c2f9896ae225f31cfe1a98606afd8",
+      "packages/runtime/src/persistence.ts": "835c0bc5ead6a50057ecabcda5ac008d9588e86dd636b84baf2ede2bca7d5236",
+      "packages/runtime/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "packages/security/package.json": "b838f0066d34ccc9807f04125f57be1c604bf1d9fdcaa821e40c390082b2d313",
+      "packages/security/src/index.ts": "53e851701818e7a5fb59525c8997b36cbe52bd31d329acfc7d43e8d8b631246d",
+      "packages/security/tsconfig.json": "66d52556588fe71a0fb9ceaecbad7d58cb8c9dd5755e824f9f90410fbeeff461",
+      "pnpm-lock.yaml": "c04a35a0cef2033fbf8dca96967eba7bc081bfbb6dd6f7f370dbf8729ba621f5",
+      "pnpm-workspace.yaml": "9c430374f6553f5e77b8305a471d074954fc7482e9a4dca567fd1543f9f67904",
+      "tsconfig.base.json": "a272d2f77a8524fdfead851db5e19821628fa2513c524f84e2e6488bdd1f3aae"
+    },
+    "nodeRuntime": "v24.19.0",
+    "executableMethodDigest": "1748c334fe1b274a56cc29b87ea19cb61f9951694f7dde7d05a9688d69f5bc2f",
+    "designFreezeSha256": "d238b073444100f45fd481a76eac40bbb975ef14e0cbc7164f01b66fc72a5350",
+    "independentTargetsSha256": "d2fbad38025b790d057b962d955edd4750baa97fedf7aec887f63d1eb33292ca",
+    "sourceAvailabilityAuditSha256": "0fa16da0b6b037352b009e579811d81bc10c03bd88512183089af8691b6c9921",
+    "agentchaosProjectionAuditSha256": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
+    "agentdojoProjectionAuditSha256": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",
+    "remainingProjectionAuditSha256": "699cf32c56cfc8497e251b94ac318a521e289f8b73d73d9059fde0198f32efc0",
+    "remainingControlSourceAuditSha256": "8af8f371b4bd9deff5987a5c1f93fdc6ba6bd04ce1bea864ff6ad6d35ab6ed97",
+    "controlExecutionContractsSha256": "1e133a61f98f44a9ccd24c355ec771ab81a9d7cc3c5df5f185eb0171b3579144",
+    "runnerExecutionContractsSha256": "146a373f797593aa4c75ab5ddc641ea54060a2a23ecdfa7e62ff7e0b1bb5b909",
+    "repeatExecutionInventorySha256": "5608079b94eda72f5a7c3c56b7609605bd85fd9946700571022b08bd0f4e20d7",
+    "trustedRunnerPolicySha256": "9b6b62ca5db5b9e42713e02ae3efb710c88b59fc5a59f3e83ca8049d7762dfd8",
+    "oracleAdjudicationTemplateSha256": "bbdea1b6d304ac8a884297394f23996b0790b2cf2079e26c965c59ba45513ec3",
+    "artifactTamperingPlanSha256": "a260fc0cac67f7bfe292732eb07429fb198a57f7e5f55a48271c2654882a96d2",
+    "controlledRunJobInventorySha256": "91209011cf86cce890e716200d9d869740848fcf41981117ea3d147ea71995ee",
+    "constructReviewPacketSha256": "e6a8a1b73c7e9dcb226442b6d50810c9b0f5d5707c0f1649c94dd16be62c9c72",
+    "designValidityAuditSha256": "e7732e6c8f3c797c0d73561395c2ca453f040a6f7a2c9ab778e791ab725954dd",
+    "projectionAuditSha256": {
+      "agentchaosbench": "d31f537c6c03722b913108fd3a6a09b196061a883fc63274b22698cd1bfc3361",
+      "agentdojo": "5e028c9544e41bf9a63cbff499a9da015f5aa6b790fb8af9188d5f1c7be1c87c",
+      "remaining": "699cf32c56cfc8497e251b94ac318a521e289f8b73d73d9059fde0198f32efc0",
+      "remainingControls": "8af8f371b4bd9deff5987a5c1f93fdc6ba6bd04ce1bea864ff6ad6d35ab6ed97"
+    },
+    "governanceRecordSha256": "c475d5795f471256d8ce2c7cb8a4c566ba457356d3ca31f3c0428d1d8a293d43",
+    "methodFreezeApprovalSha256": "0880d272024e7ed772f8cd8d777c3a783c16cb285eabc2a0e8938f7580d8e1a3"
+  }
+}

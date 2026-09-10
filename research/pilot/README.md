@@ -10,7 +10,7 @@ This directory contains a deterministic integration run for the P26-002 measurem
 
 These are synthetic engineering fixtures constructed to exercise known evaluator branches. The results validate plumbing only. They are not evidence of real-world efficacy, superiority, generalization, novelty, or publication-ready findings, and they must not be used in a paper's main results.
 
-The engineering pilot excludes the now-frozen zero-cost local LLM judge, so its three-mode manifest remains a fast deterministic plumbing check. Judge selection and both calibration attempts are isolated under `research/llm-judge`; a separate smoke run must validate judge integration before the preregistered main run. The nearest-work audit supports only a conditional, narrowed evaluator-meta-evaluation claim. Power and public source selection are frozen; the main study remains blocked on adapters, independent construct review, authorization and data-governance approval, and the full 20-repeat run.
+The engineering pilot excludes the pinned zero-cost local LLM judge, so its three-mode manifest remains a fast deterministic plumbing check. Judge selection and both calibration attempts are isolated under `research/llm-judge`; a separate smoke run must validate judge integration before any approved main run. The nearest-work audit supports only a conditional, narrowed evaluator-meta-evaluation claim. The former 80-by-20 power candidate is superseded and requires redesign; public source units remain pinned only as a candidate corpus. The main study remains blocked on that redesign, source-bound adapters, independent construct review, authorization, and data-governance approval.
 
 Regenerate locally without GitHub Actions:
 

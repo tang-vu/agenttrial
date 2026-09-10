@@ -1,0 +1,7 @@
+claim_id,claim,source,status
+P002-M001,Only n=181 crosses the frozen joint-power target.,power,design_operating_characteristic
+P002-M002,The reserve tolerates at most 19 construct rejections.,reserve,sharp_counting_result
+P002-M003,All 76 construct cases have deterministic comparator coverage.,oracle,machine_specification_result
+P002-M004,The current bounded-mean composition gap is 7.873 percentage points.,transport,sharp_weight_bound
+P002-M005,The full-pool missing-outcome interval width is 9.5 percentage points.,selection,sharp_identification_bound
+P002-M006,No model outcome or accuracy estimate is reported.,all,scope_boundary

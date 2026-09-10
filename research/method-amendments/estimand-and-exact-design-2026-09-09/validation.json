@@ -1,0 +1,63 @@
+{
+  "checks": [
+    {
+      "name": "one_primary_comparator",
+      "passed": true
+    },
+    {
+      "name": "two_co_primary_endpoints",
+      "passed": true
+    },
+    {
+      "name": "intersection_success_rule",
+      "passed": true
+    },
+    {
+      "name": "alpha_is_0_05",
+      "passed": true
+    },
+    {
+      "name": "safety_margin_is_0_05",
+      "passed": true
+    },
+    {
+      "name": "registered_frame_preserved",
+      "passed": true
+    },
+    {
+      "name": "current_evidence_counts_preserved",
+      "passed": true
+    },
+    {
+      "name": "confirmatory_n_exceeds_frame",
+      "passed": true
+    },
+    {
+      "name": "confirmatory_n_joint_lower_passes",
+      "passed": true
+    },
+    {
+      "name": "previous_n_joint_lower_fails",
+      "passed": true
+    },
+    {
+      "name": "eighty_not_confirmatory",
+      "passed": true
+    },
+    {
+      "name": "replay_prohibited",
+      "passed": true
+    },
+    {
+      "name": "all_gates_closed",
+      "passed": true
+    },
+    {
+      "name": "no_em_dash",
+      "passed": true
+    }
+  ],
+  "passed": 14,
+  "total": 14,
+  "all_passed": true
+}

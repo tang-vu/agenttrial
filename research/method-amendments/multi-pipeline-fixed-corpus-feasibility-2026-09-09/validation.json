@@ -1,0 +1,29 @@
+{
+  "checks": {
+    "commandRPlusReproducesPrior": true,
+    "controlsAssessed": true,
+    "noFrameChange": true,
+    "noSubmissionPromotion": true,
+    "noTrialPromotion": true,
+    "physicalPairsAgentDojo": true,
+    "physicalPairsCombined": true,
+    "physicalTargetCrossed": true,
+    "pipelineCount": true,
+    "taskClusterTargetNotAssumed": true,
+    "taskClustersBelowPhysicalPairs": true
+  },
+  "inputSha256": {
+    "pipeline_claude-3-5-sonnet-20240620.json": "1384d59ac3e5fd3500c502451ec8a12c3c299e32e19acc046d72cafcf726cadf",
+    "pipeline_gpt-4-0125-preview.json": "0fcc77b075797645a979636717f0deb406c7776b413a427fbd954dce136bcf6c",
+    "pipeline_gpt-4-turbo-2024-04-09.json": "cb912c34a416380132fc37ccc3d972e2a5d2d4cd4fe3e7a60c23c40c6d08278e",
+    "pipeline_gpt-4o-2024-05-13.json": "59cba1fc9a23de5ae1aa9beb29444570d7d356f593ab15abc103898aa1829e17",
+    "source_expansion_feasibility.json": "49bc02f73f79423dc7fb4ed8595dfcdafe689dc70010c2d4743c78a6281bc0a8",
+    "source_expansion_snapshot.json": "ef4016733c089750320efa5ba55b4f268de609352d637bb03dfafb0d6590e800"
+  },
+  "outputSha256": {
+    "multi_pipeline_feasibility.json": "c88617271c565981605ee2a9113c0907cf0a28262210d9315405fd08d5633ebf",
+    "multi_pipeline_feasibility.md": "eb183c2f7b481eecb157efcfc15c8f0d54dd6be6c76a618bb47a79df00dc59ac"
+  },
+  "schemaVersion": "p26-002-multi-pipeline-validation-0.1.0",
+  "status": "passed"
+}
