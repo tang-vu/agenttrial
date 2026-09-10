@@ -1,0 +1,41 @@
+{
+  "all_passed": true,
+  "artifacts": {
+    "bipia_finite_frame_safety_grid.csv": "e9486d045fee133b52e2acd8a4e2b0052481690f3b0636a9158687171ff3f524",
+    "bipia_selection_bound_grid.csv": "48dbbbf8fbc8e67fcfa73540d613ee0e6159aa5773c5047b400029220b9b7e5e",
+    "bipia_sharp_selection_bounds.json": "906639352a70c0fbb13cdd55788b9d7ae02a4b06431497f359df250ef04f1bf5",
+    "bipia_sharp_selection_bounds.md": "cef195882c554c967666dd29a27a788b42f09cdd68aa712f33401beda239a75e",
+    "bipia_sharp_selection_bounds.svg": "4586fe22662d7f1f96ae28c6f2989606f3ce25194e8713a74dedf834580558e6",
+    "manuscript_results_section.md": "d76473cf46a5be411a15cc8b6e11eb3e30c71453b52d6e362b98193b3d3f654b",
+    "retrospective_amendment_20260910.md": "f90280e4ec7132ecd0c9e39eb9faf0e2b524b7c3da6fef325cb32c853e559b75"
+  },
+  "checks": {
+    "all_gates_closed": true,
+    "composition_rows_20": true,
+    "current_code_selected_31": true,
+    "current_email_selected_50": true,
+    "current_source_width_38_percent": true,
+    "every_row_missing_19": true,
+    "excluded_19": true,
+    "four_failure_upper_11_5_percent": true,
+    "full_pool_contrast_width_19_percent": true,
+    "full_pool_mean_width_9_5_percent": true,
+    "input_blobs_exact": true,
+    "minimum_at_code_40_or_41": true,
+    "minimum_worst_source_width_20_percent": true,
+    "nine_excluded_nonfailures_needed_at_zero": true,
+    "no_construct_approval": true,
+    "no_em_dash": true,
+    "no_missingness_assumption": true,
+    "no_outcomes": true,
+    "pooled_gate_allows_four_selected_failures": true,
+    "retained_181": true,
+    "safety_rows_0_to_4": true,
+    "source_pool_200": true,
+    "source_widths_symmetric": true,
+    "zero_failure_upper_9_5_percent": true
+  },
+  "checks_passed": 24,
+  "checks_total": 24,
+  "schema_version": "p26-002-bipia-sharp-selection-bounds-validation/v1"
+}

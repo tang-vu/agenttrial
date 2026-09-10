@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="500" viewBox="0 0 920 500" role="img" aria-labelledby="title desc">
+<title id="title">Sharp selection-bound widths across feasible 181-case BIPIA frames</title>
+<desc id="desc">The full-pool bounded-mean interval width is always 9.5 percent. The worst source-specific interval width is at least 20 percent and is 38 percent for the current frame.</desc>
+<rect width="100%" height="100%" fill="white"/>
+<text x="35" y="36" font-size="22" font-weight="700">Balancing sources cannot identify outcomes for excluded cases</text>
+<text x="35" y="62" font-size="14" fill="#4b5563">Sharp interval width with no assumption on the 19 excluded construct cases</text>
+<line x1="95" y1="385" x2="825" y2="385" stroke="#475569"/>
+<line x1="95" y1="85" x2="95" y2="385" stroke="#475569"/>
+<polyline points="95.00,100.00 133.42,115.00 171.84,130.00 210.26,145.00 248.68,160.00 287.11,175.00 325.53,190.00 363.95,205.00 402.37,220.00 440.79,235.00 479.21,235.00 517.63,220.00 556.05,205.00 594.47,190.00 632.89,175.00 671.32,160.00 709.74,145.00 748.16,130.00 786.58,115.00 825.00,100.00" fill="none" stroke="#dc2626" stroke-width="4"/>
+<polyline points="95.00,313.75 133.42,313.75 171.84,313.75 210.26,313.75 248.68,313.75 287.11,313.75 325.53,313.75 363.95,313.75 402.37,313.75 440.79,313.75 479.21,313.75 517.63,313.75 556.05,313.75 594.47,313.75 632.89,313.75 671.32,313.75 709.74,313.75 748.16,313.75 786.58,313.75 825.00,313.75" fill="none" stroke="#2563eb" stroke-width="4"/>
+<circle cx="95.00" cy="100.00" r="6" fill="#991b1b"/>
+<circle cx="440.79" cy="235.00" r="6" fill="#16a34a"/>
+<text x="115" y="111" font-size="13" fill="#991b1b">worst source: 38% current, minimum 20%</text>
+<text x="610" y="303.75" font-size="13" fill="#1d4ed8">full pool: 9.5%</text>
+<text x="95.00" y="414" text-anchor="middle" font-size="13">31</text><text x="248.68" y="414" text-anchor="middle" font-size="13">35</text><text x="440.79" y="414" text-anchor="middle" font-size="13">40</text><text x="632.89" y="414" text-anchor="middle" font-size="13">45</text><text x="825.00" y="414" text-anchor="middle" font-size="13">50</text><text x="82" y="390.00" text-anchor="end" font-size="13">0%</text><text x="82" y="315.00" text-anchor="end" font-size="13">10%</text><text x="82" y="240.00" text-anchor="end" font-size="13">20%</text><text x="82" y="165.00" text-anchor="end" font-size="13">30%</text><text x="82" y="90.00" text-anchor="end" font-size="13">40%</text>
+<text x="460.00" y="453" text-anchor="middle" font-size="15">Selected CodeQA cases (selected EmailQA cases = 81 - x)</text>
+<text x="25" y="245" transform="rotate(-90 25 245)" text-anchor="middle" font-size="15">Bounded-outcome interval width</text>
+<text x="95" y="482" font-size="13" fill="#4b5563">Paired-contrast widths are twice these values because the contrast is bounded in [-1, 1].</text>
+</svg>
