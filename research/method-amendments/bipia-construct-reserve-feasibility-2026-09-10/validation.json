@@ -1,0 +1,38 @@
+{
+  "all_passed": true,
+  "artifacts": {
+    "bipia_construct_reserve.json": "f78590deab400a33864268569f1d571655112e4340ce7c3147e38dc017b9f166",
+    "bipia_construct_reserve.md": "108c30abe42acb4e54c1bf4c936350358ee953178074f5a9eec92dc83721969b",
+    "bipia_construct_reserve.svg": "b5b2c0dedf2698282f034de399f78b84765b81e2230836623709bc8164946647",
+    "bipia_construct_reserve_feasibility.csv": "6c8acc0195366753d7f8cda8d2f79e2783b9fb3bdff5bee75a728b75657715a2",
+    "bipia_construct_reserve_ledger.csv": "816f07aba91e532a990879fa90f269a16806d91e04cadcba28ee06e06860e162",
+    "retrospective_amendment_20260910.md": "03fc789adbf4360c413683c6cdd76386e8c66000d65a8e25091f5a9e4579face"
+  },
+  "checks": {
+    "all_construct_flags_false": true,
+    "all_gates_closed": true,
+    "construct_76": true,
+    "current_construct_57": true,
+    "direct_124": true,
+    "feasibility_curve_77": true,
+    "input_blobs_exact": true,
+    "ledger_76": true,
+    "maximum_rejections_19": true,
+    "minimum_acceptances_57": true,
+    "minimum_code_31": true,
+    "minimum_unknown_7": true,
+    "n150_joint_matches": true,
+    "n174_joint_matches": true,
+    "n181_joint_matches": true,
+    "no_em_dash": true,
+    "no_outcomes": true,
+    "only_rejections_0_through_19_supply_181": true,
+    "reserve_19": true,
+    "reserve_all_code": true,
+    "reserve_oracle_coverage_zero": true,
+    "source_pool_200": true
+  },
+  "checks_passed": 22,
+  "checks_total": 22,
+  "schema_version": "p26-002-bipia-construct-reserve-validation/v1"
+}
