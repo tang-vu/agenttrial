@@ -1,0 +1,106 @@
+[
+  {
+    "date": "2023",
+    "role": "BIPIA source benchmark; does not report the P26-002 frame audit.",
+    "source_id": "S01",
+    "title": "Benchmarking and Defending Against Indirect Prompt Injection Attacks on Large Language Models",
+    "url": "https://arxiv.org/abs/2312.14197",
+    "version_note": "arXiv record inspected; P26-002 remains bound to its pinned upstream Git revision."
+  },
+  {
+    "date": "2021",
+    "role": "Prior art for documenting motivation, composition, collection, and recommended uses.",
+    "source_id": "S02",
+    "title": "Datasheets for Datasets",
+    "url": "https://doi.org/10.1145/3458723",
+    "version_note": "Published Communications of the ACM article."
+  },
+  {
+    "date": "2024-03-31",
+    "role": "Prior empirical evidence that benchmark data distribution changes absolute scores and rankings.",
+    "source_id": "S03",
+    "title": "Benchmark Transparency: Measuring the Impact of Data on Evaluation",
+    "url": "https://arxiv.org/abs/2404.00748",
+    "version_note": "arXiv record and abstract inspected."
+  },
+  {
+    "date": "2026-04-02",
+    "role": "Prior agent-benchmark audit separating rigid evaluators, ambiguous specifications, and faulty ground truth; includes human validation.",
+    "source_id": "S04",
+    "title": "ELT-Bench-Verified: Benchmark Quality Issues Underestimate AI Agent Capabilities",
+    "url": "https://arxiv.org/abs/2603.29399",
+    "version_note": "arXiv v2 dated 2026-04-02 inspected."
+  },
+  {
+    "date": "2026-04-27",
+    "role": "Direct prior art for automated cross-verification of benchmark artifacts as a complement to human review.",
+    "source_id": "S05",
+    "title": "BenchGuard: Who Guards the Benchmarks? Automated Auditing of LLM Agent Benchmarks",
+    "url": "https://arxiv.org/abs/2604.24955",
+    "version_note": "arXiv v1 dated 2026-04-27 inspected."
+  },
+  {
+    "date": "2026-04-17",
+    "role": "Direct prior art for validating automated agent scorers against independent human annotation.",
+    "source_id": "S06",
+    "title": "Auditing Automated Evaluation, Error Propagation, and Runtime Mitigation in Tool-Using Language Agents",
+    "url": "https://arxiv.org/abs/2604.16706",
+    "version_note": "arXiv record and abstract inspected."
+  },
+  {
+    "date": "2026-06-08",
+    "role": "Prior art for composing benchmark metadata, run data, model metadata, provenance, reproducibility, and comparability signals.",
+    "source_id": "S07",
+    "title": "Evaluation Cards: An Interpretive Layer for AI Evaluation Reporting",
+    "url": "https://arxiv.org/abs/2606.09809",
+    "version_note": "arXiv record and abstract inspected."
+  },
+  {
+    "date": "2026-07-30",
+    "role": "Direct prior art for benchmark-as-measurement validity audits and claim restriction to benchmark, metric, behavior, and panel.",
+    "source_id": "S08",
+    "title": "Safety, or Just Capability? A Validity Audit of Agent-Safety Benchmarks",
+    "url": "https://arxiv.org/abs/2607.28685",
+    "version_note": "arXiv v1 dated 2026-07-30 inspected."
+  },
+  {
+    "date": "2026-09-01",
+    "role": "Very recent direct prior art for claim-gating construct validity, protocol isolation, stochastic stability, and Invalid/Inconclusive outputs.",
+    "source_id": "S09",
+    "title": "When Guardrails Look Effective: Construct Validity Failures in LLM Agent Commerce Evaluation",
+    "url": "https://arxiv.org/abs/2609.01519",
+    "version_note": "arXiv v1 dated 2026-09-01 inspected."
+  },
+  {
+    "date": "1934",
+    "role": "Established exact-binomial method used by the P26-002 safety gate.",
+    "source_id": "S10",
+    "title": "The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial",
+    "url": "https://doi.org/10.1093/biomet/26.4.404",
+    "version_note": "Published Biometrika article."
+  },
+  {
+    "date": "2015",
+    "role": "Established partial-identification context; P26-002 uses elementary finite-frame worst-case bounds, not a new estimator.",
+    "source_id": "S11",
+    "title": "Nonparametric Bounds and Sensitivity Analysis of Treatment Effects",
+    "url": "https://arxiv.org/abs/1503.01598",
+    "version_note": "arXiv record inspected."
+  },
+  {
+    "date": "2026-09-10",
+    "role": "Official venue scope: empirical software engineering, replicated studies, and infrastructure supporting empirical research.",
+    "source_id": "V01",
+    "title": "Empirical Software Engineering: Aims and scope",
+    "url": "https://link.springer.com/journal/10664/aims-and-scope",
+    "version_note": "Official journal page accessed 2026-09-10."
+  },
+  {
+    "date": "2026-09-10",
+    "role": "Official requirements: single-blind review, Word or LaTeX, 150-250-word abstract, 4-6 keywords, required declarations, LLM use documented in Methods, and no mandatory publication fee on the standard route.",
+    "source_id": "V02",
+    "title": "Empirical Software Engineering: Submission guidelines",
+    "url": "https://link.springer.com/journal/10664/submission-guidelines",
+    "version_note": "Official journal page accessed 2026-09-10."
+  }
+]

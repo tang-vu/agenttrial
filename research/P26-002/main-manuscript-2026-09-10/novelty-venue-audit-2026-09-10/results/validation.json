@@ -1,0 +1,43 @@
+{
+  "artifact_sha256": {
+    "claim_novelty_crosswalk.csv": "0d8b26d41118f60b59638369fa8b56155c8c7a6faf9eb50f6cb024e3ded79431",
+    "novelty_report.md": "bac8bf5a723aad8de7ecc27680d8f0bc5d4ea1a0eb58aad099fa01eefd7154fb",
+    "retrospective_amendment_20260910.md": "3f96dc47dda88e7527abd339075d6fbce101af7f8f130133d18e3c27c8b89e0a",
+    "source_ledger.json": "5c82c5c521f7625ca682d93da5ab00dc1b3f8bc0123cdfeb995e696406f774a1",
+    "venue_assessment.md": "f04545c5a7618b5425e7fad899b8d1398fbdea2e81b27c1c8c3ceb891803d207"
+  },
+  "as_of": "2026-09-10",
+  "checks": {
+    "bound_to_expected_head": true,
+    "bound_to_expected_manuscript_blob": true,
+    "claim_count_12": true,
+    "direct_2026_precedents_present": true,
+    "historical_protocol_preserved": true,
+    "human_review_not_substituted": true,
+    "no_accuracy_claim": true,
+    "no_fee_boundary": true,
+    "no_submission_authorization": true,
+    "novelty_gate_closed": true,
+    "official_venue_sources_present": true,
+    "prior_art_count_6": true,
+    "search_not_exhaustive_disclosed": true,
+    "source_count_13": true,
+    "source_specific_count_5": true,
+    "submission_gate_closed": true,
+    "synthesis_count_1": true,
+    "zero_general_novel_claims": true
+  },
+  "claim_counts": {
+    "PRIOR_ART": 6,
+    "SOURCE_SPECIFIC_RESULT": 5,
+    "SYNTHESIS_NOT_METHOD_NOVELTY": 1
+  },
+  "disposition": "KEEP_AS_SOURCE_SPECIFIC_CASE_STUDY_NOT_STANDALONE_READY",
+  "manuscript_blob": "4169a31f72ab189e928a56e3c8addd9031401a44",
+  "novelty_pass": false,
+  "schema_version": "p26-002-novelty-venue-validation/v1",
+  "source_count": 13,
+  "source_head": "ed758e55905e8432352c5063d671380e46c61b4d",
+  "submission_allowed": false,
+  "venue_fit_conditional": true
+}

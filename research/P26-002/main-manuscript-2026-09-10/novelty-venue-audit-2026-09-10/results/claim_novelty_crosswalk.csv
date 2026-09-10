@@ -1,0 +1,13 @@
+claim_id,claim,classification,sources,disposition
+P002-N001,Agent benchmarks should be audited before aggregate results are interpreted.,PRIOR_ART,S04;S05;S06;S08;S09,Retain as motivation with citations; do not claim novelty.
+P002-N002,Automated cross-verification is useful but is not independent human validation.,PRIOR_ART,S04;S05;S06,Retain as an explicit methodological boundary.
+P002-N003,A deterministic scorer can be operationally complete while construct validity remains unresolved.,PRIOR_ART,S04;S06;S08;S09,Retain as framing; avoid presenting the distinction as new.
+P002-N004,"Version, provenance, benchmark metadata, and result comparability must be reported together.",PRIOR_ART,S02;S07,"Retain as reproducibility practice, not contribution."
+P002-N005,Benchmark source composition can change aggregate scores and rankings.,PRIOR_ART,S03,Retain with attribution; the P26-002 numeric bound remains source-specific.
+P002-N006,Failed validity gates should yield Invalid or Inconclusive rather than a substantive claim.,PRIOR_ART,S09,Do not claim a new gating framework or new decision vocabulary.
+P002-N007,Only n=181 crosses the P26-002 frozen joint-power target; n=180 does not.,SOURCE_SPECIFIC_RESULT,S01;S10,"Keep as a BIPIA-frame design result, not a general power theorem."
+P002-N008,"The 181-case frame is feasible iff at least 57 of 76 construct cases are accepted, with minima of 7 sentinel and 31 code cases.",SOURCE_SPECIFIC_RESULT,S01,Keep as finite-pool counting result.
+P002-N009,All 76 construct cases have deterministic comparator coverage while construct approval remains 0 of 76.,SOURCE_SPECIFIC_RESULT,S01,Keep as machine-specification result and unresolved boundary; never call this validated accuracy.
+P002-N010,The current frame permits a 7.873-point composition-only mean difference and 15.746-point contrast difference.,SOURCE_SPECIFIC_RESULT,S01;S03,Keep as a sharp bounded-mixture result for the pinned frame.
+P002-N011,Excluding 19 cases leaves 9.5-point full-pool mean and 19-point paired-contrast identification widths.,SOURCE_SPECIFIC_RESULT,S01;S11,Keep as elementary finite-frame bounds; do not call them confidence intervals or a new estimator.
+P002-N012,"Provenance, scorer specification, construct validity, and estimand adequacy form a four-part diagnostic sequence.",SYNTHESIS_NOT_METHOD_NOVELTY,S02;S05;S07;S08;S09,Keep only as the paper's organizing synthesis; delete any implication that the sequence is a validated general framework.
