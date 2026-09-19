@@ -11,3 +11,9 @@ test-results
 data/*.json
 !.env.example
 /telegram-post.txt
+
+# AI assistant artifacts
+.devin/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+NUL
