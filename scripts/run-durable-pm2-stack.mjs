@@ -153,8 +153,10 @@ while (!stopping) {
   await delay(10_000);
   if (await ready()) {
     consecutiveFailures = 0;
-  } else if (++consecutiveFailures >= 3) {
+  } else if (++consecutiveFailures >= 9) {
     await repairStack();
     consecutiveFailures = 0;
+    // Grace window: recreated containers need ~60-90s before heartbeats resume.
+    await delay(90_000);
   }
 }
